@@ -1,0 +1,320 @@
+	a {
+        text-decoration: none;
+        border-style: none;        
+}
+
+a img {
+        text-decoration: none;
+        border-style: none;        
+}
+
+.area {
+        background-color: #41b45c;
+        border: 1px;
+        border-style: solid;
+        border-color: #256634;
+}
+
+.area_nb {
+        background-color: #41b45c;
+        border: 0px;
+}
+
+.pale_area {
+        background-color: #e0ffe0;
+        border: 1px;
+        border-style: solid;
+        border-color: #256634;
+}
+
+.pale_area_nb {
+        background-color: #e0ffe0;
+        border: 0px;
+}
+
+.image_desc {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 70pct;
+}
+
+.form_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+}
+
+.form_label_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+}
+
+a.admin_link {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+        color: gray;
+        cursor: pointer;
+}
+
+a.admin_link:hover
+{
+        color: black;
+}
+
+.image_desc_frame {
+        border: 0px solid;
+        border-style: inset;
+        padding-right: 3px;
+        padding-left: 3px;
+        width: 300px;
+}
+
+.image_info {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+}
+
+a.nav_link {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-weight: normal;
+        font-size: 9pt;
+        color: black;
+        cursor: pointer;
+}
+
+.header_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+        vertical-align: middle;
+}
+
+.box_header {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+        vertical-align: middle;
+        text-align:center
+}
+
+.footer_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.9em;
+        vertical-align: middle;
+}
+
+.gallery_name {
+        font-family: sans-serif;
+        font-size: 180pct;
+        font-weight: bold;
+}
+
+.gallery_desc {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80pct;
+}
+
+.normal_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80pct;
+}
+
+.picture-shadow {
+        float: left;
+        background: url(shadowAlpha.png) no-repeat bottom right;
+        margin: 0px 0 0 0px;
+}
+
+.picture-shadow2 {
+        border: 0px solid #a9a9a9;
+        background: url(shadow-plain.png) no-repeat top left !important;
+        background: url(shadow-plain.gif) no-repeat top left;
+        padding: 0 6px 6px 0px;
+}
+
+.picture-shadow3 {
+        color: #777;
+        background-color: #fff;
+        border: 0px solid #797979;
+        padding: 0px;
+}
+
+.gallery-shadow {
+        float: left;
+        background: url(shadowAlpha.png) no-repeat bottom right;
+        margin: 10px 0 0 10px;
+}
+
+.gallery-shadow2 {
+        border: 0px solid #a9a9a9;
+        background: url(shadow-pale.png) no-repeat top left !important;
+        background: url(shadow-pale.gif) no-repeat top left;
+        padding: 0 6px 6px 0px;
+}
+
+.gallery-shadow3 {
+        color: #777;
+        background-color: #fff;
+        border: 1px solid #797979;
+        padding: 0px;
+}
+
+.add_tag_dialogue {
+        visibility: hidden;
+        left: 183px;
+        top: 45pct;
+        margin-top: -75px;
+        position: absolute;
+        z-index: 10;
+}
+
+.add_user_dialogue {
+        visibility: hidden;
+        left: 183px;
+        top: 45pct;
+        margin-top: -75px;
+        position: absolute;
+        z-index: 10;
+}
+
+.change_pass_dialogue {
+        visibility: hidden;
+        left: 183px;
+        top: 45pct;
+        margin-top: -75px;
+        position: absolute;
+        z-index: 10;
+}
+
+.fade-area {
+        visibility: hidden;
+        left: 0px;
+        top: 0pct;
+        width: 100pct;
+        height: 100pct;
+        position: absolute;
+        z-index: 9;
+}
+
+.tag_name {        
+        display: block;
+        width: 200px;        
+        float: left;        
+        clear: left;
+        font-family: Verdana, Arial, Helvetica, sans-serif;        
+        height: 22px;
+}
+
+.tag_link {
+        display: block;
+        float: left;        
+        width: auto;
+}
+
+.tag_button {
+        display: none;
+        width: auto;
+        float: left;         
+} 
+
+.tag_edit_box {
+        display: none;
+        width: 200px;         
+        float: left;
+        height: 22px;
+}
+
+.tag_buttons { 
+        margin: 0;
+        padding: 0;
+        font-size: 0.7em;
+        position: relative;
+}
+
+.user_name {        
+        display: block;
+        width: 200px;        
+        float: left;        
+        clear: left;
+        font-family: Verdana, Arial, Helvetica, sans-serif;        
+        height: 22px;
+}
+
+.user_admin {        
+        display: block;
+        width: 50px;        
+        float: left;        
+        font-family: Verdana, Arial, Helvetica, sans-serif;        
+        height: 22px;
+        text-align: left;
+}
+
+.user_link {
+        display: block;
+        float: left;        
+        width: auto;
+}
+
+.user_button {
+        display: none;
+        width: auto;
+        float: left;         
+} 
+
+.user_edit_box {
+        display: none;
+        width: 200px;         
+        float: left;
+        height: 22px;
+}
+
+.user_check_box {
+        display: none;
+        width: 50px; 
+        float: left;
+        height: 22px;
+}
+
+.user_buttons { 
+        margin: 0;
+        padding: 0;
+        font-size: 0.7em;
+        position: relative;
+}
+
+.new_line {
+        clear: both;
+}
+
+.inline_element {
+        height: 22px;
+        font-size: 100pct;
+        padding: 0px;
+        border: none;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+}        
+
+.footer_logo {
+        vertical-align: middle;
+        height: 31px;
+}
+
+.no_cr {
+        float: left;
+}
+
+.height5 {
+        height: 5px;
+}
+
+.height10 {
+        height: 10px;
+}
+
+.height41 {
+        height: 41px;
+}
+
+.width5 {
+        width: 5px;
+}
+
+.width100pct {
+        width: 100pct;
+}

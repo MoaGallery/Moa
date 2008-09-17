@@ -1,0 +1,76 @@
+FOR NEXT TIME -
+
+  Check for duplicate tags
+  Check all dialogue text box focus on entries
+  Correct the fonts sizes for EDIT tag pages and fix up layout
+  
+TODO -
+  Important -
+    Add image edit font, taglist + dialogue boxes    
+    Popup dialogue faded background does not align to tables
+  
+  Nice (1.1) -
+    Site Settings
+    Add a custom error handling page
+    Makes pages Template based
+    Grab and save EXIF info
+    Import/Export (With desktop client)
+    Move initial dynamic content into include files to pre-populate the galleries
+    Allow old and new password MySQL functions
+    Image Integrity->no image/thumb needs to have a delete option.
+    Install.php -
+      Use Table prefixes
+    Re-Arange images on a gallery
+    Bulk Delete
+    Mass Image Tagging
+    Move Sub Gallery (Base on version of navigation bar as an admin page)
+    On image view page implement next\prev image buttons with thumb preview.
+    Slide Show        
+    Tag Lists to be in scroll box
+    
+  Pre-release -
+    Add error checking
+    Escape all variables used in queries (mysql_real_escape_string)
+    WC3 validation
+
+  Consider For Future -
+    Gallery Merge
+    Boolean Tag Opperators for galeries
+    Display movie clips.  (Not streaming)
+    Output slideshow to Vid-CD (Online \ Desktop Client)
+
+Ongoing -
+  Add more corruption detection in the admin section
+  Make it look fancy -
+    Finish CSS
+  Fix gallery width to fit browser in other browsers (Done - FF 2+3, IE 7+8)
+
+
+
+
+Bugs -
+  Bugs -
+    When add-tag dialogue is up, can tab to controls behind.
+    Possible IE6 bug - Layers not in correct order for popup add tag dialogues (IE7 and Firefox are ok)
+    IE6 not laying out thumbnails correctly.
+    
+  To Verify as fixed -
+    Thumbnails of varying height prevent other thumbnails from lining up correctly on gallery view.
+    
+  Fixed -
+    Some special chars don't display correctly in popups.
+    HTML Injection is possible for gallery title and description
+    If no images in a gallery, show a message
+    Editting + adding a desc with a '#' in doesn't save the desc.
+    Overlib shouldn't display when no description
+    Navigation Tree does not update when you change a gallery title.
+
+
+Template Ideas -
+
+  Embedable - (No footer \ Header \ Nav Bar) gallery template
+  
+
+Done this session
+
+1) Install - Cookie path needs to be added to config.php
