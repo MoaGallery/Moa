@@ -1,15 +1,17 @@
 FOR NEXT TIME -
-
-  Check for duplicate tags
-  Check all dialogue text box focus on entries
-  Correct the fonts sizes for EDIT tag pages and fix up layout
+  
+  Check all dialogue text box focus on entries (Do first next time!)
+  Unify the tag list ajax files box_taglist and box_edit_taglist.  
+  de-duplicate the showing of tag lists
   
 TODO -
-  Important -
-    Add image edit font, taglist + dialogue boxes    
-    Popup dialogue faded background does not align to tables
+  Important -    
+    Popup dialogue faded background does not align to tables - Make them all grey out the entire screen.
+    Delete of orphan images should take you bakc to the orphan images page.
   
   Nice (1.1) -
+    Confirm on delete of User or Tag.
+    Integretty Check on login.
     Site Settings
     Add a custom error handling page
     Makes pages Template based
@@ -73,4 +75,7 @@ Template Ideas -
 
 Done this session
 
-1) Install - Cookie path needs to be added to config.php
+1) Check for duplicate tags 
+2) add_gallery \ add_image font size is incorrect
+3) Admin Tag Edit Button size change on add fixed
+

@@ -38,21 +38,28 @@
       include ("sources/_inherit_tags.php");
     ?>
 
-    <table class='area' cellspacing='0' cellpadding='5' id="add_table">
+    <table border='0' class='area' cellspacing='0' cellpadding='5' id="add_table">
       <tr>
-        <td class='box_header'>Add Image</td>
+        <td colspan='3' class='box_header'>Add Image</td>
       </tr>
-      <tr>	
-        <td class='pale_area_nb'>
-          <iframe src="sources/box_add_image.php?PHPSESSID=<?php echo session_id() ?>" frameborder=0 marginwidth=0 width="500" height="200"> </iframe>
-          <hr>
+      <tr class='pale_area_nb'>	
+        <td valign='top'>          
+					<?php                                                                                                                
+						echo "<object data='sources/box_add_image.php?PHPSESSID=".session_id();                                          
+						                                                                                                                   
+						if (isset($_REQUEST["parent_id"]))                                                                                 
+						{                                                                                                                  
+						  echo "&parent_id=".$_REQUEST["parent_id"];                                                                       
+						}                                                                                                                  
+						echo "' vspace='0' hspace='0' frameborder='1' marginwidth='0' width='415' height='200' type='text/html'></object>";
+					?>
         </td>
-      </tr>
-      <tr>
-        <td class='pale_area_nb'>
+        <td class='form_label_text' style='width: 50px' valign='top'>Tags:</td>
+        <td valign='top'>
           <?php
             include "sources/box_taglist_add.php";
           ?>
+          <img src='media/trans-pixel.png' width='200' height='1'>
         </td>
       </tr>
     </table

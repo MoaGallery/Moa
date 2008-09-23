@@ -161,20 +161,20 @@
   </head>	
   <body>
     <?php
-      include_once "sources/_header.php";  
-      include_once "sources/id.php";    
-    
+      include_once "sources/_header.php";
+      include_once "sources/id.php";
+
       if ($Userinfo->ID == NULL) {
       	echo "You are not logged in.";
-    
+
       	include_once "sources/_footer.php";
       	echo "</BODY>\n</HTML>";
-    
+
       	die();
       }
-    
+
       include("sources/_admin_page_links.php");
-      
+
       echo "<table class='area' cellpadding='5' cellspacing='0' width='600px' id='add_table'>";
       echo "<tr><td class='box_header'>View all tags</td></tr>";
       echo "<tr><td class='pale_area_nb'>";

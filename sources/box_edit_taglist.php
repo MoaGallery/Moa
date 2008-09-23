@@ -37,12 +37,18 @@
         die ("no image ID supplied");
       }
     }
-  }
+  }  
 
   if (isset($_REQUEST["tagname"]) == true)
   {
-    $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-    $result = mysql_query($query) or die("ERROR!".mysql_error()."<BR>");
+    $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+    $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+    
+    if (0 == mysql_num_rows($result))
+    {    
+      $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+      $result = mysql_query($query) or die("ERROR!".mysql_error()."<BR>");
+    }
   }
 
   $edit_tag_query = "SELECT * FROM ".$tab_prefix."tag";

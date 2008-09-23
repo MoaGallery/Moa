@@ -1,7 +1,7 @@
 <?php    
     session_start();
     
-    echo "<html style='margin: 0px'>\n";
+    echo "<html>\n";
     echo "<head>\n";
     echo "<link rel='stylesheet' href='../template/default/style.css' type='text/css'>\n";
     echo "</head>\n";
@@ -33,7 +33,7 @@
 ?>
 
   <form name="gallery_add" method="post" action="box_add_gallery.php?PHPSESSID=<?php echo session_id() ?>"  enctype="multipart/form-data">    
-    <table border="0" cellspacing="0" cellpadding="0" class='normal_text'>
+    <table border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td class='form_label_text' style='width: 100px' valign='top'>Name:</td>
         <td valign='top'><input class='form_text' type='text' name="name"></td>        

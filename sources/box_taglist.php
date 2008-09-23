@@ -13,8 +13,14 @@
     // If adding a tag
     if (isset($_REQUEST["tagname"]) == true)
     {
-      $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+      $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
       $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+      
+      if (0 == mysql_num_rows($result))
+      {
+        $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+        $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+      }
     }
     
     // Show button to add new tag

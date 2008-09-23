@@ -4,7 +4,7 @@
     echo "<head>\n";
     echo "<link rel='stylesheet' href='../template/default/style.css' type='text/css'>\n";
     echo "</head>\n";
-    echo "<body class='pale_area_nb'>";
+    echo "<body style='margin: 0px' scroll='no' class='pale_area_nb'>";
     
     include_once("../private/db_config.php");
     include_once("../config.php");
@@ -70,14 +70,14 @@
 ?> 
   <form name="image_add" class="no_cr" method="post" action="box_add_image.php?PHPSESSID=<?php echo session_id() ?>" enctype="multipart/form-data">
     <div id="debug"></div>
-    <table cellpadding="5" border=0 class='normal_text'>
-      <tr>
-        <td>Comment:</td>
-        <td><textarea class='form_text' name="comment" cols="32" rows="3"></textarea></td>
+    <table cellpadding="0" border=0>
+      <tr>      	      	
+        <td valign='top' class='form_label_text'>Comment:</td>
+        <td><textarea class='form_text' name="comment" cols="35" rows="3"></textarea></td>
         <td rowspan="3" valign="center" width="10"></td>
       </tr>
       <tr>
-        <td>File:</td>
+        <td valign='top' class='form_label_text'>File:</td>
         <td>
           <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
           <input class='form_text' type="file" id="file_dlg" onchange="javascript:file_change();"size="30" name="filename" accept="image/jpg" onkeyup="document.getElementById('status').innerHTML='<BR>'"></input><br>

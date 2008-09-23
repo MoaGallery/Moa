@@ -40,7 +40,7 @@
         <td class='box_header' colspan='3'>Add Gallery</td>
       </tr>    
       <tr class='pale_area_nb'>	
-        <td>
+        <td valign='top'>
           <?php            
             echo "<object data='sources/box_add_gallery.php?PHPSESSID=".session_id();
             

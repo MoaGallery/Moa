@@ -5,7 +5,7 @@
             </tr>
             <tr class="pale_area_nb"  valign='top'>
               <td>
-                <table>
+                <table class='form_label_text'>
                   <tr>
                     <td>Name: </td>
                     <td><input type='textbox' id='newusername'></input></td>
