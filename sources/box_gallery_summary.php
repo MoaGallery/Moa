@@ -1,26 +1,28 @@
 <?php
   // Get Gallery info
   $query_summary = "SELECT * FROM ".$tab_prefix."gallery WHERE IDGallery = ".mysql_real_escape_string($gallery_summary_id);
-  $result_summary = mysql_query($query_summary) or die(mysql_error());
+  $result_summary = mysql_query($query_summary) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
   if (($gallery_summary = mysql_fetch_array($result_summary)) == false) {
-    echo "Invalid Gallery ID"; die();
+    moa_warning("Invalid Gallery ID.");
+    die();
   }    
   $summary_gallery_name = $gallery_summary["Name"];
   $summary_gallery_desc2 = mysql_real_escape_string(nl2br($gallery_summary["Description"]));
   
   $summary_gallery_desc = str_replace("\'", "&#39;", $summary_gallery_desc2);
+  $summary_gallery_desc = str_replace("<", "&lt;", $summary_gallery_desc);
   
   // Get sub-galleries
   $query_summary = "SELECT * FROM ".$tab_prefix."gallery WHERE IDParent = ".mysql_real_escape_string($gallery_summary_id);
-  $result_summary = mysql_query($query_summary) or die(mysql_error());
+  $result_summary = mysql_query($query_summary) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
   $number_of_sub_galleries = mysql_num_rows($result_summary);
   
   // Get image info
   $query_summary = "select IDImage from ".$tab_prefix."v_gallery_images where IDGallery = '".mysql_real_escape_string($gallery_summary["IDGallery"])."';";
     
-  $result_summary = mysql_query($query_summary) or die(mysql_error());
+  $result_summary = mysql_query($query_summary) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
   $number_of_images = mysql_num_rows($result_summary);      
   

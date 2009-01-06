@@ -2,9 +2,10 @@
   header("Cache-Control: no-cache, must-revalidate");
   include_once("../private/db_config.php");
   include_once("../config.php");
+  include_once("_error_funcs.php");
     
-  $db = mysql_connect($db_host, $db_user, $db_pass) or die("Error" . mysql_error());
-  mysql_select_db($db_name, $db) or die("Error" . mysql_error());
+  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+  mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
   include_once ("id.php");
   
@@ -42,17 +43,17 @@
   if (isset($_REQUEST["tagname"]) == true)
   {
     $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-    $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     if (0 == mysql_num_rows($result))
     {    
       $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-      $result = mysql_query($query) or die("ERROR!".mysql_error()."<BR>");
+      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     }
   }
 
   $edit_tag_query = "SELECT * FROM ".$tab_prefix."tag";
-  $edit_tag_result = mysql_query($edit_tag_query) or die(mysql_error());
+  $edit_tag_result = mysql_query($edit_tag_query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
   // Unset all tags in the session array
   while ($edit_tag_taglist = mysql_fetch_array($edit_tag_result))
@@ -64,7 +65,7 @@
   {
     // Mark just the ones valid for this gallery as set
     $edit_tag_query = "SELECT * FROM ".$tab_prefix."gallerytaglink WHERE (IDGallery=".mysql_real_escape_string($gallery_id).")";
-    $edit_tag_result = mysql_query($edit_tag_query) or die(mysql_error());
+    $edit_tag_result = mysql_query($edit_tag_query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     while ($edit_tag_taglist = mysql_fetch_array($edit_tag_result))
     {
@@ -76,7 +77,7 @@
   {
     // Mark just the ones valid for this image as set
     $edit_tag_query = "SELECT * FROM ".$tab_prefix."imagetaglink WHERE (IDImage=".mysql_real_escape_string($image_id).")";
-    $edit_tag_result = mysql_query($edit_tag_query) or die(mysql_error());
+    $edit_tag_result = mysql_query($edit_tag_query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     while ($edit_tag_taglist = mysql_fetch_array($edit_tag_result))
     {
@@ -84,9 +85,11 @@
     }
   }
   
+  echo "<div id='addtagarea'></div><br/>\n";
+    
   // display the list of tags
   $edit_tag_query = "SELECT * FROM ".$tab_prefix."tag ORDER BY Name";
-  $edit_tag_result = mysql_query($edit_tag_query) or die(mysql_error());
+  $edit_tag_result = mysql_query($edit_tag_query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   while ($edit_tag_taglist = mysql_fetch_array($edit_tag_result))
   {    
     echo "<div style='clear: both'><input style='float: left' class='form_label_text' type='checkbox' onClick='onTick(\"".$edit_tag_taglist["IDTag"]."\");' ";

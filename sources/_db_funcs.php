@@ -1,7 +1,4 @@
 <?php
-  include_once("private/db_config.php");
-  include_once("config.php");
-
   function RunSQLFile($filename)
   {
   	global $tab_prefix;

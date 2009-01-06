@@ -1,60 +1,108 @@
 FOR NEXT TIME -
   
-  Check all dialogue text box focus on entries (Do first next time!)
-  Unify the tag list ajax files box_taglist and box_edit_taglist.  
-  de-duplicate the showing of tag lists
   
 TODO -
   Important -    
-    Popup dialogue faded background does not align to tables - Make them all grey out the entire screen.
-    Delete of orphan images should take you bakc to the orphan images page.
+    Documentation.
+    Better website.
+    Upgrade errors/warnings to inline style with icons not just die().
+    Add feedback with new icons, including install.
+    Mention Cpanel 'Create View' bug in docs.
+    Status indicator on upload.
+    Fix size of login header.
+    Don't send javascript for non-logged in users.
   
-  Nice (1.1) -
-    Confirm on delete of User or Tag.
-    Integretty Check on login.
-    Site Settings
-    Add a custom error handling page
-    Makes pages Template based
-    Grab and save EXIF info
-    Import/Export (With desktop client)
-    Move initial dynamic content into include files to pre-populate the galleries
-    Allow old and new password MySQL functions
-    Image Integrity->no image/thumb needs to have a delete option.
-    Install.php -
-      Use Table prefixes
-    Re-Arange images on a gallery
-    Bulk Delete
-    Mass Image Tagging
-    Move Sub Gallery (Base on version of navigation bar as an admin page)
-    On image view page implement next\prev image buttons with thumb preview.
-    Slide Show        
-    Tag Lists to be in scroll box
-    
   Pre-release -
     Add error checking
     Escape all variables used in queries (mysql_real_escape_string)
     WC3 validation
+    Check all files verify login status before proceeding to process actions.
+  
+  Nice  -
+   Major version -
+     Support other databases (ms-sql, Oracle, ProgresSQL, etc) and HTTP backends (IIS).
+     
+   Minor version -
+     1.1 (Templates) -
+       Makes pages Template based. Supply 2-3 with normal install.
+       Site Settings.
+       Tidy up code/naming conventions.
+       New tag entry system.
+       Drop down menu from breadcrumbs showing sub-glleries for direct navigation.
+       
+     1.2 (Expanding content) -
+       Other image formats.
+       Display movie clips.  (Not streaming)
+       Grab and save EXIF info.
+       Simple edit ability. (crop, resize, rotate, etc)
+       User-defined thumbnails.
+       Provide friendly URL rewriting. (Via HTAccess)
+       
+     1.3 (XML + Drag&Drop) -
+       Re-Arrange images on a gallery.
+       On image view page implement next\prev image buttons with thumb preview.
+       Move dynamic content into XML string.
+       Mass Image Tagging.
+       Bulk Delete.
+       Slide Show.
+       Gallery Merge.
+       Move Sub Gallery. (Base on version of navigation bar as an admin page)
+       
 
-  Consider For Future -
-    Gallery Merge
-    Boolean Tag Opperators for galeries
-    Display movie clips.  (Not streaming)
-    Output slideshow to Vid-CD (Online \ Desktop Client)
+   Patch -
+     In-line dialogue for add user \ add tag \ edit tag should have a title label.
+     Move edit taglist and JS to include file.
+     Unify the tag list ajax files box_taglist and box_edit_taglist.
+     Add username so login is not shown.
+     Add a custom error handling page.
+     Allow old and new password MySQL functions.
+     Image Integrity->no image/thumb needs to have a delete option.
+     Tag Lists to be in scroll box.
+     Comment field to be bigger, or switch between sizes.
+     Add sub-gallery, changing parent doesn't update tag ticks.
+     Allow non-admins to change their own name/password.
+     Randomize password field name on add/edit user so browser doesn't fill it in automatically.
+     Fix gallery width to fit browser in other browsers (Done - FF 2+3, IE 7+8)
+     Split CSS up into different types.
+     Images with no main image should show thumbnail on the 'fix' screen.
+     Replace Buttons with images.
+     Integrity Check on login.
+     Use text taglist entry instead of a big ticklist.
+     Inherited tags should be implied, no need to show them (but do store them!).
+     Boolean Tag Operators for galleries.
+     Copy tags from other gallery.
+     Move gallery (choose new parent).
+     On delete tag, check if any images/galleries use that tag.
+     Correct time for timezone.
+     robots.txt.
+     Resize pics on upload.
+     Bulk add from ftp folder or .zip file.
+     Watermark/Logo stamp on pics.
+     Number of images/galleries not updating automatically on add.
+     Rotate pic.
+     Replace image.
+     Add image page -> Recently added log.
+     User action logging.
+   
+  Future -
+   Import/Export (With desktop client)
+   Output slideshow to Vid-CD (Online \ Desktop Client)
 
 Ongoing -
   Add more corruption detection in the admin section
-  Make it look fancy -
-    Finish CSS
-  Fix gallery width to fit browser in other browsers (Done - FF 2+3, IE 7+8)
-
-
+  Make it look fancy
 
 
 Bugs -
   Bugs -
-    When add-tag dialogue is up, can tab to controls behind.
-    Possible IE6 bug - Layers not in correct order for popup add tag dialogues (IE7 and Firefox are ok)
     IE6 not laying out thumbnails correctly.
+    Quotes not being stripped out in descriptions.
+    Slashes in gallery description can multiply on edit.
+    '#' symbol in title causes problems (blank description and/or not saved at all).
+    Multiline comments on add image display \n\r instead performing a CR/LF.
+    Gallery/image titles can be too long to fit on the preview without messing up the layout.
+    IE6 - need to specify the logo size.
+    View image full size link sometimes has random crap in.
     
   To Verify as fixed -
     Thumbnails of varying height prevent other thumbnails from lining up correctly on gallery view.
@@ -66,16 +114,15 @@ Bugs -
     Editting + adding a desc with a '#' in doesn't save the desc.
     Overlib shouldn't display when no description
     Navigation Tree does not update when you change a gallery title.
+    Page titles needs spacing.
+    Sometimes complains about Gallery ID when submitting a gallery edit.    
 
 
 Template Ideas -
 
-  Embedable - (No footer \ Header \ Nav Bar) gallery template
+  Embeddable - (No footer \ Header \ Nav Bar) gallery template
   
 
 Done this session
 
-1) Check for duplicate tags 
-2) add_gallery \ add_image font size is incorrect
-3) Admin Tag Edit Button size change on add fixed
-
+1) Pre-populate ajax bits.

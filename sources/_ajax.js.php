@@ -29,3 +29,4 @@ function GetAjaxObject()
   }
   return xmlHttp;
 }
+

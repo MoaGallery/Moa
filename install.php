@@ -78,10 +78,6 @@
   {
     ShowProgressStart(-1, true);
     echo "<center><b><font size='6'>Moa install</font></b></center><br>\n";
-    echo "<font size='4'>Welcome to Moa install</font></b><br><br>\n";
-
-    // TODO - write some intro text
-    echo "hello\n";
 
     echo "<br><br>\n";
     echo "<table width='600'><tr><td>\n";
@@ -235,7 +231,7 @@
 
     // table prefix
     echo "<tr>\n";
-    echo "<td>Table prefix: </td><td><input type='text' name='tabprefix' value='Moa_'\></td>\n";
+    echo "<td>Table prefix: </td><td><input type='text' name='tabprefix' value='moa_'\></td>\n";
     echo "</tr>\n";
 
     // Spacer for titles
@@ -465,7 +461,7 @@
 
     echo "Creating user login - ";
     $query = "INSERT INTO ".$tab_prefix."users (Name, Admin, Password) VALUES ('".mysql_real_escape_string(strip_tags($_REQUEST["Moauser"]))."', 1, PASSWORD('".mysql_real_escape_string(strip_tags($_REQUEST["Moapass"]))."'));";
-    $result = mysql_query($query) or die(mysql_error());
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     if ($result != false)
     {
@@ -492,33 +488,24 @@
     echo "<center><b><font size='6'>Congratulations...</font></b></center><br>\n";
     echo "<font>You have successfully installed the Moa Gallery.</font></b><br><br>\n";
         
-    echo "Click <a href='index.php'>here</a> to go to you're new site.\n";    
+    echo "Click <a href='index.php'>here</a> to go to your new gallery.\n";    
         
     ShowProgressEnd();
   }
-  
-  if ((isset($_REQUEST["stage"])) && (strcmp($_REQUEST["stage"], "stage2b") == 0))
-  {
-    setcookie($_REQUEST["cookiename"], "Test", time()+60*60*24*100, $_REQUEST["cookiepath"], false, false, false);
-  }
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
      <?php
+       $INSTALLING = true;
        include_once ("sources/_html_head.php");
-       echo "<title>Site Map</title>";
+       echo "<title>Moa install</title>";
      ?>
   </head>
   <body>
     <?php
-      $INSTALLING = true;
-
       include_once ("sources/_header.php");
-      include_once ("sources/_gallery_delete.php");
 
       if (isset($_REQUEST["stage"]))
       {
@@ -540,10 +527,18 @@
         }
         if (strcmp($_REQUEST["stage"], "stage3b") == 0)
         {
+          include_once("private/db_config.php");
+          include_once("config.php");
+          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
           Stage3B();
         }
         if (strcmp($_REQUEST["stage"], "stage4") == 0)
         {
+          include_once("private/db_config.php");
+          include_once("config.php");
+          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
           Stage4();
         }
       } else

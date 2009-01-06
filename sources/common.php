@@ -1,4 +1,9 @@
 <?php
+  $MOA_MAJOR_VERSION = 0;
+  $MOA_MINOR_VERSION = 9;
+  $MOA_REVISION = 0;
+  $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION;
+  
   // Function for retrieving date\time at page load
   function get_time_at_page_load() {
     date_default_timezone_set("GMT");
@@ -13,7 +18,9 @@
                    25 => '25th', 26 => '26th', 27 => '27th', 28 => '28th',
                    29 => '29th', 30 => '30th', 31 => '31st'
                  );
-
-    return $temp['month']." ".$mday[$temp['mday']].", ".$temp['year'].", ".$temp['hours'].":".$temp['minutes'];
-  }    
+    
+    $minutes = sprintf("%02s",$temp['minutes']);
+    
+    return $temp['month']." ".$mday[$temp['mday']].", ".$temp['year'].", ".$temp['hours'].":".$minutes;
+  }  
 ?>

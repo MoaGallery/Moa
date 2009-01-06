@@ -34,7 +34,7 @@
         ?>
         
         <div style='float:left;' id='image_thumb_<?php echo $orphan_image_id ?>'>
-          <div class='gallery-shadow' <?php echo $popup ?> onclick='window.location="view_image.php?image_id=<?php echo $orphan_image_id ?>&amp;parent_id=0000000000"'>
+          <div class='gallery-shadow' <?php echo $popup ?> onclick='window.location="view_image.php?image_id=<?php echo $orphan_image_id ?>&amp;parent_id=0000000000&amp;referer=orphan"'>
             <div class='gallery-shadow2'>
               <div class='gallery-shadow3' style="width:<?php echo ($THUMB_WIDTH+20) ?>px; height: <?php echo (ceil($THUMB_WIDTH*0.75)+20); ?>px;">
                 <div style="margin:10px;">
@@ -57,7 +57,7 @@
     echo "<p class='gallery_desc'>Images with no tags</p>\n";
     
     $query = "SELECT * FROM ".$tab_prefix."v_orphan_no_tags;";
-    $result = mysql_query($query) or die(mysql_error());    
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     DisplayResults($result);
     echo "<p class='new_line'/><br/>\n";
@@ -70,7 +70,7 @@
     echo "<p class='gallery_desc'>Images with tags that are in no gallery</p>\n";
     
     $query = "SELECT * FROM ".$tab_prefix."v_orphan_no_gallery;";
-    $result = mysql_query($query) or die(mysql_error());    
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     DisplayResults($result);
     echo "<p class='new_line'/><br/>\n";
@@ -87,7 +87,7 @@
     echo "<p class='gallery_desc'>Images that have no image/thumbnail files associated</p>\n";
     
     $query = "SELECT * FROM ".$tab_prefix."image;";
-    $result = mysql_query($query) or die(mysql_error()); 
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     while ($image = mysql_fetch_array($result))
     {
@@ -123,7 +123,7 @@
     echo "<p class='gallery_desc'>Images that have no main image file associated</p>\n";
     
     $query = "SELECT * FROM ".$tab_prefix."image;";
-    $result = mysql_query($query) or die(mysql_error()); 
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     while ($image = mysql_fetch_array($result))
     {
@@ -159,7 +159,7 @@
     echo "<p class='gallery_desc'>Images that have no thumbnail files associated</p>\n";
     
     $query = "SELECT * FROM ".$tab_prefix."image;";
-    $result = mysql_query($query) or die(mysql_error()); 
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     while ($image = mysql_fetch_array($result))
     {

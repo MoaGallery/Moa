@@ -1,14 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
-		<title>View Image</title>
+		<title>Image</title>
+		<meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>
 	</head>
 	<body>
+	  <div>
 <?php
     include_once("config.php");
-    echo "    <a onClick='history.go(-1)'><img src='".$IMAGE_PATH."/".$_REQUEST["image_id"];
+    echo "    <a onclick='history.go(-1)'><img src='".$IMAGE_PATH."/".$_REQUEST["image_id"];
 ?>
-.jpg' onMouseOver='this.style.cursor="hand"'></img></a>
+.jpg' onmouseover='this.style.cursor="hand"' alt='Full size image'></img></a>
+  </div>
   </body>
 </html>

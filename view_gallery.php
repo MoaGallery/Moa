@@ -1,24 +1,33 @@
 <?php
-   if (isset($_REQUEST["gallery_id"]) == false)
+  $no_gallery_id = false;
+  if (isset($_REQUEST["gallery_id"]) == false)
   {
-    echo "No gallery ID supplied";
-    die();
+    $no_gallery_id = true;
+  } else
+  {
+    $gallery_id = $_REQUEST["gallery_id"];
   }
-  $gallery_id = $_REQUEST["gallery_id"];
   session_start();
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
      <?php
        include_once ("sources/_html_head.php");
-       echo "<title>View Gallery</title>";
+       echo "<title>Gallery</title>";
      ?>
   </head>
   <body>
     <?php
       include_once ("sources/_header.php");
+      
+      if (true == $no_gallery_id)
+      {
+        moa_warning("No gallery ID supplied.");
+        include_once ("sources/_footer.php");
+        echo "</body>\n</html>\n";
+        die();
+      }
     ?>
 
     <script type="text/javascript" src="view_gallery.js.php"> </script>
@@ -31,10 +40,7 @@
         }
 
         gallery_id = '<?php echo $gallery_id ?>';
-        window.onresize=resize_fade;
-        
-        ajaxGetGalleryName('<?php echo $gallery_id; ?>');
-        ajaxShowThumbs('<?php echo $gallery_id; ?>');
+        window.onresize=fit_width;
       }
       
       window.onload=on_load;
@@ -43,16 +49,20 @@
     <?php
       include_once ("sources/_image_delete.php");
       include_once ("sources/_gallery_delete.php");
+      
+      $pre_cache = true;
+      $pre_gallery_id = $gallery_id;
+      $pre_index = false;
     ?>
     
+    <div id="thumbs"><?php include_once("sources/box_gallery_thumbs.php"); ?></div>
+    
     <script type="text/javascript">
-      if (<?php echo $gallery_id ?> == 0000000000)
+      if ('<?php echo $gallery_id ?>' == '0000000000')
       {
         document.location = "index.php";
       }
     </script>
-    
-    <span id="thumbs"><img src="media/loading.png" alt="Loading" title=""/></span>
     <?php
       include ("sources/_footer.php");
     ?>

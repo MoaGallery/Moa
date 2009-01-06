@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
      <?php
@@ -13,15 +12,11 @@
        include_once "sources/id.php";
        
        if ($Userinfo->ID == NULL) {
-       	 echo "You are not logged in.";
-       	 
-       	 include_once "sources/_footer.php";
-       	 echo "</BODY>\n</HTML>";
-         
-       	 die();
-       } 
-      
-       include ("sources/_admin_page_links.php");
+       	 moa_warning("You are not logged in.");
+       }  else
+       {
+         include ("sources/_admin_page_links.php");
+       }
      
        include_once "sources/_footer.php";
      ?>

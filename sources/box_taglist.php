@@ -1,31 +1,31 @@
 <?php
     header("Cache-Control: no-cache, must-revalidate");
     include_once("../private/db_config.php");
+    include_once("_error_funcs.php");
     session_start();
     
     echo "<head>\n";
-    echo "<link rel='stylesheet' href='../template/default/style.css' type='text/css'>\n";
+    echo "<link rel='stylesheet' href='../style/style.css' type='text/css'>\n";
     echo "</head>\n";
     echo "<body>\n";
-    $db = mysql_connect($db_host, $db_user, $db_pass) or die("Error" . mysql_error());
-    mysql_select_db($db_name, $db) or die("Error" . mysql_error());
+    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     // If adding a tag
     if (isset($_REQUEST["tagname"]) == true)
     {
       $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-      $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       
       if (0 == mysql_num_rows($result))
       {
         $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-        $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+        $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       }
     }
     
     // Show button to add new tag
-    //echo "<input type='button' value='Add new tag' onclick='javascript:show_add()'></input><br>";
-    echo "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a><br><br>";
+    echo "<div id='addtagarea'></div><br/>\n";
     
     // Show all tags
     {
@@ -34,7 +34,7 @@
 
     while ($taglist = mysql_fetch_array($result))
     {
-      echo "<div style='clear: both'><input style='float: left' class='form_label_text' type='checkbox' onClick='onTick(\"".$taglist["IDTag"]."\");' ";
+      echo "<div style='clear: both; height=\"24px\";'><input style='float: left; vertical-align: middle;'  class='form_label_text' type='checkbox' onClick='onTick(\"".$taglist["IDTag"]."\");' ";
       if (isset($_SESSION["tag-".$taglist["IDTag"]]))
       {
         echo "checked='true' ";

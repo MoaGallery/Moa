@@ -1,54 +1,64 @@
-<html>	 	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>		
     <?php
        include_once ("sources/_html_head.php");      
        
-       echo "<title>Tag Management</title>";
+       echo "<title>Tag management</title>";
     ?>
     <script type="text/javascript">      
       <?php
         include_once("sources/_ajax.js.php");                
       ?>
+
+		  var addTagLink  = "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a>";
+		  var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br>";
+		      addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(escape(document.getElementById(\"newtag\").value)); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
+		      addTagForm += "&nbsp;<input type='button' id='tagcancel' value='Cancel' onclick='javascript:hide_add()'></input>";
     
-      // Tag Add Functions
-      function resize_fade()
-      {
-        var fade = document.getElementById("fade");
-        var tab = document.getElementById("add_table");
-        fade.style.width = tab.offsetWidth;
-        fade.style.height = tab.offsetHeight;
-        fade.style.left = tab.offsetLeft;
-        fade.style.top = tab.offsetTop;
-      }
-      
-      function show_add()
-      {
-        resize_fade();
-        var dia = document.getElementById("add_dialogue");
-        var tab = document.getElementById("add_table");
-        dia.style.left = (tab.offsetWidth/2)-75;
-        document.getElementById("add_dialogue").style.visibility = "visible";
-        document.getElementById("fade").style.visibility = "visible";
-      }
-      
-      function hide_add()
-      {
-        document.getElementById("add_dialogue").style.visibility = "hidden";
-        document.getElementById("fade").style.visibility = "hidden";
-      }
-      
-      window.onresize=resize_fade;    
-      
+      function checkKey(e)
+		  {
+		    var characterCode
+		
+		    if(e && e.which)
+		    {
+		      e = e
+		      characterCode = e.which
+		    }
+		    else
+		    {
+		      //e = event
+		      characterCode = e.keyCode
+		    }
+		    
+		    // Check for enter
+		    if(characterCode == 13)
+		    {
+		      document.getElementById("tagsubmit").click();
+		      return false
+		    }
+		    
+		    // Check for escape
+		    if(characterCode == 27)
+		    {
+		      document.getElementById("tagcancel").click();
+		      return false
+		    }
+		    
+		    return true
+		  }
+		              
       // Tag Edit Functions
       function ajaxTagView()
       {
-      var xmlHttp = GetAjaxObject();
+        var xmlHttp = GetAjaxObject();
       
         xmlHttp.onreadystatechange=function()
         {
           if(xmlHttp.readyState==4)
           {
              document.getElementById("taglist").innerHTML=xmlHttp.responseText;
+             document.getElementById("addtagarea").innerHTML=addTagLink;
           }
         }
         xmlHttp.open("GET","sources/box_tag_admin.php?action=view",true);
@@ -65,6 +75,7 @@
         if(xmlHttp.readyState==4)
           {
             document.getElementById("taglist").innerHTML=xmlHttp.responseText;
+            document.getElementById("addtagarea").innerHTML=addTagLink;
           }
         }
           
@@ -72,19 +83,17 @@
         xmlHttp.send(null);
       }      
     
-      function hide_div( name)
-      {
-      	 document.getElementById(name).style.display = "none";      	 
-      	 document.getElementById(name).style.position = "absolute";
-      	 document.getElementById(name).style.cssFloat = "none";
-      }
-    
-      function show_div( name)
-      {      	       	
-      	 document.getElementById(name).style.position = "static";      	      	 
-      	 document.getElementById(name).style.cssFloat = "left";      	 
-      	 document.getElementById(name).style.display = "block";
-      }
+			function show_add()
+			{
+			  document.getElementById("addtagarea").innerHTML=addTagForm;
+			  document.getElementById("newtag").focus();
+			}
+			
+			function hide_add()
+			{
+				 document.getElementById("newtag").blur();
+				 document.getElementById("addtagarea").innerHTML=addTagLink;
+			}
     
       function tag_edit( id)
       {
@@ -98,6 +107,8 @@
       	 
       	 document.getElementById("tag_edit_box_" + id).style.clear = "left";      	      	 
       	 document.getElementById("tag_edit_input_" + id).value = document.getElementById("tag_name_" + id).innerHTML;
+      	 
+      	 document.getElementById("tag_edit_box_" + id).focus();
       }            
       
       function tag_cancel( id)
@@ -141,20 +152,37 @@
       
       function tag_delete( id)
       {
-        var xmlHttp = GetAjaxObject();
-    
-        xmlHttp.onreadystatechange=function()
+        if (confirm("Are you sure you want to delete this tag?"))
         {
-          if(xmlHttp.readyState==4)
-          { 
-            if (xmlHttp.responseText == "OK")
-            {
-              ajaxTagView();
+          var xmlHttp = GetAjaxObject();
+      
+          xmlHttp.onreadystatechange=function()
+          {
+            if(xmlHttp.readyState==4)
+            { 
+              if (xmlHttp.responseText == "OK")
+              {
+                ajaxTagView();
+              }
             }
           }
+          xmlHttp.open("GET","sources/box_tag_admin.php?action=delete&tag_id="+id,true);
+          xmlHttp.send(null);
         }
-        xmlHttp.open("GET","sources/box_tag_admin.php?action=delete&tag_id="+id,true);
-        xmlHttp.send(null);
+      }
+      
+      function hide_div( name)
+      {
+      	 document.getElementById(name).style.display = "none";      	 
+      	 document.getElementById(name).style.position = "absolute";
+      	 document.getElementById(name).style.cssFloat = "none";
+      }
+    
+      function show_div( name)
+      {      	       	
+      	 document.getElementById(name).style.position = "static";      	      	 
+      	 document.getElementById(name).style.cssFloat = "left";      	 
+      	 document.getElementById(name).style.display = "block";
       }
     </script>
 	  <title>Tag Management</title>
@@ -165,12 +193,10 @@
       include_once "sources/id.php";
 
       if ($Userinfo->ID == NULL) {
-      	echo "You are not logged in.";
-
-      	include_once "sources/_footer.php";
-      	echo "</BODY>\n</HTML>";
-
-      	die();
+      	moa_warning("You are not logged in.");
+        include_once ("sources/_footer.php");
+        echo "</body>\n</html>\n";
+        die();
       }
 
       include("sources/_admin_page_links.php");
@@ -179,15 +205,11 @@
       echo "<tr><td class='box_header'>View all tags</td></tr>";
       echo "<tr><td class='pale_area_nb'>";
       
-      // Show button to add new tag
-      echo "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a><br><br>";
-      
+      // Show button to add new tag      
+      echo "<div id='addtagarea'></div><br/>\n";              
       echo "<span id='taglist'><img src='media/loading.png' alt='Loading' title=''/></span>";
       echo "</td>\n</td>\n</table>";
-    
-      // Include DIV tags need for dialogue boxs 
-      include_once("sources/_add_dialogue_layers.php");
-      
+         
       include_once "sources/_footer.php";  
     ?>
     <script type="text/javascript">

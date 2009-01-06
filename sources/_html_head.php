@@ -1,16 +1,24 @@
 <?php  
-  // Database Configuration and Website configuration settings
-  include_once("private/db_config.php");
-  include_once("config.php");
+  if (false == isset($INSTALLING)) {
+    $INSTALLING = false;
+  }
   
   // Common functions
-  include_once("_common.php");
-
-  // Connect to database
-  if (isset($db_host))
+  include_once("common.php");
+  include_once("_error_funcs.php");
+  
+  if (!$INSTALLING)
   {
-    $db = mysql_connect($db_host, $db_user, $db_pass) or die("Error" . mysql_error());
-    mysql_select_db($db_name, $db) or die("Error" . mysql_error());
+    // Database Configuration and Website configuration settings
+    include_once("private/db_config.php");
+    include_once("config.php");
+  
+    // Connect to database
+    if (isset($db_host))
+    {
+      $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+      mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    }
   }
    
   // Website Icon
@@ -27,7 +35,7 @@
 
 <?php
   // Main stylesheet
-  echo "<link rel='stylesheet' href='template/default/style.css' type='text/css'/>\n";  
+  echo "<link rel='stylesheet' href='style/style.css' type='text/css'/>\n";  
   
   // Set content type
   echo "<meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>\n";

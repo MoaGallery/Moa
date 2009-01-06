@@ -1,3 +1,8 @@
+var addTagLink  = "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a>";
+var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br>";
+    addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(escape(document.getElementById(\"newtag\").value)); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
+    addTagForm += "&nbsp;<input type='button' id='tagcancel' value='Cancel' onclick='javascript:hide_add()'></input>";
+
 var view_image_js_loaded = false;
 var image_id = "blank";
 
@@ -15,10 +20,10 @@ function ajaxGetImageDesc(id)
     {
       if (xmlHttp.responseText == "")
       {
-        document.title = "View Image";
+        document.title = "Image";
       } else
       {
-        document.title = "View Image" + xmlHttp.responseText;
+        document.title = "Image - " + xmlHttp.responseText;
       }
     }
   }    
@@ -43,7 +48,7 @@ function ajaxImageFunction(id)
   xmlHttp.send(null);
 }
 
-function ajaxInfoFunction(id, par)
+function ajaxInfoFunction(id, par, referer)
 {
   var xmlHttp = GetAjaxObject();
   
@@ -52,14 +57,15 @@ function ajaxInfoFunction(id, par)
   if(xmlHttp.readyState==4)
     {
       document.getElementById("info").innerHTML=xmlHttp.responseText;
-      ajaxInfoDescription( id, 'NULL', 'false', "<?php echo session_id(); ?>", true);
+      ajaxInfoDescription( id, 'NULL', 'false', "<?php echo session_id(); ?>", true, referer);
     }
   }
-  xmlHttp.open("GET","sources/box_image_info.php?image_id="+id+"&parent_id="+par,true);
+  
+  xmlHttp.open("GET","sources/box_image_info.php?image_id="+id+"&parent_id="+par+"&referer="+referer,true);
   xmlHttp.send(null);
 }
 
-function ajaxInfoDescription(id, desc, edit, SessID, initial)
+function ajaxInfoDescription(id, desc, edit, SessID, initial, referer)
 {
   var xmlHttp = GetAjaxObject();
   
@@ -71,6 +77,7 @@ function ajaxInfoDescription(id, desc, edit, SessID, initial)
       if (edit == "true")
       {
         ajaxTagList("");
+        document.getElementById("image-comment").focus();
       } else
       {
         if (initial == "false")
@@ -139,6 +146,8 @@ function ajaxTagList(NewTagName)
   if(xmlHttp.readyState==4)
     {
       document.getElementById("taglist").innerHTML=xmlHttp.responseText;
+    
+      document.getElementById("addtagarea").innerHTML=addTagLink;
     }
   }
   if (NewTagName == "")
@@ -155,38 +164,62 @@ function ajaxTagList(NewTagName)
   xmlHttp.send(null);
 }
 
-function image_delete (image_id, gallery_id)
+function image_delete (image_id, gallery_id, orphan)
 {
   if (confirm("Are you sure you want to delete this image?"))
   {
-    window.location = 'view_gallery.php?gallery_id='+gallery_id+'&image_delete_id='+image_id+'&image_delete=true';
+    if (0 == orphan)
+    {
+      window.location = 'view_gallery.php?gallery_id='+gallery_id+'&image_delete_id='+image_id+'&image_delete=true';
+    } else
+    {
+      window.location = 'admin_orphans.php?image_delete_id='+image_id+'&image_delete=true';
+    }
   }
-}
-
-function resize_fade()
-{
-  var fade = document.getElementById("fade");
-  var tab = document.getElementById("add_table");
-  //fade.style.width = tab.offsetWidth;
-  //fade.style.height = tab.offsetHeight;
-  //fade.style.left = tab.offsetLeft;
-  //fade.style.top = tab.offsetTop;
 }
 
 function show_add()
 {
-  resize_fade();
-  var dia = document.getElementById("add_dialogue");
-  var tab = document.getElementById("add_table");
-  dia.style.left = (tab.offsetWidth/2)-75;
-  document.getElementById("add_dialogue").style.visibility = "visible";
-  document.getElementById("fade").style.visibility = "visible";
+  document.getElementById("addtagarea").innerHTML=addTagForm;
+  document.getElementById("newtag").focus();
 }
 
 function hide_add()
 {
-  document.getElementById("add_dialogue").style.visibility = "hidden";
-  document.getElementById("fade").style.visibility = "hidden";
+	 document.getElementById("newtag").blur();
+	 document.getElementById("addtagarea").innerHTML=addTagLink;
 }
 
+function checkKey(e)
+{					
+  var characterCode
+					
+  if(e && e.which)
+  {				
+    e = e	
+    characterCode = e.which
+  }				
+  else		
+  {				
+    //e = event
+    characterCode = e.keyCode
+  }				
+  				
+  // Check for enter
+  if(characterCode == 13)
+  {				
+    document.getElementById("tagsubmit").click();
+    return false
+  }				
+  				
+  // Check for escape
+  if(characterCode == 27)
+  {				
+    document.getElementById("tagcancel").click();
+    return false
+  }				
+  				
+  return true
+}    					
+  
 view_image_js_loaded = true;

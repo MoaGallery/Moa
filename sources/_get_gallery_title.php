@@ -6,20 +6,21 @@
 
   if (isset($_REQUEST["gallery_id"]) == false)
   {
-    die("Error: No Gallery ID supplied");
+    moa_warning("No Gallery ID supplied,");
+    die();
   }
   
   $gallery_id = $_REQUEST["gallery_id"];
   
   include_once("../private/db_config.php");
   
-  $db = mysql_connect($db_host, $db_user, $db_pass) or die("Error" . mysql_error());
-  mysql_select_db($db_name, $db) or die("Error" . mysql_error());
+  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+  mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   include_once("../config.php");
   include_once("id.php");
   
   $query = "SELECT Name FROM ".$tab_prefix."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
-  $result = mysql_query($query) or die(mysql_error());
+  $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   $gallery = mysql_fetch_array($result);
   
   echo $gallery["Name"];

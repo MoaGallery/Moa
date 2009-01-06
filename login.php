@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">       
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">                                                 
   <head>
      <?php
@@ -23,10 +22,10 @@
           <tr>
             <td class="pale_area_nb">
               <table cellpadding="5" cellspacing="0">
-                <tr><td>Name:</td><td> <INPUT id="loginname" type="text" name="name"></td></tr>
-                <tr><td>Password</td><td><INPUT id="loginpass" type="password" name="password"></td></tr>
-                <tr><td>Duration</td><td>
-                	<SELECT name="duration">
+                <tr><td class='form_text'>Name:</td><td> <INPUT id="loginname" type="text" name="name" class='form_text'></td></tr>
+                <tr><td class='form_text'>Password:</td><td><INPUT id="loginpass" type="password" name="password" class='form_text'></td></tr>
+                <tr><td class='form_text'>Duration:</td><td>
+                	<SELECT name="duration" class='form_text'>
                 	  <OPTION value="mins30">30 Minutes</OPTION>
                     <OPTION value="mins60">1 Hour</OPTION>
                     <OPTION value="mins120">2 Hours</OPTION>

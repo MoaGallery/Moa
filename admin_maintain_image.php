@@ -1,10 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
      <?php
        include_once ("sources/_html_head.php");
-       echo "<title>New image file</title>";
+       echo "<title>Image maintanence</title>";
      ?>
   </head>
   <body>
@@ -13,7 +12,9 @@
 
       if ($Userinfo->ID == NULL)
       {
-      	echo "You are not logged in. Bog off!";
+        moa_warning("You are not logged in.");
+        include_once ("sources/_footer.php");
+        echo "</body>\n</html>\n";
         die();
       }
       
@@ -22,17 +23,23 @@
       }
       else
       {
-      	echo "No image ID supplied";
+        moa_warning("No image ID supplied.");
+        include_once ("sources/_footer.php");
+        echo "</body>\n</html>\n";
         die();
       }
   
       include_once ("sources/_admin_page_links.php");
       include_once ("sources/_thumbnail_func.php");
       
-      echo "<table id='add_table' class='area' width='100%' cellspacing='0' cellpadding='5'><tr><td class='box_header'>Upload missing image file</td></tr><tr><td class='pale_area_nb'>\n";
+      echo "<table id='add_table' class='area' width='100%' cellspacing='0' cellpadding='5'>";
+      echo "<tr>";
+      echo "<td class='box_header'>Upload missing image file</td>";
+      echo "</tr><tr>";
+      echo "<td class='pale_area_nb'>\n";
       
       $query = "SELECT * FROM ".$tab_prefix."image WHERE IDImage = ".$image_id;
-      $result = mysql_query($query) or die(mysql_error());    
+      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);  
       
       $image_info = mysql_fetch_array( $result);  
       
@@ -56,40 +63,38 @@
 	      else
 	      {
 	        if ($image_info == false) {
-	        	echo "Invalid image id supplied";
+	        	moa_warning("Invalid image id supplied.");
+            include_once ("sources/_footer.php");
+            echo "</body>\n</html>\n";
 	          die();  	
 	        }
 	  ?>  
 	  <form name="image_add" method="post" action="admin_maintain_image.php?image_id=<?php echo $image_id ?>"  enctype="multipart/form-data">
 	    <div id="debug"></div>
 	    <table cellpadding="5" border=0>
-	    	<tr>        
-	        <td rowspan="4" valign="center" width="10"></td>
-	      </tr>
 	    	<tr>
-	    	   <td>Original Filename:</td>
-	    	   <td><?php echo nl2br(htmlspecialchars($image_info["Filename"]));?></td>
+	    	   <td class="form_label_text">Original Filename:</td>
+	    	   <td class="form_label_text"><?php echo nl2br(htmlspecialchars($image_info["Filename"]));?></td>
 	      </tr>      
 	    	<tr>
-	    	   <td>Description:</td>
-	    	   <td><?php echo nl2br(htmlspecialchars($image_info["Description"]));?></td>
+	    	   <td class="form_label_text">Description:</td>
+	    	   <td class="form_label_text"><?php echo nl2br(htmlspecialchars($image_info["Description"]));?></td>
 	      </tr>            
 	      <tr>
-	        <td>File:</td>
+	        <td class="form_label_text">File:</td>
 	        <td>
 	          <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
-	          <input type="file" id="file_dlg" onchange="javascript:file_change();"size="30" name="filename" accept="image/jpg" onkeyup="document.getElementById('status').innerHTML='<BR>'"></input><br>
+	          <input type="file" id="file_dlg" onchange="javascript:file_change();"size="30" name="filename"  class="form_label_text"accept="image/jpg" onkeyup="document.getElementById('status').innerHTML='<BR>'"></input><br>
 	        </td>
 	      </tr>
 	      <tr>
-	      <td cellspan="2"><input type='submit' value='Add Image'></input></td>
+	      <td colspan="2"><input type='submit' value='Add Image'></input></td>
 	      </tr>
 	    </table>
 	  </form>  
 	<?php
 	  }
 	}
-  echo "<a class='nav_link' href='admin_maintain.php'>&lt;-- Back to Image Integrity</a>";
   echo "</td></tr></table>\n";
   
   include_once ("sources/_footer.php");

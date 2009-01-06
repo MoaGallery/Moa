@@ -8,20 +8,20 @@
   {
     
     $query = "SELECT IDParent FROM ".$tab_prefix."gallery WHERE (IDGallery = ".mysql_real_escape_string($_REQUEST["gallery_delete_id"]).")";
-    $result = mysql_query( $query) or die(mysql_error());
+    $result = mysql_query( $query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     $galleries = mysql_fetch_array($result);
     if ($galleries)
     {
       $parent_id = $galleries["IDParent"];
       
       $query = "UPDATE ".$tab_prefix."gallery SET IDParent = '".mysql_real_escape_string($parent_id)."' WHERE (IDParent = ".mysql_real_escape_string($_REQUEST["gallery_delete_id"]).")";
-      $result = mysql_query( $query) or die(mysql_error());
+      $result = mysql_query( $query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       
       $query = "DELETE FROM ".$tab_prefix."gallerytaglink WHERE (IDGallery = ".mysql_real_escape_string($_REQUEST["gallery_delete_id"].")");
-      $result = mysql_query( $query) or die(mysql_error());
+      $result = mysql_query( $query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
       $query = "DELETE FROM ".$tab_prefix."gallery WHERE (IDGallery = ".mysql_real_escape_string($_REQUEST["gallery_delete_id"].")");
-      $result = mysql_query( $query) or die(mysql_error());
+      $result = mysql_query( $query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     }
   }
 ?>

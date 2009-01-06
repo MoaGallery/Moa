@@ -1,3 +1,8 @@
+  var addTagLink  = "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a>";
+  var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br>";
+      addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(escape(document.getElementById(\"newtag\").value)); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
+      addTagForm += "&nbsp;<input type='button' id='tagcancel' value='Cancel' onclick='javascript:hide_add()'></input>";
+
   var view_gallery_loaded = false;
   var gallery_id = "blank";
   var gallery_name = "blank";
@@ -15,7 +20,7 @@
     if(xmlHttp.readyState==4)
       {
         document.getElementById("thumbs").innerHTML=xmlHttp.responseText;
-        ajaxShowInfo(id);
+        //ajaxShowInfo(id);
       }
     }
     xmlHttp.open("GET","sources/box_gallery_thumbs.php?gallery_id="+id,true);
@@ -49,7 +54,8 @@
         document.getElementById("galleryeditinfo").innerHTML=xmlHttp.responseText;
         if (edit == "true")
         {
-          ajaxTagList("");          
+          ajaxTagList("");  
+          document.getElementById("gal-name").focus();        
         } else
         {
           if (initial == "false")
@@ -57,7 +63,7 @@
             ajaxShowThumbs(gallery_id);
           }
         }
-        resize_fade();  
+          
         ajaxGetGalleryName(id);
       }
     }
@@ -80,35 +86,12 @@
     if(xmlHttp.readyState==4)
       {
         gallery_name = xmlHttp.responseText;
-        ajaxGetGalleryDesc(gallery_id);
+        document.title = "Gallery - " + gallery_name;
       }
     }    
     
     xmlHttp.open("GET","sources/_get_gallery_title.php?gallery_id="+id,true);
 
-    xmlHttp.send(null);
-  }
-  
-  function ajaxGetGalleryDesc(id)
-  {
-    var xmlHttp = GetAjaxObject();
-    
-    xmlHttp.onreadystatechange=function()
-    {
-    if(xmlHttp.readyState==4)
-      {
-        document.getElementById("nav_tree_" + id).innerHTML = gallery_name;
-        if (xmlHttp.responseText == "")
-        {
-          document.title = "View Gallery - " + gallery_name;
-        } else
-        {
-          document.title = "View Gallery - " + gallery_name + xmlHttp.responseText;
-        }
-      }
-    }    
-    
-    xmlHttp.open("GET","sources/_get_gallery_desc.php?gallery_id="+id,true);
     xmlHttp.send(null);
   }
   
@@ -161,6 +144,7 @@
     if(xmlHttp.readyState==4)
       {
         document.getElementById("taglist").innerHTML=xmlHttp.responseText;
+        document.getElementById("addtagarea").innerHTML=addTagLink;
       }
     }
     if (NewTagName == "")
@@ -192,7 +176,7 @@
   }
   
   function fit_width()
-  {
+  { 
     //var l = document.getElementById("image_thumb_0000000066").style.left;
     //var r = document.getElementById("image_thumb_0000000067").style.left;
     //document.getElementById("debug").innerHTML = l+" "+r;
@@ -211,45 +195,61 @@
     
     var x = w - s - b;
     x = ((x/tn)|0);
-    //alert (tab.width);
+    
     tab.width = (x * tn)+s;
     if (tab.width < ((tn*2)))
     {
       tab.width = (tn*2)+s;
     }
   }
-  
-  function resize_fade()
-  {
-    var fade = document.getElementById("fade");
-    var tab = document.getElementById("add_table");
-    //fade.style.width = tab.offsetWidth + "px";
-    //fade.style.height = tab.offsetHeight + "px";
-    //fade.style.left = tab.offsetLeft + "px";
-    //fade.style.top = tab.offsetTop + "px";
-    
-    fit_width();
-  }
-  
-  function show_add()
-  {
-    resize_fade();
-    var dia = document.getElementById("add_dialogue");
-    var tab = document.getElementById("add_table");
-    dia.style.left = (tab.offsetWidth/2)-75;
-    document.getElementById("add_dialogue").style.visibility = "visible";
-    document.getElementById("fade").style.visibility = "visible";
-  }
-  
-  function hide_add()
-  {
-    document.getElementById("add_dialogue").style.visibility = "hidden";
-    document.getElementById("fade").style.visibility = "hidden";
-  }
-  
+   
+	function show_add()
+	{
+	  document.getElementById("addtagarea").innerHTML=addTagForm;
+	  document.getElementById("newtag").focus();
+	}
+	
+	function hide_add()
+	{
+		 document.getElementById("newtag").blur();
+		 document.getElementById("addtagarea").innerHTML=addTagLink;
+	}
+	
   function show_title( name)
   {
   	document.title = name;
+  }
+  
+  function checkKey(e)
+  {
+    var characterCode
+
+    if(e && e.which)
+    {
+      e = e
+      characterCode = e.which
+    }
+    else
+    {
+      //e = event
+      characterCode = e.keyCode
+    }
+    
+    // Check for enter
+    if(characterCode == 13)
+    {
+      document.getElementById("galsubmit").click();
+      return false
+    }
+    
+    // Check for escape
+    if(characterCode == 27)
+    {
+      document.getElementById("galcancel").click();
+      return false
+    }
+    
+    return true
   }
   
   view_gallery_loaded = true;

@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>users` (
   `Name` varchar(40) NOT NULL,
   `Password` varchar(100) NOT NULL,
   `Admin` tinyint(1) NOT NULL,
+  `Salt` varchar(8) NOT NULL,
   PRIMARY KEY  (`IDUser`),
   UNIQUE KEY `Name` (`Name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;

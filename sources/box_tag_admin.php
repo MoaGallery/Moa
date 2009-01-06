@@ -1,13 +1,15 @@
 <?php
     header("Cache-Control: no-cache, must-revalidate");
     include_once("../private/db_config.php");
+    include_once("_error_funcs.php");
     
-    $db = mysql_connect($db_host, $db_user, $db_pass) or die("Error" . mysql_error());
-    mysql_select_db($db_name, $db) or die("Error" . mysql_error());        
+    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     
     // Are we viewing \ editing or deleted?
     if (isset($_REQUEST["action"]) == false) {
-    	 die("No action supplied");
+    	 moa_warning("No action supplied.");
+    	 die();
     }
     
     $action = $_REQUEST["action"];
@@ -34,14 +36,14 @@
     		delete_tag();
     		break;
     	}
-    }    
+    }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     function display_tag_list() {
     	global $tab_prefix;
 
       $query = 'SELECT * FROM '.$tab_prefix.'tag ORDER BY Name';
-      $result = mysql_query($query) or die("ERROR!".mysql_error()."<BR>");
+      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       
       while ($taglist = mysql_fetch_array($result)) 
       {       	 
@@ -65,7 +67,7 @@
       global $tab_prefix;
 
       echo "<head>\n";
-      echo "<link rel='stylesheet' href='../template/default/style.css' type='text/css'>\n";
+      echo "<link rel='stylesheet' href='../style/style.css' type='text/css'>\n";
       echo "</head>\n";
       echo "<body>\n";
        
@@ -73,12 +75,12 @@
       if (isset($_REQUEST["tagname"]) == true)
       {
       	$query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-        $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+        $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
         if (0 == mysql_num_rows($result))
         {      	
           $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
-          $result = mysql_query($query) or die("ERROR!".mysql_error()."<BR>");
+          $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         }
       }       
       
@@ -91,7 +93,7 @@
        global $tab_prefix;
        
        echo "<head>\n";
-       echo "<link rel='stylesheet' href='../template/default/style.css' type='text/css'>\n";
+       echo "<link rel='stylesheet' href='../style/style.css' type='text/css'>\n";
        echo "</head>\n";
        echo "<body>\n";
        
@@ -108,6 +110,7 @@
         $tag_id = $_REQUEST["tag_id"];
       } else 
       {
+        moa_warning("No tag id");
         die();
       }
       
@@ -116,11 +119,12 @@
         $value = strip_tags($_REQUEST["value"]);
       } else 
       {
+        moa_warning("No value supplied");
         die();
       }
 
       $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string($value).'");';
-      $result = mysql_query($query) or die("ERROR!".mysql_error()."<br>");
+      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
       if (0 == mysql_num_rows($result))
       {      
@@ -140,6 +144,7 @@
         $tag_id = $_REQUEST["tag_id"];
       } else 
       {
+        moa_warning("No tag id");
         die();
       }
       

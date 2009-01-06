@@ -2,34 +2,12 @@
     session_start();
 ?>
 
-<script type="text/javascript">
-  function resize_fade()
-  {
-    var fade = document.getElementById("fade");
-    var tab = document.getElementById("add_table");
-    fade.style.width = tab.offsetWidth;
-    fade.style.height = tab.offsetHeight;
-    fade.style.left = tab.offsetLeft;
-    fade.style.top = tab.offsetTop;
-  }
-  
-  function show_add()
-  {
-    resize_fade();
-    document.getElementById("add_dialogue").style.visibility = "visible";
-    document.getElementById("fade").style.visibility = "visible";
-  }
-  
-  window.onresize=resize_fade;
-</script>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
      <?php
        include_once ("sources/_html_head.php");
-       echo "<title>Add Image</title>";
+       echo "<title>Add image</title>";
      ?>
   </head>
   <body>
@@ -55,7 +33,7 @@
 					?>
         </td>
         <td class='form_label_text' style='width: 50px' valign='top'>Tags:</td>
-        <td valign='top'>
+        <td valign='top' style='width:250px;'>
           <?php
             include "sources/box_taglist_add.php";
           ?>
