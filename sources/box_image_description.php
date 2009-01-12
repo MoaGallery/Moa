@@ -13,7 +13,7 @@
 
   if (false == isset($_REQUEST["image_id"]))
   {
-    moa_warning("No image specified");
+    moa_warning("No image specified", true);
     die();
   } else
   {
@@ -31,7 +31,7 @@
 
   if ($image == false)
   {
-    moa_warning("Invalid image");
+    moa_warning("Invalid image", true);
     die();
   }
 
@@ -82,7 +82,7 @@
           }
         } else
         {
-          moa_warning("You must be logged in.");
+          moa_warning("You must be logged in.", true);
           die();
         }      
       }

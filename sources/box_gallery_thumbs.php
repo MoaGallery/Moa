@@ -23,7 +23,7 @@
       $gallery_id = sprintf( "%010d", $pre_gallery_id);
     } else
     {
-      moa_warning("No gallery ID supplied");
+      moa_warning("No gallery ID supplied", true);
       die();
     }
   }
@@ -53,7 +53,7 @@
   
   if ($gallery == false)
   {
-    moa_warning("Invalid gallery ID");
+    moa_warning("Invalid gallery ID", true);
     die();
   }    
   

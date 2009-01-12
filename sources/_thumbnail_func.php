@@ -35,6 +35,7 @@
       imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img)); 
         
       imagejpeg($dst_img, $PREFIX.$THUMB_PATH."/"."thumb_".$image_name);
+      imagedestroy($src_img);
       
       return true; 
     }

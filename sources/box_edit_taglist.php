@@ -24,7 +24,8 @@
         $gallery_id = $_REQUEST["gallery_id"];
       } else
       {
-        die ("no gallery ID supplied");
+        moa_warning("no gallery ID supplied", true);
+        die();
       }
     }
     if (strcmp($_REQUEST["type"], "image") == 0)
@@ -35,7 +36,8 @@
         $image_id = $_REQUEST["image_id"];
       } else
       {
-        die ("no image ID supplied");
+        moa_warning("no image ID supplied", true);
+        die();
       }
     }
   }  

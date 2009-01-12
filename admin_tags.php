@@ -193,7 +193,7 @@
       include_once "sources/id.php";
 
       if ($Userinfo->ID == NULL) {
-      	moa_warning("You are not logged in.");
+      	moa_warning("You must have admin rights to use this page.");
         include_once ("sources/_footer.php");
         echo "</body>\n</html>\n";
         die();

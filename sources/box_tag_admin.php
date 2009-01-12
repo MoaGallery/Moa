@@ -8,7 +8,7 @@
     
     // Are we viewing \ editing or deleted?
     if (isset($_REQUEST["action"]) == false) {
-    	 moa_warning("No action supplied.");
+    	 moa_warning("No action supplied.", true);
     	 die();
     }
     
@@ -110,7 +110,7 @@
         $tag_id = $_REQUEST["tag_id"];
       } else 
       {
-        moa_warning("No tag id");
+        echo "No tag id";
         die();
       }
       
@@ -119,7 +119,7 @@
         $value = strip_tags($_REQUEST["value"]);
       } else 
       {
-        moa_warning("No value supplied");
+        echo "No value supplied.";
         die();
       }
 
@@ -144,7 +144,7 @@
         $tag_id = $_REQUEST["tag_id"];
       } else 
       {
-        moa_warning("No tag id");
+        echo "No tag id";
         die();
       }
       

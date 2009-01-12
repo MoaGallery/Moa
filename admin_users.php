@@ -85,7 +85,7 @@
     
       if ((NULL == $Userinfo->ID) || (0 == $Userinfo->UserAdmin))
       {
-        moa_warning("You need to be logged in and have user admin rights to use this page.");
+        moa_warning("You must have admin rights to use this page.");
       } else
       {
         include("sources/_admin_page_links.php");
@@ -122,7 +122,7 @@
         	}
         	default :
         	{
-        	  echo "That is not a valid action for this page.";
+        	  moa_warning("Unknown action.");
         	  break;
         	}
         }
@@ -156,10 +156,12 @@
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         if (0 < mysql_fetch_array($result))
         {
-          echo "That user already exists<br/><br/>\n";
+          moa_error("That user already exists<br/>");
+        } else
+        {
+          $query = "INSERT INTO ".$tab_prefix."users (Name, Password, Admin, Salt) VALUES ('".$name."', PASSWORD('".$pass."'),".$admin.", '000000')";
+          $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         }
-        $query = "INSERT INTO ".$tab_prefix."users (Name, Password, Admin, Salt) VALUES ('".$name."', PASSWORD('".$pass."'),".$admin.", '000000')";
-        $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       }
       if (0 == strcmp($_REQUEST["mode"], "edit"))
       {
@@ -177,7 +179,7 @@
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         if (0 == mysql_fetch_array($result))
         {
-          echo "Invalid user<br/><br/>\n";
+          moa_error("Invalid user\n");
         }
         if (0 < strlen($pass))
         {
@@ -256,7 +258,7 @@
     
     if (false == isset($_REQUEST["user_id"]))
     {
-      echo "No user specified to edit";
+      moa_warning("No user specified to edit");
       return;
     }
     $query = "SELECT IDUser, Name, Admin FROM ".$tab_prefix."users WHERE IDUser = '".mysql_real_escape_string(strip_tags($_REQUEST["user_id"]))."'";
@@ -269,7 +271,7 @@
       $user->Admin=$user_rec["Admin"];
     } else
     {
-      echo "Invalid user\n";
+      moa_warning("Invalid user\n");
       return;
     }
     

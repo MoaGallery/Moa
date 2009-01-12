@@ -28,8 +28,7 @@
   $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);  
   
   if (($gallery_id == '0000000000') && ( mysql_num_rows($result) == 0)) {
-    moa_warning("No galleries present.");
-    die();
+    moa_warning("No galleries.");
   }
   else {  
     while ($gallery = mysql_fetch_array($result))

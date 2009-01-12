@@ -12,7 +12,7 @@
        include_once "sources/id.php";
        
        if ($Userinfo->ID == NULL) {
-       	 moa_warning("You are not logged in.");
+       	 moa_warning("You must have admin rights to use this page.");
        }  else
        {
          include ("sources/_admin_page_links.php");

@@ -1,23 +1,46 @@
 <?php
-  header("Cache-Control: no-cache, must-revalidate");
-  session_start();
-  
-  $name_changed = false;
-
-  if (isset($_REQUEST["gallery_id"]) == false)
+  $pre_cache_from_sources = false;
+  $prefix = "../";
+  $prefix2 = "";
+  $ajax = false;
+  if (isset($pre_cache) == true)
   {
-    moa_warning("No Gallery ID supplied.");
-    die();
+    if (true == $pre_cache)
+    {
+      $gallery_id = $pre_gallery_id;
+      $pre_cache_from_sources = true;
+      $prefix = "";
+      $prefix2 = "sources/";
+    } else
+    {
+      $ajax = true;
+    }
+  } else
+  {
+    $ajax = true;
   }
   
-  $gallery_id = $_REQUEST["gallery_id"];
+  if (true == $ajax)
+  {
+    if (isset($_REQUEST["gallery_id"]) == false)
+    {
+      die();
+    }
+    
+    $gallery_id = $_REQUEST["gallery_id"];
+  }
   
-  include_once("../private/db_config.php");
+  if (isset($pre_cache) == false)
+  {
+    header("Cache-Control: no-cache, must-revalidate");
+    session_start();
+    include_once($prefix."private/db_config.php");
   
-  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-  mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-  include_once("../config.php");
-  include_once("id.php");
+    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    include_once($prefix."config.php");
+    include_once($prefix2."id.php");
+  }
   
   $query = "SELECT Description FROM ".$tab_prefix."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
   $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
@@ -27,10 +50,10 @@
   {
     if (strlen($gallery["Description"]) <= $TITLE_DESC_LENGTH)
     {
-      echo $gallery["Description"];
+      echo " - " . $gallery["Description"];
     } else
     {
-      echo " [" . substr($gallery["Description"], 0, $TITLE_DESC_LENGTH-3) . "...]";
+      echo " - " . substr($gallery["Description"], 0, $TITLE_DESC_LENGTH-3) . "...";
     }
   }
 ?>

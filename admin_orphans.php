@@ -10,17 +10,22 @@
     <?php
       include_once ("sources/_header.php");
 
-      include_once ("sources/_admin_page_links.php");
-      include_once ("sources/_image_delete.php");
-      include_once ("sources/_integrity_funcs.php");
+      if ($Userinfo->ID == NULL) {
+        moa_warning("You must have admin rights to use this page.");
+      } else
+      {
+        include_once ("sources/_admin_page_links.php");
+        include_once ("sources/_image_delete.php");
+        include_once ("sources/_integrity_funcs.php");
+    
+        echo "<table id='add_table' class='area' width='100%' cellspacing='0' cellpadding='5'><tr><td class='box_header'>Orphan Images</td></tr><tr><td class='pale_area_nb'>\n";
   
-      echo "<table id='add_table' class='area' width='100%' cellspacing='0' cellpadding='5'><tr><td class='box_header'>Orphan Images</td></tr><tr><td class='pale_area_nb'>\n";
-
-      ShowNonTaggedOrphans();
-      echo "<hr>\n";
-      ShowNoGalleryOrphans();
-        
-      echo "</td></tr></table>\n";
+        ShowNonTaggedOrphans();
+        echo "<hr>\n";
+        ShowNoGalleryOrphans();
+          
+        echo "</td></tr></table>\n";
+      }
       
       include_once ("sources/_footer.php");
     ?>

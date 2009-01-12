@@ -196,7 +196,7 @@
   
 </script>
 
-<table cellpadding='0' cellspacing='0'>
+<table cellpadding='0' cellspacing='0' style="width:240px;">
   <tr>
     <td>
       <span id='taglist'></span>

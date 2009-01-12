@@ -1,12 +1,41 @@
 <?php    
     session_start();
-    
-    echo "<html>\n";
-    echo "<head>\n";
-    echo "<link rel='stylesheet' href='../style/style.css' type='text/css'>\n";
-    echo "</head>\n";
-    echo "<body style='margin: 0px' scroll='no' class='pale_area_nb'>";
-    
+?>    
+<html>
+  <head>
+    <link rel='stylesheet' href='../style/style.css' type='text/css'>
+  </head>
+  <body style='margin: 0px' scroll='no' class='pale_area_nb'>
+    <script type="text/javascript">
+      <?php
+        include_once("_ajax.js.php");
+      ?>
+     
+      function ajaxCheckTags()
+      {
+        var xmlHttp = GetAjaxObject();
+        
+        xmlHttp.onreadystatechange=function()
+        {
+        if(xmlHttp.readyState==4)
+          {
+            if (xmlHttp.responseText == "OK")
+            {
+              document.gallery_add.submit();
+            } else
+            {
+              alert("You must have at least 1 tag selected.");
+            }
+          }
+        }    
+        
+        gottags_flag = false;
+        xmlHttp.open("GET","_numtags.php?PHPSESSID=<?php echo session_id(); ?>",true);
+        
+        xmlHttp.send(null);
+      }
+      </script>
+<?php    
     include_once("../private/db_config.php");
     include_once("../config.php");
     include_once("_error_funcs.php");
@@ -75,14 +104,14 @@
         </select></td>
       </tr>
       <tr>      
-      <td colspan="2"><br/><input type='submit' value='Add Gallery'></input><br/><br/>
-      <?php
-        if (true == $added_ok)
-        {
-        	moa_feedback("Gallery added", true);   
-        }
-      ?>
-      </td>
+        <td colspan="2"><br/><input type="button" value='Add Gallery' onclick='ajaxCheckTags();'></input><br/><br/>
+          <?php
+            if (true == $added_ok)
+            {
+            	moa_feedback("Gallery added", true);   
+            }
+          ?>
+        </td>
       </tr>
     </table>
   </form>

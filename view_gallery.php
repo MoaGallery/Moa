@@ -6,15 +6,23 @@
   } else
   {
     $gallery_id = $_REQUEST["gallery_id"];
+    $pre_cache = true;
+    $pre_gallery_id = $gallery_id;
   }
   session_start();
+  include_once("sources/id.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
      <?php
        include_once ("sources/_html_head.php");
-       echo "<title>Gallery</title>";
+       echo "<title>Gallery ";
+       if (false == $no_gallery_id)
+       {
+         include_once("sources/_get_gallery_title.php");
+       }
+       echo "</title>";
      ?>
   </head>
   <body>
@@ -31,19 +39,16 @@
     ?>
 
     <script type="text/javascript" src="view_gallery.js.php"> </script>
+    <?php
+      if ($Userinfo->ID != NULL)
+      {
+        echo '<script type="text/javascript" src="view_gallery_edit.js.php"> </script>';
+      }
+    ?>
     
     <script type="text/javascript">
-      function on_load()
-      {
-        while (view_gallery_loaded == false)
-        {
-        }
-
-        gallery_id = '<?php echo $gallery_id ?>';
-        window.onresize=fit_width;
-      }
-      
-      window.onload=on_load;
+      gallery_id = '<?php echo $gallery_id ?>';
+      window.onresize=fit_width;
     </script>
     
     <?php

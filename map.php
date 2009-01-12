@@ -39,7 +39,7 @@
         }      
                 
         echo "<div style='line-height:16px;'>";
-        echo "<a class='nav_icon' href='view_gallery.php?gallery_id=".$id."' ".$popup."><img src='media/folder_open.png' style='vertical-align:bottom;'>&nbsp</a>";
+        echo "<a class='nav_icon' href='view_gallery.php?gallery_id=".$id."' ".$popup."><img class='breadcrumbicon' src='media/folder_open.png' style='vertical-align:bottom;'>&nbsp</a>";
         echo "<a id='nav_tree_".$id."' class='nav_link' href='view_gallery.php?gallery_id=".$id."' ".$popup.">".$name."</a><br>\n";    
         echo "</div></div>";
       }
@@ -53,10 +53,7 @@
       
         if (($parent_id == '0000000000') && ( mysql_num_rows($result) == 0)) 
         {
-          moa_warning("No galleries present.");
-          include_once ("sources/_footer.php");
-          echo "</body>\n</html>\n";
-          die();
+          echo "No galleries.";
         }
         else
         {

@@ -6,8 +6,11 @@
   } else
   {
     $image_id = $_REQUEST["image_id"];
+    $pre_cache = true;
+    $pre_image_id = $image_id;
   }
   session_start();
+  include_once("sources/id.php");
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -15,7 +18,12 @@
   <head>
      <?php
        include_once ("sources/_html_head.php");
-       echo "<title>Image</title>";
+       echo "<title>Image ";
+       if (false == $no_image_id)
+       {
+         include_once("sources/_get_image_desc.php");
+       }
+       echo "</title>";
      ?>
   </head>
   <body>    
@@ -29,31 +37,26 @@
         die();
       }
     ?>
-    <script type="text/javascript" src="view_image.js.php"> </script>
-    <script type="text/javascript">
-      function on_load()
+    <?php
+      if ($Userinfo->ID != NULL)
       {
-        while (view_image_js_loaded == false)
-        {
-        }
-        
-        image_id = '<?php echo $image_id ?>';
-        parent_id = '<?php echo $_REQUEST['parent_id'] ?>';
-        <?php
-          $referer = 0;
-          if (true == isset($_REQUEST["referer"]))
-          {
-            if (0 == strcmp("orphan", $_REQUEST["referer"]))
-            {
-              $referer = 1;
-            }
-          }
-          echo "var referer=".$referer.";\n";
-        ?>
-        
+        echo '<script type="text/javascript" src="view_image_edit.js.php"> </script>';
       }
-      
-      window.onload=on_load;
+    ?>  
+    <script type="text/javascript">
+      image_id = '<?php echo $image_id ?>';
+      parent_id = '<?php echo $_REQUEST['parent_id'] ?>';
+      <?php
+        $referer = 0;
+        if (true == isset($_REQUEST["referer"]))
+        {
+          if (0 == strcmp("orphan", $_REQUEST["referer"]))
+          {
+            $referer = 1;
+          }
+        }
+        echo "var referer=".$referer.";\n";
+      ?>
     </script>        
     <?php
       $pre_cache = true;

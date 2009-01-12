@@ -17,7 +17,7 @@
       {        
         $sql_statement = str_replace( '<prefix>', $tab_prefix, $tok);
         
-        $result = mysql_query($sql_statement);
+        $result = mysql_query($sql_statement) or die(mysql_error());
         if (false == $result)
         {
           $error = true;

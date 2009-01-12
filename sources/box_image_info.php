@@ -41,18 +41,19 @@
     $parent_id = $_REQUEST["parent_id"];
   }
   
+  $referer = 0;
   if (false == isset($_REQUEST["referer"]))
   {
-    if (false == isset($pre_cache))
-    {
-      $referer = 0;
-    } else
+    if (true == isset($pre_cache))
     {
       $referer = $pre_referer;
     }
   } else
   {
-    $referer = $_REQUEST["referer"];
+    if (0 == strcmp($_REQUEST["referer"], "orphan"))
+    {
+      $referer = 1;
+    }
   }
   
   if (0 != $image_id)

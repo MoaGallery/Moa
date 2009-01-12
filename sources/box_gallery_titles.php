@@ -23,7 +23,7 @@
       $gallery_id = $pre_gallery_id;
     } else
     {
-      moa_warning("No gallery ID supplied.");
+      moa_warning("No gallery ID supplied.", true);
       die();
     }
   } 
@@ -34,7 +34,7 @@
 
   if ($gallery == false)
   {
-    moa_warning("Invalid gallery");
+    moa_warning("Invalid gallery", true);
     die();
   }
   
@@ -121,7 +121,7 @@
           }
         } else
         {
-          moa_warning("You must be logged in.");
+          moa_warning("You must be logged in.", true);
           die();
         }
       }

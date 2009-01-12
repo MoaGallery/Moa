@@ -1,15 +1,51 @@
 <?php
     session_start();
-        
-    echo "<head>\n";
-    echo "<link rel='stylesheet' href='../style/style.css' type='text/css'>\n";
-    echo "</head>\n";
-    echo "<body style='margin: 0px' scroll='no' class='pale_area_nb'>";
+?>
+  
+<html>      
+  <head>
+    <link rel='stylesheet' href='../style/style.css' type='text/css'>
+  </head>
+    <body style='margin: 0px' scroll='no' class='pale_area_nb'
+  
+      <script type="text/javascript">
+        <?php
+          include_once("_ajax.js.php");
+        ?>
+       
+        function ajaxCheckTags()
+        {
+          var xmlHttp = GetAjaxObject();
+          
+          xmlHttp.onreadystatechange=function()
+          {
+          if(xmlHttp.readyState==4)
+            {
+              if (xmlHttp.responseText == "OK")
+              {
+                document.getElementById('feedback').innerHTML='Uploading, please wait...';
+                document.image_add.submit();
+              } else
+              {
+                alert("You must have at least 1 tag selected.");
+              }
+            }
+          }    
+          
+          gottags_flag = false;
+          xmlHttp.open("GET","_numtags.php?PHPSESSID=<?php echo session_id(); ?>",true);
+          
+          xmlHttp.send(null);
+        }
+      </script>
+<?php    
     
     include_once("../private/db_config.php");
     include_once("../config.php");
     include_once("_thumbnail_func.php");
     include_once("_error_funcs.php");
+    
+    $added_ok = false;
     
     if (isset($_REQUEST["MAX_FILE_SIZE"]))
     {
@@ -43,6 +79,7 @@
         $src_img = imagecreatefromjpeg($_FILES["filename"]["tmp_name"]);
         $origw=imagesx($src_img); 
         $origh=imagesy($src_img); 
+        imagedestroy($src_img);
         $query = "UPDATE ".$tab_prefix."image SET Width=".$origw.", Height=".$origh." WHERE IDImage=".$newid.";";
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         
@@ -62,15 +99,14 @@
             $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
           }
         }
-        
-        echo "<span class='form_text' id='status'>Submitted</span>";
+        $added_ok = true;
       }
     } else
     {
       echo "<span style='float: left;' id='status'> </span>\n";
     }
 ?> 
-  <form name="image_add" class="no_cr" method="post" action="box_add_image.php?PHPSESSID=<?php echo session_id() ?>" enctype="multipart/form-data">
+  <form id="gallery_form" name="image_add" class="no_cr" method="post" action="box_add_image.php?PHPSESSID=<?php echo session_id() ?>" enctype="multipart/form-data">
     <div id="debug"></div>
     <table cellpadding="0" border=0>
       <tr>      	      	
@@ -82,11 +118,22 @@
         <td valign='top' class='form_label_text'>File:</td>
         <td>
           <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
-          <input class='form_text' type="file" id="file_dlg" onchange="javascript:file_change();"size="30" name="filename" accept="image/jpg" onkeyup="document.getElementById('status').innerHTML='<BR>'"></input><br>
+          <input class='form_text' type="file" id="file_dlg" size="30" name="filename" accept="image/jpg" onkeyup="document.getElementById('status').innerHTML='<BR>'"></input><br>
         </td>
       </tr>
       <tr>
-      <td cellspan="2"><input type='submit' value='Add Image'></input></td>
+        <td colspan="2">
+          <input type='button' value='Add Image' onclick="ajaxCheckTags();">
+          </input><br/><br/>
+          <div id="feedback" class="form_label_text">
+            <?php
+              if (true == $added_ok)
+              {
+             	  moa_feedback("Image added", true);   
+              }
+            ?>
+          </div>
+        </td>
       </tr>
     </table>
   </form>
@@ -94,3 +141,4 @@
     document.getElementById("commentbox").focus();
   </script>
 </body>  
+</html>

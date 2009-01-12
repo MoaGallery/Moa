@@ -29,7 +29,7 @@
 						{                                                                                                                  
 						  echo "&parent_id=".$_REQUEST["parent_id"];                                                                       
 						}                                                                                                                  
-						echo "' vspace='0' hspace='0' frameborder='1' marginwidth='0' width='415' height='200' type='text/html'></object>";
+						echo "' vspace='0' hspace='0' frameborder='1' marginwidth='0' width='415' height='240' type='text/html'></object>";
 					?>
         </td>
         <td class='form_label_text' style='width: 50px' valign='top'>Tags:</td>

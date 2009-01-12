@@ -12,12 +12,14 @@
 
       if ($Userinfo->ID == NULL)
       {
-        moa_warning("You are not logged in.");
+        moa_warning("You must have admin rights to use this page.");
         include_once ("sources/_footer.php");
         echo "</body>\n</html>\n";
         die();
       }
       
+      include ("sources/_admin_page_links.php");
+        
       if (isset($_REQUEST["image_id"])) {
       	$image_id = $_REQUEST["image_id"];
       }
@@ -45,7 +47,7 @@
       
       if (file_exists($IMAGE_PATH."/".$image_id.".jpg") == true)
       {
-      	echo "That image is not missing its file\n<br><br>";
+      	moa_warning("That image is not missing its file\n");
       } else
       {
 	      if (isset($_REQUEST["MAX_FILE_SIZE"])) {

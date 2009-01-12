@@ -15,7 +15,7 @@
       $gallery_id = pre_gallery_id;
     } else
     {
-      moa_warning("No gallery ID supplied.");
+      moa_warning("No gallery ID supplied.", true);
       die();
     }
   } 
@@ -58,5 +58,6 @@
   if ($gal_info == false)
   {
     moa_warning("Invalid gallery.");
+    die();
   }
 ?>

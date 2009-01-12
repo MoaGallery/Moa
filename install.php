@@ -432,19 +432,19 @@
     $result = mysql_query("SELECT * FROM ".$tab_prefix."gallerytaglink");
     if (true == $result)
     {
-      $result = runSQLFile("SQL/gallery-drop-constraints.sql");
+      $result = RunSQLFile("SQL/gallery-drop-constraints.sql");
       if (false != $result)
       {
         $count += $result;
       }
     }
 
-    $result = runSQLFile("SQL/gallery-create.sql");
+    $result = RunSQLFile("SQL/gallery-create.sql");
     if (false != $result)
     {
       $count += $result;
     }
-    $result = runSQLFile("SQL/gallery-create-view.sql");
+    $result = RunSQLFile("SQL/gallery-create-view.sql");
     if (false != $result)
     {
       $count += $result;

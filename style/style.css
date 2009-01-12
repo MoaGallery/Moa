@@ -129,6 +129,16 @@ a.nav_link:hover {
         font-size: 80%;
 }
 
+.mainlogo {
+        width: 277px;
+        height: 120px;
+}
+
+.breadcrumbicon {
+        width: 16px;
+        height: 16px;
+}
+
 .picture-shadow {
         float: left;
         background: url(../media/shadowAlpha.png) no-repeat bottom right;
@@ -307,6 +317,7 @@ a.nav_link:hover {
 .footer_logo {
         vertical-align: middle;
         height: 31px;
+        width: 88px;
 }
 
 .no_cr {

@@ -1,4 +1,30 @@
 <?php
+  if (false == isset($INSTALLING)) {
+    $INSTALLING = false;
+  }
+  
+  if(!$INSTALLING)
+  {
+    if (file_exists("private/db_config.php"))
+    {
+      include_once("private/db_config.php");
+    } else
+    {
+      include_once("../private/db_config.php");
+    }
+    
+    if (file_exists("config.php"))
+    {
+      include_once("config.php");
+    } else
+    {
+      include_once("../config.php");
+    }
+  }
+
+  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+
   class LoginInfo
   {
     var $Name;

@@ -41,6 +41,7 @@
       } else
       {
         moa_warning("Image does not exist");
+        die();
       }
     }
 ?>
