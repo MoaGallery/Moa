@@ -70,7 +70,6 @@
         }
         echo "&tagname='+encodeURIComponent(NewTagName),true);\n";
       ?>
-      alert(NewTagName);
     }
     xmlHttp.send(null);
   }
