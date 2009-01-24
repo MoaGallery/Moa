@@ -2,8 +2,9 @@
   if (isset($pre_cache) == false)
   {
     header("Cache-Control: no-cache, must-revalidate");
-    include_once("../private/db_config.php");
     include_once("../config.php");
+    include_once("common.php");
+    include_once("_db_funcs.php");
   }
   
   if (isset($_REQUEST["gallery_id"]) == true)
@@ -19,11 +20,8 @@
       die();
     }
   } 
-    
-  
-  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-  mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-  
+  $db = DBConnect();
+
   include_once ("id.php");
     
   $gallery_id = sprintf("%010s", $_REQUEST["gallery_id"]);
@@ -36,7 +34,7 @@
     echo "<a class='admin_link' onclick='ajaxShowTitles(\"".$gallery_id."\", \"NULL\", \"NULL\", \"true\")'>[Edit]</a> \n";
     echo "<a class='admin_link' onclick='gallery_delete(\"".$gallery_id."\", \"".$gal_info["IDParent"]."\");'>[Delete]</a> \n";
     echo "<a class='admin_link' href='add_image.php?parent_id=".$gallery_id."'>[Add Image]</a> \n";
-    echo "<a class='admin_link' href='add_gallery.php?parent_id=".$gallery_id."'>[Add Sub-Gallery]</a><br><br>\n";
+    echo "<a class='admin_link' href='add_gallery.php?parent_id=".$gallery_id."'>[Add Sub-Gallery]</a><br/><br/>\n";
   }  
     
   echo "<table cellpadding='0' cellspacing='0'><tr><td><div id='galleryeditinfo'>";

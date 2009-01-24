@@ -1,12 +1,8 @@
   var addTagLink  = "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a>";
-  var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br>";
+  var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br/>";
       addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(escape(document.getElementById(\"newtag\").value)); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
       addTagForm += "&nbsp;<input type='button' id='tagcancel' value='Cancel' onclick='javascript:hide_add()'></input>";
       
-  <?php 
-    include_once("sources/_ajax.js.php");
-  ?>
-
   function ajaxShowThumbs(id)
   {
     var xmlHttp = GetAjaxObject();
@@ -68,7 +64,9 @@
       xmlHttp.open("GET","sources/box_gallery_titles.php?gallery_id="+id+"&edit="+edit+"&PHPSESSID="+SessID,true);
     } else
     {
-      xmlHttp.open("GET","sources/box_gallery_titles.php?gallery_id="+id+"&name="+name+"&desc="+desc+"&edit="+edit+"&PHPSESSID="+SessID,true);
+      xmlHttp.open("GET","sources/box_gallery_titles.php?gallery_id="+id+"&name="
+                  +encodeURIComponent(name)+"&desc="+encodeURIComponent(desc)
+                  +"&edit="+edit+"&PHPSESSID="+SessID,true);
     }
     xmlHttp.send(null);
   }
@@ -82,7 +80,7 @@
     if(xmlHttp.readyState==4)
       {
         gallery_name = xmlHttp.responseText;
-        document.title = "Gallery - " + gallery_name;
+        document.title = "Gallery" + gallery_name;
       }
     }    
     
@@ -98,9 +96,10 @@
       ajaxShowTitles(gallery_id, "", "", "false", SessID, true);
     } else
     {
-      var desc = encodeURI(document.getElementById("gal-comment").value);
-      var name = encodeURI(document.getElementById("gal-name").value);
-      ajaxShowTitles(gallery_id, name, desc, "false", SessID, "false");
+      document.title = document.getElementById("gal-comment").value;
+      var desc = encodeURIComponent(document.getElementById("gal-comment").value);
+      var name = encodeURIComponent(document.getElementById("gal-name").value);
+      ajaxShowTitles(gallery_id, name, desc, "false", SessID, false);
     }
   }
   
@@ -151,7 +150,7 @@
     } else
     {
       <?php
-        echo "xmlHttp.open('GET','sources/box_edit_taglist.php?PHPSESSID=".session_id()."&tagname='+NewTagName+'&gallery_id='+gallery_id+'&type=gallery',true);\n";
+        echo "xmlHttp.open('GET','sources/box_edit_taglist.php?PHPSESSID=".session_id()."&tagname='+encodeURIComponent(NewTagName)+'&gallery_id='+gallery_id+'&type=gallery',true);\n";
       ?>
     }
     xmlHttp.send(null);

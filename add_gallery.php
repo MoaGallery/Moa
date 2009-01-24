@@ -14,14 +14,14 @@
       include_once ("sources/_header.php");
       include ("sources/_inherit_tags.php");
     ?>            
-    <table border='0' style='float: left' class='area' cellspacing='0' cellpadding='5' id="add_table">
+    <table border='0' class='area' cellspacing='0' cellpadding='5' id="add_table">
       <tr>
         <td class='box_header' colspan='3'>Add Gallery</td>
       </tr>    
       <tr class='pale_area_nb'>	
         <td valign='top'>
           <?php            
-            echo "<object style='z-index: 1;' data='sources/box_add_gallery.php?PHPSESSID=".session_id();
+            echo "<object data='sources/box_add_gallery.php?PHPSESSID=".session_id();
             
             if (isset($_REQUEST["parent_id"]))
             {

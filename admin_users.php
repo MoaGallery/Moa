@@ -14,13 +14,12 @@
       include_once ("sources/_html_head.php");
     ?>
     <title>User management</title>
-     
+
+    <script type="text/javascript" src="sources/_ajax.js.php"> </script>
     <script type="text/javascript">
-      <?php 
-        include_once("sources/_ajax.js.php");
-      ?>
       var validname = true;
       var original_name;
+      
       function ajaxCheckUserName(name)
       {
         var xmlHttp = GetAjaxObject();
@@ -39,7 +38,8 @@
           }
         }    
         
-        xmlHttp.open("GET","sources/_checkusername.php?name="+name,true);
+        encodedName = encodeURIComponent(name);
+        xmlHttp.open("GET","sources/_checkusername.php?name="+encodedName,true);
       
         xmlHttp.send(null);
       }
@@ -82,10 +82,11 @@
     <?php
       include_once "sources/_header.php";
       include_once "sources/id.php";
+      include_once "sources/common.php";
     
       if ((NULL == $Userinfo->ID) || (0 == $Userinfo->UserAdmin))
       {
-        moa_warning("You must have admin rights to use this page.");
+        moa_warning("You must be logged in to use this page.");
       } else
       {
         include("sources/_admin_page_links.php");
@@ -143,8 +144,8 @@
       $mode = $_REQUEST["mode"];
       if (0 == strcmp($_REQUEST["mode"], "add"))
       {
-        $name = mysql_real_escape_string(strip_tags($_REQUEST["name"]));
-        $pass = mysql_real_escape_string(strip_tags($_REQUEST["pass1"]));
+        $name = mysql_real_escape_string(($_REQUEST["name"]));
+        $pass = mysql_real_escape_string(($_REQUEST["pass1"]));
         if (isset($_REQUEST["admin"]))
         {
           $admin = 1;
@@ -159,15 +160,16 @@
           moa_error("That user already exists<br/>");
         } else
         {
-          $query = "INSERT INTO ".$tab_prefix."users (Name, Password, Admin, Salt) VALUES ('".$name."', PASSWORD('".$pass."'),".$admin.", '000000')";
+          $new_pass = mb_strtoupper(sha1($pass));
+          $query = "INSERT INTO ".$tab_prefix."users (Name, Password, Admin, Salt) VALUES (_utf8'".$name."', _utf8'".$new_pass."',".$admin.", '000000')";
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         }
       }
       if (0 == strcmp($_REQUEST["mode"], "edit"))
       {
-        $name = mysql_real_escape_string(strip_tags($_REQUEST["name"]));
-        $pass = mysql_real_escape_string(strip_tags($_REQUEST["pass1"]));
-        $id = mysql_real_escape_string(strip_tags($_REQUEST["id"]));
+        $name = mysql_real_escape_string($_REQUEST["name"]);
+        $pass = mysql_real_escape_string($_REQUEST["pass1"]);
+        $id = mysql_real_escape_string($_REQUEST["id"]);
         if (isset($_REQUEST["admin"]))
         {
           $admin = 1;
@@ -181,14 +183,14 @@
         {
           moa_error("Invalid user\n");
         }
-        if (0 < strlen($pass))
+        if (0 < mb_strlen($pass))
         {
-          $pass_string = "Password= PASSWORD('".$pass."'), ";
+          $pass_string = "Password= _utf8'".mb_strtoupper(sha1($pass))."', ";
         } else
         {
           $pass_string = "";
         }
-        $query = "UPDATE ".$tab_prefix."users SET Name='".$name."', ".$pass_string."Admin=".$admin." WHERE IDUser='".$id."'";
+        $query = "UPDATE ".$tab_prefix."users SET Name=_utf8'".$name."', ".$pass_string."Admin=".$admin." WHERE IDUser='".$id."'";
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       }
     }
@@ -217,7 +219,7 @@
           <?php
             foreach($users as $user)
             {
-              echo "<div class='user_name'>".$user->Name."</div>";
+              echo "<div class='user_name'>".html_display_safe($user->Name)."</div>";
               echo "<div class='user_admin'>";
               if (1 == $user->Admin)
               {
@@ -261,7 +263,7 @@
       moa_warning("No user specified to edit");
       return;
     }
-    $query = "SELECT IDUser, Name, Admin FROM ".$tab_prefix."users WHERE IDUser = '".mysql_real_escape_string(strip_tags($_REQUEST["user_id"]))."'";
+    $query = "SELECT IDUser, Name, Admin FROM ".$tab_prefix."users WHERE IDUser = '".mysql_real_escape_string($_REQUEST["user_id"])."'";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     $user_rec = mysql_fetch_array($result);
     if (0 < $user_rec)
@@ -281,13 +283,14 @@
   function delete_user()
   {
     global $tab_prefix;
+    global $Userinfo;
     
     if (false == isset($_REQUEST["user_id"]))
     {
       moa_warning("No user specified to delete.");
     } else
     {
-      $user = $_REQUEST["user_id"];
+      $user = mysql_real_escape_string($_REQUEST["user_id"]);
       $goahead = true;
       $name = "";
       
@@ -317,10 +320,19 @@
             $goahead = false;
           }
         } 
+        
+        $query = "SELECT COUNT(1) FROM ".$tab_prefix."users WHERE IDUser = '".$Userinfo->ID."'";
+        $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+        $count = mysql_affected_rows();
+        if (0 == $count)
+        {
+          moa_warning("You need to be an admin user to delete users.");
+          $goahead = false;        
+        }
       }
       
       if (true == $goahead)
-      {
+      {  
         $query = "DELETE FROM ".$tab_prefix."users WHERE IDUser = '".$user."'";
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         $count = mysql_affected_rows();
@@ -355,7 +367,7 @@
         <td class='pale_area_nb'>
           <form name="edit_form" method="post" action="admin_users.php?action=view"  enctype="multipart/form-data">
             <div class="form_label_text" style="width:120px; float:left;">Name</div>
-              <input name="name" id="namebox" type="text" onKeyPress='checkKey(event);' onKeyUp='ajaxCheckUserName(document.getElementById("namebox").value);' value="<?php echo $user->Name; ?>"></input><br/>
+              <input name="name" id="namebox" type="text" onKeyPress='checkKey(event);' onKeyUp='ajaxCheckUserName(document.getElementById("namebox").value);' value="<?php echo str_display_safe($user->Name); ?>"></input><br/>
             <div class="form_label_text" style="width:120px; float:left;">Admin</div>
                 <input name="admin" type="checkbox" onKeyPress='checkKey(event)'<?php
                 if (1 == $user->Admin)

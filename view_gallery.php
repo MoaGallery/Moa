@@ -1,4 +1,4 @@
-<?php
+<?php  
   $no_gallery_id = false;
   if (isset($_REQUEST["gallery_id"]) == false)
   {
@@ -8,9 +8,11 @@
     $gallery_id = $_REQUEST["gallery_id"];
     $pre_cache = true;
     $pre_gallery_id = $gallery_id;
-  }
+  }  
   session_start();
-  include_once("sources/id.php");
+  session_unset();
+  include_once("sources/id.php");  
+  header("Content-Type: text/html; charset=utf-8");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -42,6 +44,7 @@
     <?php
       if ($Userinfo->ID != NULL)
       {
+        echo '<script type="text/javascript" src="sources/_ajax.js.php"> </script>';
         echo '<script type="text/javascript" src="view_gallery_edit.js.php"> </script>';
       }
     ?>

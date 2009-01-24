@@ -1,14 +1,10 @@
 var addTagLink  = "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a>";
-var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br>";
+var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br/>";
     addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(escape(document.getElementById(\"newtag\").value)); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
     addTagForm += "&nbsp;<input type='button' id='tagcancel' value='Cancel' onclick='javascript:hide_add()'></input>";
 
 var view_image_js_loaded = false;
 var image_id = "blank";
-
-<?php 
-  include_once("sources/_ajax.js.php");
-?>
 
 function ajaxGetImageDesc(id)
 {
@@ -93,7 +89,9 @@ function ajaxInfoDescription(id, desc, edit, SessID, initial, referer)
     ajaxGetImageDesc(image_id);
   } else
   {
-    xmlHttp.open("GET","sources/box_image_description.php?image_id="+id+"&desc="+desc+"&edit="+edit+"&PHPSESSID="+SessID,true);
+    //desc = desc.replace("'", "%39");
+    //desc = desc.replace('"', '&quot;');
+    xmlHttp.open("GET","sources/box_image_description.php?image_id="+id+"&desc="+encodeURIComponent(desc)+"&edit="+edit+"&PHPSESSID="+SessID,true);
   }
   xmlHttp.send(null);
 }
@@ -105,8 +103,8 @@ function CommentButtons(SessID, cancel)
     ajaxInfoDescription(image_id, "", "false", SessID, true);
   } else
   {
-    var desc = encodeURI(document.getElementById("image-comment").value);
-    ajaxInfoDescription(image_id, desc, "false", SessID, "false");
+    var desc = document.getElementById("image-comment").value;
+    ajaxInfoDescription(image_id, desc, "false", SessID, false);
   }
 }
 
@@ -158,7 +156,7 @@ function ajaxTagList(NewTagName)
   } else
   {
     <?php
-      echo "xmlHttp.open('GET','sources/box_edit_taglist.php?PHPSESSID=".session_id()."&tagname='+NewTagName+'&image_id='+image_id+'&type=image',true);\n";
+      echo "xmlHttp.open('GET','sources/box_edit_taglist.php?PHPSESSID=".session_id()."&tagname='+encodeURIComponent(NewTagName)+'&image_id='+image_id+'&type=image',true);\n";
     ?>
   }
   xmlHttp.send(null);

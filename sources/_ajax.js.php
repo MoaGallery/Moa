@@ -1,4 +1,3 @@
-
 function GetAjaxObject()
 {
   var xmlHttp;
@@ -29,4 +28,3 @@ function GetAjaxObject()
   }
   return xmlHttp;
 }
-

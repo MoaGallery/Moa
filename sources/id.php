@@ -5,12 +5,12 @@
   
   if(!$INSTALLING)
   {
-    if (file_exists("private/db_config.php"))
+    if (file_exists("sources/_db_funcs.php"))
     {
-      include_once("private/db_config.php");
+      include_once("sources/_db_funcs.php");
     } else
     {
-      include_once("../private/db_config.php");
+      include_once("_db_funcs.php");
     }
     
     if (file_exists("config.php"))
@@ -20,10 +20,10 @@
     {
       include_once("../config.php");
     }
+    include_once("common.php");
   }
 
-  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+  $db = DBConnect();
 
   class LoginInfo
   {
@@ -48,7 +48,7 @@
   		$cookie_info = unserialize(stripslashes($Cookie));
   		$Cookie_ID = $cookie_info[0];
   		$Cookie_pw = $cookie_info[1];
-  		$query = "SELECT * FROM ".$tab_prefix."users WHERE (IDUser = '".mysql_real_escape_string(strip_tags($Cookie_ID))."');";
+  		$query = "SELECT * FROM ".$tab_prefix."users WHERE (IDUser = '".mysql_real_escape_string($Cookie_ID)."');";
   		$result = mysql_query($query);
   	  if ($user = mysql_fetch_array($result))
   	  {
@@ -64,9 +64,9 @@
           $_COOKIE[$COOKIE_NAME] = NULL;
   	    } else
   	    {
-  	      $Userinfo->ID = mysql_real_escape_string(strip_tags($user["IDUser"]));
-    	  	$Userinfo->Name = mysql_real_escape_string(strip_tags($user["Name"]));
-    	  	$admin = mysql_real_escape_string(strip_tags($user["Admin"]));
+  	      $Userinfo->ID = $user["IDUser"];
+    	  	$Userinfo->Name = $user["Name"];
+    	  	$admin = $user["Admin"];
     	  	if (0 == strcmp($admin, "1"))
     	  	{
     	  	  $Userinfo->UserAdmin = true;

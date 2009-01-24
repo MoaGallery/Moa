@@ -1,9 +1,11 @@
+<script type="text/javascript" src="sources/_ajax.js.php"> </script>
+
 <script type="text/javascript">
   var addTagLink  = "<a href='javascript:void(0)' class='admin_link' onclick='javascript:show_add()'>[Add new tag]</a>";
-  var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br>";
-      addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(escape(document.getElementById(\"newtag\").value)); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
+  var addTagForm  = "<input type='textbox' id='newtag'  onKeyPress='checkKey(event)'></input><br/>";
+      addTagForm += "<input type='button' id='tagsubmit' value='Add Tag' onclick='ajaxTagList(document.getElementById(\"newtag\").value); document.getElementById(\"newtag\").value=\"\"; hide_add();'></input>";
       addTagForm += "&nbsp;<input type='button' id='tagcancel' value='Cancel' onclick='javascript:hide_add()'></input>";
-  
+
   function checkKey(e)
   {
     var characterCode
@@ -38,37 +40,10 @@
   
   function ajaxTagList(NewTagName)
   {
-    var xmlHttp;
-  try
-    {
-    // Firefox, Opera 8.0+, Safari
-    xmlHttp=new XMLHttpRequest();
-    }
-  catch (e)
-    {
-    // Internet Explorer
-    try
-      {
-      xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
-      }
-    catch (e)
-      {
-      try
-        {
-        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-      catch (e)
-        {
-        alert("Your browser does not support AJAX!");
-        return false;
-        }
-      }
-    }
+    var xmlHttp = GetAjaxObject();
     xmlHttp.onreadystatechange=function()
-    {
-    	
-    	
-    if(xmlHttp.readyState==4)
+    {    	    	
+      if(xmlHttp.readyState==4)
       {
         document.getElementById("taglist").innerHTML=xmlHttp.responseText;
         document.getElementById("addtagarea").innerHTML=addTagLink;
@@ -93,72 +68,24 @@
         {
           echo "&parent_id=".$_REQUEST["parent_id"];
         }
-        echo "&tagname='+NewTagName,true);\n";
+        echo "&tagname='+encodeURIComponent(NewTagName),true);\n";
       ?>
+      alert(NewTagName);
     }
     xmlHttp.send(null);
   }
   
   function ajaxResetTagList()
   {
-  var xmlHttp;
-  try
-    {
-    // Firefox, Opera 8.0+, Safari
-    xmlHttp=new XMLHttpRequest();
-    }
-  catch (e)
-    {
-    // Internet Explorer
-    try
-      {
-      xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
-      }
-    catch (e)
-      {
-      try
-        {
-        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-      catch (e)
-        {
-        alert("Your browser does not support AJAX!");
-        return false;
-        }
-      }
-    }
+    var xmlHttp = GetAjaxObject();
+
     xmlHttp.open("GET","sources/_settag.php?reset=true",true);
     xmlHttp.send(null);
   }
   
   function ajaxSetTag(tagid, ticked)
   {
-  var xmlHttp;
-  try
-    {
-    // Firefox, Opera 8.0+, Safari
-    xmlHttp=new XMLHttpRequest();
-    }
-  catch (e)
-    {
-    // Internet Explorer
-    try
-      {
-      xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
-      }
-    catch (e)
-      {
-      try
-        {
-        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-      catch (e)
-        {
-        alert("Your browser does not support AJAX!");
-        return false;
-        }
-      }
-    }
+    var xmlHttp = GetAjaxObject();
     var tagstatus = ""
     if (ticked)
     {

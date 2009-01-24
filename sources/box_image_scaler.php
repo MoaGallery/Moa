@@ -33,7 +33,7 @@
     header("Location: ../media/img_scale_error.png");      
   }   
   else {  
-    if (strpos($_REQUEST["image_name"], "/") != false) {
+    if (mb_strpos($_REQUEST["image_name"], "/") != false) {
       $src_img = @imagecreatefrompng($_REQUEST["image_name"]);
     }
     else

@@ -13,8 +13,8 @@
   $temp_nav_history = array();
 
   if (!$INSTALLING)
-    {
-    include_once("private/db_config.php");
+  {
+    include_once("_db_funcs.php");
     include_once("config.php");
   }
 
@@ -25,8 +25,7 @@
 
   if (isset($db_host))
   {
-    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    $db = DBConnect();
   }
 
   // Get nav history
@@ -91,11 +90,11 @@
                 if ($Userinfo->ID != NULL)
                 {                                
                   // Show the username                
-                  echo "Welcome ".$Userinfo->Name."<BR>\n";
+                  echo "Welcome ".html_display_safe($Userinfo->Name)."<br/>\n";
                 }
               } else
               {
-                echo "Welcome<BR>\n";
+                echo "Welcome<br/>\n";
               }
               
               if (!$INSTALLING)
@@ -183,13 +182,13 @@
             {
               echo "  <div style='line-height:16px;'>\n";
               echo "    <a class ='nav_icon' href='index.php'><img class='breadcrumbicon' src='media/folder_open.png' style='vertical-align:middle; margin-top:1px;' alt='Folder icon'/>&nbsp;</a>\n";
-              echo "    <a id='nav_tree_0000000000' class='nav_link' href='index.php'>".$nav_node->Name."</a><br/>\n";                        
+              echo "    <a id='nav_tree_0000000000' class='nav_link' href='index.php'>".html_display_safe($nav_node->Name)."</a><br/>\n";                        
               echo "  </div>\n";  
             } else
             {
               echo "  <div style='line-height:16px;'>\n";
               echo "    <a class='nav_icon' href='view_gallery.php?gallery_id=".$nav_node->ID."'><img class='breadcrumbicon' src='media/folder_open.png' style='vertical-align:middle;' alt='Folder icon'/>&nbsp;</a>\n";
-              echo "    <a id='nav_tree_".$nav_node->ID."' class='nav_link' href='view_gallery.php?gallery_id=".$nav_node->ID."'>".$nav_node->Name."</a><br/>\n";
+              echo "    <a id='nav_tree_".$nav_node->ID."' class='nav_link' href='view_gallery.php?gallery_id=".$nav_node->ID."'>".html_display_safe($nav_node->Name)."</a><br/>\n";
               echo "  </div>\n";
             }
             echo "</div>\n";

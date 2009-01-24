@@ -15,10 +15,9 @@
       {
         $orphan_image_id = $orphan["IDImage"];                       
         
-        $image_desc2 = mysql_real_escape_string(nl2br($orphan["Description"]));
-        $image_desc = str_replace("\'", "&#39", $image_desc2);                                                                          
+        $image_desc = mysql_real_escape_string(html_display_safe($orphan["Description"]));
         
-        if (strlen($image_desc) <= 0) {
+        if (mb_strlen($image_desc) <= 0) {
         	if ($SHOW_EMPTY_DESC_POPUPS == false) 
         	{
             $popup = '';
@@ -99,7 +98,7 @@
           echo "<table><tr><td style='width:50px;'></td><td style='width:150px;'><b>Image ID</b></td><td style='width:250px;'><b>Original filename</b></td><td><b>Description</b></td></tr>\n";
           $header = true;
         }
-        echo "<tr><td><a class='admin_link' href='admin_maintain_image.php?image_id=".$image["IDImage"]."'>[Fix]</a></td><td>".$image["IDImage"]."</td><td>".$image["Filename"]."</td><td>".$image["Description"]."</td></tr>\n";
+        echo "<tr><td><a class='admin_link' href='admin_maintain_image.php?image_id=".$image["IDImage"]."'>[Fix]</a></td><td>".$image["IDImage"]."</td><td>".html_display_safe($image["Filename"])."</td><td>".html_display_safe($image["Description"])."</td></tr>\n";
       }
     }
     
@@ -135,7 +134,7 @@
           echo "<table><tr><td style='width:50px;'><td style='width:150px;'><b>Image ID</b></td><td style='width:250px;'><b>Original filename</b></td><td><b>Description</b></td></tr>\n";
           $header = true;
         }
-        echo "<tr><td><a class='admin_link' href='admin_maintain_image.php?image_id=".$image["IDImage"]."'>[Fix]</a></td><td>".$image["IDImage"]."</td><td>".$image["Filename"]."</td><td>".$image["Description"]."</td></tr>\n";
+        echo "<tr><td><a class='admin_link' href='admin_maintain_image.php?image_id=".$image["IDImage"]."'>[Fix]</a></td><td>".$image["IDImage"]."</td><td>".html_display_safe($image["Filename"])."</td><td>".html_display_safe($image["Description"])."</td></tr>\n";
       }
     }
     
@@ -172,7 +171,7 @@
           $header = true;
         }
         thumbnail($image["IDImage"].".jpg", "jpeg", true);
-        echo "<tr><td>Fixed</td><td>".$image["IDImage"]."</td><td>".$image["Filename"]."</td><td>".$image["Description"]."</td></tr>\n";
+        echo "<tr><td>Fixed</td><td>".$image["IDImage"]."</td><td>".html_display_safe($image["Filename"])."</td><td>".html_display_safe($image["Description"])."</td></tr>\n";
       }
     }
     

@@ -2,9 +2,10 @@
   if (isset($pre_cache) == false)
   {
     header("Cache-Control: no-cache, must-revalidate");
-    include_once("../private/db_config.php");
+    include_once("_db_funcs.php");
     include_once("../config.php");  
     include_once("_error_funcs.php");
+    include_once("common.php");
   }
 
   $pre_cache_from_sources = false;
@@ -44,8 +45,7 @@
   $pre_gallery_id = $gallery_id;
   $pre_index = $index;
   
-  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-  mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+  $db = DBConnect();
   
   $query = "SELECT * FROM ".$tab_prefix."gallery WHERE (IDGallery='".mysql_real_escape_string($gallery_id)."')";
   $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
@@ -60,11 +60,9 @@
   $query = "SELECT * FROM ".$tab_prefix."gallery WHERE (IDParent='".mysql_real_escape_string($gallery_id)."')";
   $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   $subgalleries = mysql_fetch_array($result);
-    
+  
   if ((($subgalleries == true) && ($DISPLAY_PLAIN_SUBGALLERIES == false)) || ($subgalleries == false))
   {
-    $query = "select IDImage, Description from ".$tab_prefix."v_gallery_images where IDGallery = '".mysql_real_escape_string($gallery_id)."';";
-    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     echo "<table id='add_table' class='area' width='100%' cellspacing='0' cellpadding='5'><tr><td class='box_header'>Photos</td></tr><tr><td class='pale_area_nb'>\n";
     echo "<div id='info'>";
     if (isset($pre_cache_from_sources) == false)
@@ -91,10 +89,11 @@
     
     while ($imagelist = mysql_fetch_array($result))
     {          
-      $image_desc2 = mysql_real_escape_string(nl2br($imagelist["Description"]));
-      $image_desc = str_replace("\'", "&#39", $image_desc2);                                                                          
+      $image_desc = str_display_safe(addslashes($imagelist["Description"]));
+      $image_desc = str_replace("<","&lt;",$image_desc);
+      $image_desc = str_replace(">","&gt;",$image_desc);
       
-      if (strlen($image_desc) <= 0) {
+      if (mb_strlen($image_desc) <= 0) {
       	if ($SHOW_EMPTY_DESC_POPUPS == false) 
       	{
           $popup = '';
@@ -128,6 +127,10 @@
       <?php
     }
     echo "</td></tr></table>\n";
+    if ($subgalleries == true)
+    {
+      echo "<div class='height10'></div>";
+    }
   }
   
   if (($subgalleries == true) || ($index == true))

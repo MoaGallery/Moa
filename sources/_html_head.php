@@ -10,14 +10,13 @@
   if (!$INSTALLING)
   {
     // Database Configuration and Website configuration settings
-    include_once("private/db_config.php");
+    include_once("_db_funcs.php");
     include_once("config.php");
   
     // Connect to database
     if (isset($db_host))
     {
-      $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+      $db = DBConnect();
     }
   }
    
@@ -38,5 +37,5 @@
   echo "<link rel='stylesheet' href='style/style.css' type='text/css'/>\n";  
   
   // Set content type
-  echo "<meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>\n";
+  echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>\n";
 ?>

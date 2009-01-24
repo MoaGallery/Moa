@@ -18,11 +18,11 @@
             </a>
           </td>     
           <td style="width: 65px;"></td>
-          <td class='footer_text'>Powered by <a class='footer_text_link' href="http://www.moagallery.net/">Moa <?php echo $MOA_VERSION; ?></a> (c)2008-2009</td>
+          <td class='footer_text'>Powered by <a class='footer_text_link' href="http://www.moagallery.net/">Moa <?php echo $MOA_VERSION; ?></a> &copy; 2008-2009</td>
           <td style="width: 65px;"></td>
           <td style="width: 98px;">
             <a href="http://validator.w3.org/check/referer">
-              <img class='footer_logo' src="media/valid-xhtml.png" alt="HTML Validation service"/>
+              <img class='footer_logo' src="http://www.w3.org/Icons/valid-xhtml11" alt="HTML Validation service"/>
             </a> 
           </td>
           <td>

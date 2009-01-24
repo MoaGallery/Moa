@@ -1,6 +1,6 @@
 <?php
-  $MOA_MAJOR_VERSION = 0;
-  $MOA_MINOR_VERSION = 9;
+  $MOA_MAJOR_VERSION = 1;
+  $MOA_MINOR_VERSION = 0;
   $MOA_REVISION = 0;
   $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION;
   
@@ -22,5 +22,38 @@
     $minutes = sprintf("%02s",$temp['minutes']);
     
     return $temp['month']." ".$mday[$temp['mday']].", ".$temp['year'].", ".$temp['hours'].":".$minutes;
-  }  
+  }
+  
+  function html_display_safe( $text) {
+    $text = htmlspecialchars($text, ENT_QUOTES, "UTF-8");
+    $text = nl2br($text);
+    return $text;
+  }
+
+  function str_display_safe( $text) {
+    $text = htmlspecialchars($text, ENT_QUOTES, "UTF-8");
+    $text = str_replace("\x0A","<br/>",$text);
+    $text = str_replace("'","&apos;",$text);
+    return str_replace('"',"&quot;",$text);
+  }
+  
+  function edit_display_safe( $text) {
+    $text = htmlspecialchars($text, ENT_QUOTES, "UTF-8");
+    return $text;
+  }
+  
+  function strip_magic_quotes($text)
+  {
+    $text = str_replace('\"', '"', $text);
+    $text = str_replace("\'", "'", $text);
+    $text = str_replace("\\\\", "\\", $text);
+    $text = str_replace("\\\x00", "\x00", $text);
+    
+    return $text;
+  }
+  
+  function magic_url_decode($text)
+  {
+    return strip_magic_quotes(urldecode($text));
+  }
 ?>

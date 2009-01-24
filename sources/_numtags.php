@@ -1,10 +1,9 @@
 <?php
   header("Cache-Control: no-cache, must-revalidate");
-  include_once("../private/db_config.php");
   session_start();
   
-  $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-  mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+  include_once("_db_funcs.php");
+  $db = DBConnect();
   
   $query = "SELECT * FROM ".$tab_prefix."tag";
   $result = mysql_query($query);

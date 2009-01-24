@@ -1,16 +1,15 @@
 <?php    
-    session_start();
+  session_start();
 ?>    
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
   <head>
     <link rel='stylesheet' href='../style/style.css' type='text/css'>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   </head>
-  <body style='margin: 0px' scroll='no' class='pale_area_nb'>
+  <body style='margin: 0px;' scroll='no' class='pale_area_nb'>
+    <script type="text/javascript" src="_ajax.js.php"> </script>
     <script type="text/javascript">
-      <?php
-        include_once("_ajax.js.php");
-      ?>
-     
       function ajaxCheckTags()
       {
         var xmlHttp = GetAjaxObject();
@@ -36,38 +35,39 @@
       }
       </script>
 <?php    
-    include_once("../private/db_config.php");
     include_once("../config.php");
     include_once("_error_funcs.php");
+    include_once("common.php");
+    include_once("_db_funcs.php");
+    $db = DBConnect();
     
     $added_ok = false;
     
     if (isset($_REQUEST["name"]))
     {
-      $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-
-      $new_comment = mysql_real_escape_string(strip_tags($_REQUEST["comment"]));
-      $query = "INSERT INTO ".$tab_prefix."gallery (Name, Description, IDParent) VALUES ('".mysql_real_escape_string(strip_tags($_REQUEST["name"]))."', '".$new_comment."', '".mysql_real_escape_string($_REQUEST["parent_id"])."');";
+      $new_comment = mysql_real_escape_string($_REQUEST["comment"]);
+      $new_name = mysql_real_escape_string($_REQUEST["name"]);
+      $new_parent_id = mysql_real_escape_string($_REQUEST["parent_id"]);
+      
+      $query = "INSERT INTO ".$tab_prefix."gallery (Name, Description, IDParent) VALUES (_utf8'".$new_name."', _utf8'".$new_comment."', '".$new_parent_id."');";
       $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       $newid = mysql_insert_id($db);
-      $newid_str = sprintf("%010s", $newid);
+      $newid_str = sprintf("%010s", $newid);            
       
       foreach ($_SESSION as $key => $value)
       {
         if (strcmp("tag-", $key))
         {
-          $tagid = substr($key, -10);
-          $query = "INSERT INTO ".$tab_prefix."gallerytaglink (IDGallery, IDTag) VALUES ('".$newid_str."', '".$tagid."');";
+          $tagid = mb_substr($key, -10);                                        
+          $query = "INSERT INTO ".$tab_prefix."gallerytaglink (IDGallery, IDTag) SELECT '".$newid_str."', IDTag FROM ".$tab_prefix."tag WHERE IDTag = '".$tagid."'";                    
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         }
-      }
-      
+      }      
       $added_ok = true;
     }
 ?>
 
-  <form name="gallery_add" method="post" action="box_add_gallery.php?PHPSESSID=<?php echo session_id() ?>"  enctype="multipart/form-data">    
+  <form name="gallery_add" method="post" action="box_add_gallery.php?PHPSESSID=<?php echo session_id() ?>"  enctype="multipart/form-data">
     <table border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td class='form_label_text' style='width: 120px' valign='top'>Name:</td>
@@ -81,15 +81,12 @@
         <td class='form_label_text' style='width: 120px' valign='top'>Parent Gallery:</td>
         <td><select name="parent_id">
           <?php
-            $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-            mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-        
             $query = "SELECT * FROM ".$tab_prefix."gallery;";
             $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
             echo "<option value='0000000000'>No Parent</option>";
             while ($gallery = mysql_fetch_array($result))
             {
-              echo "<option value='".$gallery["IDGallery"]."'";
+              echo "<option value='".html_display_safe($gallery["IDGallery"])."'";
               if (isset($_REQUEST["parent_id"]))
               {
                 $parent_id = sprintf("%010s", $_REQUEST["parent_id"]);

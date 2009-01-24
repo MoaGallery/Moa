@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
      <?php
        include_once ("sources/_html_head.php");
@@ -8,12 +8,11 @@
   </head>
   <body>
     <?php
-      include_once ("sources/_header.php");
-      include_once("private/db_config.php");
+      include_once("sources/_header.php");
       include_once("config.php");  
-      
-      $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+      include_once("sources/common.php");
+      include_once("sources/_db_funcs.php");
+      $db = DBConnect();
       
       function display_gallery_link( $id, $level, $name, $description)
       {        
@@ -33,14 +32,17 @@
           }
         } else 
         {
-          $description = str_replace("\'", "&#39;", mysql_real_escape_string(nl2br($description)));
+          $description = str_replace("\'", "&#39;", str_display_safe($description));
+          $description = str_replace('\"', '&#39;', str_display_safe($description));
+          $description = str_replace("<","&lt;",$description);
+          $description = str_replace(">","&gt;",$description);
           
           $popup = "onmouseover='return overlib(\"".$description."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }      
                 
         echo "<div style='line-height:16px;'>";
-        echo "<a class='nav_icon' href='view_gallery.php?gallery_id=".$id."' ".$popup."><img class='breadcrumbicon' src='media/folder_open.png' style='vertical-align:bottom;'>&nbsp</a>";
-        echo "<a id='nav_tree_".$id."' class='nav_link' href='view_gallery.php?gallery_id=".$id."' ".$popup.">".$name."</a><br>\n";    
+        echo "<a class='nav_icon' href='view_gallery.php?gallery_id=".$id."' ".$popup."><img class='breadcrumbicon' src='media/folder_open.png' style='vertical-align:bottom;' alt='tree node' />&nbsp;</a>\n";
+        echo "<a id='nav_tree_".$id."' class='nav_link' href='view_gallery.php?gallery_id=".$id."' ".$popup.">".$name."</a><br/>\n";    
         echo "</div></div>";
       }
       
@@ -48,7 +50,7 @@
       {    
         global $tab_prefix;
         
-        $query = "SELECT IDGallery, name, description FROM ".$tab_prefix."gallery WHERE (IDParent='".mysql_real_escape_string($parent_id)."')";
+        $query = "SELECT IDGallery, name, description FROM ".$tab_prefix."gallery WHERE (IDParent='".$parent_id."')";
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       
         if (($parent_id == '0000000000') && ( mysql_num_rows($result) == 0)) 
@@ -72,7 +74,7 @@
 
       get_sub_galleries( '0000000000', 0);
 
-      echo"<img source='media\trans_pixel.png' width='400' height='1'>";
+      echo"<img src='media\trans_pixel.png' width='400' height='1' alt='' />";
 
       echo "</td>\n</tr>";
       echo "</table>";

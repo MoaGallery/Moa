@@ -10,6 +10,8 @@
     $pre_image_id = $image_id;
   }
   session_start();
+  session_unset();
+  header("Content-Type: text/html; charset=UTF-8");
   include_once("sources/id.php");
 ?>
 
@@ -40,6 +42,7 @@
     <?php
       if ($Userinfo->ID != NULL)
       {
+        echo '<script type="text/javascript" src="sources/_ajax.js.php"> </script>';
         echo '<script type="text/javascript" src="view_image_edit.js.php"> </script>';
       }
     ?>  

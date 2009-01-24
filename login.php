@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">       
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">                                                 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">                                             
   <head>
      <?php
        include_once ("sources/_html_head.php");
@@ -11,35 +11,35 @@
       include_once ("sources/_header.php");  
       include_once ("sources/id.php");
       ?>
-      <FORM name="login-form" method="post" action="index.php" enctype="multipart/form-data">
-        <center>
-          <table class="area" cellpadding="5" cellspacing="0">
-            <tr>
-              <td class="box_header">Login</td>
-            </tr>
-            <tr>
-              <td class="pale_area_nb">
-                <table cellpadding="5" cellspacing="0">
-                  <tr><td class='form_text'>Name:</td><td> <INPUT id="loginname" type="text" name="name" class='form_text'></td></tr>
-                  <tr><td class='form_text'>Password:</td><td><INPUT id="loginpass" type="password" name="password" class='form_text'></td></tr>
-                  <tr><td class='form_text'>Duration:</td><td>
-                  	<SELECT name="duration" class='form_text'>
-                  	  <OPTION value="mins30">30 Minutes</OPTION>
-                      <OPTION value="mins60">1 Hour</OPTION>
-                      <OPTION value="mins120">2 Hours</OPTION>
-                      <OPTION value="forever">Forever</OPTION>
-                    </SELECT></td>
-                  </tr>
-                  <tr><td colspan="2"><center><INPUT type="submit" value="Login"></center></td></tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </center>
-      </FORM>
+      <form id="login-form" method="post" action="index.php" enctype="multipart/form-data">
+        <table class="area" cellpadding="5" cellspacing="0" style="margin-left:auto; margin-right:auto;">
+          <tr>
+            <td class="box_header">Login</td>
+          </tr>
+          <tr>
+            <td class="pale_area_nb">
+              <table cellpadding="5" cellspacing="0">
+                <tr><td class='form_text'>Name:</td><td> <input id="loginname" type="text" name="name" class='form_text' /></td></tr>
+                <tr><td class='form_text'>Password:</td><td><input id="loginpass" type="password" name="password" class='form_text' /></td></tr>
+                <tr><td class='form_text'>Duration:</td><td>
+                	<select name="duration" class='form_text'>
+                	  <option value="mins30">30 Minutes</option>
+                    <option value="mins60">1 Hour</option>
+                    <option value="mins120">2 Hours</option>
+                    <option value="forever">Forever</option>
+                  </select></td>
+                </tr>
+                <tr><td colspan="2"><div style="width:60px; margin-left:auto; margin-right:auto;"><input type="submit" value="Login" /></div></td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </form>
     <?php
     include_once ("sources/_footer.php");
   ?>
+    <script type="text/javascript">
+      document.getElementById("loginname").focus();
+    </script>
   </body>
-  <script>document.getElementById("loginname").focus();</script>
 </html>

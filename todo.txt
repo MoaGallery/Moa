@@ -2,19 +2,22 @@ FOR NEXT TIME -
   
   
 TODO -
-  Important -    
+  Important -
     Documentation.
     Better website.
     Install public test version.
     Mention Cpanel 'Create View' bug in docs.
     Mention server memory limit for uploads in docs.
+    Mention that GD bundled version should be used if thumbnails are not being produced correctly.
+    In install refuse to go any further if config or db_config already exist.
   
   Pre-release -
-    Add error checking
+    Add error checking to new code.
     Escape all variables used in queries (mysql_real_escape_string)
     WC3 validation
     Check all files verify login status before proceeding to process actions.
     Version number change.
+    Check with/without magic quotes.
   
   Nice  -
    Major version -
@@ -22,13 +25,14 @@ TODO -
      
    Minor version -
      1.1 (Templates) -
+       Common root path variable to be applied to config.php
        Makes pages Template based. Supply 2-3 with normal install.
        Site Settings.
-       Tidy up code/naming conventions.
+       Tidy up code/naming conventions. - Should include a common index file for all operations
        Comments.
        New tag entry system.
        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
-       Pages on thumbnails.
+       Pages of thumbnails.
        Next/Prev on image view.
        Filmstrip.
        Comment field to be bigger, or switch between sizes.
@@ -52,9 +56,9 @@ TODO -
        Slide Show.
        Gallery Merge.
        Move Sub Gallery. (Base on version of navigation bar as an admin page)
-       
 
-   Patch -
+   Patch -   
+     Add more corruption detection in the admin section (Look for images that can't exist no any gallery)
      In-line dialogue for add user \ add tag \ edit tag should have a title label.
      Move edit taglist and JS to include file.
      Unify the tag list ajax files box_taglist and box_edit_taglist.
@@ -93,11 +97,6 @@ TODO -
    Import/Export (With desktop client)
    Output slideshow to Vid-CD (Online \ Desktop Client)
 
-Ongoing -
-  Add more corruption detection in the admin section
-  Make it look fancy
-
-
 Bugs -
   Bugs -
     IE6 not laying out thumbnails correctly.
@@ -130,4 +129,5 @@ Template Ideas -
 
 Done this session
 
-1) Pre-loading doesn't set page title.
+1) Check for quotes being stripped/escaped in all text fields.
+2) Unicode!

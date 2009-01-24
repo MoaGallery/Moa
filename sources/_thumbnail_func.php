@@ -12,7 +12,7 @@
         $PREFIX = "../";
       }
       
-      $src_img = imagecreatefromjpeg($PREFIX.$IMAGE_PATH."/".$image_name);
+      $src_img = imagecreatefromjpeg($PREFIX.$IMAGE_PATH."/".str_display_safe($image_name));
       
       $origw=imagesx($src_img); 
       $origh=imagesy($src_img); 
@@ -34,7 +34,7 @@
       imageAntiAlias($dst_img, true);
       imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img)); 
         
-      imagejpeg($dst_img, $PREFIX.$THUMB_PATH."/"."thumb_".$image_name);
+      imagejpeg($dst_img, $PREFIX.$THUMB_PATH."/"."thumb_".str_display_safe($image_name));
       imagedestroy($src_img);
       
       return true; 

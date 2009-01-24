@@ -11,7 +11,7 @@
       include_once ("sources/_header.php");
 
       if ($Userinfo->ID == NULL) {
-        moa_warning("You must have admin rights to use this page.");
+        moa_warning("You must be logged in to use this page.");
       } else
       {
         include_once ("sources/_admin_page_links.php");

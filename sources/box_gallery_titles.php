@@ -2,13 +2,14 @@
   if (isset($pre_cache) == false)
   {
     header("Cache-Control: no-cache, must-revalidate");
+    header("Content-Type: text/html; charset=utf-8");
     session_start();
     include_once("_error_funcs.php");
-    include_once("../private/db_config.php");
-    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    include_once("_db_funcs.php");
+    $db = DBConnect();
     include_once("../config.php");
     include_once("id.php");
+    include_once("common.php");
   } else
   {
     $_REQUEST["edit"] = false;
@@ -26,7 +27,7 @@
       moa_warning("No gallery ID supplied.", true);
       die();
     }
-  } 
+  }
 
   $query = "SELECT Name, Description FROM ".$tab_prefix."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
   $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
@@ -51,7 +52,7 @@
                 Name:
               </td>
               <td style='height: 10px;' valign='top' colspan='4'>            
-                <input class='form_text' type='text' id='gal-name' value='<?php echo $gallery["Name"]; ?>' onkeypress='return checkKey(event);'></input>      
+                <input class='form_text' type='text' id='gal-name' value='<?php echo str_display_safe($gallery["Name"]); ?>' onkeypress='return checkKey(event);'></input>      
               </td>
             </tr>
             <tr>
@@ -59,7 +60,7 @@
                 Comment:&nbsp
               </td>
               <td valign='top'>
-                <textarea class='form_text' id='gal-comment' rows='4' cols='30'><?php echo $gallery["Description"];?></textarea>
+                <textarea class='form_text' id='gal-comment' rows='4' cols='30'><?php echo edit_display_safe($gallery["Description"]);?></textarea>
                 <br/>
                 <br/>
               </td>
@@ -87,7 +88,7 @@
                     </td>
                   </tr>
                 </table>
-                <br>
+                <br/>
               </td>
             </tr>
           </table>
@@ -100,10 +101,13 @@
       {
         if ($Userinfo->ID != NULL)
         {
-          $query = "UPDATE ".$tab_prefix."gallery SET Description = '".mysql_real_escape_string(strip_tags($_REQUEST["desc"]))."', Name = '".mysql_real_escape_string(strip_tags($_REQUEST["name"]))."' WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
+          $name = magic_url_decode($_REQUEST["name"]);
+          $desc = magic_url_decode($_REQUEST["desc"]);
+
+          $query = "UPDATE ".$tab_prefix."gallery SET Description = _utf8'".mysql_real_escape_string($desc)."', Name = _utf8'".mysql_real_escape_string($name)."' WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-          $gallery["Description"] = strip_tags($_REQUEST["desc"]);
-          $gallery["Name"] = strip_tags($_REQUEST["name"]);
+          $gallery["Description"] = $desc;
+          $gallery["Name"] = $name;
 
           $query = "DELETE FROM ".$tab_prefix."gallerytaglink WHERE (IDGallery = ".mysql_real_escape_string($gallery_id).")";
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
@@ -126,12 +130,10 @@
         }
       }
 
-      //print_r($gallery)."<br>\n";
-
-      echo "<div class='gallery_name'>".$gallery["Name"]."</div><br/>";
+      echo "<div class='gallery_name'>".html_display_safe($gallery["Name"])."</div><br/>";
       if (($gallery["Description"]) != NULL)
       {
-        echo "<div class='gallery_desc'>".nl2br(stripslashes($gallery["Description"]))."</div>";
+        echo "<div class='gallery_desc'>".html_display_safe($gallery["Description"])."</div>";
       }
     }
   }

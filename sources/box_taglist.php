@@ -1,25 +1,27 @@
 <?php
     header("Cache-Control: no-cache, must-revalidate");
-    include_once("../private/db_config.php");
+    header("Content-Type: text/html; charset=utf-8");
+    include_once("_db_funcs.php");
+    $db = DBConnect();
     include_once("_error_funcs.php");
+    include_once("common.php");
     session_start();
     
-    echo "<head>\n";
-    echo "<link rel='stylesheet' href='../style/style.css' type='text/css'>\n";
+    echo "<head>\n";    
     echo "</head>\n";
     echo "<body>\n";
-    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     // If adding a tag
     if (isset($_REQUEST["tagname"]) == true)
     {
-      $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+      $tagname = magic_url_decode($_REQUEST["tagname"]);
+      
+      $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string($tagname).'");';
       $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       
       if (0 == mysql_num_rows($result))
       {
-        $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+        $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES (_utf8"'.mysql_real_escape_string($tagname).'");';
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       }
     }
@@ -39,9 +41,9 @@
       {
         echo "checked='true' ";
       }
-      echo "id='tag-".$taglist["IDTag"]."'><div class='form_label_text'> ".$taglist["Name"]."</div></input></div>\n";
+      echo "id='tag-".$taglist["IDTag"]."'><div class='form_label_text'> ".html_display_safe($taglist["Name"])."</div></input></div>\n";
     }
-    echo "<br>";
+    echo "<br/>";
     mysql_close($db);
   }
   echo "</body>\n";

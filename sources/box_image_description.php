@@ -4,11 +4,11 @@
     header("Cache-Control: no-cache, must-revalidate");
     session_start();
     include_once("_error_funcs.php");
-    include_once("../private/db_config.php");
-    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    include_once("_db_funcs.php");
+    $db = DBConnect();
     include_once("../config.php");
     include_once("id.php");
+    include_once("common.php");
   }
 
   if (false == isset($_REQUEST["image_id"]))
@@ -39,7 +39,7 @@
   {
     if (strcmp($_REQUEST["edit"], "true") == 0)
     {
-      echo "<textarea class='form_text' id='image-comment' rows='4' cols='37'>".$image["Description"]."</textarea><br>\n";
+      echo "<textarea class='form_text' id='image-comment' rows='4' cols='37'>".edit_display_safe($image["Description"])."</textarea><br/>\n";
       ?>
       <table>
         <tr>
@@ -50,19 +50,20 @@
         </tr>
       </table>
       <?php
-      echo "<br>\n";
+      echo "<br/>\n";
       echo "<input type='submit' value='Submit' onclick='CommentButtons(\"".session_id()."\");'></input>\n";
       echo "<input type='submit' value='Cancel' onclick='CommentButtons(\"".session_id()."\", true);'></input>\n";
     } else
     {
       if (isset($_REQUEST["desc"]))
       {
-        //print_r($Userinfo);
+        $desc = magic_url_decode($_REQUEST["desc"]);
+        
         if ($Userinfo->ID != NULL)
         {
-          $query = "UPDATE ".$tab_prefix."image SET Description = '".mysql_real_escape_string(strip_tags($_REQUEST["desc"]))."' WHERE (IDImage = '".mysql_real_escape_string($image_id)."')";
+          $query = "UPDATE ".$tab_prefix."image SET Description = _utf8'".mysql_real_escape_string($desc)."' WHERE (IDImage = '".mysql_real_escape_string($image_id)."')";
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-          $image["Description"] = strip_tags($_REQUEST["desc"]);
+          $image["Description"] = $desc;
           
           $query = "DELETE FROM ".$tab_prefix."imagetaglink WHERE (IDImage = ".mysql_real_escape_string($image_id).")";
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
@@ -88,11 +89,11 @@
       }
 
       // If description length is zero then output a non-breaking space instead
-      if (strlen( $image["Description"]) == 0) {
+      if (mb_strlen( $image["Description"]) == 0) {
         echo "&nbsp";
       } else
       {
-        echo "<div class='image_desc'>".nl2br(htmlspecialchars($image["Description"]))."</div>";
+        echo "<div class='image_desc'>".html_display_safe($image["Description"])."</div>";
       }
     }
   }

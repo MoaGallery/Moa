@@ -1,10 +1,10 @@
 <?php
     header("Cache-Control: no-cache, must-revalidate");
-    include_once("../private/db_config.php");
+    header("Content-Type: text/html; charset=utf-8");
     include_once("_error_funcs.php");
-    
-    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+    include_once("common.php");
+    include_once("_db_funcs.php");
+    $db = DBConnect();
     
     // Are we viewing \ editing or deleted?
     if (isset($_REQUEST["action"]) == false) {
@@ -47,11 +47,8 @@
       
       while ($taglist = mysql_fetch_array($result)) 
       {       	 
-        // Spacer
-        //echo"<img src='media/trans-pixel.png' width='1' height='20' alt=''/>";
-        
         // Tag Data
-        echo "<div class='tag_name' id='tag_name_".$taglist["IDTag"]."'>".$taglist["Name"]."</div>\n";
+        echo "<div class='tag_name' id='tag_name_".$taglist["IDTag"]."'>".html_display_safe($taglist["Name"])."</div>\n";
         echo "<div class='tag_link' id='tag_edit_link_".$taglist["IDTag"]."'><a class='admin_link' onclick='javascript: tag_edit( \"".$taglist["IDTag"]."\")'>[Edit]</a></div>\n";       	 
         echo "<div class='tag_link' id='tag_delete_link_".$taglist["IDTag"]."'><a class='admin_link' onclick='javascript: tag_delete( \"".$taglist["IDTag"]."\")'>[Delete]</a></div>\n";
         
@@ -59,7 +56,7 @@
         echo "<div class='tag_edit_box' id='tag_edit_box_".$taglist["IDTag"]."'><input id='tag_edit_input_".$taglist["IDTag"]."' class='inline_element' type='text' name='tag_edit_box_".$taglist["IDTag"]."'></div>\n";
         echo "<div class='tag_button' id='tag_edit_submit_".$taglist["IDTag"]."'><button class='tag_buttons' onclick='javascript: tag_submit(\"".$taglist["IDTag"]."\")' class='inline_element'>Ok</button><img src='media/trans-pixel.png' width='6' height='1' alt=''/></div>\n";
         echo "<div class='tag_button' id='tag_edit_cancel_".$taglist["IDTag"]."'><button class='tag_buttons' onclick='javascript: tag_cancel(\"".$taglist["IDTag"]."\")' class='inline_element'>Cancel</button></div>\n";       	 
-        echo "<br>";
+        echo "<br/>";
       }
     }    
     
@@ -74,22 +71,24 @@
       // If adding a tag
       if (isset($_REQUEST["tagname"]) == true)
       {
-      	$query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+        $tagname = magic_url_decode($_REQUEST["tagname"]);
+        
+      	$query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string($tagname).'");';
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
         if (0 == mysql_num_rows($result))
-        {      	
-          $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES ("'.mysql_real_escape_string(strip_tags($_REQUEST["tagname"])).'");';
+        {
+          $query = 'INSERT INTO '.$tab_prefix.'tag (Name) VALUES (_utf8"'.mysql_real_escape_string($tagname).'");';
           $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         }
-      }       
+      }    
       
       display_tag_list();
       
       echo "</body>\n";
     }
         
-    function view_tag() {      
+    function view_tag() {
        global $tab_prefix;
        
        echo "<head>\n";
@@ -105,6 +104,7 @@
     function submit_tag() {    
     	global $tab_prefix;
     	
+    	// Check for an ID
       if (isset($_REQUEST["tag_id"]))
       {
         $tag_id = $_REQUEST["tag_id"];
@@ -114,22 +114,25 @@
         die();
       }
       
+      // Check for a new name
       if (isset($_REQUEST["value"]))
       {
-        $value = strip_tags($_REQUEST["value"]);
+        $value = magic_url_decode($_REQUEST["value"]);
       } else 
       {
         echo "No value supplied.";
         die();
       }
 
+      // Check the ID exists
       $query = 'SELECT 1 FROM '.$tab_prefix.'tag WHERE UPPER(Name) = UPPER("'.mysql_real_escape_string($value).'");';
       $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
   
+      // It does
       if (0 == mysql_num_rows($result))
       {      
-        $query = "UPDATE ".$tab_prefix."tag SET Name = '".mysql_real_escape_string($value)."' WHERE (IDTag = '".$tag_id."')";
-        if ($result = mysql_query($query))
+        $query = "UPDATE ".$tab_prefix."tag SET Name = _utf8'".mysql_real_escape_string($value)."' WHERE (IDTag = '".$tag_id."')";
+        if ($result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__))
         {
           echo "OK";
         }

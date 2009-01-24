@@ -2,16 +2,14 @@
   if (isset($pre_cache) == false)
   {
     header("Cache-Control: no-cache, must-revalidate");
-    include_once("../private/db_config.php");
     include_once("../config.php");
     include_once("_error_funcs.php");
-    $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-    include_once ("id.php");
+    include_once("_db_funcs.php");
+    $db = DBConnect();
+    include_once("id.php");
+    include_once("common.php");
   }
-  
-  
-  
+      
   if (false == isset($_REQUEST["image_id"]))
   {
     if (false == isset($pre_cache))
@@ -67,7 +65,7 @@
       if ($Userinfo->ID != NULL) {
         echo "<a class='admin_link' onclick='ajaxInfoDescription(\"".$image_id."\", \"NULL\", \"true\")'>[Edit]</a> ";
         echo "<a class='admin_link' onclick='image_delete(\"".$image_id."\", \"".$parent_id."\", ".$referer.");'>[Delete]</a>\n";
-        echo "<br><br>\n";
+        echo "<br/><br/>\n";
       }
       $width = $image["Width"];
       $height = $image["Height"];
