@@ -1,0 +1,31 @@
+==== ABOUT ====
+
+Moa is an image gallery website system written in PHP and using MySQL for data 
+storage. It is released as Open Source under the zlib/libpng license. This 
+allows pretty much any usage as long as you don't claim that you wrote it.
+
+The intended use is for websites that want a gallery but do not want the 
+complexity and extended feature set of some of the heavier-duty open source 
+galleries. It is purposefully designed to not require registration/login (apart 
+from admins), has no comments/ratings and provide just one shared set of 
+galleries. Our reasoning for these is that someone putting up pictures of their 
+pet or holiday on a personal homepage usually won't care about feedback.
+
+However that doesn't mean the site-owner doesn't need decent tools and we 
+provide some of these (with more to come). "Tags", or keywords, are given to 
+all galleries and images and are the way the site knows where to put each 
+image. This allows a hierarchical gallery structure and allows images to appear 
+in more than one gallery without re-uploading. Galleries can be made and will 
+auto-populate with any images that have matching tags. Adding, editting and 
+deleting galleries/images is easy.
+
+We chose the name Moa for two reasons. Firstly, there wasn't another project 
+with the same name. Secondly it was meant to represent that things are not 
+eternal. Once holidays, pets or giant extinct birds are gone, the images and 
+memories are all we have left. And again, the name was free...
+
+
+
+==== HOW TO USE ====
+
+Please refer to docs/manual.html

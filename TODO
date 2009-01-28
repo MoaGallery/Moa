@@ -4,12 +4,7 @@ FOR NEXT TIME -
 TODO -
   Important -
     Documentation.
-    Better website.
-    Install public test version.
-    Mention Cpanel 'Create View' bug in docs.
     Mention server memory limit for uploads in docs.
-    Mention that GD bundled version should be used if thumbnails are not being produced correctly.
-    In install refuse to go any further if config or db_config already exist.
   
   Pre-release -
     Add error checking to new code.
@@ -24,20 +19,23 @@ TODO -
      Support other databases (ms-sql, Oracle, ProgresSQL, etc) and HTTP backends (IIS).
      
    Minor version -
-     1.1 (Templates) -
+     1.1 (Tidy up) -
        Common root path variable to be applied to config.php
+       Tidy up code/naming conventions. - Should include a common index file for all operations
+       Add comments to code.
+       New tag entry system.
+       Comment field to be bigger, or switch between sizes.
+       New upload/Add.
+       
+     1.2 (Templates) -
        Makes pages Template based. Supply 2-3 with normal install.
        Site Settings.
-       Tidy up code/naming conventions. - Should include a common index file for all operations
-       Comments.
-       New tag entry system.
        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
        Pages of thumbnails.
        Next/Prev on image view.
        Filmstrip.
-       Comment field to be bigger, or switch between sizes.
        
-     1.2 (Expanding content) -
+     1.3 (Expanding content) -
        Other image formats.
        Display movie clips.  (Not streaming)
        Grab and save EXIF info.
@@ -47,7 +45,7 @@ TODO -
        IPTC support.
        GeoTagging support.
        
-     1.3 (XML + Drag&Drop) -
+     1.4 (XML + Drag&Drop) -
        Re-Arrange images on a gallery.
        On image view page implement next\prev image buttons with thumb preview.
        Move dynamic content into XML string.
@@ -92,6 +90,7 @@ TODO -
      User action logging.
      Handle image uploads that are too big.
      Full size view should put desc in browser title.
+     Option to hide the login button.
    
   Future -
    Import/Export (With desktop client)

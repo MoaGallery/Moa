@@ -54,7 +54,7 @@
         
         // Edit Controls
         echo "<div class='tag_edit_box' id='tag_edit_box_".$taglist["IDTag"]."'><input id='tag_edit_input_".$taglist["IDTag"]."' class='inline_element' type='text' name='tag_edit_box_".$taglist["IDTag"]."'></div>\n";
-        echo "<div class='tag_button' id='tag_edit_submit_".$taglist["IDTag"]."'><button class='tag_buttons' onclick='javascript: tag_submit(\"".$taglist["IDTag"]."\")' class='inline_element'>Ok</button><img src='media/trans-pixel.png' width='6' height='1' alt=''/></div>\n";
+        echo "<div class='tag_button' id='tag_edit_submit_".$taglist["IDTag"]."'><button class='tag_buttons' onclick='javascript: tag_submit(\"".$taglist["IDTag"]."\")' class='inline_element'>Ok</button><img src='media/trans-pixel.png' width='6' height='1' alt='' /></div>\n";
         echo "<div class='tag_button' id='tag_edit_cancel_".$taglist["IDTag"]."'><button class='tag_buttons' onclick='javascript: tag_cancel(\"".$taglist["IDTag"]."\")' class='inline_element'>Cancel</button></div>\n";       	 
         echo "<br/>";
       }

@@ -37,7 +37,7 @@
             <div class='gallery-shadow2'>
               <div class='gallery-shadow3' style="width:<?php echo ($THUMB_WIDTH+20) ?>px; height: <?php echo (ceil($THUMB_WIDTH*0.75)+20); ?>px;">
                 <div style="margin:10px;">
-                  <img style="display: block; margin-left: auto; margin-right: auto;" src='images/thumbs/thumb_<?php echo $orphan_image_id ?>.jpg'>
+                  <img style="display: block; margin-left: auto; margin-right: auto;" src='images/thumbs/thumb_<?php echo $orphan_image_id ?>.jpg' alt='Thumbnail'/>
                 </div>
               </div>
             </div>

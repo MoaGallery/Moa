@@ -15,7 +15,10 @@
     
     if (!$install)
     {
-      include_once("private/db_config.php");
+      if (file_exists("private/db_config.php"))
+      {
+        include_once("private/db_config.php");
+      }
     }
   }
 

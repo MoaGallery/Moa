@@ -10,7 +10,7 @@
     include_once("config.php");
     echo "    <a onclick='history.go(-1)'><img src='".$IMAGE_PATH."/".$_REQUEST["image_id"];
 ?>
-.jpg' onmouseover='this.style.cursor="hand"' alt='Full size image'></img></a>
+.jpg' onmouseover='this.style.cursor="hand"' alt='Full size image' /></a>
   </div>
   </body>
 </html>

@@ -7,7 +7,7 @@
     {
       $icon = "../".$icon;
     }
-    echo "<img src='".$icon."' style='vertical-align:middle;'/>";
+    echo "<img src='".$icon."' style='vertical-align:middle;' alt='Warning'/>";
     echo "  Warning: ".$text."\n";
     echo "</div><br/>\n";
   }
@@ -20,7 +20,7 @@
     {
       $icon = "../".$icon;
     }
-    echo "<img src='".$icon."' style='vertical-align:middle;'/>";
+    echo "<img src='".$icon."' style='vertical-align:middle;' alt='Error'/>";
     echo "  Error: ".$text."\n";
     echo "</div><br/>\n";
   }
@@ -28,7 +28,7 @@
   function moa_db_error($text, $file, $line)
   {
     echo "<div class='fatalerror_box' style='line-height:40px;'>\n";
-    echo "<img src='media/error.png' style='vertical-align:middle;'/>";
+    echo "<img src='media/error.png' style='vertical-align:middle;' alt='Error'/>";
     echo "  Fatal error!: Line ".$line." of ".$file."<br/>".$text."\n";
     echo "</div><br/>\n";
     //die();
@@ -42,7 +42,7 @@
     {
       $icon = "../".$icon;
     }
-    echo "<img src='media/success.png' style='vertical-align:middle;'/>";
+    echo "<img src='media/success.png' style='vertical-align:middle;' alt='Success'/>";
     echo "  Success: ".$text."\n";
     echo "</div><br/>\n";
   }
@@ -56,7 +56,7 @@
     {
       $icon = "../".$icon;
     }
-    echo "<img src='".$icon."' style='vertical-align:middle;'/>";
+    echo "<img src='".$icon."' style='vertical-align:middle;' alt='Feedback'/>";
     echo "  Success: ".$text."\n";
     echo "</div><br/>\n";
   }
