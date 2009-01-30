@@ -29,3 +29,13 @@ memories are all we have left. And again, the name was free...
 ==== HOW TO USE ====
 
 Please refer to docs/manual.html
+
+==== KNOWN ISSUES ====
+
+Server limits. Apache can set limits on both uploaded file size and how much 
+memory it uses. For regular internet images this probably won't be a problem 
+but if you want to host high-resolution images it can be. Our own hosts have 
+a limit of 32Mb memory due to shared hosting which means we can't upload a 
+file bigger than about 7 megapixels but it is probably rare you would want 
+to upload one that big. Moa currently does not have a check for this, although 
+it is something we want to add sooner rather than later.
