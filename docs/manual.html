@@ -1,4 +1,4 @@
-<html
+<html>
   <head>
     <title>Moa user manual</title>
   </head>
@@ -6,12 +6,19 @@
     <h2>How to use Moa</h2>
   <p>The key (and only, really) thing for getting to grips with Moa is to understand that it is tag (keyword) based.  Every image should have tags attached to identify what it is an image of.  Every gallery needs tags to tell it what it should contain.  How complex you make your tag system is up to you.  Images are not directly associated with galleries and can appear in multiple ones.  Images without any tags will not be displayed in any gallery.</p>
   
-  <p>For example a gallery with tags of 'holiday' and 'Hawaii' will contain any image that has at least those two tags as well, even if they have others as well.  This lets you tag images in lots of ways to appear in more than one gallery.  An image in that example gallery could have tags of 'holiday', 'Hawaii', '2005', 'beach', 'dad' and 'family'.  This lets you create another gallery called with the 'Family' tag and it will go in there as well, no need to upload the image twice.</p>
+  <p>For example a gallery with tags of 'holiday' and 'Hawaii' will contain any image that has at least those two tags as well, even if they have others as well.  This lets you tag images in lots of ways to appear in more than one gallery.  An image in that example gallery could have tags of 'holiday', 'Hawaii', '2005', 'beach', 'dad' and 'family'.  The same image can appear in more than one gallery.</p>
+  
+  <p>New in version 1.1 is a better way to work with tags. This is a list rather than big table of checkboxes and holding the mouse over the edit box will show you all available and used tags. By default, comma (",") is used to seperate the tags, this can be changed in config.php by changing the $STR_DELIMITER variable. A suggested alternative is semi-colon (";") as it is unlikely to be used in normal phrases.</p>
   
   <p>Galleries can have sub-galleries inside them as well.  These do not have to inherit the tags of it's parent although they will be filled-in automatically when you create one. By default any gallery with sub-galleries will not show any images inside, just the list of sub-galleries. This can be changed by editting the config.php file and changing $DISPLAY_PLAIN_SUBGALLERIES to true. As of version 1.0 this doesn't look very good but is planned to be worked on for version 1.1.</p>
   
   <p>To add, edit or delete galleries and images use the links just below the header. You need to be logged in to do this. Galleries can be added from the main page or inside another gallery. Images can be added inside any gallery. Edit and delete can be done on any gallery or image. Deleting a gallery with sub-galleries will move those sub-galleries to where the parent was.</p>
   
   <p>The admin button will let you do several things. You can create extra users or change your name/password. Extra users will all have access to the same galleries as you. The 'admin' tickbox against a user is whether to let them add/edit other users. You can add, edit and delete tags on the tag admin page. The last two pages are for finding any problems or lost images (not tagged).</p>
+  
+  <hr>
+  
+  <p>This manual is a work in progress and we will be working on a more detailed version for the 1.2 release. Please check the Moa website at http://www.moagallery.net for the most up-to-date version of the online manual in the 'Docs' section.</p>
+
   </body>
-</html>  
+</html>

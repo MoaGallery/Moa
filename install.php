@@ -126,8 +126,9 @@
 	  return $version;
 	}
 
-  function ShowProgressStart($stage, $processing)
+  function ShowProgressStart($p_stage, $p_processing)
   {
+  	// Set up stages
     $stages1 = array();
     $stages1[-1] = "Welcome";
     $stages1[0] = "Check environment";
@@ -142,6 +143,7 @@
     $stages2[2] = "Setting up server";
     $stages2[3] = "Finished";
 
+    // Draw progress box
     echo "<table class='normal_text' style='width:100%;'><tr><td valign='top' style='width:250px;'>\n";
 
     echo "<table class='area' width='250' cellspacing='0' cellpadding='5'>\n";
@@ -154,15 +156,16 @@
         echo "<td align='left' class='pale_area_nb'>\n";
           echo"<img src='media/trans-pixel.png' width='250' height='1' alt=''/>";
           echo "<br/>\n";
+          // For each line in the box
           for ($loop = -1; $loop < count($stages1) - 1; $loop++)
           {
-            if ($loop < $stage)
+            if ($loop < $p_stage)
             {
               echo "<img src='media/progress-blank.png' alt=''/> <span style='color: grey'>".$stages2[$loop]." - Done<br/></span>\n";
             }
-            if ($loop == $stage)
+            if ($loop == $p_stage)
             {
-              if (!$processing)
+              if (!$p_processing)
               {
                 echo "<img src='media/progress-arrow.png' width='21' height='10'  alt=''/> ".$stages1[$loop]."<br/>\n";
               } else
@@ -170,7 +173,7 @@
                 echo "<img src='media/progress-arrow.png' width='21' height='10' alt=''/> ".$stages2[$loop]."<br/>\n";
               }
             }
-            if ($loop > $stage)
+            if ($loop > $p_stage)
             {
               echo "<img src='media/progress-blank.png' alt=''/> ".$stages1[$loop]."<br/>\n";
             }
@@ -199,6 +202,7 @@
     echo "</table>\n";
   }
 
+  // Stage 0 = Welcome message
   function Stage0()
   {
     ShowProgressStart(-1, true);
@@ -211,9 +215,10 @@
     echo "</form>\n";
     echo "</td></tr></table>\n";
 
-    ShowProgressEnd();
+   ShowProgressEnd();
   }
 
+  // Stage 1B = Version checks
   function Stage1B()
   {
   	global $APACHE_MIN_VERSION;
@@ -316,8 +321,8 @@
 
     // Check for GD
     echo "Checking for GD extension to PHP - ";
-    $gd_present = function_exists('imagecreatefromjpeg');    
-    
+    $gd_present = function_exists('imagecreatefromjpeg');
+
     if ($gd_present)
     {
       echo "<span style='color: green'>Success</span><br/>\n";
@@ -329,12 +334,12 @@
 
     // Only check the GD version of GD is present
     if ($gd_present) {
-	    // Check the GD version  
+	    // Check the GD version
 	    echo "Checking for version ".$GD_MIN_VERSION[0]." of GD extension or later - ";
 	    $gd_version = get_gd_version();
-	
+
 	  	$passed = false;
-	
+
 	  	// Major version
 	  	if ($gd_version[0] > $GD_MIN_VERSION[0])
 	  	{
@@ -358,7 +363,7 @@
 	  			}
 	  		}
 	  	}
-	
+
 	  	if (false == $passed)
 	  	{
 	   	  echo "<span style='color: red'>Failed (".$gd_version[0].".".$gd_version[1].".".$gd_version[2].")</span><br/>\n";
@@ -379,7 +384,7 @@
       echo "<span style='color: red'>Failed</span><br/>\n";
       $check = true;
     }
-    
+
     // Check for mbstring
     echo "Checking for mbstring extension to PHP - ";
     if (function_exists('mb_strpos'))
@@ -469,12 +474,50 @@
     ShowProgressEnd();
   }
 
+  // Stage 2A = Gather system settings
   function Stage2A()
   {
-    ShowProgressStart(1, false);
+    echo "<script type='text/javascript' src='sources/_request.js'></script>\n";
+    echo "<script type='text/javascript' src='sources/common.js'></script>\n";
+    echo "<script type='text/javascript'>\n";
+    echo "function dbcheck()\n";
+    echo "{\n";
+	  echo "  var l_dbname = document.getElementById('dbname').value;\n";
+	  echo "  var l_dbuser = document.getElementById('dbuser').value;\n";
+	  echo "  var l_dbpass = document.getElementById('dbpass').value;\n";
+	  echo "  var l_dbhost = document.getElementById('servername').value;\n";
+    echo "\n";
+	  echo "  var url = 'action=dbcheck' +\n";
+	  echo "            '&dbname='+l_dbname +\n";
+	  echo "            '&dbuser='+l_dbuser +\n";
+	  echo "            '&dbpass='+l_dbpass +\n";
+	  echo "            '&dbhost='+l_dbhost;\n";
+	  echo "\n";
+	  echo "  var request = new httpRequest('install.php', Stage2ACallback, null);\n";
+	  echo "  request.update(url, 'GET');\n";
+    echo "}\n";
+    echo "\n";
+    echo "function Stage2ACallback(text, status, xml, note)\n";
+    echo "{\n";
+	  echo "  if (status != 200)\n";
+	  echo "  {\n";
+	  echo "    document.getElementById('checkresultdb').innerHTML = 'Server returned code ' + status;\n";
+	  echo "    return;\n";
+	  echo "  }\n";
+	  echo "  if ('OK' != text.substr(0, 2))\n";
+	  echo "  {\n";
+	  echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
+	  echo "    return;\n";
+	  echo "  } else\n";
+	  echo "  {\n";
+	  echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
+	  echo "  }\n";
+    echo "}\n";
+    echo "</script>\n";
+
+  	ShowProgressStart(1, false);
     echo "<b><div style='width:200px; margin-left:auto; margin-right:auto; font-size: 30px'>Moa install</div></b><br/>\n";
     echo "<span style='font-size: 20px'>Gathering data about server environment...</span></b><br/><br/>\n";
-
 
     echo "<form name='install_2a' method='post' action='install.php?stage=stage2b' enctype='multipart/form-data'>\n";
     echo "<table>\n";
@@ -483,28 +526,35 @@
 
     // Servername
     echo "<tr>\n";
-    echo "<td>Server address: </td><td><input type='text' name='servername' value='localhost'\></td>\n";
+    echo "<td>Server address: </td><td><input type='text' name='servername' id='servername' value='localhost'\></td>\n";
     echo "</tr>\n";
 
     // Database name
     echo "<tr>\n";
-    echo "<td>Database name: </td><td><input type='text' name='dbname'\></td>\n";
+    echo "<td>Database name: </td><td><input type='text' name='dbname' id='dbname'\></td>\n";
     echo "</tr>\n";
 
     // Database user
     echo "<tr>\n";
-    echo "<td>Database username: </td><td><input type='text' name='dbuser'\></td>\n";
+    echo "<td>Database username: </td><td><input type='text' name='dbuser' id='dbuser'\></td>\n";
     echo "</tr>\n";
 
     // Database password
     echo "<tr>\n";
-    echo "<td>Database password: </td><td><input type='password' name='dbpass'\></td>\n";
+    echo "<td>Database password: </td><td><input type='password' name='dbpass' id='dbpass'\></td>\n";
     echo "</tr>\n";
 
     // table prefix
     echo "<tr>\n";
     echo "<td>Table prefix: </td><td><input type='text' name='tabprefix' value='moa_'\></td>\n";
     echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo "<td colspan='2'><input id='checklogin' type='button' value='Check Login'/><span id='checkresultdb'></span></td></tr>\n";
+
+    echo "<script type='text/javascript'>\n";
+    echo "addEvent( document.getElementById('checklogin'), 'click', function(e) {dbcheck();});\n";
+    echo "</script>\n";
 
     // Spacer for titles
     echo "<tr><td><span style='color: blue; font-size:13px;'><b><br/><br/>Cookies</b></span></td></tr>\n";
@@ -531,14 +581,15 @@
     ShowProgressEnd();
   }
 
+  // Stage 2B = Check DB settings and write config files
   function Stage2B()
   {
-    global $MYSQL_MIN_VERSION;            
+    global $MYSQL_MIN_VERSION;
 
     $check = false;
     ShowProgressStart(1, true);
     echo "<b><div style='width:200px; margin-left:auto; margin-right:auto; font-size: 30px;'>Installing...</div></b><br/>\n";
-    echo "<span style='font-size: 20px'>Checking database settings to see if Moa will work.</span></b><br/><br/>\n";    
+    echo "<span style='font-size: 20px'>Checking database settings to see if Moa will work.</span></b><br/><br/>\n";
 
     // Check database login
     echo "Checking database login - ";
@@ -553,10 +604,10 @@
     }
 
     $servername = mysql_real_escape_string($_REQUEST["servername"]);
-    $dbuser     = mysql_real_escape_string($_REQUEST["dbuser"]);    
-    $dbpass     = mysql_real_escape_string($_REQUEST["dbpass"]);    
-    $dbname     = mysql_real_escape_string($_REQUEST["dbname"]);    
-    $tabprefix  = mysql_real_escape_string($_REQUEST["tabprefix"]); 
+    $dbuser     = mysql_real_escape_string($_REQUEST["dbuser"]);
+    $dbpass     = mysql_real_escape_string($_REQUEST["dbpass"]);
+    $dbname     = mysql_real_escape_string($_REQUEST["dbname"]);
+    $tabprefix  = mysql_real_escape_string($_REQUEST["tabprefix"]);
     $cookiename = mysql_real_escape_string($_REQUEST["cookiename"]);
     $cookiepath = mysql_real_escape_string($_REQUEST["cookiepath"]);
 
@@ -591,7 +642,7 @@
   	}
 
     if (false == $passed)
-  	{   	  
+  	{
    	  echo "<span style='color: red'>Failed (".$mysql_version[0].".".$mysql_version[1].".".$mysql_version[2].")</span><br/>\n";
       $check = true;
     } else
@@ -611,7 +662,7 @@
       echo "<span style='color: red'>Failed</span><br/>\n";
       $check = true;
     }
-    
+
     // Check for magic quotes
     $magic_quotes = "false";
     if (function_exists("get_magic_quotes_gpc"))
@@ -651,6 +702,7 @@
       fwrite($file, "  \$EMPTY_DESC_POPUP_TEXT = 'No description';\n");
       fwrite($file, "  \$TITLE_DESC_LENGTH = 30;\n");
       fwrite($file, "  \$MAGIC_QUOTES = ".$magic_quotes.";\n");
+      fwrite($file, "  \$STR_DELIMITER = \",\";\n");
       fwrite($file, "?>\n");
       fclose($file);
     }
@@ -717,6 +769,7 @@
     ShowProgressEnd();
   }
 
+  // Stage 3A = Gather new user settings
   function Stage3A()
   {
     ShowProgressStart(2, false);
@@ -746,6 +799,7 @@
     ShowProgressEnd();
   }
 
+  // Stage 3B = Create database and add new user
   function Stage3B()
   {
     global $tab_prefix;
@@ -760,7 +814,7 @@
     $max_run = 21;
     $datainstalled = true;
     $count = 0;
-    
+
     $result = mysql_query("SELECT * FROM ".$tab_prefix."gallerytaglink");
     if (false != $result)
     {
@@ -805,8 +859,8 @@
     }
 
     echo "Creating user login - ";
-    $new_pass = strtoupper(sha1($_REQUEST["Moapass"]));
-    $query = "INSERT INTO ".$tab_prefix."users (Name, Admin, Password, Salt) VALUES ('".mysql_real_escape_string($_REQUEST["Moauser"])."', 1, '".$new_pass."', '000000');";
+    $new_pass = mb_strtoupper(sha1($_REQUEST["Moapass"]));
+    $query = "INSERT INTO ".$tab_prefix."users (Name, Admin, Password, Salt) VALUES (_utf8'".mysql_real_escape_string($_REQUEST["Moauser"])."', 1, '".$new_pass."', '000000');";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     if ($result != false)
@@ -827,7 +881,8 @@
     ShowProgressEnd();
   }
 
-  function stage4()
+  // Stage 4 = Finish
+  function Stage4()
   {
     ShowProgressStart(3, true);
 
@@ -838,6 +893,58 @@
 
     ShowProgressEnd();
   }
+
+  // httpRequested part. Checks the database details to see if they are valid
+  function dbcheck()
+  {
+
+    $dbname = GetParam('dbname');
+    if (false == $dbname)
+    {
+      RaiseFatalError("No database name supplied.");
+      return false;
+    }
+
+    $dbuser = GetParam('dbuser');
+    if (false == $dbuser)
+    {
+      RaiseFatalError("No user name supplied.");
+      return false;
+    }
+
+    $dbpass = GetParam('dbpass');
+    if (false == $dbpass)
+    {
+      RaiseFatalError("No database password supplied.");
+      return false;
+    }
+
+    $dbhost = GetParam('dbhost');
+    if (false == $dbhost)
+    {
+      RaiseFatalError("No database host name supplied.");
+      return false;
+    }
+
+    $success = true;
+  	$db = mysql_connect($dbhost, $dbuser, $dbpass) or $success = false;
+
+  	if (!$success)
+  	{
+  		echo "Could not connect to database server.";
+  		return false;
+  	}
+		mysql_select_db($dbname, $db) or $success = false;
+
+		if (!$success)
+		{
+			echo "Could not select database '".$dbname."'.";
+			return false;
+		}
+
+		echo "OK";
+		return true;
+  }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -845,6 +952,17 @@
   <head>
      <?php
        $INSTALLING = true;
+       include_once ("sources/common.php");
+
+	     if (isset($_REQUEST["action"]))
+	     {
+	       if (strcmp($_REQUEST["action"], "dbcheck") == 0)
+	       {
+	         dbcheck();
+	         die();
+	       }
+	     }
+
        include_once ("sources/_html_head.php");
        echo "<title>Moa install</title>";
      ?>
@@ -855,48 +973,65 @@
 
       if (isset($_REQUEST["stage"]))
       {
-        if (strcmp($_REQUEST["stage"], "stage1b") == 0)
-        {
-          Stage1B();
-        }
-        if (strcmp($_REQUEST["stage"], "stage2a") == 0)
-        {
-          Stage2A();
-        }
-        if (strcmp($_REQUEST["stage"], "stage2b") == 0)
-        {
-          Stage2B();
-        }
-        if (strcmp($_REQUEST["stage"], "stage3a") == 0)
-        {
-          Stage3A();
-        }
-        if (strcmp($_REQUEST["stage"], "stage3b") == 0)
-        {
-          include_once("private/db_config.php");
-          include_once("config.php");
-          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-          // Turn on UTF-8 support
-          mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
-          mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
-          Stage3B();
-        }
-        if (strcmp($_REQUEST["stage"], "stage4") == 0)
-        {
-          include_once("private/db_config.php");
-          include_once("config.php");
-          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-          // Turn on UTF-8 support
-          mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
-          mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
-          Stage4();
-        }
+      	$stage = $_REQUEST["stage"];
+
+      	switch ($stage)
+      	{
+      		case "stage1b" :
+          {
+            Stage1B();
+            break;
+          }
+      		case "stage2a" :
+	        {
+	          Stage2A();
+	          break;
+          }
+      		case "stage2b" :
+	        {
+	          Stage2B();
+	          break;
+	        }
+      		case "stage3a" :
+	        {
+	          Stage3A();
+	          break;
+	        }
+      		case "stage3b" :
+	        {
+	          include_once("private/db_config.php");
+	          include_once("config.php");
+	          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          // Turn on UTF-8 support
+	          mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
+	          mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
+	          Stage3B();
+	          break;
+	        }
+      		case "stage4" :
+	        {
+	          include_once("private/db_config.php");
+	          include_once("config.php");
+	          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          // Turn on UTF-8 support
+	          mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
+	          mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
+	          Stage4();
+	          break;
+	        }
+      		default :
+      		{
+      			Stage0();
+      		  break;
+      	  }
+      	}
       } else
       {
         Stage0();
       }
+
 
       include ("sources/_footer.php");
     ?>

@@ -1,11 +1,11 @@
 <?php
   include_once("config.php");
   include_once("common.php");
-  
+
   function BogOff()
   {
     echo "<html><head>\n";
-    echo "  <meta http-equiv='Refresh' content='0; url=login.php'>\n";
+    echo "  <meta http-equiv='Refresh' content='0; url=index.php?action=login'>\n";
     echo "</head><body>\n";
     echo "</body></html>\n";
     die();
@@ -14,7 +14,7 @@
 
   include_once("_db_funcs.php");
   $db = DBConnect();
-  
+
   if (isset($_REQUEST["logout"]))
   {
     $c = setcookie($COOKIE_NAME, NULL, time()-100000, $COOKIE_PATH, false, false, false);
@@ -29,7 +29,7 @@
       $login_duration = $_REQUEST["duration"];
       $login_name = $_REQUEST["name"];
       $login_password = $_REQUEST["password"];
-      
+
       $query = "SELECT * FROM ".$tab_prefix."users WHERE (Name = '".mysql_real_escape_string($login_name)."');";
       $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
       $user = mysql_fetch_array($result);
@@ -60,7 +60,7 @@
           $_COOKIE[$COOKIE_NAME] = $cookie_data;
         } else
         {
-          BogOff(); 
+          BogOff();
         }
       }
     }

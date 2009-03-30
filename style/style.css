@@ -42,9 +42,47 @@ a img {
         font-size: 80%;
 }
 
+.form_tag_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;                        
+                
+        background: #ffffff url('../media/tag_lookup.gif') no-repeat scroll right center;
+        border: 0.5px;        
+        border-style: solid;
+        border-color: #cccccc;        
+                        
+        padding-right: 19px;           
+}
+
 .form_label_text {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
+}
+
+.install_list_header {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 120%;
+        font-weight: bold;
+}
+
+.install_list {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        width: 500px;
+        display: block;
+        float: left;
+}
+
+.install_list_fail {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        color: red;
+}
+
+.install_list_success {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        color: green;
 }
 
 a.admin_link {
@@ -344,14 +382,27 @@ a.nav_link:hover {
         width: 100%;
 }
 
+.error_box {
+        border: 2px solid;
+        padding: 5px;
+        border-style: solid;
+        display: table;
+        border-color: #ff0000;
+        background-color: #ffffff;
+        font-size: 100%;
+        font-weight: bold;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        color: #ff0000;
+}
+
 .warning_box {
         border: 2px solid;
         padding: 5px;
         border-style: dashed;
-        width: 500px;
+        display: table;
         border-color: #ff0000;
         background-color: #ffffff;
-        font-size: 15px;
+        font-size: 100%;
         font-weight: bold;
         font-family: Verdana, Arial, Helvetica, sans-serif; 
         color: #ff0000;
@@ -363,21 +414,52 @@ a.nav_link:hover {
         border-style: solid;
         border-color: #ff0000;
         background-color: #ffffff;
-        font-size: 15px;
+        font-size: 100%;
         font-weight: bold;
         font-family: Verdana, Arial, Helvetica, sans-serif; 
         color: #ff0000;
 }
 
 .success_box {
+        display: table;
         border: 2px solid;
-        padding: 5px;
-        width: 300px;
+        padding: 5px;                              
         border-style: solid;
         border-color: #41b45c;
         background-color: #e0ffe0;
-        font-size: 15px;
+        font-size: 100%;
         font-weight: bold;
         font-family: Verdana, Arial, Helvetica, sans-serif; 
-        color: #41b45c;
+        color: #41b45c;        
+}
+
+.tag_hint_outer {
+        float: left;
+        padding: 1px;
+}
+
+.tag_hint_inner {
+        background-color: #ebebff;        
+        border-color: #aaaaaa;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 100%;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        float: left;
+        padding: 2px;
+}
+
+.tag_hint_inner_match {
+        background-color: #a0ffa0;        
+        border-color: #aaaaaa;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 100%;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        float: left;
+        padding: 2px;
+}
+
+.breadcrumb_box {
+        padding: 5px;
 }

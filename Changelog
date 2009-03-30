@@ -1,0 +1,18 @@
+Changelog
+
+Key -
+* = Changed
+- = Removed
+n = New feature
+b = Bugfix
+
+1.1.0 - Recode - 31st March 2009
+* Refactored/rewrote almost all the code to be easier to work with. This introduced new bugs which got fixed so not listing individual bug fixes this release.
+* Made coding/naming conventions far more consistant.
+* Added a lot of comments.
+n New tag system.
+n Comment field on add/edit image and gallery now can be expanded if needed.
+n New upload method allows more than one image file at a time, plus is dynamic, no more page refreshes so it can provide a recent history.
+n Upgrade.php.
+
+1.0.0 - Initial Release - 28th Jan 2009

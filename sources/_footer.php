@@ -22,7 +22,7 @@
           <td style="width: 65px;"></td>
           <td style="width: 98px;">
             <a href="http://validator.w3.org/check/referer">
-              <img class='footer_logo' src="http://www.w3.org/Icons/valid-xhtml11" alt="HTML Validation service"/>
+              <img class='footer_logo' src="http://www.w3.org/Icons/valid-xhtml10"  alt="Valid XHTML 1.0 Transitional"/>
             </a> 
           </td>
           <td>
@@ -35,4 +35,3 @@
     </td>
   </tr>
 </table>
-

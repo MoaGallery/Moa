@@ -1,4 +1,24 @@
-==== BEFORE YOU INSTALL ====
+
+
+Contents
+
+1  BEFORE YOU INSTALL 
+2  INSTALLATION 
+3  WORKAROUNDS / PROBLEMS 
+4  UPGRADE 
+
+
+
+
+
+
+
+
+
+
+
+
+ 1 ==== BEFORE YOU INSTALL ====
 
    Moa needs the following to be able to install and run correctly -
    
@@ -16,7 +36,7 @@
 
 
 
-==== INSTALLATION ====
+ 2 ==== INSTALLATION ====
 
 1. Upload the Moa files to the server you want to use, or copy it into the web
    server path for a local install.  If using a unix-based OS make sure your
@@ -34,7 +54,7 @@
 
 
 
-==== WORKAROUNDS / PROBLEMS ====
+ 3 ==== WORKAROUNDS / PROBLEMS ====
 
 1. Database User doesn't have CREATE VIEW privs in MySQL.  When the install 
    tries to create the data tables it complains that only 15 statements ran out 
@@ -60,3 +80,18 @@
    versions.  The one we have confirmed works has 'bundled (2.0.34 compatible)' 
    in it's description using phpinfo().  The 2.0.34 version by itself didn't 
    seem to work when I installed it in Linux.
+   
+   
+   
+ 4 ==== UPGRADE ====
+ 
+1. Upload the new Moa files over the top of the old ones. It is ok to overwrite
+   the old versions. There is no need to upload/copy install.php as it is not
+   required and will only need to be deleted again to stop the reminders.
+
+2. Open Moa in a browser and login. A message at the top will prompt you to
+   complete the upgrade. Click it to continue.
+
+3. Hit the 'Complete upgrade' button to finish the process. Depending on the
+   version this stage will add new configuration variables, delete outdated
+   Moa files and/or make database changes.

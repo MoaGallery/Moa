@@ -21,8 +21,11 @@
       }
     }
   }
-
-  function DBConnect()
+  
+  include_once("_error_funcs.php");
+  
+  // Connects to MySQL database using global values defined in config.php setting character set to UTF8.
+  function DBConnect() 
   {
     global $install;
     if (!$install)
@@ -39,23 +42,26 @@
       
       mb_language('uni');
       mb_internal_encoding('UTF-8');
-      
+
       return $db;
     }
   }
 
-  function RunSQLFile($filename)
+  // Look through each statement in a file and execute it in MySQL
+  function RunSQLFile($p_filename)
   {
   	global $tab_prefix;
   	
     $error = false; 
-    $file = fopen($filename, "r");
+    $file = fopen($p_filename, "r");
     $fstat = fstat($file);
     $SQLfile = fread($file, $fstat["size"]);
     fclose($file);
     
     $count = 0;
     $tok = strtok($SQLfile, ";");
+    
+    // Loop through each statement from the SQL file and execute it in turn
     while ($tok != false)
     {
       if (mb_strlen($tok) >= 10)
@@ -79,4 +85,11 @@
       return $count;
     }
   }
+  
+  // Returns a string containing the last MySQL error formated with file of origin and line number.
+  function DBMakeErrorString($p_file,$p_line) {
+  	global $ErrorString;
+
+  	$ErrorString = mysql_error()."<br/>\n in ".basename($p_file)." (Line: ".$p_line.")";
+  }  
 ?>

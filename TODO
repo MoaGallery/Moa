@@ -1,42 +1,40 @@
-FOR NEXT TIME -
-  
-  
 TODO -
   Important -
-    Documentation.
-    Mention server memory limit for uploads in docs.
   
-  Pre-release -
-    Add error checking to new code.
-    Escape all variables used in queries (mysql_real_escape_string)
-    WC3 validation
-    Check all files verify login status before proceeding to process actions.
-    Version number change.
-    Check with/without magic quotes.
-  
+  Pre-release (1.1) -
+    * Add error checking to new code.
+    * Escape all variables used in queries (mysql_real_escape_string).
+    * Check all queries include _utf8 when setting text fields.
+    * Bugtracker items.
+    * Check all files verify login status before proceeding to process actions.
+    * Global search for TODO.
+    * Update install.php and upgrade.php.
+    * Version number change.
+    * Come out of debug mode.
+    * Final check with/without magic quotes.
+    * WC3 validation.
+    * Mention delimiter in the docs. 
+    * Update Documentation.
+    * Check changelog.
+    
   Nice  -
    Major version -
      Support other databases (ms-sql, Oracle, ProgresSQL, etc) and HTTP backends (IIS).
      
-   Minor version -
-     1.1 (Tidy up) -
-       Common root path variable to be applied to config.php
-       Tidy up code/naming conventions. - Should include a common index file for all operations
-       Add comments to code.
-       New tag entry system.
-       Comment field to be bigger, or switch between sizes.
-       New upload/Add.
-       
-     1.2 (Templates) -
+   Minor version -      
+     1.2 (User-centric) -
        Makes pages Template based. Supply 2-3 with normal install.
+       Beef up CSS to be fully skinnable.
+       User Model features (image/gallery manager, more obvious to use, mag. glass on image preview).
        Site Settings.
        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
        Pages of thumbnails.
        Next/Prev on image view.
        Filmstrip.
+       Simple UI animation (feedback vanishes, deleted items scroll up, etc).
+       png/gif support.
        
      1.3 (Expanding content) -
-       Other image formats.
        Display movie clips.  (Not streaming)
        Grab and save EXIF info.
        Simple edit ability. (crop, resize, rotate, etc)
@@ -44,11 +42,11 @@ TODO -
        Provide friendly URL rewriting. (Via HTAccess)
        IPTC support.
        GeoTagging support.
+       Search (with option to make new gallery from results).
        
      1.4 (XML + Drag&Drop) -
        Re-Arrange images on a gallery.
        On image view page implement next\prev image buttons with thumb preview.
-       Move dynamic content into XML string.
        Mass Image Tagging.
        Bulk Delete.
        Slide Show.
@@ -56,19 +54,15 @@ TODO -
        Move Sub Gallery. (Base on version of navigation bar as an admin page)
 
    Patch -   
-     Add more corruption detection in the admin section (Look for images that can't exist no any gallery)
+     Common root path variable to be applied to config.php.
+     Allow a welcome message on the index page
+     Add more corruption detection in the admin section (Look for images that can't exist in any gallery)
      In-line dialogue for add user \ add tag \ edit tag should have a title label.
-     Move edit taglist and JS to include file.
-     Unify the tag list ajax files box_taglist and box_edit_taglist.
      Add username so login is not shown.
      Add a custom error handling page.
-     Allow old and new password MySQL functions.
      Image Integrity->no image/thumb needs to have a delete option.
-     Tag Lists to be in scroll box.
-     Add sub-gallery, changing parent doesn't update tag ticks.
-     Allow non-admins to change their own name/password.
+     Add sub-gallery, changing parent doesn't update tag ticks (confirm box - do you want to set tags to be the same?).
      Randomize password field name on add/edit user so browser doesn't fill it in automatically.
-     Fix gallery width to fit browser in other browsers (Done - FF 2+3, IE 7+8)
      Split CSS up into different types.
      Images with no main image should show thumbnail on the 'fix' screen.
      Replace Buttons with images.
@@ -83,29 +77,22 @@ TODO -
      Resize pics on upload.
      Bulk add from ftp folder or .zip file.
      Watermark/Logo stamp on pics.
-     Number of images/galleries not updating automatically on add.
      Rotate pic.
      Replace image.
-     Add image page -> Recently added log.
      User action logging.
-     Handle image uploads that are too big.
-     Full size view should put desc in browser title.
      Option to hide the login button.
-   
+     Gallery/image titles can be too long to fit on the preview without messing up the layout.
+     On maintain image, redirect back to maintain image when new image added.
+     Javascript generated globals should be passed into the constructors.
+       
   Future -
    Import/Export (With desktop client)
    Output slideshow to Vid-CD (Online \ Desktop Client)
 
 Bugs -
   Bugs -
-    IE6 not laying out thumbnails correctly.
-    Quotes not being stripped out in descriptions.
-    Slashes in gallery description can multiply on edit.
-    '#' symbol in title causes problems (blank description and/or not saved at all).
-    Multiline comments on add image display \n\r instead performing a CR/LF.
-    Gallery/image titles can be too long to fit on the preview without messing up the layout.
-    IE6 - need to specify the logo size.
-    View image full size link sometimes has random crap in.
+    Euros plus possibly other characters in the parent combo box stop javascript classes from 
+    loading.  (Gallery)    
     
   To Verify as fixed -
     Thumbnails of varying height prevent other thumbnails from lining up correctly on gallery view.
