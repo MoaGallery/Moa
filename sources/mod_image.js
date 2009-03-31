@@ -100,7 +100,7 @@ function Image( p_delim)
     	m_edit_toggle = false;
     } else
     {
-      m_formobject.submit("Uploading '"+document.getElementById("imageformfilename").m_value+"'...");
+      m_formobject.submit("Uploading '"+document.getElementById("imageformfilename").value+"'...");
       document.getElementById("imageform").submit();
       m_formobject.reset();
     }
