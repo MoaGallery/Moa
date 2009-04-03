@@ -7,18 +7,16 @@
       $install = true;
     }
   }
-  if (file_exists("../private/db_config.php"))
+  
+  if (!$install)
   {
-    include_once("../private/db_config.php");
-  } else
-  {
-    
-    if (!$install)
+    if (file_exists("private/db_config.php"))
     {
-      if (file_exists("private/db_config.php"))
-      {
-        include_once("private/db_config.php");
-      }
+      include_once("private/db_config.php");
+    }
+    else
+    {
+      include_once("../private/db_config.php");
     }
   }
   

@@ -8,9 +8,6 @@
   session_unset();
   session_destroy();
 
-  include_once('sources/_db_funcs.php');
-  include_once('sources/common.php');
-
 	function get_apache_version() {
 	  $apache_info = @apache_get_version();
 
@@ -952,6 +949,7 @@
   <head>
      <?php
        $INSTALLING = true;
+       include_once('sources/_db_funcs.php');
        include_once ("sources/common.php");
 
 	     if (isset($_REQUEST["action"]))
