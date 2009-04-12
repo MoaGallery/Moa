@@ -25,7 +25,7 @@ function TagTokens() {
 
 // Class to represent a list of tags
 
-function TagList(p_delim) {
+function TagList(p_delim, p_tag_row_template) {
   var that = this;
 
   var m_delimiter = p_delim;
@@ -35,6 +35,7 @@ function TagList(p_delim) {
   var m_verbose_feedback = false; // Shows a tick/cross for tag entry or a
                                 // breakdown
   var m_fake_id = -1; // To keep track of new tags before a page load
+  var m_tag_row_template = p_tag_row_template; 
 
   // Load the existing tags as well as any for a local gallery/image
   this.PreLoad = function(p_master, p_current) {
@@ -198,7 +199,7 @@ function TagList(p_delim) {
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='media/fail.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/fail.png' width='16' height='16' /></span>";
         nd();
         break;
       case "add":
@@ -206,7 +207,7 @@ function TagList(p_delim) {
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='media/add.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/add.png' width='16' height='16' /></span>";
         nd();
         break;
       case "success":
@@ -214,7 +215,7 @@ function TagList(p_delim) {
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='media/success.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/success.png' width='16' height='16' /></span>";
         nd();
         break;
       default:
@@ -252,37 +253,11 @@ function TagList(p_delim) {
 
   // Generate an HTML table row for the specified tag 
   this.ViewSingle = function(p_index) {
-    // Tag Data
-    var tag_line = "";
-    tag_line = "<div id='tag_" + m_master[p_index].m_id + "'>\n";
-    tag_line += "<div class='tag_name' id='tag_name_" + m_master[p_index].m_id + "' ondblclick='tag_list.Edit( \""
-        + m_master[p_index].m_id + "\")'>"
-        + m_master[p_index].m_name + "</div>\n";
-    tag_line += "<div class='tag_link' id='tag_edit_link_" + m_master[p_index].m_id
-        + "'><a class='admin_link' onclick='tag_list.Edit( \""
-        + m_master[p_index].m_id + "\")'>[Edit]</a></div>\n";
-    tag_line += "<div class='tag_link' id='tag_delete_link_" + m_master[p_index].m_id
-        + "'><a class='admin_link' onclick='tag_list.Delete( \""
-        + m_master[p_index].m_id + "\")'>[Delete]</a></div>\n";
-
-    // Edit Controls
-    tag_line += "<div class='tag_edit_box' id='tag_edit_box_"
-        + m_master[p_index].m_id + "'><input id='tag_edit_input_" + m_master[p_index].m_id
-        + "' class='inline_element' type='text' name='tag_edit_box_"
-        + m_master[p_index].m_id + "' onKeyPress='checkKey(event,\"tag_edit_submit_button_"+ m_master[p_index].m_id +"\",\"tag_edit_cancel_button_" + m_master[p_index].m_id +"\")'></div>\n";
-    tag_line += "<div class='tag_button' id='tag_edit_submit_"
-        + m_master[p_index].m_id
-        + "'><button id='tag_edit_submit_button_" + m_master[p_index].m_id + "' class='tag_buttons' onclick='javascript: tag_list.SubmitEdit(\""
-        + m_master[p_index].m_id
-        + "\")' class='inline_element'>Ok</button><img src='media/trans-pixel.png' width='6' height='1' alt='' /></div>\n";
-    tag_line += "<div class='tag_button' id='tag_edit_cancel_"
-        + m_master[p_index].m_id
-        + "'><button id='tag_edit_cancel_button_" + m_master[p_index].m_id + "' class='tag_buttons' onclick='javascript: tag_list.CancelEdit(\""
-        + m_master[p_index].m_id
-        + "\")' class='inline_element'>Cancel</button></div>\n";
-    tag_line += "<br/>\n";
-    tag_line += "</div>\n";
-
+    var tag_line = m_tag_row_template;
+    
+    tag_line = str_replace(tag_line, "<moavar AdminTagID>", m_master[p_index].m_id);
+    tag_line = str_replace(tag_line, "<moavar AdminTagName>", m_master[p_index].m_name);
+   
     return tag_line;
   };
 
@@ -376,6 +351,7 @@ function TagList(p_delim) {
     name = name.replace("&amp;", "&");
     name = name.replace("&quote;", "\"");
     name = name.replace("&apos;", "\'");
+    name = trim(name);
     document.getElementById("tag_edit_input_" + p_id).value = name;
 
     document.getElementById("tag_edit_input_" + p_id).focus();

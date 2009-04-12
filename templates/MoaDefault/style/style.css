@@ -1,0 +1,585 @@
+a {
+        text-decoration: none;
+        border-style: none;        
+}
+
+a img {
+        text-decoration: none;
+        border-style: none;        
+}
+
+.area {
+        background-color: #41b45c;
+        border: 1px;
+        border-style: solid;
+        border-color: #256634;
+}
+
+.area_nb {
+        background-color: #41b45c;
+        border: 0px;
+}
+
+.pale_area {
+        background-color: #e0ffe0;
+        border: 1px;
+        border-style: solid;
+        border-color: #256634;
+}
+
+.pale_area_nb {
+        background-color: #e0ffe0;
+        border: 0px;
+}
+
+.image_desc {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 70%;
+}
+
+.form_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+}
+
+.form_tag_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;                        
+                
+        background: #ffffff url('../media/tag_lookup.gif') no-repeat scroll right center;
+        border: 0.5px;        
+        border-style: solid;
+        border-color: #cccccc;        
+                        
+        padding-right: 19px;           
+}
+
+.form_label_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+}
+
+.install_list_header {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 120%;
+        font-weight: bold;
+}
+
+.install_list {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        width: 500px;
+        display: block;
+        float: left;
+}
+
+.install_list_fail {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        color: red;
+}
+
+.install_list_success {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        color: green;
+}
+
+a.admin_link {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+        color: gray;
+        cursor: pointer;
+}
+
+a.admin_link:hover
+{
+        color: black;
+        text-decoration: underline;
+}
+
+.image_desc_frame {
+        border: 0px solid;
+        border-style: inset;
+        padding-right: 3px;
+        padding-left: 3px;
+        width: 300px;
+}
+
+.image_info {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+}
+
+a.nav_link {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-weight: normal;
+        font-size: 9pt;
+        color: black;
+        cursor: pointer;
+}
+
+a.nav_link:hover {
+        text-decoration: underline;
+}
+
+.header_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+        vertical-align: middle;
+}
+
+.box_header {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+        vertical-align: middle;
+        text-align:center
+}
+
+.footer_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.6em;
+        vertical-align: middle;
+        color: black;
+}
+
+.footer_text_link {
+        color: black;
+}
+
+.footer_text_link:hover {
+        text-decoration: underline;
+}
+
+.gallery_name {
+        font-family: sans-serif;
+        font-size: 180%;
+        font-weight: bold;
+}
+
+.gallery_desc {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+}
+
+.normal_text {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+}
+
+.mainlogo {
+        width: 277px;
+        height: 120px;
+}
+
+.breadcrumbicon {
+        width: 16px;
+        height: 16px;
+}
+
+.picture-shadow {
+        float: left;
+        background: url(../media/shadowAlpha.png) no-repeat bottom right;
+        margin: 0px 0 0 0px;
+}
+
+.picture-shadow2 {
+        border: 0px solid #a9a9a9;
+        background: url(../media/shadow-plain.png) no-repeat top left !important;
+        background: url(../media/shadow-plain.gif) no-repeat top left;
+        padding: 0 6px 6px 0px;
+}
+
+.picture-shadow3 {
+        color: #777;
+        background-color: #fff;
+        border: 0px solid #797979;
+        padding: 0px;
+}
+
+.gallery-shadow {
+        float: left;
+        background: url(../media/shadowAlpha.png) no-repeat bottom right;
+        margin: 10px 0 0 10px;
+}
+
+.gallery-shadow2 {
+        border: 0px solid #a9a9a9;
+        background: url(../media/shadow-pale.png) no-repeat top left !important;
+        background: url(../media/shadow-pale.gif) no-repeat top left;
+        padding: 0 6px 6px 0px;
+}
+
+.gallery-shadow3 {
+        color: #777;
+        background-color: #fff;
+        border: 1px solid #797979;
+        padding: 0px;
+}
+
+.add_tag_dialogue {
+        visibility: hidden;
+        left: 183px;
+        top: 45%;
+        margin-top: -75px;
+        position: absolute;
+        z-index: 10;
+}
+
+.add_user_dialogue {
+        visibility: hidden;
+        left: 183px;
+        top: 45%;
+        margin-top: -75px;
+        position: absolute;
+        z-index: 10;
+}
+
+.change_pass_dialogue {
+        visibility: hidden;
+        left: 183px;
+        top: 45%;
+        margin-top: -75px;
+        position: absolute;
+        z-index: 10;
+}
+
+.fade-area {
+        visibility: hidden;
+        left: 0px;
+        top: 0%;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 9;
+}
+
+.tag_name {        
+        display: block;
+        width: 200px;        
+        float: left;        
+        clear: left;
+        font-family: Verdana, Arial, Helvetica, sans-serif;        
+        height: 22px;
+}
+
+.tag_link {
+        display: block;
+        float: left;        
+        width: auto;
+}
+
+.tag_button {
+        display: none;
+        width: auto;
+        float: left;         
+} 
+
+.tag_edit_box {
+        display: none;
+        width: 200px;         
+        float: left;
+        height: 22px;
+}
+
+.tag_buttons { 
+        margin: 0;
+        padding: 0;
+        font-size: 0.7em;
+        position: relative;
+}
+
+.user_name {        
+        display: block;
+        width: 200px;        
+        float: left;        
+        clear: left;
+        font-family: Verdana, Arial, Helvetica, sans-serif;        
+        font-size: 80%;
+}
+
+.user_admin {        
+        display: block;
+        width: 80px;        
+        float: left;        
+        font-family: Verdana, Arial, Helvetica, sans-serif;        
+        font-size: 80%;
+        text-align: left;
+}
+
+.user_link {
+        display: block;
+        float: left;        
+        width: auto;
+}
+
+.user_button {
+        display: none;
+        width: auto;
+        float: left;         
+} 
+
+.user_edit_box {
+        display: none;
+        width: 200px;         
+        float: left;
+        height: 22px;
+}
+
+.user_check_box {
+        display: none;
+        width: 50px; 
+        float: left;
+        height: 22px;
+}
+
+.user_buttons { 
+        margin: 0;
+        padding: 0;
+        font-size: 0.7em;
+        position: relative;
+}
+
+.new_line {
+        clear: both;
+}
+
+.inline_element {
+        height: 22px;
+        font-size: 100%;
+        padding: 0px;
+        border: none;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+}        
+
+.footer_logo {
+        vertical-align: middle;
+        height: 31px;
+        width: 88px;
+}
+
+.no_cr {
+        float: left;
+}
+
+.height5 {
+        height: 5px;
+}
+
+.height10 {
+        height: 10px;
+}
+
+.height41 {
+        height: 41px;
+}
+
+.width5 {
+        width: 5px;
+}
+
+.fullwidth {
+        width: 100%;
+}
+
+.Error_box {
+        border: 2px solid;
+        padding: 5px;
+        border-style: solid;
+        display: table;
+        border-color: #ff0000;
+        background-color: #ffffff;
+        font-size: 100%;
+        font-weight: bold;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        color: #ff0000;
+}
+
+.Warning_box {
+        border: 2px solid;
+        padding: 5px;
+        border-style: dashed;
+        display: table;
+        border-color: #ff0000;
+        background-color: #ffffff;
+        font-size: 100%;
+        font-weight: bold;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        color: #ff0000;
+}
+
+.FatalError_box {
+        border: 5px solid;
+        padding: 10px;
+        border-style: solid;
+        border-color: #ff0000;
+        background-color: #ffffff;
+        font-size: 100%;
+        font-weight: bold;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        color: #ff0000;
+}
+
+.Success_box {
+        display: table;
+        border: 2px solid;
+        padding: 5px;                              
+        border-style: solid;
+        border-color: #41b45c;
+        background-color: #e0ffe0;
+        font-size: 100%;
+        font-weight: bold;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        color: #41b45c;        
+}
+
+.tag_hint_outer {
+        float: left;
+        padding: 1px;
+}
+
+.tag_hint_inner {
+        background-color: #ebebff;        
+        border-color: #aaaaaa;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 100%;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        float: left;
+        padding: 2px;
+}
+
+.tag_hint_inner_match {
+        background-color: #a0ffa0;        
+        border-color: #aaaaaa;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 100%;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        float: left;
+        padding: 2px;
+}
+
+.breadcrumb_box {
+        padding: 5px;
+}
+
+.testbox_tl {
+        background: transparent url(../media/testbox-tl.png) no-repeat top left;
+}
+
+.testbox_tr {
+        background: transparent url(../media/testbox-tr.png) no-repeat top right;
+}
+
+.testbox_bl {
+        background: transparent url(../media/testbox-bl.png) no-repeat bottom left;
+}
+
+.testbox_br {
+        background: transparent url(../media/testbox-br.png) no-repeat bottom right;
+}
+
+.testboxheader {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+        text-align:center;
+        padding: 5px;
+}
+
+.testboxcontent {
+        padding: 10px;
+}
+
+.mag_glass div {
+        width: 38px;
+        height: 37px;
+        background: url(../media/success.png);
+}
+
+.headertop-left {
+        background-color: #41b25b;
+        background: transparent url(../media/header1-left.png) no-repeat top left;
+}
+
+.headertop-right {
+        background: transparent url(../media/header1-right.png) no-repeat top right;
+}
+
+.headertop {
+        padding: 2px;
+        height: 165px;
+        min-width: 580px;
+}
+
+.headerbottom {
+        background-color: #E0FFE0;
+}
+
+.headerbottom-left {
+        background: transparent url(../media/header2-left.png) no-repeat bottom left;
+}
+
+.headerbottom-right {
+        background: transparent url(../media/header2-right.png) no-repeat bottom right;
+}
+
+.breadcrumbframe {
+        padding: 5px;
+}
+
+.headerinfoblock {
+        vertical-align: middle;
+        display : table-cell;
+        height: 138px;
+}
+
+.headerinfoblock div {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+}
+
+.headerbutton {
+        background: url(../media/headerbutton.png) no-repeat;
+        width: 80px;
+        height: 21px;
+        text-align: center;
+        color: #eeeeee;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-style: italic;
+        font-size: 13px;
+        line-height:18px;
+        float: left;
+}
+
+.logo {
+        width: 277px;
+        height: 120px;
+        background: url(../media/moa-logo-vector.png);
+        float: left;
+}
+
+.logotest {
+        width: 277px;
+        height: 120px;
+        background: url(../media/test.png);
+        float: left;
+}
+
+.padded-5 {
+        padding: 3px;
+}
+
+.footer-left {
+        background: transparent url(../media/footer-left.png) no-repeat bottom left;
+}
+
+.footer-right {
+        background: transparent url(../media/footer-right.png) no-repeat bottom right;
+}
+
+.logoutstatus {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 110%;
+        text-align:center
+}

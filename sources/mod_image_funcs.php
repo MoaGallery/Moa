@@ -2,18 +2,18 @@
   /* mod_image_funcs.php
    This is a collection of functions that interect with the database and a image.
   */
-  include_once("_error_funcs.php");
-  include_once("_db_funcs.php");
-  include_once("mod_tag_funcs.php");
+  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
+  include_once($MOA_PATH."sources/mod_tag_funcs.php");
 
   /*
    Holds information for a single image
   */
   class Image{
-  	var $id;
-  	var $description;
-  	var $height;
-  	var $width;
+  	var $m_id;
+  	var $m_description;
+  	var $m_height;
+  	var $m_width;
   };
 
   /*
@@ -197,7 +197,7 @@
     $new_filename = sprintf("%010s.jpg",$id);
 
     move_uploaded_file( $_FILES["filename"]["tmp_name"]       // source file
-                        , "../".$IMAGE_PATH."/".$new_filename); // dest file
+                      , "../".$IMAGE_PATH."/".$new_filename); // dest file
 
     thumbnail( $new_filename, "jpeg", false);
 
@@ -211,7 +211,7 @@
     global $ErrorString;
     global $tab_prefix;
 
-    $query = "SELECT ".mysql_real_escape_string($p_field)." FROM ".$tab_prefix."image WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
+    $query = "SELECT ".TypeSafeMysqlRealEscapeString($p_field)." FROM ".$tab_prefix."image WHERE IDImage = '".TypeSafeMysqlRealEscapeString($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     if (false == $result) {
       return false;
@@ -228,7 +228,7 @@
     global $ErrorString;
     global $tab_prefix;
 
-    $query = "SELECT * FROM ".$tab_prefix."image WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
+    $query = "SELECT * FROM ".$tab_prefix."image WHERE IDImage = '".TypeSafeMysqlRealEscapeString($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     if (false == $result) {
       return false;
@@ -253,6 +253,7 @@
     global $tab_prefix;
     global $IMAGE_PATH;
     global $THUMB_PATH;
+    global $MOA_PATH;
 
     $query = "DELETE FROM ".$tab_prefix."imagetaglink WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
@@ -266,12 +267,12 @@
       return false;
     }
 
-    if (file_exists( "../".$IMAGE_PATH."/".$p_id.".jpg")) {
-      unlink("../".$IMAGE_PATH."/".$p_id.".jpg");
+    if (file_exists( $MOA_PATH.$IMAGE_PATH."/".$p_id.".jpg")) {
+      unlink( $MOA_PATH.$IMAGE_PATH."/".$p_id.".jpg");
     }
 
-    if (file_exists( "../".$THUMB_PATH."/thumb_".$p_id.".jpg")) {
-      unlink("../".$THUMB_PATH."/thumb_".$p_id.".jpg");
+    if (file_exists( $MOA_PATH.$THUMB_PATH."/thumb_".$p_id.".jpg")) {
+      unlink( $MOA_PATH.$THUMB_PATH."/thumb_".$p_id.".jpg");
     }
 
     return true;

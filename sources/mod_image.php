@@ -1,14 +1,15 @@
 <?php
-$image_first = false;
-if (!isset($gallery_first))
-{
-  $image_first = true;
-}
-  include_once("_error_funcs.php");
-  include_once("_db_funcs.php");
-  include_once("mod_image_funcs.php");
-  include_once("id.php");
-  include_once("common.php");
+  $image_first = false;
+  if (!isset($gallery_first))
+  {
+    $image_first = true;
+  }
+  include_once("../config.php");
+  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
+  include_once($MOA_PATH."sources/mod_image_funcs.php");
+  include_once($MOA_PATH."sources/id.php");
+  include_once($MOA_PATH."sources/common.php");
 
   function ImageCheckExists()
   {

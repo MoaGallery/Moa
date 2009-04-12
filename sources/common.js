@@ -51,17 +51,15 @@ function UnEscapeNewLine(p_text)
 
 function FeedbackBox(p_text, p_success)
 {
-  var p_type = "error";
-  var p_name = "Error";
+  var p_type = "Error";
   if (p_success)
   {
-    p_type = "success";
-    p_name = "Success";
+    p_type = "Success";
   }
-  var newtext = "<div class='" + p_type + "_box' style='line-height:40px;'>\n";
-  newtext += "<img src='media/" + p_type + ".png' style='vertical-align:middle;' alt='" + p_name + "'/>\n";
-  newtext += "  " + p_name + ": " + p_text + "\n";
-  newtext += "</div><br/>\n";
+  var newtext = feedback_box;
+  
+  newtext = str_replace(newtext, "<moavar FeedbackType>", p_type);
+  newtext = str_replace(newtext, "<moavar FeedbackText>", p_text);
   
   return newtext;
 }

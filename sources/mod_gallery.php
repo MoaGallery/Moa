@@ -1,16 +1,17 @@
 <?php
-$gallery_first = false;
-if (!isset($image_first))
-{
-  $gallery_first = true;
-}
-  include_once("_error_funcs.php");
-  include_once("_db_funcs.php");
-  include_once("mod_gallery_funcs.php");
-  include_once("mod_gallery_view.php");
-  include_once("mod_tag_funcs.php");
-  include_once("id.php");
-  include_once("common.php");
+  $gallery_first = false;
+  if (!isset($image_first))
+  {
+    $gallery_first = true;
+  }
+  include_once("../config.php");
+  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
+  include_once($MOA_PATH."sources/mod_gallery_funcs.php");
+  include_once($MOA_PATH."sources/mod_tag_funcs.php");
+  include_once($MOA_PATH."sources/id.php");
+  include_once($MOA_PATH."sources/common.php");
+  include_once($MOA_PATH."sources/_template_parser.php");
 
   function GalleryCheckExists()
   {
@@ -108,10 +109,29 @@ if (!isset($image_first))
 
   function GalleryImageThumbs($p_id)
   {
+    global $gallery_id;
+    global $template_name;
     global $ErrorString;
+    global $tab_prefix;
+
+    // Set global vars if needed
+    if (!isset($pre_cache))
+    {
+      $gallery_id = $p_id;
+
+      // Find out which template we should be using. Fall back to MoaDefault if none set
+      $template_name = "MoaDefault";
+      $query = "SELECT * FROM ".$tab_prefix."options WHERE Name = 'Template';";
+      $result = mysql_query($query);
+      if ($result) {
+        $row = mysql_fetch_array($result);
+        $template_name = $row["Value"];
+      }
+    }
 
     OutputPrefix("OK");
-    ViewImageThumbs($p_id);
+
+    echo LoadTemplateRoot("page_gallery_view.php");
 
     return true;
   }

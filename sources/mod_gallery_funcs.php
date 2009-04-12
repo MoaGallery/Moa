@@ -1,9 +1,9 @@
 <?php
   // mod_gallery_funcs.php - This is a collection of functions that interect with the database and a gallery.
-  include_once("_error_funcs.php");
-  include_once("_db_funcs.php");
-  include_once("mod_image_funcs.php");
-  include_once("mod_tag_funcs.php");
+  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
+  include_once($MOA_PATH."sources/mod_image_funcs.php");
+  include_once($MOA_PATH."sources/mod_tag_funcs.php");
 
   // Structure - Holds information for a single gallery
   class Gallery{
@@ -242,7 +242,7 @@
     global $ErrorString;
     global $tab_prefix;
 
-    $query = "select IDImage, Description from ".$tab_prefix."v_gallery_images where IDGallery = '".mysql_real_escape_string($p_id)."';";
+    $query = "SELECT IDImage, Description from ".$tab_prefix."v_gallery_images WHERE IDGallery = '".mysql_real_escape_string($p_id)."';";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     if (false == $result) {
       return false;
@@ -274,6 +274,20 @@
     $image = mysql_fetch_array($result);
     if (false == $image)
     {
+    	if (0 < _galleryGetSubGalleryCount($p_id))
+    	{
+    	  $sub_galleries = _galleryGetSubGalleries( $p_id);
+
+        foreach ($sub_galleries as $sub_gallery)
+        {
+          $found = _galleryGetThumbNail($sub_gallery->m_id);
+          if (!is_bool($found))
+          {
+            return $found;
+          }
+        }
+    	}
+
     	return false;
     }
     return $image["IDImage"];

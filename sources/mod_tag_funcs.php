@@ -2,8 +2,8 @@
   /* mod_tag_funcs.php
    This is a collection of functions that interect with the database and a tag.
   */
-  include_once("_error_funcs.php");
-  include_once("_db_funcs.php");
+  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
 
   //  Structure for a single tag
   class Tag

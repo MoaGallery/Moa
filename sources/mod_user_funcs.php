@@ -1,6 +1,6 @@
 <?php
-  include_once("_error_funcs.php");
-  include_once("_db_funcs.php");
+  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
 
   // Structure for a single user
   class User
@@ -109,7 +109,7 @@
     global $ErrorString;
     global $tab_prefix;
 
-    $query = "select IDUser, Name, Admin from ".$tab_prefix."users;";
+    $query = "SELECT IDUser, Name, Admin FROM ".$tab_prefix."users;";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     if (false == $result) {
       return false;

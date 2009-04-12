@@ -1,0 +1,1 @@
+<div style="width: 12px; height: 16px; float: left;">&nbsp;</div>

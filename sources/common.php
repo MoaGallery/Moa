@@ -1,6 +1,6 @@
 <?php
   $MOA_MAJOR_VERSION = 1;
-  $MOA_MINOR_VERSION = 1;
+  $MOA_MINOR_VERSION = 2;
   $MOA_REVISION = 0;
   $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION;
 
@@ -143,17 +143,16 @@
     return $var;
   }
 
-  function thumbnail( $p_image_name, $p_image_type, $p_in_sources)
+  function thumbnail( $p_image_name, $p_image_type, $p_in_root)
     {
       global $IMAGE_PATH;
       global $THUMB_PATH;
       global $THUMB_WIDTH;
-      if ($p_in_sources)
+
+      $PREFIX = "../";
+      if ($p_in_root)
       {
         $PREFIX = "";
-      } else
-      {
-        $PREFIX = "../";
       }
 
       $src_img = imagecreatefromjpeg($PREFIX.$IMAGE_PATH."/".str_display_safe($p_image_name));
@@ -190,13 +189,21 @@
     {
       if (0 == strcmp($_REQUEST["deleted"], "image"))
       {
-        moa_success("Image deleted successfully.");
+        return moa_success_ret("Image deleted successfully.", false);
       }
       if (0 == strcmp($_REQUEST["deleted"], "gallery"))
       {
-        moa_success("Gallery deleted successfully.");
+        return moa_success_ret("Gallery deleted successfully.", false);
       }
     }
   }
 
+  function TypeSafeMysqlRealEscapeString( $p_value)
+  {
+    if (is_string($p_value))
+    {
+      return mysql_real_escape_string( $p_value);
+    }
+    return $p_value;
+  }
 ?>

@@ -8,7 +8,7 @@
   session_unset();
   session_destroy();
 
-	function get_apache_version() {
+  function get_apache_version() {
 	  $apache_info = @apache_get_version();
 
 	  $next   = false;
@@ -808,7 +808,7 @@
     echo "<form name='install_3b' method='post' action='install.php?stage=stage4' enctype='multipart/form-data'>\n";
 
     echo "Creating data structure - ";
-    $max_run = 21;
+    $max_run = 22;
     $datainstalled = true;
     $count = 0;
 
@@ -852,6 +852,19 @@
           echo "<span style='color: red'>This could be because you don't have permission to create views.  See install document for possible work around.</span><br/>\n";
         }
       }
+      $check = true;
+    }
+
+    echo "Creating options data - ";
+    $query = "INSERT INTO ".$tab_prefix."options (Name, Value) VALUES (_utf8'Template', _utf8'MoaGallery');";
+    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+
+    if ($result != false)
+    {
+      echo "<span style='color: green'>Success</span><br/>\n";
+    } else
+    {
+      echo "<span style='color: red'>Failed - (".mysql_error().")</span><br/>\n";
       $check = true;
     }
 
@@ -949,8 +962,10 @@
   <head>
      <?php
        $INSTALLING = true;
-       include_once('sources/_db_funcs.php');
-       include_once ("sources/common.php");
+       $template_name = "MoaDefault";
+       include_once("sources/_db_funcs.php");
+       include_once("sources/common.php");
+       include_once("sources/_template_parser.php");
 
 	     if (isset($_REQUEST["action"]))
 	     {

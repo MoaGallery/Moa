@@ -23,6 +23,8 @@ function Image( p_delim)
   var m_delimiter = p_delim;
   
   var m_taglist = new TagList( m_delimiter);
+
+  var m_parent_url = document.referrer;
   
   this.PreLoad = function(p_image_id, p_desc, p_width, p_height, p_from)
   {
@@ -116,7 +118,7 @@ function Image( p_delim)
       m_edit_toggle = false;
     } else
     {
-      history.go(-1);
+      window.location = m_parent_url;
     }
   };
   

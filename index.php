@@ -1,4 +1,6 @@
 <?php
+  global $MOA_PATH;
+
   // Tell included files not to run in "stand-alone" mode
   $pre_cache = true;
 
@@ -8,12 +10,33 @@
     include("install.php");
     die();
   }
+
   include_once ("config.php");
+
+  // If MOA_PATH is not set in config.php then set it here
+  // to the likely value to all processing to continue.
+  //
+  // Needed for when 1.2 are first copied over a existing install.
+  if (!isset($MOA_PATH))
+  {
+    $file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
+    $MOA_PATH = str_replace( getenv("DOCUMENT_ROOT"), "", $file_path) . "/";
+  }
 
   // Include login/cookie stub if we aren't installing
   if (isset($FRESH_INSTALL) == false)
   {
-    include_once ("sources/_login.php");
+    include_once($MOA_PATH."sources/_logout.php");
+    include_once($MOA_PATH."sources/_login.php");
+  }
+
+  // Find out which template we should be using. Fall back to MoaDefault if none set
+  $template_name = "MoaDefault";
+  $query = "SELECT * FROM ".$tab_prefix."options WHERE Name = 'Template';";
+  $result = mysql_query($query);
+  if ($result) {
+    $row = mysql_fetch_array($result);
+    $template_name = $row["Value"];
   }
 
   $action = GetParam("action");
@@ -25,10 +48,10 @@
     $show_headers = false;
   }
 
-  include_once("sources/id.php");
-  include_once("sources/mod_gallery_view.php");
-  include_once("sources/common.php");
-  include_once("sources/mod_upgrade_funcs.php");
+  include_once($MOA_PATH."sources/id.php");
+  include_once($MOA_PATH."sources/common.php");
+  include_once($MOA_PATH."sources/mod_upgrade_funcs.php");
+  include_once($MOA_PATH."sources/_template_parser.php");
 
   // See if we need an upgrade warning
   if (_MoaDetectOldVersion())
@@ -42,6 +65,29 @@
   		moa_warning("Upgrade in progress.", false);
   	}
   }
+
+  // Fill in vars early if available
+  if (isset($_REQUEST["image_id"]))
+  {
+    $image_id = $_REQUEST["image_id"];
+  }
+
+  if (isset($_REQUEST["gallery_id"]))
+  {
+    $gallery_id = $_REQUEST["gallery_id"];
+  } else
+  {
+    $_REQUEST["gallery_id"] = "0000000000";
+    $gallery_id = "0000000000";
+  }
+
+  if (isset($_REQUEST["parent_id"]))
+  {
+    $parent_id = $_REQUEST["parent_id"];
+    $_REQUEST["gallery_id"] = $parent_id;
+    $gallery_id = $parent_id;
+  }
+  $current_gallery = $gallery_id;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -158,7 +204,7 @@
 
       if ($show_headers)
       {
-        include ("sources/_footer.php");
+        echo LoadTemplate("component_footer.php");
       }
     ?>
   </body>

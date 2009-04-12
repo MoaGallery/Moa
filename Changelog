@@ -6,13 +6,19 @@ Key -
 n = New feature
 b = Bugfix
 
+1.2.0 - Template release
+n  Template system. Lots of changes but most output should now be done via templates. 
+b  Filename wasn't shown on the file upload status, just "undefined".
+b  If a "private/config.php" happened to exist below the Moa directory it caused _db_funcs.php to try and load it instead of the right one. 
+b  Cancel button on Add Image \ Add Gallery not working after a form submit. 
+
 1.1.0 - Recode - 31st March 2009
-* Refactored/rewrote almost all the code to be easier to work with. This introduced new bugs which got fixed so not listing individual bug fixes this release.
-* Made coding/naming conventions far more consistant.
-* Added a lot of comments.
-n New tag system.
-n Comment field on add/edit image and gallery now can be expanded if needed.
-n New upload method allows more than one image file at a time, plus is dynamic, no more page refreshes so it can provide a recent history.
-n Upgrade.php.
+*  Refactored/rewrote almost all the code to be easier to work with. This introduced new bugs which got fixed so not listing individual bug fixes this release.
+*  Made coding/naming conventions far more consistant.
+*  Added a lot of comments.
+n  New tag system.
+n  Comment field on add/edit image and gallery now can be expanded if needed.
+n  New upload method allows more than one image file at a time, plus is dynamic, no more page refreshes so it can provide a recent history.
+n  Upgrade.php.
 
 1.0.0 - Initial Release - 28th Jan 2009

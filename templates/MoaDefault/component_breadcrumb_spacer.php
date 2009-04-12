@@ -1,0 +1,1 @@
+<div style="width:<moavar SpacerWidth>px; height: 16px; float: left;">&nbsp;</div>

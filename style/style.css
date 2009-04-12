@@ -85,17 +85,17 @@ a img {
         color: green;
 }
 
-a.admin_link {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-size: 0.8em;
-        color: gray;
-        cursor: pointer;
+A.Admin_Link {
+        Font-Family: Verdana, Arial, Helvetica, Sans-Serif;
+        Font-Size: 0.8Em;
+        Color: Gray;
+        Cursor: Pointer;
 }
 
-a.admin_link:hover
+A.Admin_Link:Hover
 {
-        color: black;
-        text-decoration: underline;
+        Color: Black;
+        Text-Decoration: Underline;
 }
 
 .image_desc_frame {
@@ -462,4 +462,37 @@ a.nav_link:hover {
 
 .breadcrumb_box {
         padding: 5px;
+}
+
+.testbox_tl {
+        background: transparent url(../media/testbox-tl.png) no-repeat top left;
+}
+
+.testbox_tr {
+        background: transparent url(../media/testbox-tr.png) no-repeat top right;
+}
+
+.testbox_bl {
+        background: transparent url(../media/testbox-bl.png) no-repeat bottom left;
+}
+
+.testbox_br {
+        background: transparent url(../media/testbox-br.png) no-repeat bottom right;
+}
+
+.testboxheader {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 0.7em;
+        text-align:center;
+        padding: 5px;
+}
+
+.testboxcontent {
+        padding: 5px;
+}
+
+.mag_glass div {
+        width: 38px;
+        height: 37px;
+        background: url(../media/success.png);
 }

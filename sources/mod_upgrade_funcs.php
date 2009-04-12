@@ -4,6 +4,12 @@
   // Returns true if a new version of the files seem to have been uploaded.
   function _MoaDetectOldVersion()
   {
+    global $DEBUG_MODE;
+    if ($DEBUG_MODE)
+    {
+      return false;
+    }
+
     $new_ver = _UpgradeGetNewVersionID();
     $cur_ver = _UpgradeGetCurrentVersionID();
 

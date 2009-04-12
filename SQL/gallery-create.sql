@@ -26,7 +26,20 @@ CREATE TABLE IF NOT EXISTS `<prefix>gallery` (
   `Description` blob,
   `IDParent` int(10) unsigned zerofill NOT NULL default '0000000000',
   PRIMARY KEY  (`IDGallery`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `<prefix>options`
+--
+
+DROP TABLE IF EXISTS `<prefix>options`;
+CREATE TABLE IF NOT EXISTS `<prefix>options` (
+  `Name` varchar(40) NOT NULL,
+  `Value` varchar(100) NOT NULL default '',
+  PRIMARY KEY  (`Name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -42,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>gallerytaglink` (
   PRIMARY KEY  (`IDGalleryTagLink`),
   KEY `IDGallery` (`IDGallery`),
   KEY `IDTag` (`IDTag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -58,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>image` (
   `Width` int(5) unsigned NOT NULL,
   `Height` int(5) unsigned NOT NULL,
   PRIMARY KEY  (`IDImage`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=67 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -74,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>imagetaglink` (
   PRIMARY KEY  (`IDImageTagLink`),
   KEY `IDImage` (`IDImage`),
   KEY `IDTag` (`IDTag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=107 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -87,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>tag` (
   `IDTag` int(10) unsigned zerofill NOT NULL auto_increment,
   `Name` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`IDTag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -104,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>users` (
   `Salt` varchar(8) NOT NULL,
   PRIMARY KEY  (`IDUser`),
   UNIQUE KEY `Name` (`Name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 --
 -- Constraints for dumped tables

@@ -23,7 +23,7 @@ function User()
 }
 
 // Class to keep track of all users
-function UserList(p_delim)
+function UserList(p_delim, p_user_row_template)
 {
   var that = this;
   
@@ -32,6 +32,7 @@ function UserList(p_delim)
   var m_userlistHTML = "";
   var m_fake_id = -1;  // To keep track of new users before a page load
   var m_add_mode = false;
+  var m_user_row_template = p_user_row_template;
   
   // Load user values into memory when we start
   this.PreLoad = function( p_master)
@@ -82,24 +83,24 @@ function UserList(p_delim)
   // Display a single row in the user table
   this.ViewSingle = function(index)
   {
-    var val = "";
-    val += "<div id='user_"+m_users[index].m_id+"'>\n";
-    val += "<div id='username_"+m_users[index].m_id+"' class='user_name'>"+m_users[index].m_name+"</div>\n";
-    val += "<div id='useradmin_"+m_users[index].m_id+"' class='user_admin'>\n";
+    var val = m_user_row_template;
+    var rights = "";
+    
     if (1 == m_users[index].m_admin)
     {
-      val += "Admin\n";
+      rights = "Admin\n";
     } else
     {
-      val += "&nbsp;\n";
+      rights = "&nbsp;\n";
     }
-    val += "</div>\n";
-    val += "<div class='user_link'>\n";
-    val += "<a class='admin_link' onclick='javascript: user_list.Edit(\""+m_users[index].m_id+"\");'>[Edit]</a>\n";
-    val += "<a class='admin_link' onclick='javascript: user_list.Delete(\""+m_users[index].m_id+"\");'>[Delete]</a>\n";
-    val += "</div>\n";
-    val += "<br/>\n";
-    val += "</div>\n";
+    
+    val = str_replace(val, "<moavar AdminUserID>", m_users[index].m_id);
+    val = str_replace(val, "<moavar AdminUserName>", m_users[index].m_name);
+    val = str_replace(val, "<moavar AdminUserRights>", rights);
+    
+    val = str_replace(val, "<moavar AdminUserEditLink>", "onclick='javascript: user_list.Edit(\""+m_users[index].m_id+"\");'");
+    val = str_replace(val, "<moavar AdminUserDeleteLink>", "onclick='javascript: user_list.Delete(\""+m_users[index].m_id+"\");'");
+    
     return val;
   };
   

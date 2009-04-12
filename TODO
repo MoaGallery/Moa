@@ -1,39 +1,44 @@
 TODO -
-  Important -
+
+   Root path var in config.
+   
+  Important - 1.2 (User-centric) -    
+    Makes pages Template based. Supply 2-3 with normal install.
+    Beef up CSS to be fully skinnable.
+    User Model features (image/gallery manager, more obvious to use, mag. glass on image preview).
+    Site Settings.  (Make Sure all path variables terminate with a /)
+    Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
+    Pages of thumbnails.
+    Next/Prev on image view.
+    Filmstrip.
+    Simple UI animation (feedback vanishes, deleted items scroll up, etc).
+    png/gif support.
+    ADD OPTIONS TABLE TO SETUP (count) and UPGRADE.
+    Redo install to be interactive.
+    Stylesheets.
+    Add CDATA to page_ files.
   
-  Pre-release (1.1) -
-    * Add error checking to new code.
-    * Escape all variables used in queries (mysql_real_escape_string).
-    * Check all queries include _utf8 when setting text fields.
-    * Bugtracker items.
-    * Check all files verify login status before proceeding to process actions.
-    * Global search for TODO.
-    * Update install.php and upgrade.php.
-    * Version number change.
-    * Come out of debug mode.
-    * Final check with/without magic quotes.
-    * WC3 validation.
-    * Mention delimiter in the docs. 
-    * Update Documentation.
-    * Check changelog.
+  Pre-release (1.2) -
+    Add error checking to new code.
+    Escape all variables used in queries (mysql_real_escape_string).
+    Check all queries include _utf8 when setting text fields.
+    Bugtracker items.
+    Check all files verify login status before proceeding to process actions.
+    Global search for TODO.
+    Update install.php and upgrade.php.
+    Version number change.
+    Come out of debug mode.
+    Final check with/without magic quotes.
+    WC3 validation.
+    Mention delimiter in the docs. 
+    Update Documentation.
+    Check changelog.
     
   Nice  -
    Major version -
      Support other databases (ms-sql, Oracle, ProgresSQL, etc) and HTTP backends (IIS).
      
    Minor version -      
-     1.2 (User-centric) -
-       Makes pages Template based. Supply 2-3 with normal install.
-       Beef up CSS to be fully skinnable.
-       User Model features (image/gallery manager, more obvious to use, mag. glass on image preview).
-       Site Settings.
-       Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
-       Pages of thumbnails.
-       Next/Prev on image view.
-       Filmstrip.
-       Simple UI animation (feedback vanishes, deleted items scroll up, etc).
-       png/gif support.
-       
      1.3 (Expanding content) -
        Display movie clips.  (Not streaming)
        Grab and save EXIF info.

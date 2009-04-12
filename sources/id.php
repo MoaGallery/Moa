@@ -5,22 +5,9 @@
 
   if(!$INSTALLING)
   {
-    if (file_exists("sources/_db_funcs.php"))
-    {
-      include_once("sources/_db_funcs.php");
-    } else
-    {
-      include_once("_db_funcs.php");
-    }
-
-    if (file_exists("config.php"))
-    {
-      include_once("config.php");
-    } else
-    {
-      include_once("../config.php");
-    }
-    include_once("common.php");
+    include_once($MOA_PATH."sources/_db_funcs.php");
+    include_once($MOA_PATH."config.php");
+    include_once($MOA_PATH."sources/common.php");
   }
 
   $db = DBConnect();

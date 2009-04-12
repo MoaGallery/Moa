@@ -1,10 +1,25 @@
 <?php
-  include_once("_db_funcs.php");
-	include_once("../config.php");
-	include_once("common.php");
-	include_once("id.php");
+  include_once("../config.php");
 
-	include_once("mod_upgrade_funcs.php");
+  $no_moa_path = false;
+
+  // If MOA_PATH is not set in config.php then set it here
+  // to the likely value to all processing to continue.
+  //
+  // Needed for when 1.2 are first copied over a existing install.
+  if (!isset($MOA_PATH))
+  {
+    $file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
+    $$MOA_PATH = str_replace( getenv("DOCUMENT_ROOT"), "", $file_path) . "/";
+
+    $no_moa_path = true;
+  }
+
+  include_once($MOA_PATH."_db_funcs.php");
+	include_once($MOA_PATH."common.php");
+	include_once($MOA_PATH."id.php");
+
+	include_once($MOA_PATH."mod_upgrade_funcs.php");
 
 	// Adds a new config variable to config.php or (from 1.2 onwards) the database
 	function UpgradeAddConfigVar()

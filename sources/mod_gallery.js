@@ -22,6 +22,8 @@ function Gallery(p_delim) {
   var m_delimiter = p_delim;
 
   var m_taglist = new TagList(m_delimiter);
+  
+  var m_parent_url = document.referrer;
 
   this.PreLoad = function(p_gal_id, p_name, p_desc, p_par_id, p_from) {
     m_gallery_id = p_gal_id;
@@ -135,7 +137,7 @@ function Gallery(p_delim) {
       nd();
     } else 
     {
-      history.go(-1);
+      window.location = m_parent_url;
     }
   };
 
@@ -176,6 +178,7 @@ function Gallery(p_delim) {
       that.SubmitRollback();
       return;
     }
+    
     if ("OK" != p_text.substr(0, 2)) {
       document.getElementById("galleryblockfeedback").innerHTML = FeedbackBox(p_text, false);
       that.SubmitRollback();
@@ -215,8 +218,8 @@ function Gallery(p_delim) {
           p_text, false);
       that.SubmitRollback();
       return;
-    } else {
-      document.getElementById("galleryblockimagethumbs").innerHTML = p_text.substr(3);
+    } else {      
+      document.getElementById("pagegalleryview").innerHTML = p_text.substr(3);
     }
   };
 

@@ -1,6 +1,6 @@
 <?php
   /* -----------------------------------------------*/
-  /*  Image scaller 1.0 (PHP)                       */
+  /*  Image scaler 1.0 (PHP)                        */
   /*  Copyright (c)2008 Richard Talbutt \ Dan Brown */
   /*                                                */
   /*  Loads and scales down a image to the given    */
@@ -11,8 +11,6 @@
   /*                                                */
   /* -----------------------------------------------*/
   include_once("../config.php");
-
-  global $IMAGE_PATH;
 
   if (isset($_REQUEST["display_width"])) {
     $display_max_width = $_REQUEST["display_width"];

@@ -1,4 +1,5 @@
 <?php
+  include_once($MOA_PATH."sources/mod_gallery_funcs.php");
 
   // Get gallery id
   $no_gallery_id = false;
@@ -42,8 +43,7 @@
     }
 
     $pre_cache = true;
-	  include_once("sources/mod_gallery_view.php");
-	  include_once("sources/mod_tag_view.php");
+	  include_once($MOA_PATH."sources/mod_tag_view.php");
 
     // Only include Javascript if a user is logged in
     if (UserIsLoggedIn())
@@ -57,20 +57,34 @@
 	    echo "</script>\n";
 	    echo "<script type='text/javascript' src='sources/mod_gallery.js'></script>\n";
 	    echo "<script type='text/javascript'>\n";
+
 	    echo "  gallery_id = '".$gallery_id."';\n";
-	    echo "  var editblock="; ViewGalleryForm($parent_id); echo ";\n";
+
+	    echo "  var editblock=";
+	    echo LoadTemplateRootForJavaScript("component_gallery_form_edit.php");
+	    echo ";\n";
+
+	    echo "  var feedback_box = ";
+      echo moa_feedback_js();
+      echo ";\n";
+
+      echo "  var template_path = 'templates/".$template_name."/';\n";
+
 	    echo "  var gallery = new Gallery('".js_var_display_safe($STR_DELIMITER)."');\n";
 	    echo "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Name"))."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
 	    echo "  gallery.PageTitle();";
 	    echo "</script>\n";
 	  }
 
-	  ViewGalleryBlock($gallery_id);
-?>
+	  echo "<div id = 'pagegalleryview'>";
+	  echo LoadTemplateRoot("page_gallery_view.php");
+	  echo "</div>";
+  ?>
+
 		<script type="text/javascript">
 		  if ('<?php echo $gallery_id ?>' == '0000000000')
 		  {
-		    document.location = "index.php";
+		    document.location = 'index.php';
 		  }
     </script>
 <?php
