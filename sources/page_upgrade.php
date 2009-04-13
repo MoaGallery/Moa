@@ -8,10 +8,11 @@
 </div>
 
 <?php
-  echo "<script type='text/javascript' src='".$MOA_PATH."sources/common.js'></script>\n";
-  echo "<script type='text/javascript' src='".$MOA_PATH."sources/_request.js'></script>\n";
-  echo "<script type='text/javascript' src='".$MOA_PATH."sources/mod_upgrade.js'></script>\n";
+  echo "<script type='text/javascript' src='sources/common.js'></script>\n";
+  echo "<script type='text/javascript' src='sources/_request.js'></script>\n";
+  echo "<script type='text/javascript' src='sources/mod_upgrade.js'></script>\n";
   echo "<script type='text/javascript'>\n";
   echo "  upg = new Upgrade("._UpgradeGetCurrentVersionID().", "._UpgradeGetNewVersionID().");\n";
+  echo "  moa_path = '".$MOA_PATH."';";
   echo "</script>\n";
 ?>

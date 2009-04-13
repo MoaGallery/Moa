@@ -1,3 +1,16 @@
+<!--[if IE 6]>
+<script src="<moatag type="TemplatePath">DD_belatedPNG.js"></script>
+<script>
+  DD_belatedPNG.fix('.picture-shadow');
+  DD_belatedPNG.fix('.picture-shadow2');
+  DD_belatedPNG.fix('.gallery-shadow');
+  DD_belatedPNG.fix('.gallery-shadow2');
+  DD_belatedPNG.fix('.logo');
+  DD_belatedPNG.fix('.headerbutton');
+  DD_belatedPNG.fix('.logotest');
+</script>
+<![endif]-->
+
 <div class="headertop-left">
   <div class="headertop-right">
     <div class="headertop">

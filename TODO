@@ -5,6 +5,7 @@ TODO -
   Important - 1.2 (User-centric) -    
     Makes pages Template based. Supply 2-3 with normal install.
     Beef up CSS to be fully skinnable.
+    Keep upgrade up to date.
     User Model features (image/gallery manager, more obvious to use, mag. glass on image preview).
     Site Settings.  (Make Sure all path variables terminate with a /)
     Drop down menu from breadcrumbs showing sub-galleries for direct navigation.

@@ -700,6 +700,7 @@
       fwrite($file, "  \$TITLE_DESC_LENGTH = 30;\n");
       fwrite($file, "  \$MAGIC_QUOTES = ".$magic_quotes.";\n");
       fwrite($file, "  \$STR_DELIMITER = \",\";\n");
+      fwrite($file, "  \$MOA_PATH = ".$MOA_PATH.";\n");
       fwrite($file, "?>\n");
       fclose($file);
     }
@@ -808,7 +809,7 @@
     echo "<form name='install_3b' method='post' action='install.php?stage=stage4' enctype='multipart/form-data'>\n";
 
     echo "Creating data structure - ";
-    $max_run = 22;
+    $max_run = 21;
     $datainstalled = true;
     $count = 0;
 
@@ -852,19 +853,6 @@
           echo "<span style='color: red'>This could be because you don't have permission to create views.  See install document for possible work around.</span><br/>\n";
         }
       }
-      $check = true;
-    }
-
-    echo "Creating options data - ";
-    $query = "INSERT INTO ".$tab_prefix."options (Name, Value) VALUES (_utf8'Template', _utf8'MoaGallery');";
-    $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-
-    if ($result != false)
-    {
-      echo "<span style='color: green'>Success</span><br/>\n";
-    } else
-    {
-      echo "<span style='color: red'>Failed - (".mysql_error().")</span><br/>\n";
       $check = true;
     }
 
@@ -963,7 +951,10 @@
      <?php
        $INSTALLING = true;
        $template_name = "MoaDefault";
+       $MOA_PATH = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
+
        include_once("sources/_db_funcs.php");
+       include_once("sources/id.php");
        include_once("sources/common.php");
        include_once("sources/_template_parser.php");
 
@@ -982,7 +973,7 @@
   </head>
   <body>
     <?php
-      include_once ("sources/_header.php");
+      //include_once ("sources/_header.php");
 
       if (isset($_REQUEST["stage"]))
       {
@@ -1046,7 +1037,7 @@
       }
 
 
-      include ("sources/_footer.php");
+      //include ("sources/_footer.php");
     ?>
   </body>
 </html>

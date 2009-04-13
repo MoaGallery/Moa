@@ -41,7 +41,32 @@ var ver_10100_old_files = ["add_gallery.php",
                            "sources/_numtags.php",
                            "sources/_settag.php",
                            "sources/_thumbnail_func.php",
-                           "sources/_thumb_list.php"]
+                           "sources/_thumb_list.php"];
+
+var ver_10199_00_old_files = ["media/add.png",
+                             "media/button-admin.png",
+                             "media/button-login.png",
+                             "media/button-logout.png",
+                             "media/debug-moa-logo-vector.png",
+                             "media/fail.png",
+                             "media/folder_open.png",
+                             "media/gallery.png",
+                             "media/gallery_add.png",
+                             "media/gallery_delete.png",
+                             "media/shadowAlpha.png",
+                             "media/shadow-pale.gif",
+                             "media/shadow-pale.png",
+                             "media/shadow-plain.gif",
+                             "media/shadow-plain.png",
+                             "media/site-map.png",
+                             "media/success.png",
+                             "media/warning.png",
+                             "sources/_admin_page_links.php",
+                             "sources/_breadcrumb.php",
+                             "sources/_buttons.php",
+                             "sources/_footer.php",
+                             "sources/mod_gallery_view.php",
+                             "sources/mod_image_view.php"];
 
 
 // Structure to hold a config option
@@ -62,7 +87,7 @@ function File()
 function Upgrade(p_oldver, p_newver)
 {
   var that = this;
-  var versions = [10000, 10100];
+  var versions = [10000, 10100, 10199.00];
   var stage_1_list = Array();
   var stage_2_list = Array();
   var stage_3_list = Array();
@@ -90,30 +115,31 @@ function Upgrade(p_oldver, p_newver)
   {
     that.BuildStage1List();
     that.BuildStage2List();
+    that.BuildStage3List();
     that.Stage1Banner();
     that.RunStage1(0);
-  }
+  };
   
   // Announces stage 1 (Adding config vars)
   this.Stage1Banner = function()
   {
     var element = document.getElementById("upgradeprogress");
     element.innerHTML +=  "<span class='install_list_header'>Stage 1 - Adding config vars...</span><br/><br/>";
-  }
+  };
   
   // Announces stage 2 (Deleting old files)
   this.Stage2Banner = function()
   {
     var element = document.getElementById("upgradeprogress");
-    element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 2 - Removing outdated Moa files...</span><br/><br/>";
-  }
+    element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 2 - Removing outdated Moa files...<br/></span><br/><br/>";
+  };
   
-  // Announces stage 3 (Database changes, not in v1.1)
+  // Announces stage 3 (Database changes)
   this.Stage3Banner = function()
   {
     var element = document.getElementById("upgradeprogress");
     element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 3 - Applying database changes...</span><br/><br/>";
-  }
+  };
   
   // Announces upgrade complete
   this.EndBanner = function()
@@ -128,7 +154,7 @@ function Upgrade(p_oldver, p_newver)
       element.innerHTML += "<br/><span class='install_list_fail'>One or more commands failed to run correctly as listed above." +
                            " See the manual upgrade procedure in the documentation to complete the upgrade.</span><br/><br/>";
     }
-  }
+  };
   
   // Puts together a list of all vars to upgrade
   this.BuildStage1List = function()
@@ -147,13 +173,23 @@ function Upgrade(p_oldver, p_newver)
           
           break;
         }
+        case 10199.00 :
+        {
+          var new_opt = new Option();
+          new_opt.name = "$MOA_PATH";
+          new_opt.value = '"'+moa_path+'"';
+          new_opt.dest = "file";
+          stage_1_list[stage_1_list.length] = new_opt;
+          
+          break;
+        }
         default :
         {
           break;
         }
       }
     }
-  }
+  };
   
   // Puts together a list of all files to delete
   this.BuildStage2List = function()
@@ -172,13 +208,23 @@ function Upgrade(p_oldver, p_newver)
           }
           break;
         }
+        case 10199.00 :
+        {
+          for (var j = 0; j < ver_10199_00_old_files.length; j++)
+          {
+            var new_file = new File();
+            new_file.filename = ver_10199_00_old_files[j];
+            stage_2_list[stage_2_list.length] = new_file;
+          }
+          break;
+        }
         default :
         {
           break;
         }
       }
     }
-  }
+  };
   
   // Puts together a list of all database mods to run
   this.BuildStage3List = function()
@@ -191,13 +237,20 @@ function Upgrade(p_oldver, p_newver)
         {
           break;
         }
+        case 10199.00 :
+        {
+          var new_file = new File();
+          new_file.filename = "upgrade-10199_00.sql"
+          stage_3_list[stage_3_list.length] = new_file;
+          break;
+        }
         default :
         {
           break;
         }
       }
     }
-  }
+  };
   
   // Called after each stage 1 element is run
   this.Stage1Callback = function(p_text, p_status, p_xml, p_note)
@@ -236,7 +289,7 @@ function Upgrade(p_oldver, p_newver)
       that.Stage2Banner();
       that.RunStage2(0);
     }
-  }
+  };
   
   // Called after each stage 2 element is run
   this.Stage2Callback = function(p_text, p_status, p_xml, p_note)
@@ -263,7 +316,7 @@ function Upgrade(p_oldver, p_newver)
     } else
     {
       element.innerHTML += "<span class='install_list_fail'>Failed " + reason + "</span><br/>";
-      upgrade_result = false;
+      //upgrade_result = false;
     }
     
     p_note++;
@@ -275,7 +328,7 @@ function Upgrade(p_oldver, p_newver)
       that.Stage3Banner();
       that.RunStage3(0);
     }
-  }
+  };
   
   // Called after each stage 3 element is run
   this.Stage3Callback = function(p_text, p_status, p_xml, p_note)
@@ -313,7 +366,7 @@ function Upgrade(p_oldver, p_newver)
     {
       that.EndBanner();
     }
-  }
+  };
   
   // Runs each step of stage 1
   this.RunStage1 = function(p_step)
@@ -332,7 +385,7 @@ function Upgrade(p_oldver, p_newver)
         url += "&value="+encodeURIComponent(stage_1_list[p_step].value);
     var request = new httpRequest("sources/mod_upgrade.php", that.Stage1Callback, p_step);
     request.update(url, "GET");
-  }
+  };
   
   // Runs each step of stage 2
   this.RunStage2 = function(p_step)
@@ -349,7 +402,7 @@ function Upgrade(p_oldver, p_newver)
         url += "&filename="+encodeURIComponent(stage_2_list[p_step].filename);
     var request = new httpRequest("sources/mod_upgrade.php", that.Stage2Callback, p_step);
     request.update(url, "GET");
-  }
+  };
   
   // Runs each step of stage 3
   this.RunStage3 = function(p_step)
@@ -361,11 +414,11 @@ function Upgrade(p_oldver, p_newver)
       that.EndBanner();
       return;
     }
-    element.innerHTML +=  "<span class='install_list'>"+stage_3_list[p_step].label+"</span>";
+    element.innerHTML +=  "<span class='install_list'>Running '"+stage_3_list[p_step].filename+"'</span>";
     var url =  "action=modify_db";
         url += "&filename="+encodeURIComponent(stage_3_list[p_step].filename);
     var request = new httpRequest("sources/mod_upgrade.php", that.Stage3Callback, p_step);
     request.update(url, "GET");
-  }
+  };
 }
 

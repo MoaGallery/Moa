@@ -1,7 +1,7 @@
 <?php
   $MOA_MAJOR_VERSION = 1;
-  $MOA_MINOR_VERSION = 2;
-  $MOA_REVISION = 0;
+  $MOA_MINOR_VERSION = 1;
+  $MOA_REVISION = 99;
   $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION;
 
   // Function for retrieving date\time at page load

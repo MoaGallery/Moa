@@ -23,7 +23,6 @@
   }
 
   echo LoadTemplate("component_header.php");
-  //echo "<br/>";
 
   // Check gallery exists and set to home if it doesn't
   if (0 != strcmp("0000000000", $current_gallery))

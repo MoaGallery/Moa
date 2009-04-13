@@ -19,8 +19,8 @@
   // Needed for when 1.2 are first copied over a existing install.
   if (!isset($MOA_PATH))
   {
-    $file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
-    $MOA_PATH = str_replace( getenv("DOCUMENT_ROOT"), "", $file_path) . "/";
+    $MOA_PATH = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
+    $no_moa_path = true;
   }
 
   // Include login/cookie stub if we aren't installing

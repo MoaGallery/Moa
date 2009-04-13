@@ -1,25 +1,23 @@
 <?php
   include_once("../config.php");
 
-  $no_moa_path = false;
-
   // If MOA_PATH is not set in config.php then set it here
   // to the likely value to all processing to continue.
   //
   // Needed for when 1.2 are first copied over a existing install.
+  $no_moa_path = false;
   if (!isset($MOA_PATH))
   {
-    $file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
-    $$MOA_PATH = str_replace( getenv("DOCUMENT_ROOT"), "", $file_path) . "/";
-
+    $MOA_PATH = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
+    $MOA_PATH = str_replace( "/sources/", "/", $MOA_PATH);
     $no_moa_path = true;
   }
 
-  include_once($MOA_PATH."_db_funcs.php");
-	include_once($MOA_PATH."common.php");
-	include_once($MOA_PATH."id.php");
+  include_once($MOA_PATH."sources/_db_funcs.php");
+	include_once($MOA_PATH."sources/common.php");
+	include_once($MOA_PATH."sources/id.php");
 
-	include_once($MOA_PATH."mod_upgrade_funcs.php");
+	include_once($MOA_PATH."sources/mod_upgrade_funcs.php");
 
 	// Adds a new config variable to config.php or (from 1.2 onwards) the database
 	function UpgradeAddConfigVar()
@@ -108,6 +106,43 @@
     return true;
   }
 
+  function ModifyDB()
+  {
+    // Only proceed if a user is logged in
+    if (!UserIsLoggedIn())
+    {
+      RaiseFatalError("Not logged in.");
+      return false;
+    }
+
+    // Get the filename
+    $filename = GetParam('filename');
+    if (false == $filename)
+    {
+      RaiseFatalError("No filename supplied.");
+      return false;
+    }
+
+    // Check they aren't trying to run external files.
+    // Dissallowing a slash should ensure this
+    if ((mb_strpos($filename, "\\")) || (mb_strpos($filename, "/")))
+    {
+      RaiseFatalError("Only files inside the Moa SQL directory can be run as part of the upgrade.");
+      return false;
+    }
+
+    $result = _ModifyDB($filename);
+    if ((is_bool($result)) && (!$result))
+    {
+      RaiseFatalError("Error running SQL.");
+      return false;
+    }
+
+    OutputPrefix("OK");
+    echo $result;
+    return true;
+  }
+
   function UpgradeAjaxMain()
   {
     // Get the action
@@ -129,6 +164,11 @@
       case "delete_file" :
       {
         UpgradeDelFile();
+        break;
+      }
+      case "modify_db" :
+      {
+        ModifyDB();
         break;
       }
       default :

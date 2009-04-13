@@ -491,12 +491,6 @@ a.nav_link:hover {
         padding: 10px;
 }
 
-.mag_glass div {
-        width: 38px;
-        height: 37px;
-        background: url(../media/success.png);
-}
-
 .headertop-left {
         background-color: #41b25b;
         background: transparent url(../media/header1-left.png) no-repeat top left;

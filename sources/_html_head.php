@@ -24,10 +24,6 @@
   echo "<link rel='SHORTCUT ICON' href='favicon.ico'/>\n";
 ?>
 
-<!--[if lt IE 7.]>
-<script defer type="text/javascript" src="sources/pngfix.js"></script>
-<![endif]-->
-
 <!-- Overlib includes -->
 <script type='text/javascript' src='sources/OverLib/overlib.js'></script>
 <script type='text/javascript' src='sources/OverLib/overlib_adaptive_width.js'></script>

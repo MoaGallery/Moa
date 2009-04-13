@@ -62,6 +62,7 @@
         $result = mysql_query($sql_statement);
         if (false == $result)
         {
+          echo mysql_error()."\n\n<br>";
           $error = true;
         }
         $count++;
