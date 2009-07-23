@@ -1,37 +1,38 @@
 <form id='imageform' method='post' enctype='multipart/form-data' action='sources/mod_image.php?action=add'>
-  <input type='hidden' name='imageform' value='true' />
-
-  <div>
-    <div id='imageformexpandblock' style='float: left'>
-      <div class='form_label_text' style='width: 100px;'>
-        Description:
+  <ul class="form_items">
+    <dt>
+      <div id='imageformexpandblock'>
+        <div class='form_label_text'>
+          Description:
+        </div>
+        <a class='admin_link' id='imageformexpandlink'>
+          [Expand]
+        </a>
       </div>
-      <a class='admin_link' id='imageformexpandlink' style='width:100px;'>
-        [Expand]
-      </a>
-    </div>
-    <br\>
+    </dt>
+    <dd>
+      <textarea class='form_text' name='imageformdesc' id='imageformdesc' rows='4' cols='37'></textarea>
+    </dd>
 
-    <textarea class='form_text' name='imageformdesc' id='imageformdesc' rows='4' cols='37'></textarea>
-  </div>
+    <dt class='form_label_text'>
+      Tags:
+    </dt>
+    <dd>
+      <input class='form_text image_form_tags' type='text' name='imageformtags' id='imageformtags' onmouseover='image.EnableTagHintList(this);' onmouseout='image.DisableTagHintList(this);'/>
+      <span id='formtaglistfeedback'></span>
+    </dd>
 
-  <div class='form_label_text' style='width: 100px; float: left;'>
-    Tags:
-  </div>
-  <br\>
-  <span>
-    <input class='form_text' type='text' name='imageformtags' id='imageformtags' style='width:267px;' onmouseover='image.EnableTagHintList(this);' onmouseout='image.DisableTagHintList(this);'/>
-  </span>
-  <span id='formtaglistfeedback'></span>
-
-  <div class='form_label_text' style='height: 10px; width: 100px;'>
-    &nbsp;
-  </div>
-  <input type='button' value='Submit' id='imageformsubmit' onclick='image.SubmitEdit();'/>
-  <input type='button' value='Cancel' id='imageformcancel' onclick='image.CancelEdit();'/>
-  <br/>
+    <dt class='form_label_text'>
+      &nbsp;
+    </dt>
+    <dd>
+      <input type='button' value='Submit' id='imageformsubmit' onclick='image.SubmitEdit();'/>
+      <input type='button' value='Cancel' id='imageformcancel' onclick='image.CancelEdit();'/>
+      <br/>
+      <div id='imageformupload'>
+        &nbsp;
+      </div>
+    </dd>
+  </ul>
 </form>
-
-<div id='imageformupload'>
-  &nbsp;
-</div>
+<div class="new_line height1px">&nbsp;</div>

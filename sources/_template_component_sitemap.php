@@ -3,24 +3,26 @@
   function TagParseSiteMapList($p_tag_options)
   {
     $output = "";
+    $spacing = 10;
 
-    $output .= get_sub_galleries( "0000000000", 0, $output);
+    if (isset($p_tag_options['spacing']))
+    {
+    	$spacing = $p_tag_options['spacing'];
+    }
+
+    $output .= get_sub_galleries( "0000000000", 0, $output, $spacing);
 
     return $output;
   }
 
-  function TagParseSiteMapSpacer($p_tag_options)
+  function TagParseSiteMapNodeSpacer($p_tag_options)
   {
-    return "Spacer";
+
   }
 
-  function TagParseSiteMapNode($p_tag_options)
-  {
-    return "Node";
-  }
 
-    // Recurse through all galleries
-  function get_sub_galleries( $p_parent_id, $p_level, $p_output)
+  // Recurse through all galleries
+  function get_sub_galleries( $p_parent_id, $p_level, $p_output, $p_spacing)
   {
     global $EMPTY_DESC_POPUP_TEXT;
     global $SHOW_EMPTY_DESC_POPUPS;
@@ -34,21 +36,15 @@
 
     if (($p_parent_id == '0000000000') && ( mysql_num_rows($result) == 0))
     {
-      echo "No galleries.";
+      return "There are currently no galleries. ";
     }
     else
     {
       while ($gallery = mysql_fetch_array($result))
       {
         $node = "";
-        $node_spacer ="";
 
         $node .= $line;
-
-        for ($i = 0; $i < $p_level; $i++)
-        {
-          $node_spacer .= $spacer;
-        }
 
         if ($gallery["description"] == NULL)
         {
@@ -57,20 +53,21 @@
             $popup = "";
           } else
           {
-            $popup = "onmouseover='return overlib(\"".$EMPTY_DESC_POPUP_TEXT."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+            $popup = "onmouseover='return overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
           }
         } else
         {
-          $popup = "onmouseover='return overlib(\"".html_display_safe($gallery["description"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='return overlib(\"".popup_display_safe($gallery["description"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }
 
         $node = ParseVar( $node, "SiteMapNodePopUp"      , $popup);
         $node = ParseVar( $node, "SiteMapNodeName"       , html_display_safe($gallery["name"]));
         $node = ParseVar( $node, "SiteMapNodeDescription", html_display_safe($gallery["description"]));
         $node = ParseVar( $node, "SiteMapNodeID"         , html_display_safe($gallery["IDGallery"]));
-        $node = ParseVar( $node, "SiteMapNodeSpacer"     , $node_spacer);
+        $node = ParseVar( $node, "SiteMapNodeSpacer"     , $spacer);
+        $node = ParseVar( $node, "SpacerWidth"     , $p_spacing*$p_level);
 
-        $p_output .= get_sub_galleries( $gallery["IDGallery"], $p_level + 1, $node);
+        $p_output .= get_sub_galleries( $gallery["IDGallery"], $p_level + 1, $node, $p_spacing);
       }
     }
     return $p_output;

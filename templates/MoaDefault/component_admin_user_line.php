@@ -1,4 +1,4 @@
-<div id='user_<moavar AdminUserID>'>
+<li id='user_<moavar AdminUserID>'>
   <div id='username_<moavar AdminUserID>' class='user_name'>
     <moavar AdminUserName>
   </div>
@@ -14,4 +14,4 @@
     </a>
   </div>
   <br/>
-</div>
+</li>

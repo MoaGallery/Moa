@@ -19,7 +19,7 @@
 
 	include_once($MOA_PATH."sources/mod_upgrade_funcs.php");
 
-	// Adds a new config variable to config.php or (from 1.2 onwards) the database
+	// Adds a new config variable to config.php or (from 1.2.1 onwards) the database
 	function UpgradeAddConfigVar()
   {
     global $ErrorString;

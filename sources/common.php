@@ -1,7 +1,7 @@
 <?php
   $MOA_MAJOR_VERSION = 1;
-  $MOA_MINOR_VERSION = 1;
-  $MOA_REVISION = 99;
+  $MOA_MINOR_VERSION = 2;
+  $MOA_REVISION = 0;
   $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION;
 
   // Function for retrieving date\time at page load
@@ -54,9 +54,9 @@
 
   function popup_display_safe($p_text)
   {
-  	$p_text = str_replace("<","&lt;",$p_text);
+    $p_text = str_display_safe(addslashes($p_text));
+    $p_text = str_replace("<","&lt;",$p_text);
     $p_text = str_replace(">","&gt;",$p_text);
-  	$p_text = str_display_safe(addslashes($p_text));
 
     return $p_text;
   }
@@ -155,7 +155,13 @@
         $PREFIX = "";
       }
 
-      $src_img = imagecreatefromjpeg($PREFIX.$IMAGE_PATH."/".str_display_safe($p_image_name));
+      if (!CheckImageMemory($PREFIX.$IMAGE_PATH."/".str_display_safe($p_image_name)))
+      {
+      	return false;
+      }
+
+
+      $src_img = @imagecreatefromjpeg($PREFIX.$IMAGE_PATH."/".str_display_safe($p_image_name));
 
       $origw=imagesx($src_img);
       $origh=imagesy($src_img);
@@ -205,5 +211,47 @@
       return mysql_real_escape_string( $p_value);
     }
     return $p_value;
+  }
+
+  function CheckImageMemory($p_filename)
+  {
+  	global $ErrorString;
+
+    $result = getimagesize($p_filename);
+    if (!isset($result["channels"]))
+    {
+    	return true;
+    }
+    $picsize = $result[0] * $result[1] * $result["channels"];
+    $memlimitstr = ini_get("memory_limit");
+    $units = substr($memlimitstr, -1, 1);
+    $memlimit = substr($memlimitstr, 0, strlen($memlimitstr)-1);
+    $memused = memory_get_usage();
+    switch ($units)
+    {
+      case "M":
+      {
+        $memlimit *= (1024*1024);
+        break;
+      }
+      case 'G':
+      {
+        $memlimit *= (1024*1024*1024);
+        break;
+      }
+      default :
+      {
+        $memlimit *= (1024);
+        break;
+      }
+    }
+
+    // 3.5Mb is a guess how much overhead the jpeg decoder uses (accurate for a 10megapixel image)
+    if (($memused + $picsize + 3500000) > $memlimit)
+    {
+      $ErrorString = sprintf("Not enough memory to decode image (%.1f Mb needed, %.1f Mb available)<br/>", ($picsize/(1024*1024)), ($memlimit-$memused-3500000) / (1024*1024));
+      return false;
+    }
+    return true;
   }
 ?>

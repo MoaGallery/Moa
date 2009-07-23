@@ -65,20 +65,22 @@
 	    echo ";\n";
 
 	    echo "  var feedback_box = ";
-      echo moa_feedback_js();
-      echo ";\n";
+        echo moa_feedback_js();
+        echo ";\n";
 
-      echo "  var template_path = 'templates/".$template_name."/';\n";
+        echo "  var template_path = 'templates/".$template_name."/';\n";
 
 	    echo "  var gallery = new Gallery('".js_var_display_safe($STR_DELIMITER)."');\n";
 	    echo "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Name"))."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
-	    echo "  gallery.PageTitle();";
+	    echo "  gallery.PageTitle();\n";
 	    echo "</script>\n";
 	  }
 
-	  echo "<div id = 'pagegalleryview'>";
+	  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+
+	  echo "<div id = 'pagegalleryview'>\n";
 	  echo LoadTemplateRoot("page_gallery_view.php");
-	  echo "</div>";
+	  echo "</div>\n";
   ?>
 
 		<script type="text/javascript">
@@ -86,7 +88,8 @@
 		  {
 		    document.location = 'index.php';
 		  }
-    </script>
+       </script>
 <?php
+    echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
 ?>

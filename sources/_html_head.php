@@ -22,7 +22,17 @@
 
   // Website Icon
   echo "<link rel='SHORTCUT ICON' href='favicon.ico'/>\n";
+
+  // Inline stylesheet template
+  echo "<style type='text/css'>\n";
+  echo LoadTemplate("style_inline.php")."\n";
+  echo "</style>\n";
 ?>
+
+<!-- IE6 PNG transparency hack -->
+<!--[if IE 6]>
+<script defer='defer' type='text/javascript' src='sources/pngfix.js'></script>
+<![endif]-->
 
 <!-- Overlib includes -->
 <script type='text/javascript' src='sources/OverLib/overlib.js'></script>

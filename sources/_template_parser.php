@@ -15,13 +15,7 @@
     global $pre_cache;
     global $MOA_PATH;
 
-    $filename = "";
-    if (!isset($pre_cache))
-    {
-      $filename = "../";
-    }
-
-    $filename .= $MOA_PATH."templates/".$template_name."/".$p_filename;
+    $filename = $MOA_PATH."templates/".$template_name."/".$p_filename;
 
     $fp = @fopen($filename, "r");
     if ((!$fp) && (is_bool($fp)))
@@ -70,7 +64,7 @@
       $result = eval(" ?> ".$template." <?php ");
     } else
     {
-      $result = @eval("r ?> ".$template." <?php ");
+      $result = eval(" ?> ".$template." <?php ");
     }
 
     if ((is_bool($result)) && (!$result))
@@ -143,9 +137,8 @@
     $template = $p_template;
     $start = 0;
     $end = 0;
-    $count = 0;
 
-    while ((!is_bool(strpos($template, "<moatag"))) && (10 > $count))
+    while (!is_bool(strpos($template, "<moatag")))
     {
       $start = strpos($template, "<moatag");
       $end = strpos($template, ">", $start);
@@ -196,13 +189,6 @@
       $str_c = substr($template, $end+1, strlen($template));
       $template = $str_a.$str_b.$str_c;
 
-
-      $count++;
-    }
-
-    if ((10 <= $count) && ($DEBUG_MODE))
-    {
-      $template .= "TEMPLATE WARNING: Recursed too deep.";
     }
 
     return $template;

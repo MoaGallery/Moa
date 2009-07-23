@@ -17,22 +17,36 @@
   {
     global $tab_prefix;
     global $ErrorString;
+    global $INSTALLING;
 
-    $query = "SELECT count(1) as Count FROM ".$tab_prefix."image";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
-    return $row["Count"];
+    if (!$INSTALLING)
+    {
+      $query = "SELECT count(1) as Count FROM ".$tab_prefix."image";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      $row = mysql_fetch_array($result);
+      return $row["Count"];
+    } else
+    {
+      return "0";
+    }
   }
 
   function TagParseHeaderGalleryCount($p_tag_options)
   {
     global $tab_prefix;
     global $ErrorString;
+    global $INSTALLING;
 
-    $query = "SELECT count(1) as Count FROM ".$tab_prefix."gallery";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    $row = mysql_fetch_array($result);
-    return $row["Count"];
+    if (!$INSTALLING)
+    {
+      $query = "SELECT count(1) as Count FROM ".$tab_prefix."gallery";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      $row = mysql_fetch_array($result);
+      return $row["Count"];
+    } else
+    {
+      return "0";
+    }
   }
 
   function TagParseHeaderSystemDate($p_tag_options)
@@ -88,6 +102,7 @@
   {
     global $gallery_id;
     global $tab_prefix;
+    global $INSTALLING;
 
     $linear = false;
     if (isset($p_tag_options["format"]))
@@ -103,27 +118,30 @@
     $count = 0;
     $dead = false;
 
-    // Find parent galleries going back to Home gallery
-    while ((0 != strcmp($gallery_id, "0000000000")) && (!$dead))
+    if (!$INSTALLING)
     {
-      $query = "SELECT Name, IDParent FROM ".$tab_prefix."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
-      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      if ((is_bool($result)) && (!$result))
+      // Find parent galleries going back to Home gallery
+      while ((0 != strcmp($gallery_id, "0000000000")) && (!$dead))
       {
-        $dead = true;
-      } else
-      {
-        $gal_name = mysql_fetch_array($result) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-        if ((is_bool($gal_name)) && (!$gal_name))
+        $query = "SELECT Name, IDParent FROM ".$tab_prefix."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
+        $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+        if (((is_bool($result)) && (!$result)) || (0 == mysql_num_rows($result)))
         {
           $dead = true;
         } else
         {
-          $nav = new Nav;
-          $nav->m_name = $gal_name["Name"];
-          $nav->m_id = $gallery_id;
-          $temp_nav_history[] = $nav;
-          $gallery_id = $gal_name["IDParent"];
+          $gal_name = mysql_fetch_array($result) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+          if ((is_bool($gal_name)) && (!$gal_name))
+          {
+            $dead = true;
+          } else
+          {
+            $nav = new Nav;
+            $nav->m_name = $gal_name["Name"];
+            $nav->m_id = $gallery_id;
+            $temp_nav_history[] = $nav;
+            $gallery_id = $gal_name["IDParent"];
+          }
         }
       }
     }
@@ -146,12 +164,12 @@
       $node = $blanknode;
       if ($linear)
       {
-        if (($count+1) == $end)
+        if (($count+1) < $end)
         {
-          $node = ParseVar($node, "SpacerWidth", "0");
+          $node = ParseVar($node, "SpacerWidth", '<moatag type="BreadcrumbSpacer">');
         } else
         {
-          $node = ParseVar($node, "SpacerWidth", "20");
+          $node = ParseVar($node, "SpacerWidth", '');
         }
       } else
       {

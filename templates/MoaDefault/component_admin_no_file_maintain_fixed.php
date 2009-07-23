@@ -1,22 +1,22 @@
 <tr>
-  <td style="padding-left: 5px; padding-right: 5px;">
-    <span class="gallery_desc" style="font-style: italic;">
+  <td>
+    <span class="gallery_desc italic">
       Fixed
     </span>
   </td>
-  <td style="padding-left: 5px; padding-right: 5px;">
+  <td>
     <moavar ImageID>
   </td>
-  <td style="padding-left: 5px; padding-right: 5px;">
+  <td>
     <moavar ImageFileName>
   </td>
-  <td style="padding-left: 5px; padding-right: 5px;">
+  <td>
     <moavar ImageDescription>
   </td>
-  <td style="padding-left: 5px; padding-right: 5px;">
+  <td>
     <moavar ImageMainStatus>
   </td>
-  <td style="padding-left: 5px; padding-right: 5px;">
+  <td>
     <moavar ImageThumbStatus>
   </td>
 </tr>

@@ -51,12 +51,24 @@ function UnEscapeNewLine(p_text)
 
 function FeedbackBox(p_text, p_success)
 {
-  var p_type = "Error";
-  if (p_success)
-  {
-    p_type = "Success";
-  }
+  var p_type = "Success";
+
   var newtext = feedback_box;
+  
+  // Strip out ERROR and IERROR
+  var stub = p_text.substring(0, 5);
+  if ("ERROR" == stub)
+  {
+	  p_text = p_text.substring(6, 4096);
+	  p_type = "Error";
+  }
+  
+  stub = p_text.substring(0, 6);
+  if ("IERROR" == stub)
+  {
+	  p_text = p_text.substring(7, 4096);
+	  p_type = "Error";
+  }
   
   newtext = str_replace(newtext, "<moavar FeedbackType>", p_type);
   newtext = str_replace(newtext, "<moavar FeedbackText>", p_text);
@@ -68,15 +80,15 @@ function FeedbackBox(p_text, p_success)
 function hide_div( p_name)
 {
    document.getElementById(p_name).style.display = "none";         
-   document.getElementById(p_name).style.position = "absolute";
-   document.getElementById(p_name).style.cssFloat = "none";
+   //document.getElementById(p_name).style.position = "absolute";
+   //document.getElementById(p_name).style.cssFloat = "none";
 }
 
 // Applies nesesary styles to a DIV in order to make it visable on a page.
 function show_div( p_name)
 {               
-   document.getElementById(p_name).style.position = "static";                
-   document.getElementById(p_name).style.cssFloat = "left";        
+   //document.getElementById(p_name).style.position = "static";                
+   //document.getElementById(p_name).style.cssFloat = "left";        
    document.getElementById(p_name).style.display = "block";
 }
 

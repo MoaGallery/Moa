@@ -14,7 +14,7 @@
   include_once ("config.php");
 
   // If MOA_PATH is not set in config.php then set it here
-  // to the likely value to all processing to continue.
+  // to the likely value to allow processing to continue.
   //
   // Needed for when 1.2 are first copied over a existing install.
   if (!isset($MOA_PATH))
@@ -32,11 +32,12 @@
 
   // Find out which template we should be using. Fall back to MoaDefault if none set
   $template_name = "MoaDefault";
-  $query = "SELECT * FROM ".$tab_prefix."options WHERE Name = 'Template';";
-  $result = mysql_query($query);
-  if ($result) {
-    $row = mysql_fetch_array($result);
-    $template_name = $row["Value"];
+  if (isset($TEMPLATE))
+  {
+    if (is_dir("templates/".$TEMPLATE))
+    {
+      $template_name = $TEMPLATE;
+    }
   }
 
   $action = GetParam("action");
@@ -52,19 +53,6 @@
   include_once($MOA_PATH."sources/common.php");
   include_once($MOA_PATH."sources/mod_upgrade_funcs.php");
   include_once($MOA_PATH."sources/_template_parser.php");
-
-  // See if we need an upgrade warning
-  if (_MoaDetectOldVersion())
-  {
-  	// If logged in
-  	if (UserIsLoggedIn())
-  	{
-  	  moa_warning("Upgraded files have been installed. Please click <a href='index.php?action=upgrade'><i>here</i></a> to complete the upgrade.", false);
-  	} else
-  	{
-  		moa_warning("Upgrade in progress.", false);
-  	}
-  }
 
   // Fill in vars early if available
   if (isset($_REQUEST["image_id"]))
@@ -195,16 +183,16 @@
       	}
       }
 
-      if (isset($page_title))
-      {
-        echo "<script type='text/javascript'>\n";
-        echo "  document.title = '".$page_title."';\n";
-        echo "</script>\n";
-      }
+      echo "<script type='text/javascript'>\n";
+	    if (isset($page_title))
+	    {
+	      echo "  document.title = '".$page_title."';\n";
+	    }
+      echo "</script>\n";
 
       if ($show_headers)
       {
-        echo LoadTemplate("component_footer.php");
+        echo LoadTemplateRoot("component_footer.php");
       }
     ?>
   </body>

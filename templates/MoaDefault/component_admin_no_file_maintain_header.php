@@ -1,20 +1,20 @@
-<table>
+<table class="admin_no_file_maintain_table">
   <tr>
-    <td style="padding-left: 5px; padding-right: 5px;">
+    <td>
     </td>
-    <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
+    <td class="bold_font">
       Image ID
     </td>
-    <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
+    <td class="bold_font">
       Original filename
     </td>
-    <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
+    <td class="bold_font">
       Description
     </td>
-    <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
+    <td class="bold_font">
       Main Image Status
     </td>
-    <td style="font-weight: bold; padding-left: 5px; padding-right: 5px;">
+    <td class="bold_font">
       Thumb Image Status
     </td>
   </tr>

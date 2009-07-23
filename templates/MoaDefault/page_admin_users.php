@@ -1,21 +1,19 @@
 <moatag type="AdminLinks">
-<br/>
-<div id='userblockfeedback'></div>
-
-
-<div class="testbox_tl" style="display: table;">
+<div id='userblockfeedback'>
+  &nbsp;
+</div>
+<div class="testbox_tl">
   <div class="testbox_tr">
     <div class="testbox_bl">
       <div class="testbox_br">
-        <div class="testboxheader">
-          User management
-        </div>
+        <p class="testboxheader">User management</p>
         <div class="testboxcontent" id="userblock">
-          <a class='admin_link' <moatag type="AdminUserAddLink">>
-            [Add new user]
-          </a>
-          <br/><br/>
-          <div id='user_lines'></div>
+          <p class="user_add_line">
+            <a class='admin_link' <moatag type="AdminUserAddLink">>
+              [Add new user]
+            </a>
+          </p>
+          <ul id='user_lines'></ul>
         </div>
       </div>
     </div>

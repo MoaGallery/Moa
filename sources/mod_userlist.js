@@ -23,7 +23,7 @@ function User()
 }
 
 // Class to keep track of all users
-function UserList(p_delim, p_user_row_template)
+function UserList(p_delim, p_user_container_template, p_user_row_template)
 {
   var that = this;
   
@@ -33,6 +33,7 @@ function UserList(p_delim, p_user_row_template)
   var m_fake_id = -1;  // To keep track of new users before a page load
   var m_add_mode = false;
   var m_user_row_template = p_user_row_template;
+  var m_user_container_template = p_user_container_template;
   
   // Load user values into memory when we start
   this.PreLoad = function( p_master)
@@ -107,6 +108,7 @@ function UserList(p_delim, p_user_row_template)
   // Show the user table
   this.ViewAll = function()
   {
+    var cont = m_user_container_template;
     var val = "";
     for (var i = 0; i < m_users.length; i++)
     {
@@ -115,7 +117,8 @@ function UserList(p_delim, p_user_row_template)
         val += that.ViewSingle(i);
       }
     }
-    return val;
+    cont = str_replace(cont, "<moavar AdminUserList>", val);
+    return cont;
   };
 
   // If the delete request fails, restore the user
@@ -327,7 +330,7 @@ function UserList(p_delim, p_user_row_template)
   {
     document.getElementById('userblock').innerHTML = m_userlistHTML;
     m_users.sort(UserSort);
-    document.getElementById('user_lines').innerHTML=user_list.ViewAll();
+    document.getElementById('user_lines').innerHTML = user_list.ViewAll();
     m_userlistHTML = "";
   };
   

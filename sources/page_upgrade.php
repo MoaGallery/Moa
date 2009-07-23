@@ -1,3 +1,7 @@
+<?php
+  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+?>
+
 <div id='upgradeprogress'>
    <div class='install_list'>Completing upgrade to version
    <?php
@@ -15,4 +19,5 @@
   echo "  upg = new Upgrade("._UpgradeGetCurrentVersionID().", "._UpgradeGetNewVersionID().");\n";
   echo "  moa_path = '".$MOA_PATH."';";
   echo "</script>\n";
+  echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 ?>

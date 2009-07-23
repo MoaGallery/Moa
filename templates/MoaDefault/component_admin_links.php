@@ -1,8 +1,7 @@
-<div id='adminlinksblock'>
-  <a class='admin_link' <moavar AdminUserLink>>[User management]</a>&nbsp;
-  <a class='admin_link' <moavar AdminTagLink>>[Tag management]</a>&nbsp;
-  <a class='admin_link' <moavar AdminOrphanLink>>[Orphan images]</a>&nbsp;
-  <a class='admin_link' <moavar AdminIntegrityLink>>[Image integrity]</a>&nbsp;<br/>
-  <img width='300' height='1' src='media/trans-pixel.png'/>
-  <br/>
-</div>
+<ul id='adminlinksblock'>
+  <li><a class='admin_link' href='<moavar AdminUserLink>'>[User management]</a></li>
+  <li><a class='admin_link' href='<moavar AdminTagLink>'>[Tag management]</a></li>
+  <li><a class='admin_link' href='<moavar AdminOrphanLink>'>[Orphan images]</a></li>
+  <li><a class='admin_link' href='<moavar AdminIntegrityLink>'>[Image integrity]</a></li>
+</ul>
+<img width='300' height='1' src='media/trans-pixel.png'/>

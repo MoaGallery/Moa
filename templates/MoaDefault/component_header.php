@@ -1,27 +1,36 @@
-<!--[if IE 6]>
-<script src="<moatag type="TemplatePath">DD_belatedPNG.js"></script>
-<script>
-  DD_belatedPNG.fix('.picture-shadow');
-  DD_belatedPNG.fix('.picture-shadow2');
-  DD_belatedPNG.fix('.gallery-shadow');
-  DD_belatedPNG.fix('.gallery-shadow2');
-  DD_belatedPNG.fix('.logo');
-  DD_belatedPNG.fix('.headerbutton');
-  DD_belatedPNG.fix('.logotest');
-</script>
-<![endif]-->
-
 <div class="headertop-left">
   <div class="headertop-right">
     <div class="headertop">
-      <div class="logo"><div class="logotest"></div></div>
-      <div class="headerinfoblock">
-        <div><moatag type="HeaderWelcome"></div>
-        <div>Currently holding <span id='hdr_imagecount'><moatag type="HeaderImageCount"></span> images and <span id='hdr_gallerycount'><moatag type="HeaderGalleryCount"></span> galleries</div>
-        <div><moatag type="HeaderSystemDate"></div>
+      <div class="logo">
+        <a id="logolink" class="logolink" href="index.php">
+          <img src="<moatag type="TemplatePath">media/moa-logo-vector.png" alt="Moa logo"/>
+          <moatag type="DebugMode" style="divbg">
+        </a>
       </div>
-      <div class="padded-5">
+      <div class="headerinfoblock">
+        <div>
+          <p>
+            <moatag type="HeaderWelcome">
+          </p>
+          <p>
+            <span id="imagestats">
+              Currently holding
+              <span id='hdr_imagecount'>
+                <moatag type="HeaderImageCount">
+              </span> images and
+              <span id='hdr_gallerycount'>
+                <moatag type="HeaderGalleryCount">
+              </span> galleries
+            </span>
+          </p>
+          <p>
+            <moatag type="HeaderSystemDate">
+          </p>
+        </div>
+      </div>
+      <div class="buttonblock" id="buttonblock">
         <moatag type="MainButtonBlock">
+        <moatag type="IE6Warning">
       </div>
     </div>
   </div>
@@ -29,10 +38,10 @@
 <div class="headerbottom">
   <div class="headerbottom-left">
     <div class="headerbottom-right">
-      <div class="breadcrumbframe">
+      <div class="breadcrumbframe" id="breadcrumbframe">
         <moatag type="BreadcrumbList" format="cascade" spacing="12">
       </div>
     </div>
   </div>
 </div>
-<div class="height10"></div>
+<p class="hspacer">&nbsp;</p>

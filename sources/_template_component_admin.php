@@ -8,10 +8,10 @@
     {
       $links = LoadTemplate("component_admin_links.php");
 
-      $links = ParseVar($links, "AdminUserLink", "href='index.php?action=admin_users'");
-      $links = ParseVar($links, "AdminTagLink", "href='index.php?action=admin_tag'");
-      $links = ParseVar($links, "AdminOrphanLink", "href='index.php?action=admin_orphans'");
-      $links = ParseVar($links, "AdminIntegrityLink", "href='index.php?action=admin_maintain'");
+      $links = ParseVar($links, "AdminUserLink", "index.php?action=admin_users");
+      $links = ParseVar($links, "AdminTagLink", "index.php?action=admin_tag");
+      $links = ParseVar($links, "AdminOrphanLink", "index.php?action=admin_orphans");
+      $links = ParseVar($links, "AdminIntegrityLink", "index.php?action=admin_maintain");
 
       return $links;
     }
@@ -72,14 +72,14 @@
       {
         $popup = "onmouseover='return overlib(\"".popup_display_safe($image->m_description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
       }
-      $width = _ImageGetValue($image, "Width");
-      $height = _ImageGetValue($image, "Height");
+      $width = _ImageGetValue($image->m_id, "Width");
+      $height = _ImageGetValue($image->m_id, "Height");
 
       $thumb = $links;
 
-      if (is_file($MOA_PATH.$THUMB_PATH."/thumb_".$image->m_id.".jpg"))
+      if (is_file($THUMB_PATH."/thumb_".$image->m_id.".jpg"))
       {
-        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($MOA_PATH.$THUMB_PATH)."/thumb_".$image->m_id.".jpg");
+        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($THUMB_PATH)."/thumb_".$image->m_id.".jpg");
       }
       else
       {

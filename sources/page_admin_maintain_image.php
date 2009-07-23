@@ -4,18 +4,33 @@
   // Only proceed if a user is logged in
   if (!UserIsLoggedIn())
   {
-    $proceed = false;
-    moa_warning("You must be logged in to use this page.");
+    global $g_message_type;
+  	global $g_message_text;
+  	
+  	$proceed = false;
+  	
+  	$g_message_text = "Not logged in";
+  	$g_message_type = "Warning";
+  	echo LoadTemplateRoot("page_message.php");
   }
 
   // check if an image ID is supplied
-  if (isset($_REQUEST["image_id"])) {
-    $image_id = mysql_real_escape_string($_REQUEST["image_id"]);
-  }
-  else
+  if ($proceed)
   {
-    $proceed = false;
-    moa_warning("No image ID supplied.");
+    if (isset($_REQUEST["image_id"])) {
+      $image_id = mysql_real_escape_string($_REQUEST["image_id"]);
+	}
+	else
+	{
+	  global $g_message_type;
+	  global $g_message_text;
+	  	
+	  $proceed = false;
+	  	
+	  $g_message_text = "No image ID supplied.";
+	  $g_message_type = "Warning";
+	  echo LoadTemplateRoot("page_message.php");
+	}
   }
 
   if ($proceed)
@@ -76,7 +91,14 @@
 
 	          thumbnail( $new_filename, "jpeg", true);
 
-	          moa_success("Image uploaded.");
+              global $g_message_type;
+			  global $g_message_text;
+			  	
+			  $proceed = false;
+			  	
+			  $g_message_text = "Image uploaded";
+			  $g_message_type = "Success";
+			  echo LoadTemplateRoot("page_message.php");
 	        }
 	      }
 	    }
@@ -91,7 +113,9 @@
 
 	    if ($show_form)
 	    {
-  	     echo LoadTemplateRoot("page_admin_maintain_image.php");
+	    	echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+  	    echo LoadTemplateRoot("page_admin_maintain_image.php");
+  	    echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 	    }
 	  }
 	}

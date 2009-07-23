@@ -1,4 +1,4 @@
-<div class="testbox_tl" style="display: table;">
+<div class="testbox_tl sitemap_box">
   <div class="testbox_tr">
     <div class="testbox_bl">
       <div class="testbox_br">
@@ -6,7 +6,7 @@
           Site Map
         </div>
         <div class="testboxcontent">
-          <moatag type="SiteMapList">
+          <moatag type="SiteMapList" spacing="12">
         </div>
       </div>
     </div>

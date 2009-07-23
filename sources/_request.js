@@ -95,7 +95,7 @@ function _httpCreateIFrameTag( p_divName, p_callback)
   var newdiv = document.createElement("div");
   newdiv.setAttribute("id", "d"+id)
     
-  newdiv.innerHTML = '<div id="progress-'+id+'" class="form_label_text"></div><iframe style="display:none" src="about:blank" id="'+id+'" name="'+id+'" onload="'+p_callback+'(\''+id+'\');"></iframe>'; 
+  newdiv.innerHTML = '<div id="progress-'+id+'" class="form_label_text"></div><iframe class="displaynone" src="about:blank" id="'+id+'" name="'+id+'" onload="'+p_callback+'(\''+id+'\');"></iframe>'; 
   
   target.appendChild(newdiv); 
 

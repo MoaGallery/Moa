@@ -4,10 +4,19 @@
   // Only proceed if a user is logged in
   if (!UserIsLoggedIn())
   {
-  	 moa_warning("You must have admin rights to use this page.");
+  	 global $g_message_type;
+  	global $g_message_text;
+  	
+  	$proceed = false;
+  	
+  	$g_message_text = "Not logged in";
+  	$g_message_type = "Warning";
+  	echo LoadTemplateRoot("page_message.php");
   }  else
   {
+  	echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     echo LoadTemplateRoot("page_admin.php");
+    echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
   $page_title = "Admin";
 ?>

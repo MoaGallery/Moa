@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 2.11.1.2
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Mar 05, 2008 at 09:44 AM
--- Server version: 5.0.45
--- PHP Version: 5.2.5
-
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
@@ -27,20 +18,6 @@ CREATE TABLE IF NOT EXISTS `<prefix>gallery` (
   `IDParent` int(10) unsigned zerofill NOT NULL default '0000000000',
   PRIMARY KEY  (`IDGallery`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `<prefix>options`
---
-
-DROP TABLE IF EXISTS `<prefix>options`;
-CREATE TABLE IF NOT EXISTS `<prefix>options` (
-  `Name` int(40) NOT NULL,
-  `Value` varchar(100) NOT NULL default '',
-  PRIMARY KEY  (`Name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
 
 -- --------------------------------------------------------
 

@@ -26,10 +26,10 @@
   function _UpgradeGetCurrentVersionID()
   {
     global $STR_DELIMITER;
+    global $TEMPLATE;
     global $no_moa_path;
 
     // Detect 1.0.0
-    // Not sure how this works but it does. This var shouldn't exist
     if (!isset($STR_DELIMITER))
     {
       return 10000;
@@ -39,6 +39,12 @@
     if($no_moa_path)
     {
       return 10100;
+    }
+
+    // Detect 1.1.99
+    if(!isset($TEMPLATE))
+    {
+    	return 10199;
     }
 
     return _UpgradeGetNewVersionID();
@@ -54,14 +60,14 @@
   	return (($MOA_MAJOR_VERSION*10000)+($MOA_MINOR_VERSION*100)+$MOA_REVISION);
   }
 
-  // Adds a new config variable to config.php or (from 1.2 onwards) the database
+  // Adds a new config variable to config.php
   function _AddFileConfigVar($p_name, $p_value)
   {
     global $ErrorString;
 
     include ("../config.php");
 
-    $fp = fopen("../config.php", "r+");
+    $fp = @fopen("../config.php", "r+");
 
     if (!$fp)
     {
@@ -97,13 +103,13 @@
     global $MOA_PATH;
 
     // Return true if the file doesn't exist anyway
-    if (!file_exists($MOA_PATH."../".$p_filename))
+    if (!file_exists($MOA_PATH.$p_filename))
     {
       return true;
     }
 
     // Delete it
-    return @unlink($MOA_PATH."../".$p_filename);
+    return unlink($MOA_PATH.$p_filename);
   }
 
   function _ModifyDB($p_filename)

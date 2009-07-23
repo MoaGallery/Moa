@@ -120,6 +120,7 @@ function Image( p_delim)
     {
       window.location = m_parent_url;
     }
+    nd();
   };
   
   this.PageTitle = function()
@@ -175,9 +176,15 @@ function Image( p_delim)
       document.getElementById("imageblockfeedback").innerHTML = FeedbackBox("Image '"+fname+"' added.", true);
       
       document.getElementById("imageformnewlist").innerHTML = "Recently added -<br/>\n";
-      var img_count = document.getElementById("hdr_imagecount").innerHTML;
-      img_count++;
-      document.getElementById("hdr_imagecount").innerHTML = img_count;
+      
+      // Only update the header if they are displaying the count
+      var hdr_imagecount = document.getElementById("hdr_imagecount");
+      if (null != hdr_imagecount)
+      {
+        var img_count = hdr_imagecount.innerHTML;
+        img_count++;
+        hdr_imagecount.innerHTML = img_count;
+      }
       
       fname += "<br/>\n";
       
@@ -300,7 +307,7 @@ function Image( p_delim)
     } else
     {
       document.getElementById("imageformdesc").rows = 15;
-      document.getElementById("imageformdesc").cols = 80;
+      document.getElementById("imageformdesc").cols = 70;
       document.getElementById("imageformexpandlink").innerHTML = "[Shrink]";
       m_descexpand = true;
     }

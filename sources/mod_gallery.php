@@ -109,6 +109,7 @@
 
   function GalleryImageThumbs($p_id)
   {
+  	global $TEMPLATE;
     global $gallery_id;
     global $template_name;
     global $ErrorString;
@@ -119,14 +120,15 @@
     {
       $gallery_id = $p_id;
 
-      // Find out which template we should be using. Fall back to MoaDefault if none set
-      $template_name = "MoaDefault";
-      $query = "SELECT * FROM ".$tab_prefix."options WHERE Name = 'Template';";
-      $result = mysql_query($query);
-      if ($result) {
-        $row = mysql_fetch_array($result);
-        $template_name = $row["Value"];
-      }
+	    // Find out which template we should be using. Fall back to MoaDefault if none set
+		  $template_name = "MoaDefault";
+		  if (isset($TEMPLATE))
+		  {
+		    if (is_dir("../templates/".$TEMPLATE))
+		    {
+		      $template_name = $TEMPLATE;
+		    }
+		  }
     }
 
     OutputPrefix("OK");

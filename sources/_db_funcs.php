@@ -26,13 +26,13 @@
       global $db_pass;
       global $db_name;
 
-      $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
-      mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
+      $db = @mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__)   or moa_db_error(mysql_error());
+      @mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+      @mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
+      @mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
 
-      mb_language('uni');
-      mb_internal_encoding('UTF-8');
+      @mb_language('uni');
+      @mb_internal_encoding('UTF-8');
 
       return $db;
     }

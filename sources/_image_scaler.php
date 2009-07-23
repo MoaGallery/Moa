@@ -11,6 +11,7 @@
   /*                                                */
   /* -----------------------------------------------*/
   include_once("../config.php");
+  include_once("common.php");
 
   if (isset($_REQUEST["display_width"])) {
     $display_max_width = $_REQUEST["display_width"];
@@ -25,12 +26,17 @@
   $w = 0;
   $h = 0;
 
-  if (isset($_REQUEST["image_name"]) == false)
+  if ((isset($_REQUEST["image_name"]) == false) || (!CheckImageMemory("../".$IMAGE_PATH."/".$_REQUEST["image_name"])))
   {
     // Image Name is not set so
     header("Location: ../media/img_scale_error.png");
-  }
-  else {
+  } else
+  {
+  	if (!CheckImageMemory("../".$IMAGE_PATH."/".$_REQUEST["image_name"]))
+  	{
+  		header("Location: ../media/img_scale_error.png");
+  		exit();
+  	}
     if (mb_strpos($_REQUEST["image_name"], "/") != false) {
       $src_img = @imagecreatefrompng($_REQUEST["image_name"]);
     }

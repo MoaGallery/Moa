@@ -1,13 +1,13 @@
 <div id='imageblockfeedback'></div>
 
-<div style="display: table-cell;">
-  <div class="testbox_tl" style="float: left;">
+<div>
+  <div class="testbox_tl">
     <div class="testbox_tr">
       <div class="testbox_bl">
         <div class="testbox_br">
-          <div class="testboxheader">
+          <p class="testboxheader">
             Add Image
-          </div>
+          </p>
           <div class="testboxcontent">
             <div id='imageaddform'>
             </div>
@@ -17,9 +17,9 @@
     </div>
   </div>
 
-  <div style="float: left;">
+  <div>
     &nbsp;&nbsp;
   </div>
-  <div id="imageformnewlist" class="form_label_text" style='float: left;'>
+  <div id="imageformnewlist" class="form_label_text">
   </div>
 </div>

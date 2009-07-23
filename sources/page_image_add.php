@@ -30,6 +30,7 @@
       echo "    var image = new Image('".$STR_DELIMITER."');\n";
       echo "</script>\n";
 
+      echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
       echo LoadTemplateRoot("page_image_add.php");
     ?>
 
@@ -41,4 +42,5 @@
 
     <?php
       $page_title = "Add image";
+      echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
     ?>

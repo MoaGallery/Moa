@@ -26,6 +26,7 @@ function Gallery(p_delim) {
   var m_parent_url = document.referrer;
 
   this.PreLoad = function(p_gal_id, p_name, p_desc, p_par_id, p_from) {
+    nd();
     m_gallery_id = p_gal_id;
     m_name = p_name;
     m_desc = p_desc;
@@ -103,7 +104,7 @@ function Gallery(p_delim) {
       that.CancelEdit();
       document.getElementById("galleryblockname").innerHTML = EscapeHTMLChars(m_name);
       document.getElementById("galleryblockdesc").innerHTML = EscapeNewLine(EscapeHTMLChars(m_desc));
-
+      
       url = "action=edit";
       url += "&name=" + encodeURIComponent(m_name);
       url += "&desc=" + encodeURIComponent(m_desc);
@@ -112,7 +113,7 @@ function Gallery(p_delim) {
       url += "&tags=" + encodeURIComponent(m_tags);
       var request = new httpRequest("sources/mod_gallery.php", that.SubmitCallback, m_gallery_id);
       request.update(url, "GET");
-
+      
       m_edit_toggle = false;
     } else 
     {
@@ -187,9 +188,15 @@ function Gallery(p_delim) {
       if (m_add_mode) {
         document.getElementById("galleryblockfeedback").innerHTML = FeedbackBox(
             "Gallery \"" + m_name + "\" added.", true);
-        var gal_count = document.getElementById("hdr_gallerycount").innerHTML;
-        gal_count++;
-        document.getElementById("hdr_gallerycount").innerHTML = gal_count;
+        
+        // Only update the header if they are displaying the count
+        var hdr_gallerycount = document.getElementById("hdr_gallerycount");
+        if (null != hdr_gallerycount)
+        {
+          var gal_count = hdr_gallerycount.innerHTML;
+          gal_count++;
+          hdr_gallerycount.innerHTML = gal_count;
+        }
       } else {
         document.getElementById("nav_tree_" + m_gallery_id).innerHTML = m_name;
         if (m_old_tags != m_tags) {
@@ -252,8 +259,13 @@ function Gallery(p_delim) {
     if (m_from == "orphan") {
       document.location = "index.php?action=admin_orphans&deleted=gallery";
     } else {
-      document.location = "index.php?action=gallery_view&gallery_id="
-          + m_parent_id + "&deleted=gallery";
+      if ("0000000000" == m_parent_id)
+      {
+    	document.location = "index.php?deleted=gallery";
+      } else
+      {
+        document.location = "index.php?action=gallery_view&gallery_id=" + m_parent_id + "&deleted=gallery";
+      }
     }
   };
 
@@ -294,5 +306,10 @@ function Gallery(p_delim) {
       document.getElementById("galleryformexpandlink").innerHTML = "[Shrink]";
       m_descexpand = true;
     }
+  };
+  
+  this.TagHintList = function(p_taglist)
+  {
+    return m_taglist.TagHintList(p_taglist);
   };
 }

@@ -72,6 +72,10 @@
 	  $pre_image_id = $image_id;
 	  $pre_parent_id = $_REQUEST["parent_id"];
 
+	  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+
 	  echo LoadTemplateRoot("page_image_view.php");
+
+	  echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
 ?>

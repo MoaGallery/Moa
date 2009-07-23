@@ -4,6 +4,8 @@
   $GD_MIN_VERSION     = ARRAY( 2, 0, 0);
   $MYSQL_MIN_VERSION  = ARRAY( 5, 0, 0);
 
+  $template_name = "MoaDefault";
+
   session_start();
   session_unset();
   session_destroy();
@@ -393,24 +395,24 @@
       $check = true;
     }
 
-    // check Images directory is writable
-    echo "Checking 'images' directory has the correct permissions - ";
-    $fp = fopen("images/temp.tmp", "w+");
+    // check main directory is writable
+    echo "Checking moa install directory has the correct permissions - ";
+    $fp = @fopen("temp.tmp", "w+");
     if (!$fp)
     {
       echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
       $check = true;
     } else
     {
-      $result = fwrite($fp, "Hello");
+      $result = @fwrite($fp, "Hello");
       if (!$result)
       {
         echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
       $check = true;
       } else
       {
-        fseek($fp, 0);
-        $result = fread($fp, 5);
+        @fseek($fp, 0);
+        $result = @fread($fp, 5);
         if (!$result)
         {
           echo "<span style='color: red'>Failed - not readable</span><br/>\n";
@@ -420,28 +422,90 @@
           echo "<span style='color: green'>Success</span><br/>\n";
         }
       }
-      fclose($fp);
-      unlink("images/temp.tmp");
+      @fclose($fp);
+      @unlink("temp.tmp");
+    }
+
+    // check private directory is writable
+    echo "Checking private directory has the correct permissions - ";
+    $fp = @fopen("private/temp.tmp", "w+");
+    if (!$fp)
+    {
+      echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
+      $check = true;
+    } else
+    {
+      $result = @fwrite($fp, "Hello");
+      if (!$result)
+      {
+        echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
+      $check = true;
+      } else
+      {
+        @fseek($fp, 0);
+        $result = @fread($fp, 5);
+        if (!$result)
+        {
+          echo "<span style='color: red'>Failed - not readable</span><br/>\n";
+          $check = true;
+        } else
+        {
+          echo "<span style='color: green'>Success</span><br/>\n";
+        }
+      }
+      @fclose($fp);
+      @unlink("private/temp.tmp");
+    }
+
+    // check Images directory is writable
+    echo "Checking 'images' directory has the correct permissions - ";
+    $fp = @fopen("images/temp.tmp", "w+");
+    if (!$fp)
+    {
+      echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
+      $check = true;
+    } else
+    {
+      $result = @fwrite($fp, "Hello");
+      if (!$result)
+      {
+        echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
+      $check = true;
+      } else
+      {
+        @fseek($fp, 0);
+        $result = @fread($fp, 5);
+        if (!$result)
+        {
+          echo "<span style='color: red'>Failed - not readable</span><br/>\n";
+          $check = true;
+        } else
+        {
+          echo "<span style='color: green'>Success</span><br/>\n";
+        }
+      }
+      @fclose($fp);
+      @unlink("images/temp.tmp");
     }
 
     // check Images/Thumbs directory is writable
     echo "Checking 'images/thumbs' directory has the correct permissions - ";
-    $fp = fopen("images/thumbs/temp.tmp", "w+");
+    $fp = @fopen("images/thumbs/temp.tmp", "w+");
     if (!$fp)
     {
       echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
       $check = true;
     } else
     {
-      $result = fwrite($fp, "Hello");
+      $result = @fwrite($fp, "Hello");
       if (!$result)
       {
         echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
       $check = true;
       } else
       {
-        fseek($fp, 0);
-        $result = fread($fp, 5);
+        @fseek($fp, 0);
+        $result = @fread($fp, 5);
         if (!$result)
         {
           echo "<span style='color: red'>Failed - not readable</span><br/>\n";
@@ -451,8 +515,8 @@
           echo "<span style='color: green'>Success</span><br/>\n";
         }
       }
-      fclose($fp);
-      unlink("images/thumbs/temp.tmp");
+      @fclose($fp);
+      @unlink("images/thumbs/temp.tmp");
     }
 
     echo "<br/>\n";
@@ -562,11 +626,22 @@
     echo "</tr>\n";
 
     // Cookie path
-    $file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
-    $dir_path = str_replace( getenv("DOCUMENT_ROOT"), "", $file_path) . "/";
+    /*$file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
+    $doc_root = getenv("DOCUMENT_ROOT");
+    $cookie_path = str_replace( $doc_root, "", $file_path) . "/";
+
+    if (substr($cookie_path, 0, 1) != '/') {
+      $cookie_path = '/'.$cookie_path;
+    }*/
+
+    // Get likely cookie path
+	  $url = $_SERVER['PHP_SELF'];
+	  $parts = explode('/', $url);
+	  $parts[count($parts)-1] = "";
+	  $cookie_path = implode('/', $parts);
 
     echo "<tr>\n";
-    echo "<td>Cookie Path: </td><td><input type='text' name='cookiepath' value='".$dir_path."'\></td>\n";
+    echo "<td>Cookie Path: </td><td><input type='text' name='cookiepath' value='".$cookie_path."'\></td>\n";
     echo "</tr>\n";
 
     echo "</table>\n";
@@ -582,6 +657,7 @@
   function Stage2B()
   {
     global $MYSQL_MIN_VERSION;
+    global $MOA_PATH;
 
     $check = false;
     ShowProgressStart(1, true);
@@ -700,7 +776,8 @@
       fwrite($file, "  \$TITLE_DESC_LENGTH = 30;\n");
       fwrite($file, "  \$MAGIC_QUOTES = ".$magic_quotes.";\n");
       fwrite($file, "  \$STR_DELIMITER = \",\";\n");
-      fwrite($file, "  \$MOA_PATH = ".$MOA_PATH.";\n");
+      fwrite($file, "  \$MOA_PATH = '".$MOA_PATH."';\n");
+      fwrite($file, "  \$TEMPLATE = 'MoaDefault';\n");
       fwrite($file, "?>\n");
       fclose($file);
     }
@@ -809,7 +886,7 @@
     echo "<form name='install_3b' method='post' action='install.php?stage=stage4' enctype='multipart/form-data'>\n";
 
     echo "Creating data structure - ";
-    $max_run = 21;
+    $max_run = 17;
     $datainstalled = true;
     $count = 0;
 
@@ -831,11 +908,6 @@
     {
       $count += $result;
     }
-    $result = RunSQLFile("SQL/gallery-create-view.sql");
-    if (false != $result)
-    {
-      $count += $result;
-    }
 
     // Check for successfull database installation
     if ($max_run == $count)
@@ -849,8 +921,8 @@
     	else
     	{
     	  echo "<span style='color: red'>Failed (".$count."/".$max_run." SQL statements ran)</span><br/>\n";
-    	  if (18 == $count) {
-          echo "<span style='color: red'>This could be because you don't have permission to create views.  See install document for possible work around.</span><br/>\n";
+    	  if ((15 == $count) || (17 == $count)) {
+          echo "<span style='color: red'>This could be because you don't have permission to create views (known problem with hosts using cPanel).  See install document for possible work around.</span><br/>\n";
         }
       }
       $check = true;
@@ -973,7 +1045,15 @@
   </head>
   <body>
     <?php
-      //include_once ("sources/_header.php");
+      include_once ("sources/_header.php");
+    ?>
+    <script type='text/javascript'>
+      document.getElementById("imagestats").innerHTML = "&nbsp";
+      document.getElementById("buttonblock").innerHTML = "&nbsp";
+      document.getElementById("breadcrumbframe").innerHTML = "&nbsp";
+    </script>
+    <?php
+      echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
 
       if (isset($_REQUEST["stage"]))
       {
@@ -1037,7 +1117,15 @@
       }
 
 
-      //include ("sources/_footer.php");
+      echo LoadTemplateRoot("component_footer.php");
+      echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
     ?>
+    <script type='text/javascript'>
+      var node = document.getElementById('logolink');
+      if (node != null)
+      {
+        node.href = "#";
+      }
+    </script>
   </body>
 </html>

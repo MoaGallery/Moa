@@ -3,7 +3,7 @@
   function TagParseFooterMoaCopyright($p_tag_options)
   {
     global $MOA_VERSION;
-    return "Powered by <a class='footer_text_link' href='http://www.moagallery.net/'>Moa ".$MOA_VERSION."</a> &copy; 2008-2009";
+    return "<a href='http://www.moagallery.net/'>Moa ".$MOA_VERSION."</a> &copy; 2008-2009";
   }
 
   function TagParseFooterLink($p_tag_options)

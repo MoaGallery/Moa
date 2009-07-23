@@ -68,6 +68,8 @@ var ver_10199_00_old_files = ["media/add.png",
                              "sources/mod_gallery_view.php",
                              "sources/mod_image_view.php"];
 
+var ver_10200_old_files = ["TODO",
+                              "media/moa-logo-vector.png"];
 
 // Structure to hold a config option
 function Option()
@@ -87,7 +89,7 @@ function File()
 function Upgrade(p_oldver, p_newver)
 {
   var that = this;
-  var versions = [10000, 10100, 10199.00];
+  var versions = [10000, 10100, 10199.00, 10200];
   var stage_1_list = Array();
   var stage_2_list = Array();
   var stage_3_list = Array();
@@ -148,7 +150,7 @@ function Upgrade(p_oldver, p_newver)
     element.innerHTML += "<br/><br/><span class='install_list_header'>Upgrade finished</span>";
     if (upgrade_result)
     {
-      element.innerHTML += " <span class='install_list_header' style='color: green;'>successfully.</span><br/><br/>";
+      element.innerHTML += " <span class='install_list_header' class='colorgreen'>successfully.</span><br/><br/>";
     } else
     {
       element.innerHTML += "<br/><span class='install_list_fail'>One or more commands failed to run correctly as listed above." +
@@ -178,6 +180,16 @@ function Upgrade(p_oldver, p_newver)
           var new_opt = new Option();
           new_opt.name = "$MOA_PATH";
           new_opt.value = '"'+moa_path+'"';
+          new_opt.dest = "file";
+          stage_1_list[stage_1_list.length] = new_opt;
+          
+          break;
+        }
+        case 10200.00 :
+        {
+          var new_opt = new Option();
+          new_opt.name = "$TEMPLATE";
+          new_opt.value = '"MoaDefault"';
           new_opt.dest = "file";
           stage_1_list[stage_1_list.length] = new_opt;
           
@@ -218,6 +230,16 @@ function Upgrade(p_oldver, p_newver)
           }
           break;
         }
+        case 10200 :
+        {
+          for (var j = 0; j < ver_10200_old_files.length; j++)
+          {
+            var new_file = new File();
+            new_file.filename = ver_10200_old_files[j];
+            stage_2_list[stage_2_list.length] = new_file;
+          }
+          break;
+        }
         default :
         {
           break;
@@ -241,6 +263,13 @@ function Upgrade(p_oldver, p_newver)
         {
           var new_file = new File();
           new_file.filename = "upgrade-10199_00.sql"
+          stage_3_list[stage_3_list.length] = new_file;
+          break;
+        }
+        case 10200.00 :
+        {
+          var new_file = new File();
+          new_file.filename = "upgrade-10200.sql"
           stage_3_list[stage_3_list.length] = new_file;
           break;
         }

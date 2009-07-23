@@ -36,9 +36,10 @@ function TagList(p_delim, p_tag_row_template) {
                                 // breakdown
   var m_fake_id = -1; // To keep track of new tags before a page load
   var m_tag_row_template = p_tag_row_template; 
+  var m_add_form = "";
 
   // Load the existing tags as well as any for a local gallery/image
-  this.PreLoad = function(p_master, p_current) {
+  this.PreLoad = function(p_master, p_current, p_add_form) {
     m_master = new Array();
     m_current = new Array();
     var all_tags = p_master.split(m_delimiter);
@@ -65,6 +66,8 @@ function TagList(p_delim, p_tag_row_template) {
     }
 
     m_master.sort(TagSort);
+
+    m_add_form = p_add_form;
   };
 
   // Output a delimiter seperated string of current tags
@@ -195,7 +198,7 @@ function TagList(p_delim, p_tag_row_template) {
 
       switch (mode) {
       case "fail":
-        output = "<span style='padding: 3px 0 0 0; position: absolute;' onmouseup='"
+        output = "<span onmouseup='"
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
@@ -203,7 +206,7 @@ function TagList(p_delim, p_tag_row_template) {
         nd();
         break;
       case "add":
-        output = "<span style='padding: 3px 0 0 0; position: absolute;' onmouseup='"
+        output = "<span onmouseup='"
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
@@ -211,11 +214,11 @@ function TagList(p_delim, p_tag_row_template) {
         nd();
         break;
       case "success":
-        output = "<span style='padding: 3px 0 0 0; position: absolute;' onmouseup='"
+        output = "<span onmouseup='"
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/success.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/Success.png' width='16' height='16' /></span>";
         nd();
         break;
       default:
@@ -446,7 +449,7 @@ function TagList(p_delim, p_tag_row_template) {
   // Show the inline add tag form
   this.ShowAdd = function()
   {       
-    document.getElementById("tag_add_line").innerHTML=add_form;    
+    document.getElementById("tag_add_line").innerHTML = m_add_form;
     
     show_div("tag_add_box");
     show_div("tag_add_submit");
@@ -544,10 +547,15 @@ function TagList(p_delim, p_tag_row_template) {
   // Generate a list of all tags, highlighting current ones
   this.TagHintList = function(p_element)
   {
-    var hintlist = "";
-    var m_current_string = p_element.value;
-    var m_current_tags = m_current_string.split(m_delimiter);
-    var fclass = "";
+    var hintlist = "<ul class='popuptaglist'>";
+    if (null != p_element)
+    {
+      var m_current_string = p_element.value;
+      var m_current_tags = m_current_string.split(m_delimiter);
+    } else
+    {
+      m_current_tags = Array();
+    }
     
     for ( var i = 0; i < m_master.length; i++) {
       fclass = "tag_hint_inner";
@@ -559,9 +567,10 @@ function TagList(p_delim, p_tag_row_template) {
           fclass = "tag_hint_inner_match";
         }
       }
-      hintlist += "<div class='tag_hint_outer'><div class='"+fclass+"'>" + m_master[i].m_name + "</div></div>";
+      hintlist += "<li class='tag_hint_outer'><div class='"+fclass+"'>" + m_master[i].m_name + "</div></li>";
     }
     
+    hintlist += "</ul>";
     return overlib(hintlist, ADAPTIVE_WIDTH, 50); 
   };
 }

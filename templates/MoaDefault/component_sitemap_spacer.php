@@ -1,1 +1,3 @@
-<div style="width: 12px; height: 16px; float: left;">&nbsp;</div>
+<div class="sitemap_spacer" style="width: <moavar SpacerWidth>px;">
+  &nbsp;
+</div>

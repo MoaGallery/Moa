@@ -1,7 +1,4 @@
-<div class='<moavar FeedbackType>_box' style='line-height:40px;'>
-  <img src='<moatag type="TemplatePath">media/<moavar FeedbackType>.png' style='vertical-align:middle;' alt='<moavar FeedbackType>'/>
+<p class='<moavar FeedbackType>_box Feedback_box'>
+  <img src='<moatag type="TemplatePath">media/<moavar FeedbackType>.png' alt=''/>
   <moavar FeedbackType>: <moavar FeedbackText>
-</div>
-<div>
-  <br/>
-</div>
+</p>

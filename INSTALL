@@ -9,15 +9,6 @@ Contents
 
 
 
-
-
-
-
-
-
-
-
-
  1 ==== BEFORE YOU INSTALL ====
 
    Moa needs the following to be able to install and run correctly -
@@ -25,14 +16,12 @@ Contents
    MySQL 5.0.1 or higher
    Apache 2.0 or higher
    PHP 5.2 or higher
-   PHP extension - gd2
+   PHP extension - gd2 (should say "bundled" on the version)
    PHP extension - mbstring
    
    A database and user set up in MySQL.  The user needs basic priviledges such 
-   as SELECT, INSERT, UPDATE, DELETE, etc.  For the install the user also needs 
-   CREATE TABLE, CREATE VIEW and ALTER privs.  See later for a workaround if 
-   your host does not allow a new user to be granted these (CPanel-based hosts 
-   for example do not seem to allow CREATE VIEW).
+   as SELECT, INSERT, UPDATE, DELETE, etc.  For the install/upgrade the user
+   also needs CREATE TABLE and ALTER privs.
 
 
 
@@ -40,7 +29,8 @@ Contents
 
 1. Upload the Moa files to the server you want to use, or copy it into the web
    server path for a local install.  If using a unix-based OS make sure your
-   web-server user has read/write permissions in the moa directory.
+   web-server user has read/write permissions in the moa directory (need to
+   write to config.php, private/db_config.php, images dir and images/thumbs dir).
 
 2. Open install.php in a browser.  It should guide you though the installation.
 
@@ -56,30 +46,10 @@ Contents
 
  3 ==== WORKAROUNDS / PROBLEMS ====
 
-1. Database User doesn't have CREATE VIEW privs in MySQL.  When the install 
-   tries to create the data tables it complains that only 15 statements ran out 
-   of 19 or 21.  We have seen this with our host that uses CPanel and it is due 
-   to created database users not having enough priviledges to create views. 
-
-   There are two workarounds we know of -
-
-    i)  Use your main login (i.e. CPanel) name and password to install Moa as
-        this should have those privs.  After it is installed, edit config.php 
-        in the Moa root and change the user name/password to the new database 
-        user you created for Moa.
-   
-    ii) Allow the install to complete and add the missing 4 statements by 
-        hand.  Open the file SQL/gallery-create-view.sql in a text editor and 
-        replace each occurence of <prefix> with whatever table prefix you chose 
-        during the Moa install (default is 'moa_').  Then execute each of the 4 
-        statements in whatever database admin tool you have access to (usually 
-        PHPMyAdmin or similar).  This usually uses your main login to run so 
-        should put the views in place.
-   
-2. Thumbnails are not created.  The gd2 PHP extension can come in several
-   versions.  The one we have confirmed works has 'bundled (2.0.34 compatible)' 
-   in it's description using phpinfo().  The 2.0.34 version by itself didn't 
-   seem to work when I installed it in Linux.
+1. Thumbnails are not created.  The gd2 PHP extension can come in several
+   versions.  The one we have confirmed works has 'bundled' in it's description
+   using phpinfo().  The 2.0.34 version by itself didn't seem to work when I
+   installed it in Linux.
    
    
    
@@ -94,4 +64,5 @@ Contents
 
 3. Hit the 'Complete upgrade' button to finish the process. Depending on the
    version this stage will add new configuration variables, delete outdated
-   Moa files and/or make database changes.
+   Moa files and/or make database changes. Make sure config.php is writable
+   by the web server user first. 

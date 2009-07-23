@@ -127,11 +127,13 @@
     global $STR_DELIMITER;
     global $IMAGE_PATH;
 
-    $src_img = @imagecreatefromjpeg($_FILES["filename"]["tmp_name"]);
-    if (false == $src_img) {
-      $ErrorString = "Failed to read image... File not a valid JPG<br/>";
+    if (!CheckImageMemory($_FILES["filename"]["tmp_name"]))
+    {
       return false;
     }
+
+    //var_dump($result);
+    $src_img = @imagecreatefromjpeg($_FILES["filename"]["tmp_name"]);
 
     $new_desc = mysql_real_escape_string($p_desc);
     $new_filename = mysql_real_escape_string($_FILES["filename"]["name"]);

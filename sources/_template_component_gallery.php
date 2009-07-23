@@ -93,11 +93,11 @@
           $popup = "";
         } else
         {
-          $popup = "onmouseover='return overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }
       } else
       {
-        $popup = "onmouseover='return overlib(\"".popup_display_safe($image->m_description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+        $popup = "onmouseover='overlib(\"".popup_display_safe($image->m_description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
       }
       $width = _ImageGetValue($image->m_id, "Width");
       $height = _ImageGetValue($image->m_id, "Height");
@@ -153,27 +153,32 @@
     global $EMPTY_DESC_POPUP_TEXT;
     global $DISPLAY_PLAIN_SUBGALLERIES;
     global $MOA_PATH;
+    global $TITLE_DESC_LENGTH;
 
-    // Sub-galleries should be hidden and we have some
-    if (($DISPLAY_PLAIN_SUBGALLERIES) && (0 != _galleryGetSubGalleryCount($gallery_id)))
+    // Check if the hidden flag is set
+    if (isset($p_tag_options["hide"]))
     {
-      if (0 == strcmp($p_tag_options["hide"], "noimage"))
+      // Sub-galleries should be hidden and we have some
+      if (($DISPLAY_PLAIN_SUBGALLERIES) && (0 != _galleryGetSubGalleryCount($gallery_id)))
       {
-        return " ";
-      }
-    } else
-    {
-      if (0 == strcmp($p_tag_options["hide"], "image"))
-      {
-        if (0 != _galleryGetImageCount($gallery_id))
+        if (0 == strcmp($p_tag_options["hide"], "noimage"))
         {
           return " ";
         }
-      } elseif (0 == strcmp($p_tag_options["hide"], "noimage"))
+      } else
       {
-        if (0 == _galleryGetImageCount($gallery_id))
+        if (0 == strcmp($p_tag_options["hide"], "image"))
         {
-          return " ";
+          if (0 != _galleryGetImageCount($gallery_id))
+          {
+            return " ";
+          }
+        } elseif (0 == strcmp($p_tag_options["hide"], "noimage"))
+        {
+          if (0 == _galleryGetImageCount($gallery_id))
+          {
+            return " ";
+          }
         }
       }
     }
@@ -182,7 +187,6 @@
     $thumbs = "";
 
     $galleries = _galleryGetSubGalleries($gallery_id);
-
     foreach ($galleries as $gallery)
     {
       // Create an Overlib popup description
@@ -232,7 +236,7 @@
       {
         $child_count = $image_count;
         $child_name = "image";
-        if (0 != $image_count)
+        if (1 != $image_count)
         {
           $child_name .= "s";
         }
@@ -240,12 +244,12 @@
       {
         $child_count = $subgallery_count;
         $child_name = "subgaller";
-        if (0 != $subgallery_count)
+        if (1 != $subgallery_count)
         {
           $child_name .= "ies";
         } else
         {
-          $child_name = "y";
+          $child_name .= "y";
         }
       }
 
@@ -255,7 +259,7 @@
 
       $thumb = ParseVar($links, "GalleryThumbID", $gallery->m_id);
       $thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($THUMB_WIDTH));
-      $thumb = ParseVar($thumb, "GalleryThumbHeight", (ceil($THUMB_WIDTH*0.75)));
+      $thumb = ParseVar($thumb, "GalleryThumbHeight", str_display_safe(ceil($THUMB_WIDTH*0.75)));
 
       if (is_bool($image_id))
       {
@@ -270,14 +274,24 @@
         $thumb = ParseVar($thumb, "GalleryThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$THUMB_WIDTH);
       }
 
+      $short_desc = $gallery->m_description;
+      if (60 < strlen($gallery->m_description))
+      {
+        $short_desc = substr($gallery->m_description, 0, 60);
+        $split = split("\n", $short_desc);
+        $short_desc = $split[0]."...";
+      }
+
       $thumb = ParseVar($thumb, "GalleryThumbPopup", $popup);
       $thumb = ParseVar($thumb, "GalleryThumbCaption", $cap);
       $thumb = ParseVar($thumb, "GalleryThumbSubGalleryCount", $subgallery_count);
       $thumb = ParseVar($thumb, "GalleryThumbImageCount", $image_count);
       $thumb = ParseVar($thumb, "GalleryThumbChildCount", $child_count);
       $thumb = ParseVar($thumb, "GalleryThumbChildTypeName", $child_name);
+      $thumb = ParseVar($thumb, "GalleryThumbDesc", $short_desc);
       $thumb = ParseVar($thumb, "GalleryID", $gallery_id);
       $thumb = ParseVar($thumb, "GalleryThumbTitle", str_display_safe($gallery->m_name));
+      $thumb = ParseVar($thumb, "GalleryThumbTitleShort", str_display_safe(substr($gallery->m_name, 0, $TITLE_DESC_LENGTH)."..."));
       $thumbs .= $thumb;
     }
 
@@ -338,4 +352,31 @@
     return $options;
   }
 
+  function TagParseThumbWidth($p_tag_options)
+  {
+    global $THUMB_WIDTH;
+
+    $result = 0;
+    if (isset($p_tag_options["add"]))
+    {
+      $result = $p_tag_options["add"];
+    }
+
+    $str = str_display_safe($THUMB_WIDTH + $result);
+    return $str;
+  }
+
+  function TagParseThumbHeight($p_tag_options)
+  {
+    global $THUMB_WIDTH;
+
+    $result = 0;
+    if (isset($p_tag_options["add"]))
+    {
+      $result = $p_tag_options["add"];
+    }
+
+    $str = str_display_safe((($THUMB_WIDTH*0.75))+ $result);
+    return $str;
+  }
 ?>

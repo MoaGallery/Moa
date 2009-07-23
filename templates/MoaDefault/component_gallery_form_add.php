@@ -1,49 +1,50 @@
-<br/>
-  <div class='form_label_text' style='height: 10px; width: 100px; float: left;'>
+<dl class='form_items'>
+  <dt class='form_label_text'>
     Name:
-  </div>
-  <span>
-    <input class='form_text' type='text' id='galleryformname' style='width:382px;'/>
-  </span>
-  <br/>
+  </dt>
+  <dd>
+    <input class='form_text gallery_form_name' type='text' id='galleryformname'/>
+  </dd>
 
-  <div>
-    <div id='galleryformexpandblock' style='float: left'>
-      <div class='form_label_text' style='width: 100px;'>
+  <dt>
+    <div id='galleryformexpandblock'>
+      <div class='form_label_text'>
         Description:
       </div>
-      <a class='admin_link' id='galleryformexpandlink' style='width:100px;'>
+      <a class='admin_link' id='galleryformexpandlink'>
         [Expand]
       </a>
     </div>
+  </dt>
+  <dd>
     <textarea class='form_text' name='galleryformdesc' id='galleryformdesc' rows='4' cols='50'></textarea>
-  </div>
+  </dd>  
 
-  <div class='form_label_text' style='height: 10px; width: 100px; float: left;'>
+  <dt class='form_label_text'>
     Tags:
-  </div>
-  <span>
-    <input class='form_text' type='text' id='galleryformtags' style='width:358px; position: relative; top: -1px;' onmouseover='gallery.EnableTagHintList(this);' onmouseout='gallery.DisableTagHintList(this);'/>
-  </span>
-  <span id='formtaglistfeedback'></span>
-  <br/>
+  </dt>
+  <dd>
+    <input class='form_text gallery_form_tags' type='text' id='galleryformtags' onmouseover='gallery.EnableTagHintList(this);' onmouseout='gallery.DisableTagHintList(this);'/>
+    <span id='formtaglistfeedback'></span>
+  </dd>
 
-  <div class='form_label_text' style='height: 10px; width: 100px; float: left;'>
+  <dt class='form_label_text'>
     Parent gallery:
-  </div>
-  <span>
-    <select name='parent_id' id='galleryformparent_id' style='width:386px;'>
+  </dt>
+  <dd>
+    <select name='parent_id' id='galleryformparent_id' class='gallery_form_parent'>
       <option value='0000000000'>
         Home
       </option>
       <moatag type="GalleryParentComboList">
     </select>
-  </span>
-  <br/>
+  </dd>
 
-  <div class='form_label_text' style='height: 10px; width: 100px; float: left;'>
+  <dt class='form_label_text'>
     &nbsp
-  </div>
-  <input type='button' value='Submit' id='galleryformsubmit' onclick='gallery.SubmitEdit();'/>
-  <input type='button' value='Cancel' id='galleryformcancel' onclick='gallery.CancelEdit();'/>
-  <br/>
+  </dt>
+  <dd>
+    <input type='button' value='Submit' id='galleryformsubmit' onclick='gallery.SubmitEdit();'/>
+    <input type='button' value='Cancel' id='galleryformcancel' onclick='gallery.CancelEdit();'/>
+  </dd>
+</dl>

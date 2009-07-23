@@ -1,1 +1,3 @@
-<div style="width:<moavar SpacerWidth>px; height: 16px; float: left;">&nbsp;</div>
+<div class="breadcrumbspacer" style="width: <moavar SpacerWidth>px; ">
+  &nbsp;
+</div>

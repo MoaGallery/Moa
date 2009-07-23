@@ -1,4 +1,6 @@
 <?php
+  include_once($MOA_PATH."sources/_template_parser.php");
+
   $ErrorString = '';
 
   function moa_feedback($p_text, $p_type)

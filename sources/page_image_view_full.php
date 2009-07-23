@@ -1,5 +1,6 @@
 	<?php
 	  include_once($MOA_PATH."config.php");
+	  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
 	  echo "    <a onclick='history.go(-1)'><img src='".$IMAGE_PATH."/".$_REQUEST["image_id"];
 	  echo ".jpg' onmouseover='this.style.cursor=\"hand\"' alt='Full size image' /></a>";
 	  $page_title = "Image";
@@ -14,4 +15,5 @@
 	  		$page_title .= " - \'" . html_display_safe($desc) . "\'";
 	  	}
 	  }
+	  echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   ?>

@@ -33,6 +33,7 @@
       echo "  gallery.PreLoad('', '', '', '".$parent_id."');\n";
       echo "</script>\n";
 
+      echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
       echo LoadTemplateRoot("page_gallery_add.php");
     ?>
 
@@ -49,5 +50,6 @@
     </script>
 
     <?php
+      echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
       $page_title = "Add gallery";
     ?>

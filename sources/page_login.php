@@ -1,6 +1,7 @@
     <?php
       include_once ($MOA_PATH."sources/id.php");
 
+      echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
       echo LoadTemplateRoot("page_login.php");
     ?>
 
@@ -14,4 +15,5 @@
 
     <?php
       $page_title = "Login";
+      echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
     ?>
