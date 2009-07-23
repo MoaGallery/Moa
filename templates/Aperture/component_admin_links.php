@@ -1,0 +1,6 @@
+<ul id='adminlinksblock'>
+  <li><a class='admin_link' href='<moavar AdminUserLink>'>[Edit users]</a>&nbsp;</li>
+  <li><a class='admin_link' href='<moavar AdminTagLink>'>[Edit tags]</a>&nbsp;</li>
+  <li><a class='admin_link' href='<moavar AdminOrphanLink>'>[Orphan images]</a>&nbsp;</li>
+  <li><a class='admin_link' href='<moavar AdminIntegrityLink>'>[Image integrity]</a>&nbsp;<br/></li>
+</ul>

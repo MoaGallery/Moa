@@ -1,0 +1,54 @@
+p {
+	      margin: 5px;
+}
+
+.outline {
+	      border: 1px solid black;
+	      overflow: auto;
+	      margin: 10px;
+	      position: relative;
+	      padding: 14px 5px 5px 5px;
+}
+
+.pageoutline {
+        border: 2px solid blue;
+        overflow: auto;
+        margin: 10px;
+        position: relative;
+        padding: 14px 5px 5px 5px;
+}
+
+.outlinetitle {
+	      position: absolute;
+	      left: 5px;
+	      top: 0;
+	      font-size: 10px;
+}
+
+.floatleft {
+	      float: left;
+}
+
+.clearleft
+{
+	      clear: left;
+}
+
+.list {
+        margin: 0;
+        padding: 0;
+}
+
+.list li {
+	      width: 170px;
+	      float: left;
+	      display: block;
+}
+
+.headerbutton {
+	      width: 100px;
+}
+
+.tag_buttons {
+	      display: none;
+}
