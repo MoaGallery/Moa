@@ -2,7 +2,7 @@
   <div id="hidden_hack" class="hidden_hack"></div>
   <div class="left_column left_column_shadow">
     <div>
-      <moatag type="ImageAdminLinks">
+      <moatag type="AdminLinks" location="image">
       <br/>
       <div id="imageblockinfo">
         <br/>

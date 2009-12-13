@@ -1,15 +1,21 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
 
   function TagParseFooterMoaCopyright($p_tag_options)
   {
-    global $MOA_VERSION;
-    return "<a href='http://www.moagallery.net/'>Moa ".$MOA_VERSION."</a> &copy; 2008-2009";
+    global $CFG;
+    return "<a href='http://www.moagallery.net/'>Moa ".$CFG["MOA_VERSION"]."</a> &copy; 2008-2009";
   }
 
   function TagParseFooterLink($p_tag_options)
   {
-    global $DEBUG_MODE;
-    global $image_id;
+    global $CFG;
 
     $str = "";
 
@@ -37,7 +43,7 @@
       }
       default:
       {
-        if ($DEBUG_MODE)
+        if ($CFG["DEBUG_MODE"])
         {
           $str = "TEMPLATE WARNING: Unknown Link in FooterLink tag - '".html_display_safe($p_tag_options["dest"])."'.";
         }

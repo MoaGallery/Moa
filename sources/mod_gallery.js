@@ -100,7 +100,6 @@ function Gallery(p_delim) {
     that.PageTitle();
     
     if (!m_add_mode) {
-      document.title = 'Gallery - ' + m_short_name;
       that.CancelEdit();
       document.getElementById("galleryblockname").innerHTML = EscapeHTMLChars(m_name);
       document.getElementById("galleryblockdesc").innerHTML = EscapeNewLine(EscapeHTMLChars(m_desc));
@@ -145,11 +144,15 @@ function Gallery(p_delim) {
   this.PageTitle = function() {
     if (!m_add_mode) {
       document.title = 'Gallery';
+      var name = m_name;
+      
       if (m_short_name.length > 0) {
-        document.title += " - '";
-        document.title += m_short_name;
-        document.title += "'";
+        name = m_short_name;
       }
+      
+      document.title += " - '";
+      document.title += name;
+      document.title += "' - Moa";
     }
   };
 

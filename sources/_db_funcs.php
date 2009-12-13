@@ -1,4 +1,12 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
   $install = false;
   if (isset($INSTALLING))
   {
@@ -8,12 +16,7 @@
     }
   }
 
-  if (!$install)
-  {
-    include_once($MOA_PATH."private/db_config.php");
-  }
-
-  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_error_funcs.php");
 
   // Connects to MySQL database using global values defined in db_config.php setting character set to UTF8.
   function DBConnect()
@@ -21,15 +24,13 @@
     global $install;
     if (!$install)
     {
-      global $db_host;
-      global $db_user;
-      global $db_pass;
-      global $db_name;
+      global $CFG;
 
-      $db = @mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__)   or moa_db_error(mysql_error());
-      @mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      @mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
-      @mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
+      $db = @mysql_connect($CFG["db_host"], $CFG["db_user"], $CFG["db_pass"]) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__)   or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+
+      @mysql_select_db($CFG["db_name"], $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+      @mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+      @mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
       @mb_language('uni');
       @mb_internal_encoding('UTF-8');
@@ -41,7 +42,7 @@
   // Look through each statement in a file and execute it in MySQL
   function RunSQLFile($p_filename)
   {
-  	global $tab_prefix;
+  	global $CFG;
 
     $error = false;
     $file = fopen($p_filename, "r");
@@ -57,10 +58,10 @@
     {
       if (mb_strlen($tok) >= 10)
       {
-        $sql_statement = str_replace( '<prefix>', $tab_prefix, $tok);
+        $sql_statement = str_replace( '<prefix>', $CFG["tab_prefix"], $tok);
 
         $result = mysql_query($sql_statement);
-        if (false == $result)
+        if (false === $result)
         {
           echo mysql_error()."\n\n<br>";
           $error = true;

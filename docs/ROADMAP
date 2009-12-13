@@ -2,48 +2,46 @@ A rough plan of what we plan to add and in which version.
 This can (and is likely to) change.
 
   Important - 1.2.x (User-centric) -
-    1.2.1 -
-        Site Settings.
-        Make Sure all path variables terminate with a '/'
-        png/gif support.
-        Remove errors from feedback DIV when a new operation is performed or cancel is pressed.
-        Add CDATA to page_ files.
-        Handle over sized data values are sent to MySQL.
-        Write out manual upgrade instructions for if the auto-upgrade fails.
-        Upgrade should check file permissions.
-
-    1.2.2 -
+  
+    Floating (parallel to main releases) -
         Redo install to be interactive.
-        Image/gallery manager on admin pages.
-        Re-Arrange images on a gallery via the admin manager.
-        User-defined thumbnails on galleries.
-        Pages of thumbnails.
-
-    1.2.3 -
-        Bulk add from ftp folder or .zip file.
+        Redo upgrade to be interactive.
+        
+    1.2.2 -
+        Bulk add from ftp folder file (support folders).
         Image Filenames should be what they are originally uploaded as for SEO.
-        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
+	Filmstrip.
+        On image view page implement next\prev image buttons with thumb preview.
+        
+    1.2.3 -
+	Search (with option to make new gallery from results).
         Edit controls to have popup help.
+        Check if db info is invalid and give a message.
+        Add username so login is not shown.
 
     1.2.4
-        Filmstrip.
+	Update javascript to use a framework.
         Simple UI animation (feedback vanishes, deleted items scroll up, etc).
-        Search (with option to make new gallery from results).
-        Move user/tag admin to image/gallery manager system.
+        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
 
-    1.3 (Expanding content) -
-        Display movie clips.  (Not streaming)
+    1.3.0
+        Image/gallery manager on admin pages.
+        Move user/tag admin to image/gallery manager system.
+        Re-Arrange images on a gallery via the admin manager.
+        User-defined thumbnails on galleries.
+
+    1.3 series (Expanding content) -
+        Display movie clips.
         Grab and save EXIF info.
         Simple edit ability. (crop, resize, rotate, etc)
         Provide friendly URL rewriting. (Via HTAccess)
-        IPTC support.
-        .htaccess URL rewrites.
+        IPTC support
+	Add a custom error handling page.
+        Mobile template
 
-    1.4 (API + Drag&Drop) -
+    1.4 series (API + Drag&Drop) -
         GeoTagging support. (Google maps, Live maps, etc embeddable)
         Expand web API to be useful outside of the Moa frontend - to allow the client app.
-        Re-Arrange images on a gallery.
-        On image view page implement next\prev image buttons with thumb preview.
         Mass Image Tagging.
         Bulk Delete.
         Slide Show.
@@ -56,35 +54,26 @@ This can (and is likely to) change.
         Output slideshow to Vid-CD (Online \ Desktop Client)
 
 
-   Patch - Can be added at any point, sooner rather than later if poss. -
+   Patch (Can be added at any point, sooner rather than later if poss) -
        Try different sized images to test for the jpeg decoder overhead.
-       Common root path variable to be applied to config.php.
-       Allow a welcome message on the index page
        Add more corruption detection in the admin section (Look for images that can't exist in any gallery)
-       Add username so login is not shown.
-       Add a custom error handling page.
        Image Integrity->no image/thumb needs to have a delete option.
        Add sub-gallery, changing parent doesn't update tags (confirm box - do you want to set tags to be the same?).
        Split CSS up into different types.
        Images with no main image should show thumbnail on the 'fix' screen.
-       Replace Buttons with images.
        Integrity Check on login.
        Inherited tags should be implied, no need to show them (but do store them!).
        Boolean Tag Operators for galleries.
        Copy tags from other gallery.
-       Move gallery (choose new parent).
        On delete tag, check if any images/galleries use that tag.
        Correct time for timezone.
        robots.txt.
        Resize pics on upload.
        Watermark/Logo stamp on pics.
-       Rotate pic.
        Replace image.
        User action logging.
-       Option to hide the login button.
        Gallery/image titles can be too long to fit on the preview without messing up the layout.
        On maintain image, redirect back to maintain image when new image added.
        Javascript generated globals should be passed into the constructors.
        Option to unmask password boxes.
-       Embeddable template - No footer \ Header
-       Mobile template
+       Audio caption.

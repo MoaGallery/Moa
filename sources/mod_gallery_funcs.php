@@ -1,9 +1,17 @@
 <?php
-// mod_gallery_funcs.php - This is a collection of functions that interect with the database and a gallery.
-include_once($MOA_PATH."sources/_error_funcs.php");
-include_once($MOA_PATH."sources/_db_funcs.php");
-include_once($MOA_PATH."sources/mod_image_funcs.php");
-include_once($MOA_PATH."sources/mod_tag_funcs.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  // mod_gallery_funcs.php - This is a collection of functions that interect with the database and a gallery.
+  include_once($CFG["MOA_PATH"]."sources/_error_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
 
 // Structure - Holds information for a single gallery
 class Gallery{
@@ -16,38 +24,38 @@ class Gallery{
 // Function to return query that will return all gallery images meeting
 // given condition and record order.
 function _buildGalleryContentQuery($p_fields, $p_condition, $p_order_by = "") {
-	global $tab_prefix;
-	 
+	global $CFG;
+
 	$query = "SELECT ".$p_fields."
-                FROM ".$tab_prefix."imagetaglink   AS ImgTagLinks, 
-                     ".$tab_prefix."gallerytaglink AS GalTagLinks,
-                     ".$tab_prefix."image,
-                     ".$tab_prefix."gallery
+                FROM `".$CFG["tab_prefix"]."imagetaglink`   AS ImgTagLinks,
+                     `".$CFG["tab_prefix"]."gallerytaglink` AS GalTagLinks,
+                     `".$CFG["tab_prefix"]."image`,
+                     `".$CFG["tab_prefix"]."gallery`
                WHERE ImgTagLinks.IDTag     = GalTagLinks.IDTag
-                 AND ImgTagLinks.IDImage   = ".$tab_prefix."image.IDImage
-                 AND GalTagLinks.IDGallery = ".$tab_prefix."gallery.IDGallery
+                 AND ImgTagLinks.IDImage   = `".$CFG["tab_prefix"]."image`.IDImage
+                 AND GalTagLinks.IDGallery = `".$CFG["tab_prefix"]."gallery`.IDGallery
                  AND (".$p_condition.")
-               GROUP BY ".$tab_prefix."gallery.IDGallery, ImgTagLinks.IDimage, ".$tab_prefix."image.Description
+               GROUP BY `".$CFG["tab_prefix"]."gallery`.IDGallery, ImgTagLinks.IDimage, `".$CFG["tab_prefix"]."image`.Description
               HAVING COUNT(ImgTagLinks.IDTag) = (SELECT COUNT(GalTagLinks2.IDTag)
-                                                   FROM ".$tab_prefix."gallerytaglink AS GalTagLinks2
-                                                  WHERE GalTagLinks2.IDGallery = ".$tab_prefix."gallery.IDGallery)";
+                                                   FROM `".$CFG["tab_prefix"]."gallerytaglink` AS GalTagLinks2
+                                                  WHERE GalTagLinks2.IDGallery = `".$CFG["tab_prefix"]."gallery`.IDGallery)";
 
 	if (0 != strlen($p_order_by)) {
 		$query .= " ORDER BY ".$p_order_by;
 	}
-	 
+
 	return $query;
 };
 
 // Checks on database that a gallery exists for the given p_id.
 function _galleryExists($p_id) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
-	$query = "SELECT 1 FROM ".$tab_prefix."gallery WHERE IDGallery = ".mysql_real_escape_string($p_id);
+	$query = "SELECT 1 FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-	if ((false == $result) || (0 == mysql_num_rows($result))) {
+	if ((false === $result) || (0 == mysql_num_rows($result))) {
 		return false;
 	}
 	return true;
@@ -56,11 +64,11 @@ function _galleryExists($p_id) {
 // Changes the value of field named by $field to $value for gallery identified by $p_id.
 function _galleryChangeValue($p_id, $p_field, $p_value) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
-	$query = "UPDATE ".$tab_prefix."gallery SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDGallery = ".mysql_real_escape_string($p_id);
+	$query = "UPDATE `".$CFG["tab_prefix"]."gallery` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 	return true;
@@ -69,23 +77,22 @@ function _galleryChangeValue($p_id, $p_field, $p_value) {
 // Changes the value of all fields for gallery identified by $p_id.
 function _galleryEdit($p_id, $p_name, $p_desc, $p_pid, $p_tags) {
 	global $ErrorString;
-	global $tab_prefix;
-	global $STR_DELIMITER;
+	global $CFG;
 
-	$query = "UPDATE ".$tab_prefix."gallery SET Name = _utf8'".mysql_real_escape_string($p_name)."', Description = _utf8'".mysql_real_escape_string($p_desc)."', IDParent = '".mysql_real_escape_string($p_pid)."' WHERE IDGallery = ".mysql_real_escape_string($p_id);
+	$query = "UPDATE `".$CFG["tab_prefix"]."gallery` SET Name = _utf8'".mysql_real_escape_string($p_name)."', Description = _utf8'".mysql_real_escape_string($p_desc)."', IDParent = '".mysql_real_escape_string($p_pid)."' WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
-	$query = "DELETE FROM ".$tab_prefix."gallerytaglink WHERE IDGallery='".mysql_real_escape_string($p_id)."'";
+	$query = "DELETE FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDGallery='".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
 	$alltags = _TagGetTags();
-	$taglist = explode($STR_DELIMITER, $p_tags);
+	$taglist = explode($CFG["STR_DELIMITER"], $p_tags);
 
 	foreach ($taglist as $newtag)
 	{
@@ -98,9 +105,9 @@ function _galleryEdit($p_id, $p_name, $p_desc, $p_pid, $p_tags) {
 				if (0 == strcmp(strtolower($oldtag->m_name), strtolower($newtag)))
 				{
 					// Tag already exists, just create the link
-					$query = "INSERT INTO ".$tab_prefix."gallerytaglink (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($p_id)."', '".$oldtag->m_id."')";
+					$query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($p_id)."', '".$oldtag->m_id."')";
 					$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-					if (false == $result) {
+					if (false === $result) {
 						return false;
 					}
 					$found = true;
@@ -109,23 +116,23 @@ function _galleryEdit($p_id, $p_name, $p_desc, $p_pid, $p_tags) {
 			if (!$found)
 			{
 				// Add as a new tag
-				$query = "INSERT INTO ".$tab_prefix."tag (Name) VALUES (_utf8'".mysql_real_escape_string($newtag)."')";
+				$query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($newtag)."')";
 				$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-				if (false == $result) {
+				if (false === $result) {
 					return false;
 				}
 				// Get the new ID
-				$query = "SELECT IDTag FROM ".$tab_prefix."tag WHERE Name='".mysql_real_escape_string($newtag)."'";
+				$query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name='".mysql_real_escape_string($newtag)."'";
 				$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-				if (false == $result) {
+				if (false === $result) {
 					return false;
 				}
 				$row = mysql_fetch_array($result);
 				$newid = $row["IDTag"];
 				// Make the link
-				$query = "INSERT INTO ".$tab_prefix."gallerytaglink (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($p_id)."', '".$newid."')";
+				$query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($p_id)."', '".$newid."')";
 				$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-				if (false == $result) {
+				if (false === $result) {
 					return false;
 				}
 			}
@@ -138,19 +145,18 @@ function _galleryEdit($p_id, $p_name, $p_desc, $p_pid, $p_tags) {
 // Adds a new gallery based on passed in fields values.
 function _galleryAdd($p_name, $p_desc, $p_parentid, $p_tags) {
 	global $ErrorString;
-	global $tab_prefix;
-	global $STR_DELIMITER;
+	global $CFG;
 
-	$query = "INSERT ".$tab_prefix."gallery (Name, Description, IDParent) VALUES (_utf8'".mysql_real_escape_string($p_name)."', _utf8'".mysql_real_escape_string($p_desc)."', '".mysql_real_escape_string($p_parentid)."');";
+	$query = "INSERT INTO `".$CFG["tab_prefix"]."gallery` (Name, Description, IDParent) VALUES (_utf8'".mysql_real_escape_string($p_name)."', _utf8'".mysql_real_escape_string($p_desc)."', '".mysql_real_escape_string($p_parentid)."');";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 	$newid = mysql_insert_id();
 	$id = sprintf("%010s", $newid);
 
 	$alltags = _TagGetTags();
-	$taglist = explode($STR_DELIMITER, $p_tags);
+	$taglist = explode($CFG["STR_DELIMITER"], $p_tags);
 
 	foreach ($taglist as $newtag)
 	{
@@ -163,9 +169,9 @@ function _galleryAdd($p_name, $p_desc, $p_parentid, $p_tags) {
 				if (0 == strcmp(strtolower($oldtag->m_name), strtolower($newtag)))
 				{
 					// Tag already exists, just create the link
-					$query = "INSERT INTO ".$tab_prefix."gallerytaglink (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($id)."', '".$oldtag->m_id."')";
+					$query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($id)."', '".$oldtag->m_id."')";
 					$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-					if (false == $result) {
+					if (false === $result) {
 						return false;
 					}
 					$found = true;
@@ -174,23 +180,23 @@ function _galleryAdd($p_name, $p_desc, $p_parentid, $p_tags) {
 			if (!$found)
 			{
 				// Add as a new tag
-				$query = "INSERT INTO ".$tab_prefix."tag (Name) VALUES (_utf8'".mysql_real_escape_string($newtag)."')";
+				$query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($newtag)."')";
 				$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-				if (false == $result) {
+				if (false === $result) {
 					return false;
 				}
 				// Get the new ID
-				$query = "SELECT IDTag FROM ".$tab_prefix."tag WHERE Name='".mysql_real_escape_string($newtag)."'";
+				$query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name='".mysql_real_escape_string($newtag)."'";
 				$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-				if (false == $result) {
+				if (false === $result) {
 					return false;
 				}
 				$row = mysql_fetch_array($result);
 				$newid = $row["IDTag"];
 				// Make the link
-				$query = "INSERT INTO ".$tab_prefix."gallerytaglink (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($id)."', '".$newid."')";
+				$query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".mysql_real_escape_string($id)."', '".$newid."')";
 				$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-				if (false == $result) {
+				if (false === $result) {
 					return false;
 				}
 			}
@@ -203,11 +209,12 @@ function _galleryAdd($p_name, $p_desc, $p_parentid, $p_tags) {
 // Returns the value of field named by $field for gallery specified by $p_id.
 function _galleryGetValue($p_id, $p_field ) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
-	$query = "SELECT ".mysql_real_escape_string($p_field)." FROM ".$tab_prefix."gallery WHERE IDGallery = ".mysql_real_escape_string($p_id);
+	$query = "SELECT `".mysql_real_escape_string($p_field)."` FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
+    echo $ErrorString;
 		return false;
 	}
 
@@ -218,11 +225,11 @@ function _galleryGetValue($p_id, $p_field ) {
 // Returns the values of all gallery fields for gallery specified by $p_id.
 function _galleryGetAllValues($p_id) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
-	$query = "SELECT * FROM ".$tab_prefix."gallery WHERE IDGallery = ".mysql_real_escape_string($p_id);
+	$query = "SELECT * FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -240,11 +247,11 @@ function _galleryGetAllValues($p_id) {
 // Returns a list of galleries where IDParent is specified by $p_id.
 function _galleryGetSubGalleries($p_id) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
-	$query = "SELECT * FROM ".$tab_prefix."gallery WHERE IDParent = ".mysql_real_escape_string($p_id);
+	$query = "SELECT * FROM `".$CFG["tab_prefix"]."gallery` WHERE IDParent = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -266,13 +273,13 @@ function _galleryGetSubGalleries($p_id) {
 // Returns a list of images where tag match those of the gallery specified by $p_id
 function _galleryGetImages($p_id) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
-	$query = _buildGalleryContentQuery( $tab_prefix."image.IDImage, ".$tab_prefix."image.Description"
-	, $tab_prefix."gallery.IDGallery = '".mysql_real_escape_string($p_id)."'");
+	$query = _buildGalleryContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage, `".$CFG["tab_prefix"]."image`.Description"
+	, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
 
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -292,17 +299,18 @@ function _galleryGetImages($p_id) {
 // Returns the ID of the first image in this gallery.
 function _galleryGetThumbNail($p_id)
 {
-	global $tab_prefix;
-	$query = _buildGalleryContentQuery( $tab_prefix."image.IDImage"
-	, $tab_prefix."gallery.IDGallery = '".mysql_real_escape_string($p_id)."'");
-	 
+	global $CFG;
+
+	$query = _buildGalleryContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
+	, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
+
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
 	$image = mysql_fetch_array($result);
-	if (false == $image)
+	if (false === $image)
 	{
 		if (0 < _galleryGetSubGalleryCount($p_id))
 		{
@@ -326,12 +334,13 @@ function _galleryGetThumbNail($p_id)
 // Returns the number of images in this gallery.
 function _galleryGetImageCount($p_id)
 {
-	global $tab_prefix;
+	global $CFG;
+
 	$query = _buildGalleryContentQuery( "1"
-	, $tab_prefix."gallery.IDGallery = '".mysql_real_escape_string($p_id)."'");
+	, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
 
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -341,10 +350,11 @@ function _galleryGetImageCount($p_id)
 // Returns the number of sub-galleries of this gallery.
 function _galleryGetSubGalleryCount($p_id)
 {
-	global $tab_prefix;
-	$query = "SELECT 1 FROM ".$tab_prefix."gallery WHERE IDParent = '".mysql_real_escape_string($p_id)."';";
+	global $CFG;
+
+	$query = "SELECT 1 FROM `".$CFG["tab_prefix"]."gallery` WHERE IDParent = '".mysql_real_escape_string($p_id)."';";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -354,33 +364,33 @@ function _galleryGetSubGalleryCount($p_id)
 // Deletes the gallery indentified by $id.
 function _galleryDelete($p_id) {
 	global $ErrorString;
-	global $tab_prefix;
+	global $CFG;
 
 	$query_safe_id = mysql_real_escape_string($p_id);
 
-	$query = "DELETE FROM ".$tab_prefix."gallerytaglink WHERE IDGallery = '".$query_safe_id."'";
+	$query = "DELETE FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDGallery = '".$query_safe_id."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
-	$query = "SELECT IDParent FROM ".$tab_prefix."gallery WHERE IDGallery = '".$query_safe_id."'";
+	$query = "SELECT IDParent FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".$query_safe_id."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
 	$row = mysql_fetch_array($result);
 
-	$query = "UPDATE ".$tab_prefix."gallery SET IDParent = '".$row["IDParent"]."' WHERE IDParent = '".$query_safe_id."'";
+	$query = "UPDATE `".$CFG["tab_prefix"]."gallery` SET IDParent = '".$row["IDParent"]."' WHERE IDParent = '".$query_safe_id."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
-	$query = "DELETE FROM ".$tab_prefix."gallery WHERE IDGallery = '".$query_safe_id."'";
+	$query = "DELETE FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".$query_safe_id."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -389,17 +399,17 @@ function _galleryDelete($p_id) {
 
 // Returns list of tags for gallery identified by $id
 function _galleryGetTagList($p_id) {
-	global $tab_prefix;
+	global $CFG;
 
-	$query = "SELECT IDTag FROM ".$tab_prefix."gallerytaglink WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
+	$query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
 	$tags = array();
 
-	while (false != ($row = mysql_fetch_array($result))) {
+	while (false !== ($row = mysql_fetch_array($result))) {
 		$tags[] = $row["IDTag"];
 	}
 
@@ -408,15 +418,15 @@ function _galleryGetTagList($p_id) {
 
 function _GalleryGetNextImage($p_gallery_id, $p_image_id)
 {
-	global $tab_prefix;
+	global $CFG;
 
 	// Get just the first ID out of the next images in the same gallery
-	$query = _buildGalleryContentQuery( $tab_prefix."image.IDImage"
-	, "((".$tab_prefix."image.IDImage > ".$p_image_id.") AND (".$tab_prefix."gallery.IDGallery = ".$p_gallery_id."))"
-	, $tab_prefix."image.IDImage ASC LIMIT 1");
+	$query = _buildGalleryContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
+	, "((`".$CFG["tab_prefix"]."image`.IDImage > '".$p_image_id."') AND (`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."'))"
+	, "`".$CFG["tab_prefix"]."image`.IDImage ASC LIMIT 1");
 
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -425,12 +435,12 @@ function _GalleryGetNextImage($p_gallery_id, $p_image_id)
 	if (0 == $found)
 	{
 		// Get just the first ID out of the next images in the same gallery
-		$query = _buildGalleryContentQuery( $tab_prefix."image.IDImage"
-		, "(".$tab_prefix."gallery.IDGallery = ".$p_gallery_id.")"
-		, $tab_prefix."image.IDImage ASC LIMIT 1");
+		$query = _buildGalleryContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
+		, "(`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."')"
+		, "`".$CFG["tab_prefix"]."image`.IDImage ASC LIMIT 1");
 
 		$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-		if (false == $result) {
+		if (false === $result) {
 			return false;
 		}
 	}
@@ -441,15 +451,15 @@ function _GalleryGetNextImage($p_gallery_id, $p_image_id)
 
 function _GalleryGetPreviousImage($p_gallery_id, $p_image_id)
 {
-	global $tab_prefix;
+	global $CFG;
 
 	// Get just the first ID out of the previous images in the same gallery
-	$query = _buildGalleryContentQuery( $tab_prefix."image.IDImage"
-	, "((".$tab_prefix."image.IDImage < ".$p_image_id.") AND (".$tab_prefix."gallery.IDGallery = ".$p_gallery_id."))"
-	, $tab_prefix."image.IDImage DESC LIMIT 1");
+	$query = _buildGalleryContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
+	, "((`".$CFG["tab_prefix"]."image`.IDImage < '".$p_image_id."') AND (`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."'))"
+	, "`".$CFG["tab_prefix"]."image`.IDImage DESC LIMIT 1");
 
 	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	if (false == $result) {
+	if (false === $result) {
 		return false;
 	}
 
@@ -458,12 +468,12 @@ function _GalleryGetPreviousImage($p_gallery_id, $p_image_id)
 	if (0 == $found)
 	{
 		// Get just the first ID out of the next images in the same gallery
-		$query = _buildGalleryContentQuery( $tab_prefix."image.IDImage"
-		, "(".$tab_prefix."gallery.IDGallery = ".$p_gallery_id.")"
-		, $tab_prefix."image.IDImage DESC LIMIT 1");
+		$query = _buildGalleryContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
+		, "(`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."')"
+		, "`".$CFG["tab_prefix"]."image`.IDImage DESC LIMIT 1");
 
 		$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-		if (false == $result) {
+		if (false === $result) {
 			return false;
 		}
 	}

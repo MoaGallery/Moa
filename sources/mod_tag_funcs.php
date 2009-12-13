@@ -1,9 +1,17 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
   /* mod_tag_funcs.php
    This is a collection of functions that interect with the database and a tag.
   */
-  include_once($MOA_PATH."sources/_error_funcs.php");
-  include_once($MOA_PATH."sources/_db_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_error_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
 
   //  Structure for a single tag
   class Tag
@@ -15,12 +23,12 @@
   function _TagExists($p_id)
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT 1 FROM ".$tab_prefix."tag WHERE IDTag = ".mysql_real_escape_string($p_id);
+    $query = "SELECT 1 FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-    if ((false == $result) || (0 == mysql_num_rows($result))) {
+    if ((false === $result) || (0 == mysql_num_rows($result))) {
       return false;
     }
     return true;
@@ -29,12 +37,12 @@
   function _TagLookup($p_name)
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT IDTag FROM ".$tab_prefix."tag WHERE Name = '".mysql_real_escape_string($p_name)."'";
+    $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name = '".mysql_real_escape_string($p_name)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-    if ((false == $result) || (0 == mysql_num_rows($result))) {
+    if ((false === $result) || (0 == mysql_num_rows($result))) {
       return false;
     }
     $row = mysql_fetch_array($result);
@@ -44,11 +52,11 @@
   function _TagChangeValue($p_id, $p_field, $p_value)
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "UPDATE ".$tab_prefix."tag SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDTag = ".$p_id;
+    $query = "UPDATE `".$CFG["tab_prefix"]."tag` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDTag = '".$p_id."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
     return true;
@@ -57,11 +65,11 @@
   function _TagGetValue($p_id, $p_field )
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT ".mysql_real_escape_string($p_field)." FROM ".$tab_prefix."tag WHERE IDTag = ".mysql_real_escape_string($p_id);
+    $query = "SELECT ".mysql_real_escape_string($p_field)." FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -72,11 +80,11 @@
   function _TagGetAllValues($p_id)
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT * FROM ".$tab_prefix."tag WHERE IDTag = ".mysql_real_escape_string($p_id);
+    $query = "SELECT * FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -92,11 +100,11 @@
   function _TagGetTags()
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT * FROM ".$tab_prefix."tag;";
+    $query = "SELECT * FROM `".$CFG["tab_prefix"]."tag`;";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -116,23 +124,23 @@
   function _TagDelete($p_id)
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "DELETE FROM ".$tab_prefix."imagetaglink WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+    $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
-    $query = "DELETE FROM ".$tab_prefix."gallerytaglink WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+    $query = "DELETE FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
-    $query = "DELETE FROM ".$tab_prefix."tag WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+    $query = "DELETE FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -142,11 +150,11 @@
   function _TagAdd($p_name)
   {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "INSERT INTO ".$tab_prefix."tag( Name) VALUES (_utf8'".mysql_real_escape_string($p_name)."')";
+    $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($p_name)."')";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 

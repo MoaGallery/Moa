@@ -1,5 +1,5 @@
-<moatag type='AdminLinks'>
-<div id='orphanblockfeedback'>
+<moatag type="AdminLinks" location="admin">
+<div id="orphanblockfeedback">
   <moatag type="GalleryDeleteFeedback">
   &nbsp;
 </div>

@@ -1,5 +1,13 @@
 <?php
-  include_once($MOA_PATH."sources/mod_gallery_funcs.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
   // Get gallery id
   $no_gallery_id = false;
@@ -25,7 +33,7 @@
   // Complain if invalid id is supplied
   if ((!_GalleryExists($gallery_id)) && ("0000000000" != $gallery_id))
   {
-    echo _GalleryExists($gallery_id);
+    $bodycontent .= _GalleryExists($gallery_id);
     moa_warning("Invalid gallery ID supplied.");
     $proceed = false;
   }
@@ -43,53 +51,63 @@
     }
 
     $pre_cache = true;
-	  include_once($MOA_PATH."sources/mod_tag_view.php");
+	  include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
     // Only include Javascript if a user is logged in
     if (UserIsLoggedIn())
 	  {
-	    echo "<script type='text/javascript' src='sources/common.js'></script>\n";
-	  	echo "<script type='text/javascript' src='sources/_request.js'></script>\n";
-	    echo "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
-	  	echo "<script type='text/javascript'>\n";
-	    echo "  all_tags = '"; ViewAllTagList(); echo "';\n";
-	    echo "  cur_tags = '"; ViewGalleryCurrentTagList($gallery_id); echo "';\n";
-	    echo "</script>\n";
-	    echo "<script type='text/javascript' src='sources/mod_gallery.js'></script>\n";
-	    echo "<script type='text/javascript'>\n";
+	    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
+	  	$bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
+	    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+	  	$bodycontent .= "<script type='text/javascript'>\n";
+	    $bodycontent .= "  //<![CDATA[\n";
+      $bodycontent .= "all_tags = '"; ViewAllTagList();
+      $bodycontent .= "';\n";
+	    $bodycontent .= "  cur_tags = '"; ViewGalleryCurrentTagList($gallery_id);
+      $bodycontent .= "';\n";
+      $bodycontent .= "  title_max_length = ".$CFG["TITLE_DESC_LENGTH"].";\n";
+      $bodycontent .= " //]]>\n";
+	    $bodycontent .= "</script>\n";
+	    $bodycontent .= "<script type='text/javascript' src='sources/mod_gallery.js'></script>\n";
+	    $bodycontent .= "<script type='text/javascript'>\n";
+      $bodycontent .= "  //<![CDATA[\n";
+	    $bodycontent .= "  gallery_id = '".$gallery_id."';\n";
 
-	    echo "  gallery_id = '".$gallery_id."';\n";
+	    $bodycontent .= "  var editblock=";
+	    $bodycontent .= LoadTemplateRootForJavaScript("component_gallery_form_edit.php");
+	    $bodycontent .= ";\n";
 
-	    echo "  var editblock=";
-	    echo LoadTemplateRootForJavaScript("component_gallery_form_edit.php");
-	    echo ";\n";
+	    $bodycontent .= "  var feedback_box = ";
+      $bodycontent .= moa_feedback_js();
+      $bodycontent .= ";\n";
 
-	    echo "  var feedback_box = ";
-        echo moa_feedback_js();
-        echo ";\n";
+      $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 
-        echo "  var template_path = 'templates/".$template_name."/';\n";
-
-	    echo "  var gallery = new Gallery('".js_var_display_safe($STR_DELIMITER)."');\n";
-	    echo "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Name"))."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
-	    echo "  gallery.PageTitle();\n";
-	    echo "</script>\n";
+	    $bodycontent .= "  var gallery = new Gallery('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
+	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Name"))."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
+      $bodycontent .= " //]]>\n";
+	    $bodycontent .= "</script>\n";
 	  }
 
-	  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+	  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
 
-	  echo "<div id = 'pagegalleryview'>\n";
-	  echo LoadTemplateRoot("page_gallery_view.php");
-	  echo "</div>\n";
-  ?>
+	  $bodycontent .= "<div id = 'pagegalleryview'>\n";
+	  $bodycontent .= LoadTemplateRoot("page_gallery_view.php");
+	  $bodycontent .= "</div>\n";
+		$bodycontent .= "<script type=\"text/javascript\">\n";
+		$bodycontent .= "  if ('".$gallery_id."' == '0000000000')\n";
+		$bodycontent .= "  {\n";
+		$bodycontent .= "    document.location = 'index.php';\n";
+		$bodycontent .= "  }\n";
+    $bodycontent .= "   </script>\n";
+    $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-		<script type="text/javascript">
-		  if ('<?php echo $gallery_id ?>' == '0000000000')
-		  {
-		    document.location = 'index.php';
-		  }
-       </script>
-<?php
-    echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
+    $gal_shortname = _galleryGetValue($gallery_id, "Name");
+    if ($CFG["TITLE_DESC_LENGTH"] < strlen($gal_shortname))
+    {
+      $gal_shortname = substr($gal_shortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";
+    }
+
+    $bodytitle .= "Gallery '".$gal_shortname."' - Moa";
   }
 ?>

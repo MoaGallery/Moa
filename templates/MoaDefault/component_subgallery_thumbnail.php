@@ -3,7 +3,7 @@
     <div class='gallery-shadow3 padding-10'>
       <div class="gal_thumbsize">
         <a href="index.php?action=gallery_view&amp;gallery_id=<moavar GalleryThumbID>">
-          <img src='<moavar GalleryThumb>' alt='<moavar GalleryThumbTitle> subgallery' title=''/>
+          <img src='<moavar GalleryThumb>' alt='<moavar GalleryThumbTitle> subgallery' title='' width="<moavar GalleryThumbWidth>" height="<moavar GalleryThumbHeight>"/>
         </a>
       </div>
       <div class='normal_text margin_5top'>

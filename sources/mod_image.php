@@ -1,28 +1,37 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once("_settings.php");
+  LoadSettings();
+
   $image_first = false;
   if (!isset($gallery_first))
   {
     $image_first = true;
   }
-  include_once("../config.php");
-  include_once($MOA_PATH."sources/_error_funcs.php");
-  include_once($MOA_PATH."sources/_db_funcs.php");
-  include_once($MOA_PATH."sources/mod_image_funcs.php");
-  include_once($MOA_PATH."sources/id.php");
-  include_once($MOA_PATH."sources/common.php");
+
+  include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/id.php");
+  include_once($CFG["MOA_PATH"]."sources/common.php");
 
   function ImageCheckExists()
   {
     // Get the ID
     $image_id = GetParam("image_id");
-    if (false == $image_id)
+    if (false === $image_id)
     {
       RaiseFatalError("No image id supplied.");
       return false;
     }
 
     // Check that it is a real image
-    if (false == _imageExists($image_id))
+    if (false === _imageExists($image_id))
     {
       RaiseFatalError($image_id." Image does not exist.");
       return false;
@@ -42,14 +51,14 @@
 
     // Get the value
     $newvalue = GetParam($p_varname);
-    if (false == $newvalue)
+    if (false === $newvalue)
     {
       RaiseFatalError("No ".$p_varname." supplied.");
       return false;
     }
 
     // Try to change the value
-    if (false == _ImageChangeValue($p_id, $p_field, $newvalue))
+    if (false === _ImageChangeValue($p_id, $p_field, $newvalue))
     {
       RaiseFatalError("Could not set new ".$p_varname, false);
       return false;
@@ -62,7 +71,7 @@
   {
     $value = _ImageGetValue($p_id, $p_field);
 
-    if (false == $value)
+    if (false === $value)
     {
       RaiseFatalError("Could not get value for field '".$p_field."'", false);
       return false;
@@ -89,7 +98,7 @@
     }
 
     // Try to delete the image
-    if (false == _ImageDelete($p_id))
+    if (false === _ImageDelete($p_id))
     {
       RaiseFatalError("Could not delete image.", false);
       return false;
@@ -110,21 +119,21 @@
 
     // Get the description
     $newdesc = GetParam("desc");
-    if (false == $newdesc)
+    if (false === $newdesc)
     {
       $newdesc = "";
     }
 
     // Get the tags
     $newtags = GetParam("tags");
-    if (false == $newtags)
+    if (false === $newtags)
     {
       RaiseFatalError("No tags supplied.");
       return false;
     }
 
     // Try to change the value
-    if (false == _ImageEdit($p_id, $newdesc, $newtags))
+    if (false === _ImageEdit($p_id, $newdesc, $newtags))
     {
       RaiseFatalError("Could not change image.", false);
       return false;
@@ -142,7 +151,7 @@
       return false;
     }
 
-    if (false == isset($_FILES['filename']))
+    if (false === isset($_FILES['filename']))
     {
     	RaiseFatalError("Failed to upload file to web server...  File too big<br/>");
     	return false;
@@ -192,22 +201,22 @@
 
     // Get the description
     $newdesc = GetParam("imageformdesc");
-    if (false == $newdesc)
+    if (false === $newdesc)
     {
       $newdesc = "";
     }
 
     // Get the tags
     $newtags = GetParam("imageformtags");
-    if (false == $newtags)
+    if (false === $newtags)
     {
       RaiseFatalError("No tags supplied.");
       return false;
     }
 
-    // Try to change the value
+    // Try to add it
     $result = _ImageAdd($newdesc, $newtags);
-    if (false == $result)
+    if (false === $result)
     {
       RaiseFatalError("Could not add image.", false);
       return false;
@@ -222,7 +231,7 @@
   {
     // Get the action
     $action = GetParam("action");
-    if (false == $action)
+    if (false === $action)
     {
       RaiseFatalError("No action supplied.");
     }
@@ -234,7 +243,7 @@
       case "changedesc" :
       {
       	$image_id = ImageCheckExists();
-        if (false != $image_id)
+        if (false !== $image_id)
         {
           if (ImageChangeValue($image_id, "Description", "desc"))
           {
@@ -251,7 +260,7 @@
       case "edit" :
       {
       	$image_id = ImageCheckExists();
-        if (false != $image_id)
+        if (false !== $image_id)
         {
           if (ImageEdit($image_id))
           {
@@ -263,7 +272,7 @@
       case "getdesc" :
       {
       	$image_id = ImageCheckExists();
-        if (false != $image_id)
+        if (false !== $image_id)
         {
           ImageGetValue($image_id,"Description");
         }
@@ -272,7 +281,7 @@
       case "delete" :
       {
       	$image_id = ImageCheckExists();
-        if (false != $image_id)
+        if (false !== $image_id)
         {
       	  ImageDelete($image_id);
         }
@@ -286,7 +295,7 @@
     }
   }
 
-  if ((false == isset($pre_cache)) && ($image_first))
+  if ((false === isset($pre_cache)) && ($image_first))
   {
     ImageAjaxMain();
   }

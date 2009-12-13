@@ -1,4 +1,12 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
 
   // Used to hold 1 gallery for the breadcrumb data
   class Nav
@@ -15,13 +23,13 @@
 
   function TagParseHeaderImageCount($p_tag_options)
   {
-    global $tab_prefix;
+    global $CFG;
     global $ErrorString;
     global $INSTALLING;
 
     if (!$INSTALLING)
     {
-      $query = "SELECT count(1) as Count FROM ".$tab_prefix."image";
+      $query = "SELECT count(1) as Count FROM ".$CFG["tab_prefix"]."image";
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
       $row = mysql_fetch_array($result);
       return $row["Count"];
@@ -33,13 +41,13 @@
 
   function TagParseHeaderGalleryCount($p_tag_options)
   {
-    global $tab_prefix;
+    global $CFG;
     global $ErrorString;
     global $INSTALLING;
 
     if (!$INSTALLING)
     {
-      $query = "SELECT count(1) as Count FROM ".$tab_prefix."gallery";
+      $query = "SELECT count(1) as Count FROM ".$CFG["tab_prefix"]."gallery";
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
       $row = mysql_fetch_array($result);
       return $row["Count"];
@@ -80,8 +88,8 @@
     } else
     {
       $button = $blankbutton;
-      $button = ParseVar($button, "Label", "Login");
-      $button = ParseVar($button, "Link", "index.php?action=login");
+      $button = ParseVar($button, "Label", "Admin");
+      $button = ParseVar($button, "Link", "index.php?action=admin");
       $buttons .= $button;
     }
 
@@ -101,7 +109,7 @@
   function TagParseBreadcrumbList($p_tag_options)
   {
     global $gallery_id;
-    global $tab_prefix;
+    global $CFG;
     global $INSTALLING;
 
     $linear = false;
@@ -123,7 +131,7 @@
       // Find parent galleries going back to Home gallery
       while ((0 != strcmp($gallery_id, "0000000000")) && (!$dead))
       {
-        $query = "SELECT Name, IDParent FROM ".$tab_prefix."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
+        $query = "SELECT Name, IDParent FROM ".$CFG["tab_prefix"]."gallery WHERE (IDGallery = '".mysql_real_escape_string($gallery_id)."')";
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         if (((is_bool($result)) && (!$result)) || (0 == mysql_num_rows($result)))
         {

@@ -1,17 +1,25 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
   if (false == isset($INSTALLING)) {
     $INSTALLING = false;
   }
 
   // Common functions
-  include_once($MOA_PATH."sources/common.php");
-  include_once($MOA_PATH."sources/_error_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/common.php");
+  include_once($CFG["MOA_PATH"]."sources/_error_funcs.php");
 
   if (!$INSTALLING)
   {
     // Database Configuration and Website configuration settings
     include_once("config.php");
-    include_once($MOA_PATH."sources/_db_funcs.php");
+    include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
 
     // Connect to database
     if (isset($db_host))

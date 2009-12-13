@@ -8,7 +8,7 @@
             Gallery
           </p>
           <div class="testboxcontent">
-            <moatag type="GalleryAdminLinks" location="gallery">
+            <moatag type="AdminLinks" location="gallery">
             <div id="galleryblocktitles" class="new_line">
               <div id="galleryblockname" class="gallery_name">
                 <moatag type="GalleryName">
@@ -17,16 +17,16 @@
                 <moatag type="GalleryDescription">
               </div>
             </div>
+            <moatag type="GallerySubgalleryThumbnails" hide="image">
             <div id="galleryblockimagethumbs">
               <moatag type="GalleryImageThumbnails">
             </div>
-            <moatag type="GallerySubgalleryThumbnails" hide="image">
             <div class="new_line height1px">&nbsp;</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <moatag type="GallerySubgalleryThumbBlock">
+
 </div>
 <p class="hspacer">&nbsp;</p>

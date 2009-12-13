@@ -1,1 +1,1 @@
- <moatag type="AdminLinks">
+ <moatag type="AdminLinks" location="admin">

@@ -1,23 +1,20 @@
 <?php
-  include_once("../config.php");
 
-  // If MOA_PATH is not set in config.php then set it here
-  // to the likely value to all processing to continue.
-  //
-  // Needed for when 1.2 are first copied over a existing install.
-  $no_moa_path = false;
-  if (!isset($MOA_PATH))
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
   {
-    $MOA_PATH = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
-    $MOA_PATH = str_replace( "/sources/", "/", $MOA_PATH);
-    $no_moa_path = true;
+    echo "Hacking attempt.";
+    die();
   }
 
-  include_once($MOA_PATH."sources/_db_funcs.php");
-	include_once($MOA_PATH."sources/common.php");
-	include_once($MOA_PATH."sources/id.php");
+  include_once("_settings.php");
+  LoadSettings();
 
-	include_once($MOA_PATH."sources/mod_upgrade_funcs.php");
+	include_once($CFG["MOA_PATH"]."sources/common.php");
+	include_once($CFG["MOA_PATH"]."sources/id.php");
+
+	include_once($CFG["MOA_PATH"]."sources/mod_upgrade_funcs.php");
 
 	// Adds a new config variable to config.php or (from 1.2.1 onwards) the database
 	function UpgradeAddConfigVar()
@@ -31,25 +28,36 @@
       return false;
     }
 
+    // Get the test status
+    $testflag = true;
+    $test = GetParam("test");
+    if (false !== $test)
+    {
+      if (0 == strcmp("false", $test))
+      {
+        $testflag = false;
+      }
+    }
+
     // Get the name
-    $newname = GetParam('name');
-    if (false == $newname)
+    $newname = GetParam("name");
+    if (false === $newname)
     {
       RaiseFatalError("No config var name supplied.");
       return false;
     }
 
     // Get the value
-    $newvalue = GetParam('value');
-    if (false == $newvalue)
+    $newvalue = GetParam("value");
+    if (false === $newvalue)
     {
       RaiseFatalError("No config var value supplied.");
       return false;
     }
 
     // Get the destination
-    $dest = GetParam('dest');
-    if (false == $dest)
+    $dest = GetParam("dest");
+    if (false === $dest)
     {
       RaiseFatalError("No destination supplied.");
       return false;
@@ -57,7 +65,7 @@
 
     if (0 == strcmp($dest, "file"))
     {
-      if (!_AddFileConfigVar($newname, $newvalue))
+      if (!_AddFileConfigVar($newname, $newvalue, $testflag))
       {
       	RaiseFatalError("Could not add new var.");
       	return false;
@@ -82,9 +90,20 @@
       return false;
     }
 
+    // Get the test status
+    $testflag = true;
+    $test = GetParam("test");
+    if (false !== $test)
+    {
+      if (0 == strcmp("false", $test))
+      {
+        $testflag = false;
+      }
+    }
+
     // Get the filename
     $filename = GetParam('filename');
-    if (false == $filename)
+    if (false === $filename)
     {
       RaiseFatalError("No filename supplied.");
       return false;
@@ -97,8 +116,9 @@
       return false;
     }
 
-    if (!_UpgradeDelFile($filename))
+    if (!_UpgradeDelFile($filename, $testflag))
     {
+      RaiseFatalError("");
     	return false;
     }
 
@@ -115,9 +135,20 @@
       return false;
     }
 
+    // Get the test status
+    $testflag = true;
+    $test = GetParam("test");
+    if (false !== $test)
+    {
+      if (0 == strcmp("false", $test))
+      {
+        $testflag = false;
+      }
+    }
+
     // Get the filename
     $filename = GetParam('filename');
-    if (false == $filename)
+    if (false === $filename)
     {
       RaiseFatalError("No filename supplied.");
       return false;
@@ -127,12 +158,12 @@
     // Dissallowing a slash should ensure this
     if ((mb_strpos($filename, "\\")) || (mb_strpos($filename, "/")))
     {
-      RaiseFatalError("Only files inside the Moa SQL directory can be run as part of the upgrade.");
+      RaiseFatalError("Only files inside the Moa SQL/upgrade/ directory can be run as part of the upgrade.");
       return false;
     }
 
-    $result = _ModifyDB($filename);
-    if ((is_bool($result)) && (!$result))
+    $result = _ModifyDB($filename, $testflag);
+    if (false === $result)
     {
       RaiseFatalError("Error running SQL.");
       return false;
@@ -143,11 +174,76 @@
     return true;
   }
 
+  function RunFunc()
+  {
+    global $ErrorString;
+
+    // Only proceed if a user is logged in
+    if (!UserIsLoggedIn())
+    {
+      RaiseFatalError("Not logged in.");
+      return false;
+    }
+
+    // Get the test status
+    $testflag = true;
+    $test = GetParam("test");
+    if (false !== $test)
+    {
+      if (0 == strcmp("false", $test))
+      {
+        $testflag = false;
+      }
+    }
+
+    // Get the function to run
+    $funcname = GetParam("func");
+    if (false === $funcname)
+    {
+      RaiseFatalError("No function name supplied.");
+      return false;
+    }
+
+    $result = "";
+    switch ($funcname)
+    {
+      case "upgrade_10201_MoveConfigtoDB" :
+      {
+        $result = _upgrade_10201_MoveConfigtoDB($testflag);
+        break;
+      }
+      case "upgrade_10201_AddImageFormats" :
+      {
+        $result = _upgrade_10201_AddImageFormats($testflag);
+        break;
+      }
+      case "upgrade_complete" :
+      {
+        $result = _upgrade_complete($testflag);
+        break;
+      }
+      default :
+      {
+        RaiseFatalError("Unknown function.");
+        break;
+      }
+    }
+
+    if (false === $result)
+    {
+      RaiseFatalError($ErrorString);
+      return false;
+    }
+
+    OutputPrefix("OK");
+    return true;
+  }
+
   function UpgradeAjaxMain()
   {
     // Get the action
     $action = GetParam("action");
-    if (false == $action)
+    if (false === $action)
     {
       RaiseFatalError("No action supplied.");
     }
@@ -171,6 +267,11 @@
         ModifyDB();
         break;
       }
+      case "run_func" :
+      {
+        RunFunc();
+        break;
+      }
       default :
       {
         RaiseFatalError("Unknown action.");
@@ -180,7 +281,7 @@
   }
 
   // Only do this if we are running stand-alone (not included from index.php)
-  if (false == isset($pre_cache))
+  if (false === isset($pre_cache))
   {
     UpgradeAjaxMain();
   }

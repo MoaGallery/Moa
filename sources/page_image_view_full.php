@@ -1,19 +1,28 @@
-	<?php
-	  include_once($MOA_PATH."config.php");
-	  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
-	  echo "    <a onclick='history.go(-1)'><img src='".$IMAGE_PATH."/".$_REQUEST["image_id"];
-	  echo ".jpg' onmouseover='this.style.cursor=\"hand\"' alt='Full size image' /></a>";
-	  $page_title = "Image";
-	  $desc = _ImageGetValue($_REQUEST["image_id"], "Description");
-	  if (strlen($desc) > 0)
-	  {
-	  	if (strlen($desc) > $TITLE_DESC_LENGTH)
-	  	{
-	  		$page_title .= " - \'" . html_display_safe(mb_substr($desc, 0, $TITLE_DESC_LENGTH-3)) . "...\'";
-	  	} else
-	  	{
-	  		$page_title .= " - \'" . html_display_safe($desc) . "\'";
-	  	}
-	  }
-	  echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
-  ?>
+<?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
+  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+  $bodycontent .= "    <a onclick='history.go(-1)'><img src='".$CFG["IMAGE_PATH"].$_REQUEST["image_id"];
+  $ext = _ImageGetValue($_REQUEST["image_id"], "Format");
+  $bodycontent .= ".".$ext."' onmouseover='this.style.cursor=\"hand\"' alt='Full size image' /></a>";
+  $bodytitle = "Image";
+  $desc = _ImageGetValue($_REQUEST["image_id"], "Description");
+  if (strlen($desc) > 0)
+  {
+  	if (strlen($desc) > $CFG["TITLE_DESC_LENGTH"])
+  	{
+  		$bodytitle .= " - \'" . html_display_safe(mb_substr($desc, 0, $CFG["TITLE_DESC_LENGTH"]-3)) . "...\'";
+  	} else
+  	{
+  		$bodytitle .=  " - \'" . html_display_safe($desc) . "\'";
+  	}
+  }
+  $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
+?>

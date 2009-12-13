@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `<prefix>image` (
   `Description` blob,
   `Width` int(5) unsigned NOT NULL,
   `Height` int(5) unsigned NOT NULL,
+  `Format` varchar(4) NOT NULL,
   PRIMARY KEY  (`IDImage`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
@@ -96,6 +97,31 @@ CREATE TABLE IF NOT EXISTS `<prefix>users` (
   PRIMARY KEY  (`IDUser`),
   UNIQUE KEY `Name` (`Name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `<prefix>settings`
+--
+
+DROP TABLE IF EXISTS `<prefix>settings`;
+CREATE TABLE IF NOT EXISTS `<prefix>settings` (
+  `Name` varchar(100) NOT NULL,
+  `Value` varchar(255) NOT NULL,
+  `Type` varchar(10) NOT NULL,
+  UNIQUE KEY `Name` (`Name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+--
+-- Table structure for table `<prefix>frontpage`
+--
+
+DROP TABLE IF EXISTS `<prefix>frontpage`;
+CREATE TABLE IF NOT EXISTS `<prefix>frontpage` (
+  `Description` blob
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+INSERT INTO `<prefix>frontpage` VALUES ("");
 
 --
 -- Constraints for dumped tables

@@ -1,5 +1,13 @@
 <?php
-  include_once($MOA_PATH."sources/mod_gallery_funcs.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
   function TagParseGalleryDescription($p_tag_options)
   {
@@ -25,55 +33,12 @@
     return html_display_safe($name);
   }
 
-  function TagParseGalleryAdminLinks($p_tag_options)
-  {
-    global $gallery_id;
-
-    if (UserIsLoggedIn())
-    {
-      if (!isset($p_tag_options["location"]))
-      {
-        if (0 == strcmp($gallery_id, "0000000000"))
-        {
-          $p_tag_options["location"] = "home";
-        } else
-        {
-          $p_tag_options["location"] = "gallery";
-        }
-      }
-
-      if (0 == strcmp($p_tag_options["location"], "gallery"))
-      {
-        $links = LoadTemplate("component_gallery_admin_links.php");
-        $links = ParseVar($links, "GalleryEditLink", "onclick='gallery.Edit();'");
-        $links = ParseVar($links, "GalleryDeleteLink", "onclick='gallery.Delete();'");
-        $links = ParseVar($links, "ImageAddLink", "href='index.php?action=image_add&parent_id=".$gallery_id."'");
-        $links = ParseVar($links, "GalleryAddLink", "href='index.php?action=gallery_add&parent_id=".$gallery_id."'");
-        return $links;
-      }
-      elseif (0 == strcmp($p_tag_options["location"], "home"))
-      {
-        $links = LoadTemplate("component_gallery_home_admin_links.php");
-        $links = ParseVar($links, "ImageAddLink", "href='index.php?action=image_add&parent_id=".$gallery_id."'");
-        $links = ParseVar($links, "GalleryAddLink", "href='index.php?action=gallery_add&parent_id=".$gallery_id."'");
-        return $links;
-      }
-      return "";
-    }
-    return " ";
-  }
-
   function TagParseGalleryImageThumbnails($p_tag_options)
   {
     global $gallery_id;
-    global $THUMB_WIDTH;
-    global $THUMB_PATH;
-    global $SHOW_EMPTY_DESC_POPUPS;
-    global $EMPTY_DESC_POPUP_TEXT;
-    global $DISPLAY_PLAIN_SUBGALLERIES;
-    global $MOA_PATH;
+    global $CFG;
 
-    if (($DISPLAY_PLAIN_SUBGALLERIES) && (0 != _galleryGetSubGalleryCount($gallery_id)))
+    if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != _galleryGetSubGalleryCount($gallery_id)))
     {
       return " ";
     }
@@ -88,12 +53,12 @@
       $thumb = "";
 
       if (mb_strlen($image->m_description) <= 0) {
-        if ($SHOW_EMPTY_DESC_POPUPS == false)
+        if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
         {
           $popup = "";
         } else
         {
-          $popup = "onmouseover='overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }
       } else
       {
@@ -102,20 +67,45 @@
       $width = _ImageGetValue($image->m_id, "Width");
       $height = _ImageGetValue($image->m_id, "Height");
 
+      if ((null == $width) || (null == $height))
+      {
+        $width = 150;
+        $height = 112;
+      }
+
+      if (($width > $CFG["THUMB_WIDTH"]) or ($height > ($CFG["THUMB_WIDTH"]*0.75)))
+      {
+        $w = $width / $CFG["THUMB_WIDTH"];
+        $h = $height / ($CFG["THUMB_WIDTH"] * 0.75);
+        if ($w > $h)
+        {
+          $width = $CFG["THUMB_WIDTH"];
+          $height = $height / $w;
+        } else
+        {
+          $width = $width / $h;
+          $height = $CFG["THUMB_WIDTH"] * 0.75;
+        }
+      }
+
       $thumb = $links;
 
-      if (is_file($MOA_PATH.$THUMB_PATH."/thumb_".$image->m_id.".jpg"))
+      if (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image->m_id.".jpg"))
       {
-        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($THUMB_PATH)."/thumb_".$image->m_id.".jpg");
+        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image->m_id.".jpg");
       }
       else
       {
-        $thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$THUMB_WIDTH);
+        $thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
       }
 
       $thumb = ParseVar($thumb, "ImageThumbID", $image->m_id);
-      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($THUMB_WIDTH));
-      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($THUMB_WIDTH*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+      $thumb = ParseVar($thumb, "ImageThumbGlobalHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
+      $thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($width));
+      $thumb = ParseVar($thumb, "GalleryThumbHeight", str_display_safe(ceil($height)));
+      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($width));
+      $thumb = ParseVar($thumb, "ImageThumbHeight", str_display_safe(ceil($height)));
       $thumb = ParseVar($thumb, "ImagePopup", $popup);
       $thumb = ParseVar($thumb, "GalleryID", $gallery_id);
       $thumb = ParseVar($thumb, "Referer", "");
@@ -131,12 +121,13 @@
 
   function TagParseGallerySubgalleryThumbBlock($p_tag_options)
   {
-    global $DISPLAY_PLAIN_SUBGALLERIES;
+    global $CFG;
     global $gallery_id;
 
     $subs = _galleryGetSubGalleryCount($gallery_id);
     $images = _galleryGetImageCount($gallery_id);
-    if ((0 == $subs) || (($DISPLAY_PLAIN_SUBGALLERIES) && (0 != $images)) || ((0 != $subs) && (0 == $images) && (!$DISPLAY_PLAIN_SUBGALLERIES)))
+    if (0 == $subs)
+    //if ((0 == $subs) || (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != $images)) || ((0 != $subs) && (0 == $images) && (!$CFG["DISPLAY_PLAIN_SUBGALLERIES"])))
     {
       return " ";
     }
@@ -147,38 +138,17 @@
   function TagParseGallerySubGalleryThumbnails($p_tag_options)
   {
     global $gallery_id;
-    global $THUMB_WIDTH;
-    global $THUMB_PATH;
-    global $SHOW_EMPTY_DESC_POPUPS;
-    global $EMPTY_DESC_POPUP_TEXT;
-    global $DISPLAY_PLAIN_SUBGALLERIES;
-    global $MOA_PATH;
-    global $TITLE_DESC_LENGTH;
+    global $CFG;
 
     // Check if the hidden flag is set
     if (isset($p_tag_options["hide"]))
     {
       // Sub-galleries should be hidden and we have some
-      if (($DISPLAY_PLAIN_SUBGALLERIES) && (0 != _galleryGetSubGalleryCount($gallery_id)))
+      if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != _galleryGetSubGalleryCount($gallery_id)))
       {
         if (0 == strcmp($p_tag_options["hide"], "noimage"))
         {
           return " ";
-        }
-      } else
-      {
-        if (0 == strcmp($p_tag_options["hide"], "image"))
-        {
-          if (0 != _galleryGetImageCount($gallery_id))
-          {
-            return " ";
-          }
-        } elseif (0 == strcmp($p_tag_options["hide"], "noimage"))
-        {
-          if (0 == _galleryGetImageCount($gallery_id))
-          {
-            return " ";
-          }
         }
       }
     }
@@ -191,12 +161,12 @@
     {
       // Create an Overlib popup description
       if (mb_strlen($gallery->m_description) <= 0) {
-        if ($SHOW_EMPTY_DESC_POPUPS == false)
+        if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
         {
           $popup = "";
         } else
         {
-          $popup = "onmouseover='return overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='return overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }
       } else
       {
@@ -207,7 +177,7 @@
       $subgallery_count = _galleryGetSubGalleryCount($gallery->m_id);
       $image_count = _galleryGetImageCount($gallery->m_id);
       $cap = "";
-      if ($DISPLAY_PLAIN_SUBGALLERIES)
+      if ($CFG["DISPLAY_PLAIN_SUBGALLERIES"])
       {
         if ($subgallery_count > 0)
         {
@@ -257,21 +227,44 @@
       $width = _ImageGetValue($image_id, "Width");
       $height = _ImageGetValue($image_id, "Height");
 
+      if ((null == $width) || (null == $height))
+      {
+        $width = 150;
+        $height = 112;
+      }
+
+      if (($width > $CFG["THUMB_WIDTH"]) or ($height > ($CFG["THUMB_WIDTH"]*0.75)))
+      {
+        $w = $width / $CFG["THUMB_WIDTH"];
+        $h = $height / ($CFG["THUMB_WIDTH"] * 0.75);
+        if ($w > $h)
+        {
+          $width = $CFG["THUMB_WIDTH"];
+          $height = $height / $w;
+        } else
+        {
+          $width = $width / $h;
+          $height = $CFG["THUMB_WIDTH"] * 0.75;
+        }
+      }
+
       $thumb = ParseVar($links, "GalleryThumbID", $gallery->m_id);
-      $thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($THUMB_WIDTH));
-      $thumb = ParseVar($thumb, "GalleryThumbHeight", str_display_safe(ceil($THUMB_WIDTH*0.75)));
+      $thumb = ParseVar($thumb, "GalleryThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+      $thumb = ParseVar($thumb, "GalleryThumbGlobalHeight", str_display_safe(ceil($CFG["THUMB_WIDTH"]*0.75)));
+      $thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($width));
+      $thumb = ParseVar($thumb, "GalleryThumbHeight", str_display_safe(ceil($height)));
 
       if (is_bool($image_id))
       {
-        $thumb = ParseVar($thumb, "GalleryThumb", "sources/_image_scaler.php?image_name=../media/empty.png&amp;display_width=".$THUMB_WIDTH);
+        $thumb = ParseVar($thumb, "GalleryThumb", "sources/_image_scaler.php?image_name=../media/empty.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
       }
-      elseif (is_file($MOA_PATH.$THUMB_PATH."/thumb_".$image_id.".jpg"))
+      elseif (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image_id.".jpg"))
       {
-        $thumb = ParseVar($thumb, "GalleryThumb", str_display_safe($THUMB_PATH)."/thumb_".$image_id.".jpg");
+        $thumb = ParseVar($thumb, "GalleryThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image_id.".jpg");
       }
       else
       {
-        $thumb = ParseVar($thumb, "GalleryThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$THUMB_WIDTH);
+        $thumb = ParseVar($thumb, "GalleryThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
       }
 
       $short_desc = $gallery->m_description;
@@ -291,7 +284,7 @@
       $thumb = ParseVar($thumb, "GalleryThumbDesc", $short_desc);
       $thumb = ParseVar($thumb, "GalleryID", $gallery_id);
       $thumb = ParseVar($thumb, "GalleryThumbTitle", str_display_safe($gallery->m_name));
-      $thumb = ParseVar($thumb, "GalleryThumbTitleShort", str_display_safe(substr($gallery->m_name, 0, $TITLE_DESC_LENGTH)."..."));
+      $thumb = ParseVar($thumb, "GalleryThumbTitleShort", str_display_safe(substr($gallery->m_name, 0, $CFG["TITLE_DESC_LENGTH"])."..."));
       $thumbs .= $thumb;
     }
 
@@ -316,7 +309,7 @@
 
   function TagParseGalleryParentComboList($p_tag_options)
   {
-    global $tab_prefix;
+    global $CFG;
     global $gallery_id;
     global $parent_id;
 
@@ -331,7 +324,7 @@
       $pid = _galleryGetValue($gallery_id, "IDParent");
     }
 
-    $query = "SELECT * FROM ".$tab_prefix."gallery;";
+    $query = "SELECT * FROM ".$CFG["tab_prefix"]."gallery;";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     while ($gallery = mysql_fetch_array($result))
     {
@@ -354,7 +347,7 @@
 
   function TagParseThumbWidth($p_tag_options)
   {
-    global $THUMB_WIDTH;
+    global $CFG;
 
     $result = 0;
     if (isset($p_tag_options["add"]))
@@ -362,13 +355,13 @@
       $result = $p_tag_options["add"];
     }
 
-    $str = str_display_safe($THUMB_WIDTH + $result);
+    $str = str_display_safe($CFG["THUMB_WIDTH"] + $result);
     return $str;
   }
 
   function TagParseThumbHeight($p_tag_options)
   {
-    global $THUMB_WIDTH;
+    global $CFG;
 
     $result = 0;
     if (isset($p_tag_options["add"]))
@@ -376,7 +369,7 @@
       $result = $p_tag_options["add"];
     }
 
-    $str = str_display_safe((($THUMB_WIDTH*0.75))+ $result);
+    $str = str_display_safe((($CFG["THUMB_WIDTH"]*0.75))+ $result);
     return $str;
   }
 ?>

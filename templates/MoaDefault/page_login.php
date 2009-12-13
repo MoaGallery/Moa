@@ -1,4 +1,4 @@
-<form id="login-form" method="post" action="index.php" enctype="multipart/form-data">
+<form id="login-form" method="post" action="index.php?action=admin" enctype="multipart/form-data">
   <div>
     <div class="logoutstatus">
       <moatag type="LogoutStatus">
@@ -39,6 +39,7 @@
                 </dd>
 
                 <dt>
+                  &nbsp;
                 </dt>
                 <dd>
                   <input type="submit" value="Login" id="loginsubmit"/>

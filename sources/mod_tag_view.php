@@ -1,41 +1,52 @@
 <?php
-  include_once($MOA_PATH."config.php");
-  include_once($MOA_PATH."sources/mod_tag_funcs.php");
-  include_once($MOA_PATH."sources/mod_gallery_funcs.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."config.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
   function ViewAllTagList()
   {
-  	global $STR_DELIMITER;
+  	global $CFG;
+    global $bodycontent;
 
   	$tags = _TagGetTags();
 
     foreach ($tags as $tag)
     {
-      echo $tag->m_id."=".js_var_display_safe($tag->m_name.$STR_DELIMITER);
+      $bodycontent .= $tag->m_id."=".js_var_display_safe($tag->m_name.$CFG["STR_DELIMITER"]);
     }
   }
 
   function ViewGalleryCurrentTagList($p_id)
   {
-  	global $STR_DELIMITER;
+  	global $CFG;
+    global $bodycontent;
 
     $tags = _galleryGetTagList($p_id);
 
     foreach ($tags as $tag)
     {
-      echo str_display_safe($tag.$STR_DELIMITER);
+      $bodycontent .= str_display_safe($tag.$CFG["STR_DELIMITER"]);
     }
   }
 
   function ViewImageCurrentTagList($p_id)
   {
-    global $STR_DELIMITER;
+    global $CFG;
+    global $bodycontent;
 
     $tags = _ImageGetTagList($p_id);
 
     foreach ($tags as $tag)
     {
-      echo js_var_display_safe($tag.$STR_DELIMITER);
+      $bodycontent .= js_var_display_safe($tag.$CFG["STR_DELIMITER"]);
     }
   }
 ?>

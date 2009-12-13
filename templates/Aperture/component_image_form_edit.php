@@ -17,8 +17,8 @@
       <dd>
         <input class='form_text image_name_tags' type='text' name='imageformtags' id='imageformtags' onmouseover='image.EnableTagHintList(this);' onmouseout='image.DisableTagHintList(this);'/>
         <span id='formtaglistfeedback' class="image_name_tag_icon"></span>
+        <br/>
       </dd>
-      <br/>
 
       <dt class='form_label_text'>
         &nbsp

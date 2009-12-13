@@ -1,26 +1,35 @@
 <?php
-  include_once($MOA_PATH."sources/_template_component_header.php");
-  include_once($MOA_PATH."sources/_template_component_footer.php");
-  include_once($MOA_PATH."sources/_template_component_image.php");
-  include_once($MOA_PATH."sources/_template_component_gallery.php");
-  include_once($MOA_PATH."sources/_template_component_admin.php");
-  include_once($MOA_PATH."sources/_template_component_login.php");
-  include_once($MOA_PATH."sources/_template_component_sitemap.php");
-  include_once($MOA_PATH."sources/_template_component_generic.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."sources/_template_component_header.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_footer.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_image.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_gallery.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_admin.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_login.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_sitemap.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_generic.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_settings.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_main.php");
 
   function LoadTemplate($p_filename)
   {
-    global $tab_prefix;
     global $template_name;
     global $pre_cache;
-    global $MOA_PATH;
+    global $CFG;
 
-    $filename = $MOA_PATH."templates/".$template_name."/".$p_filename;
+    $filename = $CFG["MOA_PATH"]."templates/".$template_name."/".$p_filename;
 
     $fp = @fopen($filename, "r");
     if ((!$fp) && (is_bool($fp)))
     {
-      $fp = $fp = @fopen($MOA_PATH."templates/MoaDefault/".$p_filename, "r");
+      $fp = $fp = @fopen($CFG["MOA_PATH"]."templates/MoaDefault/".$p_filename, "r");
       if ((!$fp) && (is_bool($fp)))
       {
         return "Cannot find template file - '".$filename."'";
@@ -55,34 +64,13 @@
 
   function LoadTemplateRoot($p_template)
   {
-    global $DEBUG_MODE;
+    global $CFG;
 
     $template = LoadTemplate($p_template);
+    ob_start();
+    ob_flush();
 
-    if ($DEBUG_MODE)
-    {
-      $result = eval(" ?> ".$template." <?php ");
-    } else
-    {
-      $result = eval(" ?> ".$template." <?php ");
-    }
-
-    if ((is_bool($result)) && (!$result))
-    {
-      return "error";
-    } else
-    {
-      return $result;
-    }
-  }
-
-  function LoadTemplateRootForJavaScript($p_template)
-  {
-    global $DEBUG_MODE;
-
-    $template = LoadTemplateforJavaScript($p_template);
-
-    if ($DEBUG_MODE)
+    if ($CFG["DEBUG_MODE"])
     {
       $result = eval(" ?> ".$template." <?php ");
     } else
@@ -90,13 +78,40 @@
       $result = @eval(" ?> ".$template." <?php ");
     }
 
-    if (is_bool($result))
+    $result = ob_get_clean();
+
+    if (false === $result)
     {
-      echo "error";
+      $result = "error";
+    }
+
+    return $result;
+  }
+
+  function LoadTemplateRootForJavaScript($p_template)
+  {
+    global $CFG;
+
+    $template = LoadTemplateforJavaScript($p_template);
+    ob_start();
+    ob_flush();
+
+    if ($CFG["DEBUG_MODE"])
+    {
+      eval(" ?> ".$template." <?php ");
     } else
     {
-      echo $result;
+      @eval(" ?> ".$template." <?php ");
     }
+
+    $result = ob_get_clean();
+
+    if (is_bool($result))
+    {
+      $result = "error";
+    }
+
+    return $result;
   }
 
   function SplitTag($source)
@@ -132,7 +147,7 @@
 
   function ParseTemplate($p_template)
   {
-    global $DEBUG_MODE;
+    global $CFG;
 
     $template = $p_template;
     $start = 0;
@@ -177,17 +192,17 @@
       // Call it if it exists
       if (function_exists($fname))
       {
-        $str_b = $fname($tag_options);
+      	$str_b = $fname($tag_options);
       }
 
-      if ((0 == strlen($str_b)) && ($DEBUG_MODE))
+      if ((0 == strlen($str_b)) && ($CFG["DEBUG_MODE"]))
       {
         $str_b = "TEMPLATE WARNING: Tag not found - '".html_display_safe($fulltag)."'.";
       }
 
       $str_a = substr($template, 0, $start);
       $str_c = substr($template, $end+1, strlen($template));
-      $template = $str_a.$str_b.$str_c;
+      $template= $str_a.$str_b.$str_c;
 
     }
 

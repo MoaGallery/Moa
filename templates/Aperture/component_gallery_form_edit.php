@@ -6,8 +6,8 @@
       </dt>
       <dd>
         <input class='form_text gallery_edit_name' type='text' id='galleryformname'/>
+        <br/>
       </dd>
-      <br/>
 
       <dt class='form_label_text'>
         Description:
@@ -25,8 +25,8 @@
       <dd>
         <input class='form_text gallery_name_tags' type='text' id='galleryformtags' onmouseover='gallery.EnableTagHintList(this);' onmouseout='gallery.DisableTagHintList(this);'/>
         <span id='formtaglistfeedback' class="gallery_name_tag_icon"></span>
+        <br/>
       </dd>
-      <br/>
 
       <dt class='form_label_text'>
         Parent gallery:
@@ -38,8 +38,8 @@
           </option>
           <moatag type="GalleryParentComboList">
         </select>
+        <br/>
       </dd>
-      <br/>
 
       <dt class='form_label_text'>
         &nbsp

@@ -1,0 +1,1 @@
+Move db_config.php writing code into a function to be used in both install and update.

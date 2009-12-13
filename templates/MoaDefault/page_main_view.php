@@ -1,17 +1,22 @@
-<div id="galleryblockfeedback">
-  <moatag type="GalleryDeleteFeedback">
+<div id="mainblockfeedback">
+  <moatag type="MainDeleteFeedback">
 </div>
-<div id="galleryblock">
+<div id="mainblock">
   <div class="testbox_tl">
     <div class="testbox_tr">
       <div class="testbox_bl">
         <div class="testbox_br">
           <p class="testboxheader">
-            Image
+            Gallery
           </p>
           <div class="testboxcontent">
-            <moatag type="GalleryAdminLinks" location="home">
+            <moatag type="AdminLinks" location="home">
             <div class="new_line">
+              <div id="mainblocktitles" class="new_line">
+                <div id="mainblockdesc" class="main_desc">
+                  <moatag type="MainDescription">
+                </div>
+              </div>
               <moatag type="GallerySubgalleryThumbnails" hide="image">
             </div>
             <div class="new_line height1px">&nbsp;</div>

@@ -1,7 +1,7 @@
 <div class="body_section">
   <div id="hidden_hack" class="hidden_hack"></div>
   <div class="left_column left_column_shadow">
-    <moatag type="GalleryAdminLinks">
+    <moatag type="AdminLinks" location="gallery">
     <div id='galleryblockfeedback'>
       <moatag type="GalleryDeleteFeedback">
     </div>
@@ -17,9 +17,7 @@
 
   <div class="right_column right_column_shadow">
     <div class="gallery_container">
-      <ul class="subgallery_list">
-        <moatag type="GallerySubGalleryThumbnails" hide="image">
-      </ul>
+      <moatag type="GallerySubGalleryThumbBlock">
       <ul class="image_thumbs_list">
         <moatag type="GalleryImageThumbnails">
       </ul>

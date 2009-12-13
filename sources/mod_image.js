@@ -33,14 +33,15 @@ function Image( p_delim)
     m_width = p_width;
     m_height = p_height;
     m_from = p_from;
-    
-    m_short_desc = ShortName(m_desc); 
+   
+    m_short_desc = ShortName(m_desc);
     m_old_desc = "";
     m_old_tags = "";
+
     
     m_taglist.PreLoad(all_tags, cur_tags);
     m_tags = m_taglist.StringList();
-    
+        
     if ("" == m_image_id)
     {
       m_add_mode = true;
@@ -130,7 +131,7 @@ function Image( p_delim)
     {
       document.title += " - '";
       document.title += m_short_desc;
-      document.title += "'";
+      document.title += "' - Moa";
     }
   };
   
@@ -306,8 +307,8 @@ function Image( p_delim)
       m_descexpand = false;
     } else
     {
-      document.getElementById("imageformdesc").rows = 15;
-      document.getElementById("imageformdesc").cols = 70;
+      document.getElementById("imageformdesc").rows = 14;
+      document.getElementById("imageformdesc").cols = 60;
       document.getElementById("imageformexpandlink").innerHTML = "[Shrink]";
       m_descexpand = true;
     }

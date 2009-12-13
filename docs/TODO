@@ -1,46 +1,46 @@
 
 
 TODO -
-    Aperture - popup appears on top left if page is loaded with thumbnail under the mouse.
+    Image thumbnails need a container moatag (aperture needs it for <ul>s).
 Bugs -
-    Euros plus possibly other characters in the parent combo box stop javascript classes from loading.  (Gallery) - Unable to reproduce, old?
     galleryfuncs stuff returns false if it fails, we need to check it.
+    Popup appears on top left if page is loaded with thumbnail under the mouse.
+    Moadefault - long image descriptions expand the desc box and gets pushed below due to the float: left;
+    Tags containing the seperator char are broken up on the tag admin page. Should be replaced.
+	Replacing an image with a different sized file will keep the old dimensions in the DB.
+    
+Fixed -
+    * Changing template to Aperture shows an error about 2 settings not being done.  
+	* Showing thumbs+galleries isn't showing the galleries.
+	* Handle thumbnail sizes.
+	* Add gallery - labels wrong colour.
  
  
  
  
  
 Done -
-    'Home' on breadcrumb should go to index, not gallery_id 0000000000 (same for deleting level 1 sub-gallery) - fixed.
-    Cookie path invalid for apache redirected URLS - fixed.
-    Sitemap node should insert just 1 variable width spacer. Not 1 div per indent level - fixed.
-    Make logo clickable - done.
-    Check sitemap with no galleries - fixed.
-    Remove new english words (I.E IERROR) from error messages before displaying - done.
-    Remove unused CSS classes - done.
-    Darkroom header branding.
-    Gallery edit screws up styles - fixed.
-    Uploading a big image hangs on uploading. No error or indication of what is going on - fixed.
-    Add old version message for IE6.
+    Make Sure all path variables terminate with a '/'
+    Let parsers return false for no output and check with ===. (and all mod_x.php param getters)
 
 
 
 
 
 
-  Pre-release (1.2) -
-    * Add error checking to new code.
-    * Escape all variables used in queries (mysql_real_escape_string).
-    * Check all queries include _utf8 when setting text fields.
-    * Bugs/todo items.
-    * Check all files verify login status before proceeding to process actions.
-    * Global search for TODO.
-    * Update install.php and upgrade.php (Write version detection code!).
-    * Version number change.
-    * Come out of debug mode.
-    * Final check with/without magic quotes.
-    * Check in different browsers.
-    * WC3 validation.
-    * Update Documentation.
-    * Update perl script.
+  Pre-release (1.2.1) -
+  * Add error checking to new code.
+  * Escape all variables used in queries (mysql_real_escape_string).
+  * Check all queries include _utf8 when setting text fields.
+  * Bugs/todo items.
+  * Check all files verify login status before proceeding to process actions.
+  * Global search for TODO.
+  * Update install.php and upgrade.php (Write version detection code!).
+  * Version number change.
+  * Come out of debug mode.
+  * Final check with/without magic quotes.
+  * WC3 validation.
+  * Check in different browsers.
+  * Update Documentation.
+    Update perl script.
     Check changelog.

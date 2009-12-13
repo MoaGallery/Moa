@@ -1,4 +1,12 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
   $APACHE_MIN_VERSION = ARRAY( 2, 0, 0);
   $PHP_MIN_VERSION    = ARRAY( 5, 2, 0);
   $GD_MIN_VERSION     = ARRAY( 2, 0, 0);
@@ -567,11 +575,12 @@
 	  echo "  }\n";
 	  echo "  if ('OK' != text.substr(0, 2))\n";
 	  echo "  {\n";
+    echo "    text = str_replace(text, 'IERROR\\n', '');";
 	  echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
 	  echo "    return;\n";
 	  echo "  } else\n";
 	  echo "  {\n";
-	  echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
+    echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
 	  echo "  }\n";
     echo "}\n";
     echo "</script>\n";
@@ -611,7 +620,7 @@
     echo "</tr>\n";
 
     echo "<tr>\n";
-    echo "<td colspan='2'><input id='checklogin' type='button' value='Check Login'/><span id='checkresultdb'></span></td></tr>\n";
+    echo "<td><input id='checklogin' type='button' value='Check Login'/></td><td><span id='checkresultdb'></span></td></tr>\n";
 
     echo "<script type='text/javascript'>\n";
     echo "addEvent( document.getElementById('checklogin'), 'click', function(e) {dbcheck();});\n";
@@ -624,15 +633,6 @@
     echo "<tr>\n";
     echo "<td>Cookie name: </td><td><input type='text' name='cookiename' value='_MoaCookie_'\></td>\n";
     echo "</tr>\n";
-
-    // Cookie path
-    /*$file_path = str_replace( "\\", "/", dirname(realpath(__FILE__)));
-    $doc_root = getenv("DOCUMENT_ROOT");
-    $cookie_path = str_replace( $doc_root, "", $file_path) . "/";
-
-    if (substr($cookie_path, 0, 1) != '/') {
-      $cookie_path = '/'.$cookie_path;
-    }*/
 
     // Get likely cookie path
 	  $url = $_SERVER['PHP_SELF'];
@@ -657,7 +657,11 @@
   function Stage2B()
   {
     global $MYSQL_MIN_VERSION;
-    global $MOA_PATH;
+    global $CFG;
+    global $MOA_MAJOR_VERSION;
+    global $MOA_MINOR_VERSION;
+    global $MOA_REVISION;
+    global $MOA_PATCH;
 
     $check = false;
     ShowProgressStart(1, true);
@@ -736,48 +740,39 @@
       $check = true;
     }
 
-    // Check for magic quotes
-    $magic_quotes = "false";
-    if (function_exists("get_magic_quotes_gpc"))
-    {
-      if (1 == get_magic_quotes_gpc())
-      {
-        $magic_quotes = "true";
-      }
-    }
-
     // Save db_config file
     if (false == $check)
     {
-      $file = fopen("private/db_config.php", "wt");
+    	$file = fopen("private/db_config.php", "wt");
       fwrite($file, "<?php\n");
-      fwrite($file, "  \$db_host = '".strip_tags($_REQUEST["servername"])."';\n");
-      fwrite($file, "  \$db_user = '".strip_tags($_REQUEST["dbuser"])."';\n");
-      fwrite($file, "  \$db_pass = '".strip_tags($_REQUEST["dbpass"])."';\n");
-      fwrite($file, "  \$db_name = '".strip_tags($_REQUEST["dbname"])."';\n");
-      fwrite($file, "  \$tab_prefix = '".strip_tags($_REQUEST["tabprefix"])."';\n");
+      fwrite($file, "  \$CFG['db_host'] = '".strip_tags($_REQUEST["servername"])."';\n");
+      fwrite($file, "  \$CFG['db_user'] = '".strip_tags($_REQUEST["dbuser"])."';\n");
+      fwrite($file, "  \$CFG['db_pass'] = '".strip_tags($_REQUEST["dbpass"])."';\n");
+      fwrite($file, "  \$CFG['db_name'] = '".strip_tags($_REQUEST["dbname"])."';\n");
+      fwrite($file, "  \$CFG['tab_prefix'] = '".strip_tags($_REQUEST["tabprefix"])."';\n");
       fwrite($file, "?>\n");
       fclose($file);
 
-      $file = fopen("config.php", "wt");
-      fwrite($file, "<?php\n");
-      fwrite($file, "  \$CONFIG_DISPLAY_MAX_WIDTH = 640;\n");
-      fwrite($file, "  \$THUMB_PATH  = 'images/thumbs';\n");
-      fwrite($file, "  \$IMAGE_PATH  = 'images';\n");
-      fwrite($file, "  \$THUMB_WIDTH = 150;\n");
-      fwrite($file, "  \$DISPLAY_PLAIN_SUBGALLERIES = true;\n");
-      fwrite($file, "  \$COOKIE_NAME = '".strip_tags($_REQUEST["cookiename"])."';\n");
-
       $cookie_path = str_replace( "\\", "/", strip_tags($_REQUEST["cookiepath"]));
 
-      fwrite($file, "  \$COOKIE_PATH = '".$cookie_path."';\n");
-      fwrite($file, "  \$SHOW_EMPTY_DESC_POPUPS = false;\n");
-      fwrite($file, "  \$EMPTY_DESC_POPUP_TEXT = 'No description';\n");
-      fwrite($file, "  \$TITLE_DESC_LENGTH = 30;\n");
-      fwrite($file, "  \$MAGIC_QUOTES = ".$magic_quotes.";\n");
-      fwrite($file, "  \$STR_DELIMITER = \",\";\n");
-      fwrite($file, "  \$MOA_PATH = '".$MOA_PATH."';\n");
-      fwrite($file, "  \$TEMPLATE = 'MoaDefault';\n");
+      $file = fopen("config.php", "wt");
+      fwrite($file, "<?php\n");
+      fwrite($file, "  \$CFG['CONFIG_DISPLAY_MAX_WIDTH'] = 640;\n");
+      fwrite($file, "  \$CFG['THUMB_PATH']  = 'images/thumbs/';\n");
+      fwrite($file, "  \$CFG['IMAGE_PATH']  = 'images/';\n");
+      fwrite($file, "  \$CFG['THUMB_WIDTH'] = 150;\n");
+      fwrite($file, "  \$CFG['DISPLAY_PLAIN_SUBGALLERIES'] = true;\n");
+      fwrite($file, "  \$CFG['COOKIE_NAME'] = '".strip_tags($_REQUEST["cookiename"])."';\n");
+      fwrite($file, "  \$CFG['COOKIE_PATH'] = '".$cookie_path."';\n");      fwrite($file, "  \$CFG['SHOW_EMPTY_DESC_POPUPS'] = false;\n");
+      fwrite($file, "  \$CFG['EMPTY_DESC_POPUP_TEXT'] = 'No description';\n");
+      fwrite($file, "  \$CFG['TITLE_DESC_LENGTH'] = 30;\n");
+      fwrite($file, "  \$CFG['STR_DELIMITER'] = \",\";\n");
+      fwrite($file, "  \$CFG['MOA_PATH'] = '".$CFG["MOA_PATH"]."';\n");
+      fwrite($file, "  \$CFG['TEMPLATE'] = 'MoaDefault';\n");
+      fwrite($file, "  \$CFG['MOA_MAJOR_VERSION'] = '".$MOA_MAJOR_VERSION."';\n");
+      fwrite($file, "  \$CFG['MOA_MINOR_VERSION'] = '".$MOA_MINOR_VERSION."';\n");
+      fwrite($file, "  \$CFG['MOA_REVISION'] = '".$MOA_REVISION."';\n");
+      fwrite($file, "  \$CFG['MOA_PATCH'] = '".$MOA_PATCH."';\n");
       fwrite($file, "?>\n");
       fclose($file);
     }
@@ -797,7 +792,7 @@
     }
 
     echo "Checking permission (writing data) - ";
-    $result = mysql_query("INSERT INTO test_table VALUES(1)");
+    $result = mysql_query("INSERT INTO `test_table` VALUES(1)");
     if ($result != false)
     {
       echo "<span style='color: green'>Success</span><br/>\n";
@@ -808,7 +803,7 @@
     }
 
     echo "Checking permission (deleting data) - ";
-    $result = mysql_query("DELETE FROM test_table WHERE (IDtab = 1)");
+    $result = mysql_query("DELETE FROM `test_table` WHERE (IDtab = 1)");
     if ($result != false)
     {
       echo "<span style='color: green'>Success</span><br/>\n";
@@ -877,7 +872,8 @@
   // Stage 3B = Create database and add new user
   function Stage3B()
   {
-    global $tab_prefix;
+    global $CFG;
+    global $ErrorString;
 
     ShowProgressStart(2, true);
     echo "<b><div style='width:200px; margin-left:auto; margin-right:auto; font-size: 30px;'>Installing...</div></b><br/>\n";
@@ -886,11 +882,11 @@
     echo "<form name='install_3b' method='post' action='install.php?stage=stage4' enctype='multipart/form-data'>\n";
 
     echo "Creating data structure - ";
-    $max_run = 17;
+    $max_run = 22;
     $datainstalled = true;
     $count = 0;
 
-    $result = mysql_query("SELECT * FROM ".$tab_prefix."gallerytaglink");
+    $result = mysql_query("SELECT * FROM `".$CFG["tab_prefix"]."gallerytaglink`;");
     if (false != $result)
     {
       $result = RunSQLFile("SQL/gallery-drop-constraints.sql");
@@ -928,9 +924,22 @@
       $check = true;
     }
 
+    echo "Creating default config - ";
+
+    $result = _UpgradeConfigFile(false);
+
+    if ($result != false)
+    {
+      echo "<span style='color: green'>Success</span><br/>\n";
+    } else
+    {
+      echo "<span style='color: red'>Failed - (".$ErrorString.")</span><br/>\n";
+      $check = true;
+    }
+
     echo "Creating user login - ";
     $new_pass = mb_strtoupper(sha1($_REQUEST["Moapass"]));
-    $query = "INSERT INTO ".$tab_prefix."users (Name, Admin, Password, Salt) VALUES (_utf8'".mysql_real_escape_string($_REQUEST["Moauser"])."', 1, '".$new_pass."', '000000');";
+    $query = "INSERT INTO `".$CFG["tab_prefix"]."users` (Name, Admin, Password, Salt) VALUES (_utf8'".mysql_real_escape_string($_REQUEST["Moauser"])."', '1', '".$new_pass."', '000000');";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     if ($result != false)
@@ -997,7 +1006,7 @@
     }
 
     $success = true;
-  	$db = mysql_connect($dbhost, $dbuser, $dbpass) or $success = false;
+  	$db = @mysql_connect($dbhost, $dbuser, $dbpass) or $success = false;
 
   	if (!$success)
   	{
@@ -1023,12 +1032,15 @@
      <?php
        $INSTALLING = true;
        $template_name = "MoaDefault";
-       $MOA_PATH = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
+       $bodycontent = "";
+       $CFG["MOA_PATH"] = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
 
        include_once("sources/_db_funcs.php");
        include_once("sources/id.php");
        include_once("sources/common.php");
        include_once("sources/_template_parser.php");
+
+       $CFG["MOA_VERSION"] = $MOA_VERSION;
 
 	     if (isset($_REQUEST["action"]))
 	     {
@@ -1046,6 +1058,8 @@
   <body>
     <?php
       include_once ("sources/_header.php");
+      echo $bodycontent;
+      $bodycontent = "";
     ?>
     <script type='text/javascript'>
       document.getElementById("imagestats").innerHTML = "&nbsp";
@@ -1053,7 +1067,7 @@
       document.getElementById("breadcrumbframe").innerHTML = "&nbsp";
     </script>
     <?php
-      echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+      $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
 
       if (isset($_REQUEST["stage"]))
       {
@@ -1083,10 +1097,11 @@
 	        }
       		case "stage3b" :
 	        {
-	          include_once("private/db_config.php");
+	        	include_once("private/db_config.php");
 	          include_once("config.php");
-	          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-	          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          include_once("sources/mod_upgrade_funcs.php");
+	          $db = mysql_connect($CFG["db_host"], $CFG["db_user"], $CFG["db_pass"]) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          mysql_select_db($CFG["db_name"], $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 	          // Turn on UTF-8 support
 	          mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
 	          mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
@@ -1095,10 +1110,15 @@
 	        }
       		case "stage4" :
 	        {
-	          include_once("private/db_config.php");
-	          include_once("config.php");
-	          $db = mysql_connect($db_host, $db_user, $db_pass) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-	          mysql_select_db($db_name, $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	        	$install = false;
+
+	        	include_once("sources/_settings.php");
+            LoadSettings();
+
+            DBConnect();
+
+	          $db = mysql_connect($CFG["db_host"], $CFG["db_user"], $CFG["db_pass"]) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
+	          mysql_select_db($CFG["db_name"], $db) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 	          // Turn on UTF-8 support
 	          mysql_query("SET NAMES utf8;") or moa_db_error(mysql_error());
 	          mysql_query("SET CHARACTER SET utf8")  or moa_db_error(mysql_error());
@@ -1113,7 +1133,7 @@
       	}
       } else
       {
-        Stage0();
+      	Stage0();
       }
 
 

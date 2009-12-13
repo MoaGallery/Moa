@@ -1,8 +1,17 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
   $MOA_MAJOR_VERSION = 1;
   $MOA_MINOR_VERSION = 2;
-  $MOA_REVISION = 0;
-  $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION;
+  $MOA_REVISION = 1;
+  $MOA_PATCH = "";
+  $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION.$MOA_PATCH;
 
   // Function for retrieving date\time at page load
   function get_time_at_page_load() {
@@ -59,6 +68,69 @@
     $p_text = str_replace(">","&gt;",$p_text);
 
     return $p_text;
+  }
+
+  function StripHTMLTags($p_text)
+	{
+	  $BannedHTMLTagList = Array( "html"
+	                            , "head"
+	                            , "body"
+	                            , "iframe"
+	                            , "object"
+	                            , "script"
+	                            , "meta");
+
+	  $CurrentPos = 0;
+	  $MaxPos     = strlen($p_text);
+	  $Buffer     = "";
+
+	  while ($CurrentPos < $MaxPos) {
+	    $Start = strpos($p_text, "<", $CurrentPos);
+	    $End = strpos($p_text, ">", $CurrentPos);
+
+	    if (($End === false) || ($Start === false)) {
+	      $Buffer .= substr( $p_text, $CurrentPos, ($MaxPos - $CurrentPos));
+	      $CurrentPos = $MaxPos;
+	    }
+	    else
+	    {
+	      $Buffer .= substr( $p_text, $CurrentPos, ($Start - $CurrentPos));
+
+	      $Tag = substr( $p_text, ($Start + 1), ($End - $Start - 1));
+	      $Tag = trim($Tag);
+	      $Tag = strtolower($Tag);
+
+	      $TagWithoutSlashes = $Tag;
+	      if (0 == strcmp( substr($Tag, 0, 1), "/")) {
+	        $TagWithoutSlashes = substr( $Tag, 1, (strlen($Tag) - 1));
+	      }
+
+        $NameArray = explode(" ", $TagWithoutSlashes, 1);
+	      $Name = $NameArray[0];
+
+	      $Found = false;
+
+	      for ($i=0; $i < count($BannedHTMLTagList); $i++) {
+	        if (0 == strcmp( $BannedHTMLTagList[$i], $Name)) {
+	          $Found = true;
+	        }
+	      }
+
+	      if ($Found == true) {
+	        $Buffer .= "&lt;";
+	        $Buffer .= $Tag;
+	        $Buffer .= "&gt;";
+	      }
+	      else
+	      {
+	        $Buffer .= "<";
+	        $Buffer .= $Tag;
+	        $Buffer .= ">";
+	      }
+	      $CurrentPos = $End + 1;
+	    }
+	  }
+	  return $Buffer;
   }
 
   function strip_magic_quotes($p_text)
@@ -145,23 +217,41 @@
 
   function thumbnail( $p_image_name, $p_image_type, $p_in_root)
     {
-      global $IMAGE_PATH;
-      global $THUMB_PATH;
-      global $THUMB_WIDTH;
+      global $CFG;
 
       $PREFIX = "../";
       if ($p_in_root)
       {
         $PREFIX = "";
       }
-
-      if (!CheckImageMemory($PREFIX.$IMAGE_PATH."/".str_display_safe($p_image_name)))
+      if (!CheckImageMemory($PREFIX.$CFG["IMAGE_PATH"].str_display_safe($p_image_name.".".$p_image_type)))
       {
       	return false;
       }
 
 
-      $src_img = @imagecreatefromjpeg($PREFIX.$IMAGE_PATH."/".str_display_safe($p_image_name));
+      switch ($p_image_type)
+      {
+        case "jpg" :
+        {
+          $src_img = @imagecreatefromjpeg($PREFIX.$CFG["IMAGE_PATH"].str_display_safe($p_image_name.".".$p_image_type));
+          break;
+        }
+        case "png" :
+        {
+          $src_img = @imagecreatefrompng($PREFIX.$CFG["IMAGE_PATH"].str_display_safe($p_image_name.".".$p_image_type));
+          break;
+        }
+        case "gif" :
+        {
+          $src_img = @imagecreatefromgif($PREFIX.$CFG["IMAGE_PATH"].str_display_safe($p_image_name.".".$p_image_type));
+          break;
+        }
+        default :
+        {
+          return false;
+        }
+      }
 
       $origw=imagesx($src_img);
       $origh=imagesy($src_img);
@@ -169,12 +259,12 @@
       $diff=$origw/$origh;
       if ($diff > 1.3333333)
       {
-        $new_w = $THUMB_WIDTH;
+        $new_w = $CFG["THUMB_WIDTH"];
         $divisor = $origw / $new_w;
         $new_h = $origh / $divisor;
       } else
       {
-        $new_h = $THUMB_WIDTH*0.75;
+        $new_h = $CFG["THUMB_WIDTH"]*0.75;
         $divisor = $origh / $new_h;
         $new_w = $origw / $divisor;
       }
@@ -183,7 +273,7 @@
       imageAntiAlias($dst_img, true);
       imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
 
-      imagejpeg($dst_img, $PREFIX.$THUMB_PATH."/"."thumb_".str_display_safe($p_image_name));
+      imagejpeg($dst_img, $PREFIX.$CFG["THUMB_PATH"]."thumb_".str_display_safe($p_image_name.".jpg"));
       imagedestroy($src_img);
 
       return true;

@@ -1,11 +1,11 @@
-<moatag type="AdminLinks">
+<moatag type="AdminLinks" location="admin">
 <div class="testbox_tl admin_maintain_image_container">
   <div class="testbox_tr">
     <div class="testbox_bl">
       <div class="testbox_br">
         <p class="testboxheader">Upload missing image file</p>
         <div class="testboxcontent">
-     	    <form id="image_add" method="post" action="index.php?action=admin_maintain_image&image_id=<moatag type="ImageID">" enctype="multipart/form-data">
+     	    <form id="image_add" method="post" action="index.php?action=admin_maintain_image&amp;image_id=<moatag type="ImageID">" enctype="multipart/form-data">
             <dl class="form_items">
               <dt class='form_label_text'>
                 Original filename:

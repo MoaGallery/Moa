@@ -1,4 +1,4 @@
-<moatag type="AdminLinks">
+<moatag type="AdminLinks" location="admin">
 <div id='tagblockfeedback'>
   &nbsp;
 </div>

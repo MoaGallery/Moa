@@ -1,19 +1,26 @@
-    <?php
-      include_once ($MOA_PATH."sources/id.php");
+<?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
 
-      echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
-      echo LoadTemplateRoot("page_login.php");
-    ?>
+  include_once ($CFG["MOA_PATH"]."sources/id.php");
 
-    <script type='text/javascript' src='sources/common.js'></script>
-    <script type="text/javascript">
-      addEvent(document.getElementById('loginname'), "keypress", function (e) {checkKey(e, "loginsubmit", null);});
-      addEvent(document.getElementById('loginpass'), "keypress", function (e) {checkKey(e, "loginsubmit", null);});
-      addEvent(document.getElementById('loginduration'), "keypress", function (e) {checkKey(e, "loginsubmit", null);});
-      document.getElementById("loginname").focus();
-    </script>
+  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+  $bodycontent .= LoadTemplateRoot("page_login.php");
 
-    <?php
-      $page_title = "Login";
-      echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
-    ?>
+  $bodycontent .= "<script type=\"text/javascript\" src=\"sources/common.js\"></script>\n";
+  $bodycontent .= "<script type=\"text/javascript\">\n";
+  $bodycontent .= "  addEvent(document.getElementById('loginname'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
+  $bodycontent .= "  addEvent(document.getElementById('loginpass'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
+  $bodycontent .= "  addEvent(document.getElementById('loginduration'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
+  $bodycontent .= "  document.getElementById(\"loginname\").focus();\n";
+  $bodycontent .= "</script>\n";
+
+  $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
+
+  $bodytitle = "Login - Moa";
+?>

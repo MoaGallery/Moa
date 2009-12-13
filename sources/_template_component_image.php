@@ -1,4 +1,12 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
 
   function TagParseImageDescription($p_tag_options)
   {
@@ -27,16 +35,28 @@
   function TagParseImageThumbName($p_tag_options)
   {
     global $image_id;
-    global $THUMB_PATH;
+    global $CFG;
 
-    $filename = $THUMB_PATH."/thumb_".$image_id.".jpg";
+    $filename = $CFG["THUMB_PATH"]."thumb_".$image_id.".jpg";
     return html_display_safe($filename);
+  }
+
+  function TagParseImageFormat($p_tag_options)
+  {
+    global $image_id;
+
+    $format = _ImageGetValue($image_id, "Format");
+    if (0 == strlen($format))
+    {
+      $format = " ";
+    }
+    return html_display_safe($format);
   }
 
   function TagParseImageSize($p_tag_options)
   {
     global $image_id;
-    global $DEBUG_MODE;
+    global $CFG;
 
     $width = _ImageGetValue($image_id, "Width");
     $height = _ImageGetValue($image_id, "Height");
@@ -61,7 +81,7 @@
       }
       default:
       {
-        if ($DEBUG_MODE)
+        if ($CFG["DEBUG_MODE"])
         {
           $str = "TEMPLATE WARNING: Unknown Link in ImageSize tag - '".html_display_safe($p_tag_options["format"])."'.";
         }
@@ -75,24 +95,12 @@
   function TagParseImageFullLink($p_tag_options)
   {
     global $image_id;
-    global $DEBUG_MODE;
+    global $CFG;
 
     $str = "";
     $link = "index.php?action=image_view_full&amp;image_id=".$image_id;
 
     return $link;
-  }
-
-  function TagParseImageAdminLinks($p_tag_options)
-  {
-    if (UserIsLoggedIn())
-    {
-      $links = LoadTemplate("component_image_admin_links.php");
-      $links = ParseVar($links, "ImageEditLink", "onclick='image.Edit();'");
-      $links = ParseVar($links, "ImageDeleteLink", "onclick='image.Delete();'");
-      return $links;
-    }
-    return " ";
   }
 
   function TagParseImagePreview($p_tag_options)
@@ -158,7 +166,7 @@
 
   function TagParseImagePreviewWidth($p_tag_options)
   {
-    global $CONFIG_DISPLAY_MAX_WIDTH;
+    global $CFG;
     global $image_id;
 
     if (!isset($image_id))
@@ -169,13 +177,19 @@
     $width = _ImageGetValue($image_id, "Width");
     $height = _ImageGetValue($image_id, "Height");
 
-    $max_height = $CONFIG_DISPLAY_MAX_WIDTH / 1.33333333;
+    $max_height = $CFG["CONFIG_DISPLAY_MAX_WIDTH"] / 1.33333333;
     $aspectratio = $width / $height;
 
     $result = 0;
     if ($aspectratio >= 1.33333333)
     {
-      $result = $CONFIG_DISPLAY_MAX_WIDTH;
+      if ($width < $CFG["CONFIG_DISPLAY_MAX_WIDTH"])
+      {
+        $result = $width;
+      } else
+      {
+        $result = $CFG["CONFIG_DISPLAY_MAX_WIDTH"];
+      }
     } else
     {
       $aspectratio = $height / $max_height;
@@ -198,19 +212,19 @@
 
   function TagParseImagePreviewHeight($p_tag_options)
   {
-    global $CONFIG_DISPLAY_MAX_WIDTH;
+    global $CFG;
     global $image_id;
 
     $width = _ImageGetValue($image_id, "Width");
     $height = _ImageGetValue($image_id, "Height");
 
-    $max_height = $CONFIG_DISPLAY_MAX_WIDTH / 1.33333333;
+    $max_height = $CFG["CONFIG_DISPLAY_MAX_WIDTH"] / 1.33333333;
     $aspectratio = $width / $height;
 
     $result = 0;
     if ($aspectratio >= 1.33333333)
     {
-      $aspectratio = $width / $CONFIG_DISPLAY_MAX_WIDTH;
+      $aspectratio = $width / $CFG["CONFIG_DISPLAY_MAX_WIDTH"];
       if (1 < $aspectratio)
       {
         $result = $height / $aspectratio;
@@ -220,7 +234,7 @@
       }
     } else
     {
-      $result = $CONFIG_DISPLAY_MAX_WIDTH / 1.33333333;
+      $result = $CFG["CONFIG_DISPLAY_MAX_WIDTH"] / 1.33333333;
     }
 
     if (isset($p_tag_options["add"]))

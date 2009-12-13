@@ -1,5 +1,5 @@
-<moatag type='AdminLinks'>
-<div id='orphanblockfeedback'>
+<moatag type="AdminLinks" location="admin">
+<div id="orphanblockfeedback">
   <moatag type="GalleryDeleteFeedback">
   &nbsp;
 </div>
@@ -15,7 +15,7 @@
               <p>
                 <moatag type="AdminOrphanNonTagged" success="All ok">
               </p>
-              <hr class="orphansplit">
+              <hr class="orphansplit"/>
               <p>Images with tags that are in no gallery</p>
               <p>
                 <moatag type="AdminOrphanNoGallery" success="All ok">

@@ -1,6 +1,6 @@
 <div class="body_section">
   <div class="left_column left_column_shadow">
-    <moatag type="AdminLinks">
+    <moatag type="AdminLinks" location="admin">
     <br/>
     <div id='userblockfeedback'></div>
   </div>
@@ -26,7 +26,7 @@
             &nbsp;
           </div>
         </div>
-        
+
         <div id='user_lines' class="user_table admin_table_bottom">
         </div>
       </div>

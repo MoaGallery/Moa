@@ -1,23 +1,14 @@
 <?php
-  include_once($MOA_PATH."sources/mod_image_funcs.php");
-  include_once($MOA_PATH."sources/_integrity_funcs.php");
-
-  function TagParseAdminLinks($p_tag_options)
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
   {
-    if (UserIsLoggedIn())
-    {
-      $links = LoadTemplate("component_admin_links.php");
-
-      $links = ParseVar($links, "AdminUserLink", "index.php?action=admin_users");
-      $links = ParseVar($links, "AdminTagLink", "index.php?action=admin_tag");
-      $links = ParseVar($links, "AdminOrphanLink", "index.php?action=admin_orphans");
-      $links = ParseVar($links, "AdminIntegrityLink", "index.php?action=admin_maintain");
-
-      return $links;
-    }
-
-   return " ";
+    echo "Hacking attempt.";
+    die();
   }
+
+  include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_integrity_funcs.php");
 
   function TagParseAdminUserAddLink($p_tag_options)
   {
@@ -46,12 +37,7 @@
 
   function TagParseAdminOrphanNonTagged($p_tag_options)
   {
-    global $THUMB_WIDTH;
-    global $THUMB_PATH;
-    global $SHOW_EMPTY_DESC_POPUPS;
-    global $EMPTY_DESC_POPUP_TEXT;
-    global $DISPLAY_PLAIN_SUBGALLERIES;
-    global $MOA_PATH;
+    global $CFG;
 
     $links = LoadTemplate("component_image_thumbnail.php");
     $thumbs = "";
@@ -61,12 +47,12 @@
     foreach ($images as $image)
     {
       if (mb_strlen($image->m_description) <= 0) {
-        if ($SHOW_EMPTY_DESC_POPUPS == false)
+        if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
         {
           $popup = "";
         } else
         {
-          $popup = "onmouseover='return overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='return overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }
       } else
       {
@@ -75,20 +61,43 @@
       $width = _ImageGetValue($image->m_id, "Width");
       $height = _ImageGetValue($image->m_id, "Height");
 
+      if ((null == $width) || (null == $height))
+      {
+        $width = 150;
+        $height = 112;
+      }
+
+      if (($width > $CFG["THUMB_WIDTH"]) or ($height > ($CFG["THUMB_WIDTH"]*0.75)))
+      {
+        $w = $width / $CFG["THUMB_WIDTH"];
+        $h = $height / ($CFG["THUMB_WIDTH"] * 0.75);
+        if ($w > $h)
+        {
+          $width = $CFG["THUMB_WIDTH"];
+          $height = $height / $w;
+        } else
+        {
+          $width = $width / $h;
+          $height = $CFG["THUMB_WIDTH"] * 0.75;
+        }
+      }
+
       $thumb = $links;
 
-      if (is_file($THUMB_PATH."/thumb_".$image->m_id.".jpg"))
+      if (is_file($CFG["THUMB_PATH"]."thumb_".$image->m_id.".jpg"))
       {
-        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($THUMB_PATH)."/thumb_".$image->m_id.".jpg");
+        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image->m_id.".jpg");
       }
       else
       {
-        $thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$THUMB_WIDTH);
+        $thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
       }
 
       $thumb = ParseVar($thumb, "ImageThumbID", $image->m_id);
-      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($THUMB_WIDTH));
-      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($THUMB_WIDTH*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+      $thumb = ParseVar($thumb, "ImageThumbGlobalHeight", str_display_safe(ceil($CFG["THUMB_WIDTH"]*0.75)));
       $thumb = ParseVar($thumb, "ImagePopup", $popup);
       $thumb = ParseVar($thumb, "GalleryID", "0000000000");
       $thumb = ParseVar($thumb, "Referer", "&amp;referer=orphan");
@@ -109,12 +118,7 @@
 
   function TagParseAdminOrphanNoGallery($p_tag_options)
   {
-    global $THUMB_WIDTH;
-    global $THUMB_PATH;
-    global $SHOW_EMPTY_DESC_POPUPS;
-    global $EMPTY_DESC_POPUP_TEXT;
-    global $DISPLAY_PLAIN_SUBGALLERIES;
-    global $MOA_PATH;
+    global $CFG;
 
     $links = LoadTemplate("component_image_thumbnail.php");
     $thumbs = "";
@@ -124,12 +128,12 @@
     foreach ($images as $image)
     {
       if (mb_strlen($image->m_description) <= 0) {
-        if ($SHOW_EMPTY_DESC_POPUPS == false)
+        if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
         {
           $popup = "";
         } else
         {
-          $popup = "onmouseover='return overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='return overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
         }
       } else
       {
@@ -138,20 +142,43 @@
       $width = _ImageGetValue($image->m_id, "Width");
       $height = _ImageGetValue($image->m_id, "Height");
 
+      if ((null == $width) || (null == $height))
+      {
+        $width = 150;
+        $height = 112;
+      }
+
+      if (($width > $CFG["THUMB_WIDTH"]) or ($height > ($CFG["THUMB_WIDTH"]*0.75)))
+      {
+        $w = $width / $CFG["THUMB_WIDTH"];
+        $h = $height / ($CFG["THUMB_WIDTH"] * 0.75);
+        if ($w > $h)
+        {
+          $width = $CFG["THUMB_WIDTH"];
+          $height = $height / $w;
+        } else
+        {
+          $width = $width / $h;
+          $height = $CFG["THUMB_WIDTH"] * 0.75;
+        }
+      }
+
       $thumb = $links;
 
-      if (is_file($MOA_PATH.$THUMB_PATH."/thumb_".$image->m_id.".jpg"))
+      if (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image->m_id.".jpg"))
       {
-        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($THUMB_PATH)."/thumb_".$image->m_id.".jpg");
+        $thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image->m_id.".jpg");
       }
       else
       {
-        $thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$THUMB_WIDTH);
+        $thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
       }
 
       $thumb = ParseVar($thumb, "ImageThumbID", $image->m_id);
-      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($THUMB_WIDTH));
-      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($THUMB_WIDTH*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+      $thumb = ParseVar($thumb, "ImageThumbGlobalHeight", str_display_safe(ceil($CFG["THUMB_WIDTH"]*0.75)));
       $thumb = ParseVar($thumb, "ImagePopup", $popup);
       $thumb = ParseVar($thumb, "GalleryID", "0000000000");
       $thumb = ParseVar($thumb, "Referer", "&amp;referer=orphan");
@@ -172,21 +199,18 @@
 
   function TagParseAdminNoFileMaintain($p_tag_options)
   {
-    global $IMAGE_PATH;
-    global $THUMB_PATH;
-    global $tab_prefix;
-    global $MOA_PATH;
+    global $CFG;
 
     $output = "";
     $found = false;
 
-    $query = "SELECT * FROM ".$tab_prefix."image;";
+    $query = "SELECT * FROM ".$CFG["tab_prefix"]."image;";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     while (($image = mysql_fetch_array($result)) && (!$found))
     {
-      if ((file_exists($MOA_PATH.$IMAGE_PATH."/".$image["IDImage"].".jpg") == false) ||
-         (file_exists($MOA_PATH.$THUMB_PATH."/thumb_".$image["IDImage"].".jpg") == false))
+      if ((file_exists($CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$image["IDImage"].".".$image["Format"]) == false) ||
+         (file_exists($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image["IDImage"].".".$image["Format"]) == false))
       {
         $found = true;
       }
@@ -213,11 +237,7 @@
 
   function TagParseAdminNoFileMaintainList($p_tag_options)
   {
-    global $IMAGE_PATH;
-    global $THUMB_PATH;
-    global $TITLE_DESC_LENGTH;
-    global $tab_prefix;
-    global $MOA_PATH;
+    global $CFG;
 
     $result_line = LoadTemplate("component_admin_no_file_maintain.php");
     $fixed_line  = LoadTemplate("component_admin_no_file_maintain_fixed.php");
@@ -233,13 +253,14 @@
       $p_tag_options["notfoundtext"] = "Missing";
     }
 
-    $query = "SELECT * FROM ".$tab_prefix."image;";
+    $query = "SELECT * FROM ".$CFG["tab_prefix"]."image;";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     while ($image = mysql_fetch_array($result))
     {
-      $image_exists = file_exists($MOA_PATH.$IMAGE_PATH."/".$image["IDImage"].".jpg");
-      $thumb_exists = file_exists($MOA_PATH.$THUMB_PATH."/thumb_".$image["IDImage"].".jpg");
+      $ext = _ImageGetValue($image["IDImage"], "Format");
+      $image_exists = file_exists($CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$image["IDImage"].".".$ext);
+      $thumb_exists = file_exists($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image["IDImage"].".jpg");
 
       if ((!$image_exists) || (!$thumb_exists))
       {
@@ -248,7 +269,7 @@
         {
           $line = $fixed_line;
           // Create Thumbnail from existing full image
-          thumbnail($image["IDImage"].".jpg", NULL, true);
+          thumbnail($image["IDImage"], $ext, true);
         }
 
         $main_status = $p_tag_options["notfoundtext"];
@@ -264,9 +285,9 @@
         }
 
         $desc = $image["Description"];
-        if (strlen($desc) > $TITLE_DESC_LENGTH)
+        if (strlen($desc) > $CFG["TITLE_DESC_LENGTH"])
         {
-          $desc = substr( $desc, 0, $TITLE_DESC_LENGTH - 3)."...";
+          $desc = substr( $desc, 0, $CFG["TITLE_DESC_LENGTH"] - 3)."...";
         }
 
         $line = ParseVar( $line, "ImageMainStatus"  , $main_status);

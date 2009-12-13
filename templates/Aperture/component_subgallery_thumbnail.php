@@ -8,7 +8,7 @@
   <div class="subgallery_thumb_wrapper thumbheight">
     <p class="thumbbox thumbsize">
       <a href="index.php?action=gallery_view&amp;gallery_id=<moavar GalleryThumbID>" class="subthumblink">
-        <img src='<moavar GalleryThumb>' alt='<moavar GalleryThumbTitle> subgallery' title=''/>
+        <img src='<moavar GalleryThumb>' alt='<moavar GalleryThumbTitle> subgallery' title='' width="<moavar GalleryThumbWidth>" height = "<moavar GalleryThumbHeight>"/>
       </a>
     </p>
     <p class="subgallery_title">

@@ -1,4 +1,11 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
 
   // Get the image id
   $no_image_id = false;
@@ -32,50 +39,63 @@
 	    }
 	  }
 
-	  include_once($MOA_PATH."sources/mod_tag_view.php");
+	  include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
     // Only include Javascript if a user is logged in
     if (UserIsLoggedIn())
 		{
-		  echo "<script type='text/javascript' src='sources/common.js'></script>\n";
-		  echo "<script type='text/javascript' src='sources/_request.js'></script>\n";
-		  echo "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
-		  echo "<script type='text/javascript'>\n";
-		  echo "  all_tags = '"; ViewAllTagList(); echo "';\n";
-		  echo "  cur_tags = '"; ViewImageCurrentTagList($image_id); echo "';\n";
-		  echo "</script>\n";
-		  echo "<script type='text/javascript' src='sources/mod_image.js'></script>\n";
-		  echo "<script type='text/javascript'>\n";
+		  $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
+		  $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
+		  $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+		  $bodycontent .= "<script type='text/javascript'>\n";
+      $bodycontent .= "  //<![CDATA[\n";
+		  $bodycontent .= "  all_tags = '"; ViewAllTagList();
+      $bodycontent .= "';\n";
+		  $bodycontent .= "  cur_tags = '"; ViewImageCurrentTagList($image_id);
+      $bodycontent .= "';\n";
+      $bodycontent .= "  title_max_length = ".$CFG["TITLE_DESC_LENGTH"].";\n";
+      $bodycontent .= " //]]>\n";
+		  $bodycontent .= "</script>\n";
+		  $bodycontent .= "<script type='text/javascript' src='sources/mod_image.js'></script>\n";
+		  $bodycontent .= "<script type='text/javascript'>\n";
+      $bodycontent .= "  //<![CDATA[\n";
+		  $bodycontent .= "  image_id= '".$image_id."';\n";
 
-		  echo "  image_id= '".$image_id."';\n";
+		  $bodycontent .= "  var editblock=";
+		  $bodycontent .= LoadTemplateRootForJavaScript("component_image_form_edit.php");
+		  $bodycontent .= ";\n";
 
-		  echo "  var editblock=";
-		  echo js_var_display_safe(LoadTemplateRootForJavaScript("component_image_form_edit.php"));
-		  echo ";\n";
+		  $bodycontent .= "  var feedback_box = ";
+      $bodycontent .= moa_feedback_js();
+      $bodycontent .= ";\n";
 
-		  echo "  var feedback_box = ";
-      echo moa_feedback_js();
-      echo ";\n";
-
-      echo "  var template_path = 'templates/".$template_name."/';\n";
-		  echo "  var image = new Image('".js_var_display_safe($STR_DELIMITER)."');\n";
-		  echo "  image.PreLoad('".$image_id."', '".js_var_display_safe(_ImageGetValue($image_id, "Description"))."', "._ImageGetValue($image_id, "Width").", "._ImageGetValue($image_id, "Height").", '".$from."');\n";
-		  echo "  image.PageTitle();";
-		  echo "</script>\n";
+      $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
+		  $bodycontent .= "  var image = new Image('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
+		  $bodycontent .= "  image.PreLoad('".$image_id."', '".js_var_display_safe(_ImageGetValue($image_id, "Description"))."', "._ImageGetValue($image_id, "Width").", "._ImageGetValue($image_id, "Height").", '".$from."');\n";
+      $bodycontent .= " //]]>\n";
+		  $bodycontent .= "</script>\n";
 		}
-?>
-		<script type="text/javascript">
-		  image_id = '<?php echo $image_id ?>';
-		</script>
-<?php
+		$bodycontent .= "<script type=\"text/javascript\">\n";
+    $bodycontent .= "  //<![CDATA[\n";
+		$bodycontent .= "  image_id = '".$image_id."';\n";
+    $bodycontent .= " //]]>\n";
+		$bodycontent .= "</script>\n";
+
 	  $pre_cache = true;
 	  $pre_image_id = $image_id;
 	  $pre_parent_id = $_REQUEST["parent_id"];
 
-	  echo "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+	  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
 
-	  echo LoadTemplateRoot("page_image_view.php");
+	  $bodycontent .= LoadTemplateRoot("page_image_view.php");
 
-	  echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
+	  $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
+
+    $img_shortname = _imageGetValue($image_id, "Description");
+    if ($CFG["TITLE_DESC_LENGTH"] < strlen($img_shortname))
+    {
+      $img_shortname = substr($img_shortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";
+    }
+    $bodytitle .= "Image '".$img_shortname."' - Moa";
   }
 ?>

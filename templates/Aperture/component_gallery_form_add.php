@@ -1,5 +1,5 @@
 <dl class="form_items">
-  <dt>
+  <dt class='form_label_text'>
     Name:
   </dt>
   <dd>
@@ -7,7 +7,7 @@
   </dd>
   <br/>
 
-  <dt>
+  <dt class='form_label_text'>
     Description:
     <br/>
     <a class='admin_link' id='galleryformexpandlink'>

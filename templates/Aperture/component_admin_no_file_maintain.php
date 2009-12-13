@@ -1,6 +1,6 @@
 <tr class= "admin_table_row">
   <td>
-    <a class='admin_link' href='index.php?action=admin_maintain_image&image_id=<moavar ImageID>'>
+    <a class='admin_link' href='index.php?action=admin_maintain_image&amp;image_id=<moavar ImageID>'>
       [Fix]
     </a>
   </td>

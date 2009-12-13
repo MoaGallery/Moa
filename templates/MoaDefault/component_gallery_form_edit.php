@@ -6,19 +6,17 @@
     <input class='form_text gallery_form_name' type='text' id='galleryformname'/>
   </dd>
 
-  <dt>
-    <div id='galleryformexpandblock'>
-      <div class='form_label_text'>
-        Description:
-      </div>
-      <a class='admin_link' id='galleryformexpandlink'>
-        [Expand]
-      </a>
-    </div>
+  <dt id='galleryformexpandblock'>
+    <span class='form_label_text'>
+      Description:
+    </span>
+    <a class='admin_link' id='galleryformexpandlink'>
+      [Expand]
+    </a>
   </dt>
   <dd>
     <textarea class='form_text' name='galleryformdesc' id='galleryformdesc' rows='4' cols='50'></textarea>
-  </dd>  
+  </dd>
 
   <dt class='form_label_text'>
     Tags:

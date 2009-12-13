@@ -1,4 +1,11 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
 
   function TagParseSiteMapList($p_tag_options)
   {
@@ -24,14 +31,12 @@
   // Recurse through all galleries
   function get_sub_galleries( $p_parent_id, $p_level, $p_output, $p_spacing)
   {
-    global $EMPTY_DESC_POPUP_TEXT;
-    global $SHOW_EMPTY_DESC_POPUPS;
-    global $tab_prefix;
+    global $CFG;
 
     $line    = LoadTemplate("component_sitemap_node.php");
     $spacer  = LoadTemplate("component_sitemap_spacer.php");
 
-    $query = "SELECT IDGallery, name, description FROM ".$tab_prefix."gallery WHERE (IDParent='".mysql_real_escape_string($p_parent_id)."')";
+    $query = "SELECT IDGallery, name, description FROM ".$CFG["tab_prefix"]."gallery WHERE (IDParent='".mysql_real_escape_string($p_parent_id)."')";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
 
     if (($p_parent_id == '0000000000') && ( mysql_num_rows($result) == 0))
@@ -48,12 +53,12 @@
 
         if ($gallery["description"] == NULL)
         {
-          if ($SHOW_EMPTY_DESC_POPUPS == true)
+          if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == true)
           {
             $popup = "";
           } else
           {
-            $popup = "onmouseover='return overlib(\"".popup_display_safe($EMPTY_DESC_POPUP_TEXT)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+            $popup = "onmouseover='return overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
           }
         } else
         {

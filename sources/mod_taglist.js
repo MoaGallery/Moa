@@ -202,7 +202,7 @@ function TagList(p_delim, p_tag_row_template) {
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/fail.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/fail.png' width='16' height='16' alt='no tags'/></span>";
         nd();
         break;
       case "add":
@@ -210,7 +210,7 @@ function TagList(p_delim, p_tag_row_template) {
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/add.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/add.png' width='16' height='16' alt='new tag'/></span>";
         nd();
         break;
       case "success":
@@ -218,7 +218,7 @@ function TagList(p_delim, p_tag_row_template) {
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/Success.png' width='16' height='16' /></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/Success.png' width='16' height='16' alt='all tags ok'/></span>";
         nd();
         break;
       default:

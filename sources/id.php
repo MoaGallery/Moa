@@ -1,16 +1,21 @@
 <?php
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
   if (false == isset($INSTALLING)) {
     $INSTALLING = false;
   }
 
   if(!$INSTALLING)
   {
-    include_once($MOA_PATH."sources/_db_funcs.php");
-    include_once($MOA_PATH."config.php");
-    include_once($MOA_PATH."sources/common.php");
+    include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
+    include_once($CFG["MOA_PATH"]."sources/common.php");
   }
-
-  $db = DBConnect();
 
   // Class - Holds information of user who is currently logged in.
   class LoginInfo
@@ -27,16 +32,16 @@
   $Userinfo->m_id    = null;
   $Userinfo->m_admin = false;
 
-  if (isset($COOKIE_NAME) == true)
+  if (isset($CFG["COOKIE_NAME"]) == true)
   {
-    if (isset($_COOKIE[$COOKIE_NAME]))
+    if (isset($_COOKIE[$CFG["COOKIE_NAME"]]))
   	{
-  		$Cookie = $_COOKIE[$COOKIE_NAME];
+  		$Cookie = $_COOKIE[$CFG["COOKIE_NAME"]];
   		$cookie_info = array();
   		$cookie_info = unserialize(stripslashes($Cookie));
   		$cookie_id = $cookie_info[0];
   		$Cookie_pw = $cookie_info[1];
-  		$query = "SELECT * FROM ".$tab_prefix."users WHERE (IDUser = '".mysql_real_escape_string($cookie_id)."');";
+  		$query = "SELECT * FROM `".$CFG["tab_prefix"]."users` WHERE (IDUser = '".mysql_real_escape_string($cookie_id)."');";
   		$result = mysql_query($query);
   	  if ($user = mysql_fetch_array($result))
   	  {
@@ -48,8 +53,8 @@
   	      $Userinfo->m_name = null;
           $Userinfo->m_id = null;
           $Userinfo->m_admin = false;
-          $c = setcookie($COOKIE_NAME, null, time()-100000, $COOKIE_PATH, false, false, false);
-          $_COOKIE[$COOKIE_NAME] = null;
+          $c = setcookie($CFG["COOKIE_NAME"], null, time()-100000, $CFG["COOKIE_PATH"], false, false, false);
+          $_COOKIE[$CFG["COOKIE_NAME"]] = null;
   	    } else
   	    {
   	      $Userinfo->m_id = $user["IDUser"];

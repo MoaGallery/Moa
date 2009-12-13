@@ -91,7 +91,7 @@ a.admin_link:hover {
         margin: 0 0 0 0;
 }
 
-a.nav_link, a.nav_link:visited {
+.nav_link, .nav_link:visited, .nav_link:active {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-weight: normal;
         font-size: 11px;
@@ -100,7 +100,7 @@ a.nav_link, a.nav_link:visited {
         text-decoration: none;
 }
 
-a.nav_link:hover {
+.nav_link:hover {
         text-decoration: underline;
 }
 
@@ -136,6 +136,11 @@ a.nav_link:hover {
 }
 
 .gallery_desc {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 14px;
+}
+
+.main_desc {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 14px;
 }
@@ -494,8 +499,9 @@ a.nav_link:hover {
 }
 
 .footer-left {
+        clear: both;
         background: transparent url(../media/footer-left.png) no-repeat bottom left;
-        margin: 10px 0 0 0;
+        margin: 20px 0 0 0;
         overflow: auto;
 }
 
@@ -514,19 +520,59 @@ a.nav_link:hover {
 	      overflow: hidden;
 }
 
-.form_items dt, .form_items dd {
+.form_items, .form_items dd {
 	      display: block;
-	      float: left;
 	      margin: 2px 0 2px 0;
 	      line-height: 16px;
 }
 
 .form_items dt {
 	      clear: left;
+	      float: left;
 	      width: 120px;
-              margin: 2px 0 2px 0;
-              vertical-align: middle;
-              line-height: 20px;
+        margin: 2px 0 2px 0;           
+        vertical-align: middle;
+        line-height: 20px;
+}
+
+.settings_form_items {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+}
+
+.settings_form_items dt, .settings_form_items dd {
+        display: block;
+        float: left;
+        margin: 2px 0 15px 0;
+        line-height: 16px;
+        font-size: 12px;
+}
+
+.settings_form_items dt {
+        clear: left;
+        width: 400px;
+        margin: 2px 0 2px 30px;
+        vertical-align: middle;
+        line-height: 20px;
+}
+
+.settings_section_break {
+        clear: left;
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+        padding: 20px 0;
+}
+
+.settings_label_text {
+        font-size: 14px;
+        font-family: Verdana, Arial, Helvetica, sans-serif; 
+}
+
+.settings_section_break {
+        font-size: 20px;
+        font-family: Verdana, Arial, Helvetica, sans-serif;	
 }
 
 .admin_maintain_image_container {
@@ -631,6 +677,11 @@ a.nav_link:hover {
 	      width: 420px;
 }
 
+.settings_admin_box
+{
+        width: 700px;
+}
+
 .user_add_line {
         margin: 0 0 10px 0;
         padding: 0;
@@ -661,7 +712,6 @@ a.nav_link:hover {
 .gallery_form_tags
 {
 	      width: 405px;
-              float: left;
 }
 
 .gallery_form_parent
@@ -672,7 +722,6 @@ a.nav_link:hover {
 .image_form_tags
 {
         width: 300px;
-        float: left;
 }
 
 .image_nav_icon
@@ -798,6 +847,7 @@ a.nav_link:hover {
 {
 	      float: left;
 	      overflow: auto;
+	      margin: 0 0 10px 5px;
 }
 
 .logolink
@@ -844,6 +894,16 @@ a.nav_link:hover {
 #galleryblockimagethumbs
 {
           clear: left;
+}
+
+#mainblock
+{
+          overflow: auto;
+}
+
+#mainblocktitles
+{
+          overflow: auto;
 }
 
 #imageblockinfo

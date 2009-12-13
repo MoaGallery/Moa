@@ -79,6 +79,10 @@
   {
     type = "image";
   }
+  if (null != document.getElementById("mainblockdesc"))
+  {
+    type = "main";
+  }
 
   var link = document.getElementById("edit_link");
   if (null != link)

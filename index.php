@@ -1,5 +1,13 @@
 <?php
-  global $MOA_PATH;
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  global $CFG;
 
   // Tell included files not to run in "stand-alone" mode
   $pre_cache = true;
@@ -11,33 +19,15 @@
     die();
   }
 
-  include_once ("config.php");
-
-  // If MOA_PATH is not set in config.php then set it here
-  // to the likely value to allow processing to continue.
-  //
-  // Needed for when 1.2 are first copied over a existing install.
-  if (!isset($MOA_PATH))
-  {
-    $MOA_PATH = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
-    $no_moa_path = true;
-  }
+  // Load Moa settings
+  include_once("sources/_settings.php");
+  LoadSettings();
 
   // Include login/cookie stub if we aren't installing
   if (isset($FRESH_INSTALL) == false)
   {
-    include_once($MOA_PATH."sources/_logout.php");
-    include_once($MOA_PATH."sources/_login.php");
-  }
-
-  // Find out which template we should be using. Fall back to MoaDefault if none set
-  $template_name = "MoaDefault";
-  if (isset($TEMPLATE))
-  {
-    if (is_dir("templates/".$TEMPLATE))
-    {
-      $template_name = $TEMPLATE;
-    }
+    include_once($CFG["MOA_PATH"]."sources/_logout.php");
+    include_once($CFG["MOA_PATH"]."sources/_login.php");
   }
 
   $action = GetParam("action");
@@ -49,10 +39,10 @@
     $show_headers = false;
   }
 
-  include_once($MOA_PATH."sources/id.php");
-  include_once($MOA_PATH."sources/common.php");
-  include_once($MOA_PATH."sources/mod_upgrade_funcs.php");
-  include_once($MOA_PATH."sources/_template_parser.php");
+  include_once($CFG["MOA_PATH"]."sources/id.php");
+  include_once($CFG["MOA_PATH"]."sources/common.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_upgrade_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_parser.php");
 
   // Fill in vars early if available
   if (isset($_REQUEST["image_id"]))
@@ -76,10 +66,144 @@
     $gallery_id = $parent_id;
   }
   $current_gallery = $gallery_id;
+
+
+  // Process submitted data
+  if (isset($_REQUEST["moa_form_submitted"]))
+  {
+    if (0 == strcmp($_REQUEST["moa_form_submitted"], "true"))
+    {
+      switch ($action)
+      {
+        case "admin_settings" :
+        {
+          include_once("sources/page_admin_settings_submit.php");
+          break;
+        }
+      }
+    }
+  }
+
+  // Find out which template we should be using. Fall back to MoaDefault if none set
+  $template_name = "MoaDefault";
+  if (isset($CFG["TEMPLATE"]))
+  {
+    if (is_dir("templates/".$CFG["TEMPLATE"]))
+    {
+      $template_name = $CFG["TEMPLATE"];
+    }
+  }
+
+  // Start generating the content
+  $bodycontent = "";
+  $bodytitle = "";
+
+  if ($show_headers)
+  {
+    include_once ("sources/_header.php");
+  }
+
+  switch($action)
+  {
+    case "admin" :
+    {
+      include_once("sources/page_admin.php");
+      break;
+    }
+    case "admin_settings" :
+    {
+      include_once("sources/page_admin_settings.php");
+      break;
+    }
+    case "admin_maintain_image" :
+    {
+      include_once("sources/page_admin_maintain_image.php");
+      break;
+    }
+    case "admin_maintain" :
+    {
+      include_once("sources/page_admin_maintain.php");
+      break;
+    }
+    case "admin_orphans" :
+    {
+      include_once("sources/page_admin_orphans.php");
+      break;
+    }
+    case "admin_tag" :
+    {
+      include_once("sources/page_admin_tags.php");
+      break;
+    }
+    case "admin_users" :
+    {
+      include_once("sources/page_admin_users.php");
+      break;
+    }
+    case "gallery_add" :
+    {
+      include_once("sources/page_gallery_add.php");
+      break;
+    }
+    case "gallery_view" :
+    {
+      include_once("sources/page_gallery_view.php");
+      break;
+    }
+    case "image_add" :
+    {
+      include_once("sources/page_image_add.php");
+      break;
+    }
+    case "image_view" :
+    {
+      include_once("sources/page_image_view.php");
+      break;
+    }
+    case "image_view_full" :
+    {
+      include_once("sources/page_image_view_full.php");
+      break;
+    }
+    case "login" :
+    {
+      $logout = false;
+      include_once("sources/page_login.php");
+      break;
+    }
+    case "logout" :
+    {
+      $logout = true;
+      include_once("sources/page_login.php");
+      break;
+    }
+    case "sitemap" :
+    {
+      include_once("sources/page_sitemap.php");
+      break;
+    }
+    case "upgrade" :
+    {
+      include_once("sources/page_upgrade.php");
+      break;
+    }
+    default :
+    {
+      include_once("sources/page_main_view.php");
+      break;
+    }
+  }
+
+  if ($show_headers)
+  {
+    $bodycontent .= LoadTemplateRoot("component_footer.php");
+  }
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
+     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
      <?php
        include_once ("sources/_html_head.php");
        if (isset($FRESH_INSTALL))
@@ -87,113 +211,12 @@
          include("install.php");
          die();
        }
-       echo "<title></title>";
+       echo "<title>".$bodytitle."</title>";
      ?>
   </head>
   <body>
-    <?php
-      if ($show_headers)
-      {
-        include_once ("sources/_header.php");
-      }
-
-      switch($action)
-      {
-        case "admin" :
-        {
-          include_once("sources/page_admin.php");
-          break;
-        }
-        case "admin_maintain_image" :
-        {
-          include_once("sources/page_admin_maintain_image.php");
-          break;
-        }
-        case "admin_maintain" :
-        {
-          include_once("sources/page_admin_maintain.php");
-          break;
-        }
-        case "admin_orphans" :
-        {
-          include_once("sources/page_admin_orphans.php");
-          break;
-        }
-        case "admin_tag" :
-      	{
-      		include_once("sources/page_admin_tags.php");
-          break;
-      	}
-        case "admin_users" :
-        {
-          include_once("sources/page_admin_users.php");
-          break;
-        }
-      	case "gallery_add" :
-        {
-          include_once("sources/page_gallery_add.php");
-          break;
-        }
-        case "gallery_view" :
-        {
-          include_once("sources/page_gallery_view.php");
-          break;
-        }
-        case "image_add" :
-        {
-          include_once("sources/page_image_add.php");
-          break;
-        }
-      	case "image_view" :
-      	{
-      		include_once("sources/page_image_view.php");
-      		break;
-      	}
-        case "image_view_full" :
-        {
-          include_once("sources/page_image_view_full.php");
-          break;
-        }
-        case "login" :
-        {
-        	$logout = false;
-          include_once("sources/page_login.php");
-          break;
-        }
-        case "logout" :
-        {
-        	$logout = true;
-          include_once("sources/page_login.php");
-          break;
-        }
-        case "sitemap" :
-        {
-          include_once("sources/page_sitemap.php");
-          break;
-        }
-        case "upgrade" :
-        {
-          include_once("sources/page_upgrade.php");
-          break;
-        }
-      	default :
-      	{
-      		include_once("sources/page_main_view.php");
-      		break;
-      	}
-      }
-
-      echo "<script type='text/javascript'>\n";
-	    if (isset($page_title))
-	    {
-	      echo "  document.title = '".$page_title."';\n";
-	    }
-      echo "</script>\n";
-
-      if ($show_headers)
-      {
-        echo LoadTemplateRoot("component_footer.php");
-      }
-    ?>
+     <?php
+       echo $bodycontent;
+     ?>
   </body>
 </html>

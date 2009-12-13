@@ -10,19 +10,20 @@ function str_replace(p_haystack, p_needle, p_replacement)
 function ShortName(p_name)
 {
   var newName = p_name;
-
-  if (p_name.length > 30)
+  if (p_name.length > title_max_length)
   {
-    newName = p_name.substr(0, 27)+"...";
-  }    
+
+    newName = p_name.substr(0, (title_max_length-3))+"...";
+  }
+
   return newName;
 }
 
-// Standard whitespace trimming function that will remove leading and trailing spaces from a string 
+// Standard whitespace trimming function that will remove leading and trailing spaces from a string
 function trim(p_text)
 {
   var result = p_text.replace(/^\s+|\s+$/g, '');
-  
+
   return result;
 }
 
@@ -31,21 +32,89 @@ function EscapeHTMLChars(p_text)
   p_text = str_replace(p_text, "&", "&amp;");
   p_text = str_replace(p_text, "<", "&lt;");
   p_text = str_replace(p_text, ">", "&gt;");
-  
+
   return p_text;
+}
+
+function StripHTMLTags(p_text)
+{
+  var BannedHTMLTagList = new Array( "html"
+		                           , "head"
+		                           , "body"
+		                           , "iframe"
+		                           , "object"
+		                           , "script"
+		                           , "meta");
+  
+  var CurrentPos  = 0;
+  var MaxPos      = p_text.length;
+  var Buffer      = "";
+  
+  while (CurrentPos < MaxPos) {
+    Start = p_text.indexOf("<", CurrentPos);
+    End = p_text.indexOf(">", CurrentPos);
+    
+    if ((End == -1) || (Start == -1)) {
+      Buffer += p_text.substr( CurrentPos, MaxPos - CurrentPos);
+      CurrentPos = MaxPos;    
+    }
+    else
+    {    
+      Buffer += p_text.substr( CurrentPos, Start - CurrentPos);
+
+      Tag = p_text.substr( Start + 1, End - Start - 1);
+      Tag = trim(Tag);
+      Tag = Tag.toLowerCase();
+      
+      TagWithoutSlashes = Tag;
+      if (Tag.charAt(0) == "/") {
+        TagWithoutSlashes = Tag.substr( 1, Tag.length - 1);
+      }
+      
+      if (-1 == TagWithoutSlashes.indexOf(" ", 0)) {
+        Name = TagWithoutSlashes;
+      }
+      else
+      {
+        Name = TagWithoutSlashes.split(" ", 1);
+      }
+      
+      Found = false;
+      
+      for (i=0; i < BannedHTMLTagList.length;i++) {
+        if (BannedHTMLTagList[i] == Name) {
+          Found = true;
+        }
+      }
+      
+      if (Found == true) {
+        Buffer += "&lt;";
+        Buffer += Tag;
+        Buffer += "&gt;";
+      }
+      else
+      {
+        Buffer += "<";
+        Buffer += Tag;
+        Buffer += ">";
+      }
+      CurrentPos = End + 1;
+    }
+  }
+  return Buffer;
 }
 
 function EscapeNewLine(p_text)
 {
   p_text = str_replace(p_text, "\n", "<br />");
- 
+
   return p_text;
 }
 
 function UnEscapeNewLine(p_text)
 {
   p_text = str_replace(p_text, "<br />", "\n");
- 
+
   return p_text;
 }
 
@@ -54,7 +123,7 @@ function FeedbackBox(p_text, p_success)
   var p_type = "Success";
 
   var newtext = feedback_box;
-  
+
   // Strip out ERROR and IERROR
   var stub = p_text.substring(0, 5);
   if ("ERROR" == stub)
@@ -69,26 +138,32 @@ function FeedbackBox(p_text, p_success)
 	  p_text = p_text.substring(7, 4096);
 	  p_type = "Error";
   }
-  
+
+  stub = p_text.substring(0, 2);
+  if ("OK" == stub)
+  {
+    p_text = p_text.substring(3, 4096);
+  }
+
   newtext = str_replace(newtext, "<moavar FeedbackType>", p_type);
   newtext = str_replace(newtext, "<moavar FeedbackText>", p_text);
-  
+
   return newtext;
 }
 
-//Applies nesesary styles to a DIV in order to hide id from view on a page.
+//Applies neccesary styles to a DIV in order to hide id from view on a page.
 function hide_div( p_name)
 {
-   document.getElementById(p_name).style.display = "none";         
+   document.getElementById(p_name).style.display = "none";
    //document.getElementById(p_name).style.position = "absolute";
    //document.getElementById(p_name).style.cssFloat = "none";
 }
 
-// Applies nesesary styles to a DIV in order to make it visable on a page.
+// Applies neccesary styles to a DIV in order to make it visable on a page.
 function show_div( p_name)
-{               
-   //document.getElementById(p_name).style.position = "static";                
-   //document.getElementById(p_name).style.cssFloat = "left";        
+{
+   //document.getElementById(p_name).style.position = "static";
+   //document.getElementById(p_name).style.cssFloat = "left";
    document.getElementById(p_name).style.display = "block";
 }
 
@@ -97,7 +172,7 @@ function show_div( p_name)
 function checkKey(p_e, p_submit, p_cancel)
 {
   var characterCode;
-  
+
   if(p_e && p_e.which)
   {
     p_e = p_e;
@@ -108,7 +183,7 @@ function checkKey(p_e, p_submit, p_cancel)
     //e = event
     characterCode = p_e.keyCode;
   }
-  
+
   // Check for enter
   if((characterCode == 13) && (null != p_submit))
   {
@@ -122,7 +197,7 @@ function checkKey(p_e, p_submit, p_cancel)
     }
     return false;
   }
-  
+
   // Check for escape
   if((characterCode == 27) && (null != p_cancel))
   {
@@ -136,21 +211,21 @@ function checkKey(p_e, p_submit, p_cancel)
     }
     return false;
   }
-  
+
   return true;
 }
 
 // Add an event function to a javascript DOM object
 function addEvent( p_obj, p_type, p_fn )
-{
+{    
   if (p_obj.addEventListener)
     p_obj.addEventListener( p_type, p_fn, false );
   else if (p_obj.attachEvent)
-  {
+  {	  
     p_obj["e"+p_type+p_fn] = p_fn;
     p_obj[p_type+p_fn] = function() { p_obj["e"+p_type+p_fn]( window.event ); }
     p_obj.attachEvent( "on"+p_type, p_obj[p_type+p_fn] );
-  }
+  }   
 }
 
 //Remove an event function from a DOM object

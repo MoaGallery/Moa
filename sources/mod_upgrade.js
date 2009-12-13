@@ -85,14 +85,20 @@ function File()
   var m_filename = "";
 }
 
+function Func()
+{
+  var m_funcname = "";
+}
+
 // Class to help in upgrading
 function Upgrade(p_oldver, p_newver)
 {
   var that = this;
-  var versions = [10000, 10100, 10199.00, 10200];
-  var stage_1_list = Array();
-  var stage_2_list = Array();
-  var stage_3_list = Array();
+  var versions = [10000, 10100, 10199.00, 10200, 10201];
+  var stage_1_list = new Array();
+  var stage_2_list = new Array();
+  var stage_3_list = new Array();
+  var stage_4_list = new Array();
 
   var index_old = 0;
   var index_new = 0;
@@ -110,16 +116,73 @@ function Upgrade(p_oldver, p_newver)
     }
   }
 
+  addEvent(document.getElementById("testbutton"), "click", function(e) {upg.Test();});
   addEvent(document.getElementById("upgradebutton"), "click", function(e) {upg.Go();});
+  document.getElementById("upgradebutton").style.display = "none";
   
-  // Starts the upgrade process
+  // Test the upgrade process
+  this.Test = function()
+  {
+    that.upgrade_result = true;
+   
+    document.getElementById("upgradeprogress").innerHTML = "";
+    document.getElementById("upgradebutton").style.display = "none"; 
+    that.Stage1TestBanner();
+    that.RunStage1Test(0);
+  };
+  
+  // Start the upgrade process
   this.Go = function()
   {
-    that.BuildStage1List();
-    that.BuildStage2List();
-    that.BuildStage3List();
+    that.upgrade_result = true;
+    
+    document.getElementById("upgradeprogress").innerHTML = "";
     that.Stage1Banner();
     that.RunStage1(0);
+  };
+  
+  // Announces test stage 1 (Adding config vars)
+  this.Stage1TestBanner = function()
+  {
+    var element = document.getElementById("upgradeprogress");
+    element.innerHTML +=  "<span class='install_list_header'>Stage 1 - Testing config file...</span><br/><br/>";
+  };
+  
+  // Announces test stage 2 (Deleting old files)
+  this.Stage2TestBanner = function()
+  {      
+    var element = document.getElementById("upgradeprogress");
+    element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 2 - Testing file permissions...<br/></span><br/><br/>";
+  };
+  
+  // Announces test stage 3 (Database changes)
+  this.Stage3TestBanner = function()
+  {
+    var element = document.getElementById("upgradeprogress");
+    element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 3 - Testing database access...</span><br/><br/>";
+  };
+  
+  // Announces test stage 4 (Other changes)
+  this.Stage4TestBanner = function()
+  {
+    var element = document.getElementById("upgradeprogress");
+    element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 4 - Testing post-upgrade processes...</span><br/><br/>";
+  };
+  
+  // Announces testing complete
+  this.EndTestBanner = function()
+  {
+    var element = document.getElementById("upgradeprogress");
+    element.innerHTML += "<br/><br/><span class='install_list_header'>Testing finished</span>";
+    if (that.upgrade_result)
+    {
+      element.innerHTML += " <span class='install_list_header' class='colorgreen'>successfully.</span><br/><br/>";
+      document.getElementById("upgradebutton").style.display = "block";
+    } else
+    {
+      element.innerHTML += "<br/><span class='install_list_fail'>One or more parts failed the upgrade test as listed above.<br/>\n"+
+                           "Please fix the issues mentioned and re-run the upgrade test.<br/><br/>\n";
+    }
   };
   
   // Announces stage 1 (Adding config vars)
@@ -141,6 +204,13 @@ function Upgrade(p_oldver, p_newver)
   {
     var element = document.getElementById("upgradeprogress");
     element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 3 - Applying database changes...</span><br/><br/>";
+  };
+  
+  // Announces stage 4 (Other changes)
+  this.Stage4Banner = function()
+  {
+    var element = document.getElementById("upgradeprogress");
+    element.innerHTML +=  "<br/><br/><span class='install_list_header'>Stage 4 - Finalising changes...</span><br/><br/>";
   };
   
   // Announces upgrade complete
@@ -273,11 +343,202 @@ function Upgrade(p_oldver, p_newver)
           stage_3_list[stage_3_list.length] = new_file;
           break;
         }
+        case 10201.00 :
+        {
+          var new_file = new File();
+          new_file.filename = "upgrade-10201.sql"
+          stage_3_list[stage_3_list.length] = new_file;
+          break;
+        }        
         default :
         {
           break;
         }
       }
+    }
+  };
+  
+  // Puts together a list of all upgrade functions to run
+  this.BuildStage4List = function()
+  {
+    for (var i = index_old; i <= index_new; i++)
+    {
+      switch (versions[i])
+      {
+        case 10201.00 :
+        {
+          var new_func = new Func();
+          new_func.m_funcname = "upgrade_10201_MoveConfigtoDB";
+          stage_4_list[stage_4_list.length] = new_func;
+          new_func = new Func();
+          new_func.m_funcname = "upgrade_10201_AddImageFormats";
+          stage_4_list[stage_4_list.length] = new_func;
+          break;          
+        }        
+        default :
+        {
+          break;
+        }
+      }
+    }
+    
+    var new_func = new Func();
+    new_func.m_funcname = "upgrade_complete";
+    stage_4_list[stage_4_list.length] = new_func;
+  };
+  
+  // Called after each stage 1 element is run
+  this.Stage1TestCallback = function(p_text, p_status, p_xml, p_note)
+  {
+    var success = true;
+    var reason = "";
+    var element = document.getElementById("upgradeprogress");
+    
+    if (200 != p_status)
+    {
+      success = false;
+      reason = "Server error (status "+p_status+")."; 
+    }
+    
+    if (p_text.substr(0, 2) != "OK")
+    {
+      success = false;
+      reason = p_text;
+    }
+    
+    if (success)
+    {
+      element.innerHTML += "<span class='install_list_success'>Success</span><br/>"
+    } else
+    {
+      element.innerHTML += "<span class='install_list_fail'>" + reason + "</span><br/>";
+      that.upgrade_result = false;
+    }
+    
+    p_note++;
+    if (p_note < stage_1_list.length)
+    {
+      that.RunStage1Test(p_note);
+    } else
+    {
+      that.Stage2TestBanner();
+      that.RunStage2Test(0);
+    }
+  };
+  
+  // Called after each stage 2 element is run
+  this.Stage2TestCallback = function(p_text, p_status, p_xml, p_note)
+  {
+    var success = true;
+    var reason = "";
+    var element = document.getElementById("upgradeprogress");
+    
+    if (200 != p_status)
+    {
+      success = false;
+      reason = "Server error (status "+p_status+")."; 
+    }
+    
+    if (p_text.substr(0, 2) != "OK")
+    {
+      success = false;
+      reason = p_text;
+    }
+    
+    if (success)
+    {
+      element.innerHTML += "<span class='install_list_success'>Success</span><br/>"
+    } else
+    {
+      element.innerHTML += "<span class='install_list_fail'>" + reason + "</span><br/>";
+      that.upgrade_result = false;
+    }
+    
+    p_note++;
+    if (p_note < stage_2_list.length)
+    {
+      that.RunStage2Test(p_note);
+    } else
+    {
+      that.Stage3TestBanner();
+      that.RunStage3Test(0);
+    }
+  };
+  
+  // Called after each stage 3 element is run
+  this.Stage3TestCallback = function(p_text, p_status, p_xml, p_note)
+  {
+    var success = true;
+    var reason = "";
+    var element = document.getElementById("upgradeprogress");
+    
+    if (200 != p_status)
+    {
+      success = false;
+      reason = "Server error (status "+p_status+")."; 
+    }
+    
+    if (p_text.substr(0, 2) != "OK")
+    {
+      success = false;
+      reason = p_text;
+    }
+    
+    if (success)
+    {
+      element.innerHTML += "<span class='install_list_success'>Success</span><br/>"
+    } else
+    {
+      element.innerHTML += "<span class='install_list_fail'>" + reason + "</span><br/>";
+      that.upgrade_result = false;
+    }
+    
+    p_note++;
+    if (p_note < stage_3_list.length)
+    {
+      that.RunStage3Test(p_note);
+    } else
+    {
+      that.Stage4TestBanner();
+      that.RunStage4Test(0);
+    }
+  };
+  
+  // Called after each stage 3 element is run
+  this.Stage4TestCallback = function(p_text, p_status, p_xml, p_note)
+  {
+    var success = true;
+    var reason = "";
+    var element = document.getElementById("upgradeprogress");
+    
+    if (200 != p_status)
+    {
+      success = false;
+      reason = "Server error (status "+p_status+")."; 
+    }
+    
+    if (p_text.substr(0, 2) != "OK")
+    {
+      success = false;
+      reason = p_text;
+    }
+    
+    if (success)
+    {
+      element.innerHTML += "<span class='install_list_success'>Success</span><br/>"
+    } else
+    {
+      element.innerHTML += "<span class='install_list_fail'>Failed " + reason + "</span><br/>";
+      that.upgrade_result = false;
+    }
+    
+    p_note++;
+    if (p_note < stage_4_list.length)
+    {
+      that.RunStage4Test(p_note);
+    } else
+    {
+      that.EndTestBanner();
     }
   };
   
@@ -306,7 +567,7 @@ function Upgrade(p_oldver, p_newver)
     } else
     {
       element.innerHTML += "<span class='install_list_fail'>Failed " + reason + "</span><br/>";
-      upgrade_result = false;
+      that.upgrade_result = false;
     }
     
     p_note++;
@@ -345,7 +606,7 @@ function Upgrade(p_oldver, p_newver)
     } else
     {
       element.innerHTML += "<span class='install_list_fail'>Failed " + reason + "</span><br/>";
-      //upgrade_result = false;
+      that.upgrade_result = false;
     }
     
     p_note++;
@@ -384,7 +645,7 @@ function Upgrade(p_oldver, p_newver)
     } else
     {
       element.innerHTML += "<span class='install_list_fail'>Failed " + reason + "</span><br/>";
-      upgrade_result = false;
+      that.upgrade_result = false;
     }
     
     p_note++;
@@ -393,8 +654,120 @@ function Upgrade(p_oldver, p_newver)
       that.RunStage3(p_note);
     } else
     {
+      that.Stage4Banner();
+      that.RunStage4(0);
+    }
+  };
+  
+  // Called after each stage 4 element is run
+  this.Stage4Callback = function(p_text, p_status, p_xml, p_note)
+  {
+    var success = true;
+    var reason = "";
+    var element = document.getElementById("upgradeprogress");
+    
+    if (200 != p_status)
+    {
+      success = false;
+      reason = "Server error (status "+p_status+")."; 
+    }
+    
+    if (p_text.substr(0, 2) != "OK")
+    {
+      success = false;
+      reason = p_text;
+    }
+    
+    if (success)
+    {
+      element.innerHTML += "<span class='install_list_success'>Success</span><br/>"
+    } else
+    {
+      element.innerHTML += "<span class='install_list_fail'>Failed " + reason + "</span><br/>";
+      that.upgrade_result = false;
+    }
+    
+    p_note++;
+    if (p_note < stage_4_list.length)
+    {
+      that.RunStage4(p_note);
+    } else
+    {
       that.EndBanner();
     }
+  };
+  
+  // Tests each step of stage 1
+  this.RunStage1Test = function(p_step)
+  {
+    var element = document.getElementById("upgradeprogress");
+    if (0 == stage_1_list.length)
+    {
+      element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
+      that.Stage2TestBanner();
+      that.RunStage2Test(0);
+      return;
+    }
+    element.innerHTML +=  "<span class='install_list'>Testing - adding '"+stage_1_list[p_step].name+"' - </span>";
+    var url =  "action=add_var";
+        url += "&dest=file";
+        url += "&name="+encodeURIComponent(stage_1_list[p_step].name);
+        url += "&value="+encodeURIComponent(stage_1_list[p_step].value);
+    var request = new httpRequest("sources/mod_upgrade.php", that.Stage1TestCallback, p_step);
+    request.update(url, "GET");
+  };
+  
+  // Tests each step of stage 2
+  this.RunStage2Test = function(p_step)
+  {
+    var element = document.getElementById("upgradeprogress");
+    if (0 == stage_2_list.length)
+    {
+      element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
+      that.Stage3TestBanner();
+      that.RunStage3Test(0);
+      return;
+    }
+    element.innerHTML +=  "<span class='install_list'>Testing deletion of '"+stage_2_list[p_step].filename+"' - </span>";
+    var url =  "action=delete_file";
+        url += "&filename="+encodeURIComponent(stage_2_list[p_step].filename);
+    var request = new httpRequest("sources/mod_upgrade.php", that.Stage2TestCallback, p_step);
+    request.update(url, "GET");
+  };
+  
+  // Tests each step of stage 3
+  this.RunStage3Test = function(p_step)
+  {
+    var element = document.getElementById("upgradeprogress");
+    if (0 == stage_3_list.length)
+    {
+      element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
+      that.Stage4TestBanner();
+      that.RunStage4Test(0);
+      return;
+    }
+    element.innerHTML +=  "<span class='install_list'>Testing SQL upgrade '"+stage_3_list[p_step].filename+"' - </span>";
+    var url =  "action=modify_db";
+        url += "&filename="+encodeURIComponent(stage_3_list[p_step].filename);
+    var request = new httpRequest("sources/mod_upgrade.php", that.Stage3TestCallback, p_step);
+    request.update(url, "GET");
+  };
+  
+  // Tests each step of stage 4
+  this.RunStage4Test = function(p_step)
+  {
+    var element = document.getElementById("upgradeprogress");
+    if (0 == stage_4_list.length)
+    {
+      element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
+      that.EndTestBanner();
+      return;
+    }
+    element.innerHTML +=  "<span class='install_list'>Testing '"+stage_4_list[p_step].m_funcname+"'</span>";
+    var url =  "action=run_func";
+        url += "&func="+encodeURIComponent(stage_4_list[p_step].m_funcname);
+    var request = new httpRequest("sources/mod_upgrade.php", that.Stage4TestCallback, p_step);
+    request.update(url, "GET");
   };
   
   // Runs each step of stage 1
@@ -406,10 +779,12 @@ function Upgrade(p_oldver, p_newver)
       element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
       that.Stage2Banner();
       that.RunStage2(0);
+      return;
     }
-    element.innerHTML +=  "<span class='install_list'>Adding "+stage_1_list[p_step].name+" - </span>";
+    element.innerHTML +=  "<span class='install_list'>Adding '"+stage_1_list[p_step].name+"' - </span>";
     var url =  "action=add_var";
         url += "&dest=file";
+        url += "&test=false";
         url += "&name="+encodeURIComponent(stage_1_list[p_step].name);
         url += "&value="+encodeURIComponent(stage_1_list[p_step].value);
     var request = new httpRequest("sources/mod_upgrade.php", that.Stage1Callback, p_step);
@@ -425,9 +800,11 @@ function Upgrade(p_oldver, p_newver)
       element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
       that.Stage3Banner();
       that.RunStage3(0);
+      return;
     }
-    element.innerHTML +=  "<span class='install_list'>Deleting "+stage_2_list[p_step].filename+" - </span>";
+    element.innerHTML +=  "<span class='install_list'>Deleting '"+stage_2_list[p_step].filename+"' - </span>";
     var url =  "action=delete_file";
+        url += "&test=false";
         url += "&filename="+encodeURIComponent(stage_2_list[p_step].filename);
     var request = new httpRequest("sources/mod_upgrade.php", that.Stage2Callback, p_step);
     request.update(url, "GET");
@@ -440,14 +817,39 @@ function Upgrade(p_oldver, p_newver)
     if (0 == stage_3_list.length)
     {
       element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
-      that.EndBanner();
+      that.Stage4Banner();
+      that.RunStage4(0);
       return;
     }
     element.innerHTML +=  "<span class='install_list'>Running '"+stage_3_list[p_step].filename+"'</span>";
     var url =  "action=modify_db";
+        url += "&test=false";
         url += "&filename="+encodeURIComponent(stage_3_list[p_step].filename);
     var request = new httpRequest("sources/mod_upgrade.php", that.Stage3Callback, p_step);
     request.update(url, "GET");
   };
+  
+  // Runs each step of stage 4
+  this.RunStage4 = function(p_step)
+  {
+    var element = document.getElementById("upgradeprogress");
+    if (0 == stage_4_list.length)
+    {
+      element.innerHTML +=  "<span class='install_list'>Nothing to do</span><br/>";
+      that.EndBanner();
+      return;
+    }
+    element.innerHTML +=  "<span class='install_list'>Running '"+stage_4_list[p_step].m_funcname+"'</span>";
+    var url =  "action=run_func";
+        url += "&test=false";
+        url += "&func="+encodeURIComponent(stage_4_list[p_step].m_funcname);
+    var request = new httpRequest("sources/mod_upgrade.php", that.Stage4Callback, p_step);
+    request.update(url, "GET");
+  };
+  
+  that.BuildStage1List();
+  that.BuildStage2List();
+  that.BuildStage3List();
+  that.BuildStage4List();
 }
 

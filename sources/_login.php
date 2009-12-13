@@ -1,19 +1,22 @@
 <?php
-  include_once("config.php");
-  include_once($MOA_PATH."sources/common.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."sources/common.php");
 
   function BogOff()
   {
     echo "<html><head>\n";
-    echo "  <meta http-equiv='Refresh' content='0; url=index.php?action=login'>\n";
+    echo "  <meta http-equiv='Refresh' content='0; url=index.php?action=login&amp;invalid=true'>\n";
     echo "</head><body>\n";
     echo "</body></html>\n";
     die();
-    return;
   }
-
-  include_once($MOA_PATH."sources/_db_funcs.php");
-  $db = DBConnect();
 
   if (isset($_POST["duration"]))
   {
@@ -21,7 +24,7 @@
     $login_name = $_REQUEST["name"];
     $login_password = $_REQUEST["password"];
 
-    $query = "SELECT * FROM ".$tab_prefix."users WHERE (Name = '".mysql_real_escape_string($login_name)."');";
+    $query = "SELECT * FROM `".$CFG["tab_prefix"]."users` WHERE (Name = '".mysql_real_escape_string($login_name)."');";
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
     $user = mysql_fetch_array($result);
     if ($user == false)
@@ -43,12 +46,12 @@
         }
         $rand = md5(rand(0, 0x0fffffff));
         $salt = mb_substr($rand, 0, 8);
-        $query = "UPDATE ".$tab_prefix."users SET Salt = '".$salt."' WHERE IDUser = '".$user["IDUser"]."'";
+        $query = "UPDATE `".$CFG["tab_prefix"]."users` SET Salt = '".$salt."' WHERE IDUser = '".$user["IDUser"]."'";
         $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
         $cookie_pw = sha1($login_enc_password.$salt);
         $cookie_data = serialize(array($user["IDUser"], $cookie_pw));
-        $c = setcookie($COOKIE_NAME, $cookie_data, time()+$timeout, $COOKIE_PATH, false, false, false);
-        $_COOKIE[$COOKIE_NAME] = $cookie_data;
+        $c = setcookie($CFG["COOKIE_NAME"], $cookie_data, time()+$timeout, $CFG["COOKIE_PATH"], false, false, false);
+        $_COOKIE[$CFG["COOKIE_NAME"]] = $cookie_data;
       } else
       {
         BogOff();

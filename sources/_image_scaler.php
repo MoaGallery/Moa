@@ -10,7 +10,18 @@
   /*  URL Params: image_name                        */
   /*                                                */
   /* -----------------------------------------------*/
-  include_once("../config.php");
+
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once("_settings.php");
+  LoadSettings();
+
   include_once("common.php");
 
   if (isset($_REQUEST["display_width"])) {
@@ -18,7 +29,7 @@
   }
   else
   {
-    $display_max_width = $CONFIG_DISPLAY_MAX_WIDTH;
+    $display_max_width = $CFG["CONFIG_DISPLAY_MAX_WIDTH"];
   }
 
   $width = 0;
@@ -26,14 +37,15 @@
   $w = 0;
   $h = 0;
 
-  if ((isset($_REQUEST["image_name"]) == false) || (!CheckImageMemory("../".$IMAGE_PATH."/".$_REQUEST["image_name"])))
+  if (isset($_REQUEST["image_name"]) == false)
   {
-    // Image Name is not set so
+    // Image Name is not set
     header("Location: ../media/img_scale_error.png");
   } else
   {
-  	if (!CheckImageMemory("../".$IMAGE_PATH."/".$_REQUEST["image_name"]))
+  	if (!CheckImageMemory("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]))
   	{
+      // Not enough memory to process this image
   		header("Location: ../media/img_scale_error.png");
   		exit();
   	}
@@ -42,7 +54,17 @@
     }
     else
     {
-      $src_img = @imagecreatefromjpeg("../".$IMAGE_PATH."/".$_REQUEST["image_name"]);
+      $src_img = @imagecreatefromjpeg("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]);
+
+      if (!$src_img)
+      {
+        $src_img = @imagecreatefrompng("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]);
+      }
+
+      if (!$src_img)
+      {
+        $src_img = @imagecreatefromgif("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]);
+      }
     }
 
     if (!$src_img )

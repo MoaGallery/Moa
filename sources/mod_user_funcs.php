@@ -1,6 +1,14 @@
 <?php
-  include_once($MOA_PATH."sources/_error_funcs.php");
-  include_once($MOA_PATH."sources/_db_funcs.php");
+  // Guard against false config variables being passed via the URL
+  // if the register_globals php setting is turned on
+  if (isset($_REQUEST["CFG"]))
+  {
+    echo "Hacking attempt.";
+    die();
+  }
+
+  include_once($CFG["MOA_PATH"]."sources/_error_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
 
   // Structure for a single user
   class User
@@ -17,12 +25,12 @@
   */
   function _UserExists($p_id) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT 1 FROM ".$tab_prefix."users WHERE IDUser = ".mysql_real_escape_string($p_id);
+    $query = "SELECT 1 FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-    if ((false == $result) || (0 == mysql_num_rows($result))) {
+    if ((false === $result) || (0 == mysql_num_rows($result))) {
       return false;
     }
     return true;
@@ -33,12 +41,12 @@
   */
   function _UserLookup($p_name) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT IDUser FROM ".$tab_prefix."users WHERE Name = '".mysql_real_escape_string($p_name)."'";
+    $query = "SELECT IDUser FROM `".$CFG["tab_prefix"]."users` WHERE Name = '".mysql_real_escape_string($p_name)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-    if ((false == $result) || (0 == mysql_num_rows($result))) {
+    if ((false === $result) || (0 == mysql_num_rows($result))) {
       return false;
     }
     $row = mysql_fetch_array($result);
@@ -50,11 +58,11 @@
   */
   function _UserChangeValue($p_id, $p_field, $p_value) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "UPDATE ".$tab_prefix."users SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDUser = ".mysql_real_escape_string($p_id);
+    $query = "UPDATE `".$CFG["tab_prefix"]."users` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
     return true;
@@ -65,16 +73,16 @@
   */
   function _UserGetValue($p_id, $p_field ) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT ".mysql_real_escape_string($p_field)." FROM ".$tab_prefix."users WHERE IDUser = ".mysql_real_escape_string($p_id);
+    $query = "SELECT ".mysql_real_escape_string($p_field)." FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
     $row = mysql_fetch_array($result);
-    return $row[$field];
+    return $row[$p_field];
   };
 
   /*
@@ -83,11 +91,11 @@
   */
   function _UserGetAllValues($p_id) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT Name, Admin FROM ".$tab_prefix."users WHERE IDUser = ".mysql_real_escape_string($p_id);
+    $query = "SELECT Name, Admin FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -107,11 +115,11 @@
    */
   function _UserGetUsers() {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "SELECT IDUser, Name, Admin FROM ".$tab_prefix."users;";
+    $query = "SELECT IDUser, Name, Admin FROM `".$CFG["tab_prefix"]."users`;";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -134,11 +142,11 @@
   */
   function _UserDelete($p_id) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
-    $query = "DELETE FROM ".$tab_prefix."users WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
+    $query = "DELETE FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -150,7 +158,7 @@
   */
   function _UserAdd($p_name, $p_admin, $p_pass) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
     $admin_val = 0;
     if (0 == strcmp($p_admin, "true"))
@@ -160,9 +168,9 @@
 
     $new_pass = mb_strtoupper(sha1($p_pass));
 
-    $query = "INSERT INTO ".$tab_prefix."users (Name, Admin, Password, Salt) VALUES (_utf8'".mysql_real_escape_string($p_name)."', '".$admin_val."', '".$new_pass."', '000000');";
+    $query = "INSERT INTO `".$CFG["tab_prefix"]."users` (Name, Admin, Password, Salt) VALUES (_utf8'".mysql_real_escape_string($p_name)."', '".$admin_val."', '".$new_pass."', '000000');";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -174,7 +182,7 @@
   */
   function _UserEdit($p_id, $p_name, $p_admin, $p_pass) {
     global $ErrorString;
-    global $tab_prefix;
+    global $CFG;
 
     $admin_val = 0;
     if (0 == strcmp($p_admin, "true"))
@@ -182,9 +190,9 @@
     	$admin_val = 1;
     }
 
-    $query = "UPDATE ".$tab_prefix."users SET Name=_utf8'".mysql_real_escape_string($p_name)."', Admin='".$admin_val."' WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
+    $query = "UPDATE `".$CFG["tab_prefix"]."users` SET Name=_utf8'".mysql_real_escape_string($p_name)."', Admin='".$admin_val."' WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false == $result) {
+    if (false === $result) {
       return false;
     }
 
@@ -192,9 +200,9 @@
     {
     	$new_pass = mb_strtoupper(sha1($p_pass));
 
-	    $query = "UPDATE ".$tab_prefix."users SET Password='".$new_pass."' WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
+	    $query = "UPDATE `".$CFG["tab_prefix"]."users` SET Password='".$new_pass."' WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
 	    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-	    if (false == $result) {
+	    if (false === $result) {
 	      return false;
 	    }
 

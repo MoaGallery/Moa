@@ -1,5 +1,5 @@
 <div class="body_section">
-  <form id="login-form" method="post" action="index.php" enctype="multipart/form-data" >
+  <form id="login-form" method="post" action="index.php?action=admin" enctype="multipart/form-data" >
     <div class="left_column left_column_shadow">
       &nbsp;
     </div>

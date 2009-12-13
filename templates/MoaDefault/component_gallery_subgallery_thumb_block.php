@@ -6,7 +6,7 @@
           Sub-galleries
         </p>
         <div class="testboxcontent">
-        <moatag type="GallerySubgalleryThumbnails" hide="noimage"><br/>
+        <moatag type="GallerySubgalleryThumbnails" hide="image"><br/>
         </div>
       </div>
     </div>

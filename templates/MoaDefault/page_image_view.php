@@ -35,7 +35,7 @@
               <div class="testboxcontent">
                 <div id='imageblockinfo'>
                   <div class="adminlinks">
-                    <moatag type="ImageAdminLinks">
+                    <moatag type="AdminLinks" location="image">
                   </div>
                   <div class="image_desc new_line" id="imageblockdesc"><moatag type="ImageDescription"></div><br/>
                   <img width='300' height='1' src='media/trans-pixel.png' alt=""/>

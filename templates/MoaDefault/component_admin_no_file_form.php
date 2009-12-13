@@ -1,4 +1,4 @@
-<form id="image_add" method="post" action="index.php?action=admin_maintain_image&image_id=<moatag type="ImageID">" enctype="multipart/form-data">
+<form id="image_add" method="post" action="index.php?action=admin_maintain_image&amp;image_id=<moatag type="ImageID">" enctype="multipart/form-data">
   <dl class="form_items">
     <dt class='form_label_text'>
       Original filename:
