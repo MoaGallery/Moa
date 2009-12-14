@@ -40,30 +40,38 @@
     global $no_moa_path;
     global $THUMB_WIDTH;
 
-    // Detect 1.0.0
-    if (!isset($CFG["STR_DELIMITER"]))
+    $version = _UpgradeGetNewVersionID();
+
+    $query = "SELECT Name FROM ".$CFG["tab_prefix"]."settings;";
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+
+    if (false === $result)
     {
-      return 10000;
+      $version = 10200;
+      
+      $query = "SELECT * FROM ".$CFG["tab_prefix"]."v_gallery_images;";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+
+      if (false === $result)
+      {
+        $version = 10199;
+
+        $query = "SELECT * FROM ".$CFG["tab_prefix"]."options;";
+        $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+
+        if (false === $result)
+        {
+          $version = 10100;
+
+          if (0 == strlen($CFG["STR_DELIMITER"]))
+          {
+            $version = 10000;
+          }
+        }
+      }
     }
 
-    // Detect 1.1.0
-    if (file_exists($CFG["MOA_PATH"]."media/debug-moa-logo-vector.png"))
-    {
-      return 10100;
-    }
-
-    // Detect 1.1.99
-    if (file_exists($CFG["MOA_PATH"]."media/moa-logo-vector.png"))
-    {
-    	return 10199;
-    }
-
-    // Detect 1.2.0
-    if(isset($THUMB_WIDTH))
-    {
-      return 10200;
-    }
-    return _UpgradeGetNewVersionID();
+    return $version;
   }
 
   // Returns the id of the current Moa source files
