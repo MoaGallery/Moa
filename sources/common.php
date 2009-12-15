@@ -10,7 +10,7 @@
   $MOA_MAJOR_VERSION = 1;
   $MOA_MINOR_VERSION = 2;
   $MOA_REVISION = 1;
-  $MOA_PATCH = "";
+  $MOA_PATCH = "a";
   $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION.$MOA_PATCH;
 
   // Function for retrieving date\time at page load
