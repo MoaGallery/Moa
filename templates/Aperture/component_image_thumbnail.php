@@ -1,4 +1,4 @@
-<li class="thumbframeheight">
+<li class="thumbframeheight" id='drag_<moavar DragID>' >
   <div <moavar ImagePopup> onclick='nd();'>
     <div>
       <a href="index.php?action=image_view&amp;image_id=<moavar ImageThumbID>&amp;parent_id=<moavar GalleryID><moavar Referer>">

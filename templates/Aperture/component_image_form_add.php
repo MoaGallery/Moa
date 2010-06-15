@@ -6,7 +6,7 @@
       File:
     </dt>
     <dd>
-      <input class='form_text image_name_file' type='file' id='imageformfilename' size='30' name='filename' accept='image/jpg'></input>
+      <input class='form_text image_name_file' type='file' id='imageformfilename' size='30' name='filename'></input>
     </dd>
 
     <dt class='form_label_text'>

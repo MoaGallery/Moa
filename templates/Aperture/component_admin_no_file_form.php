@@ -12,7 +12,7 @@
     </dt>
     <dd>
       <input type="hidden" name="FORM_SUBMITTED" value="true"/>
-      <input class='form_text image_name_file' type='file' id='imageformfilename' size='30' name='filename' accept='image/jpg'></input>
+      <input class='form_text image_name_file' type='file' id='imageformfilename' size='30' name='filename'></input>
     </dd>
 
     <br/>

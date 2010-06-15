@@ -8,11 +8,11 @@ a { text-decoration: none; border-style: none; }
 a img { text-decoration: none; border-style: none; }
 a.admin_link { font-size: 11px; color: #c0c0c0; cursor: pointer; }
 a.admin_link:hover { color: white; text-decoration: underline; }
-h1 { font-size: 1.8em; font-weight: bold; color: #ddd; margin: 5px; padding: 0px; }
+h1 { font-size: 1.8em; font-weight: bold; color: #ddd; margin: 5px 0; padding: 0px; }
 h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0px; }
 .form_text { text-align: left; font-size: 14px; }
 .form_items { display: block; margin: 0; padding: 0; }
-.form_items dt { margin-left: 0; padding-left: 0; width: 150px; float: left; display: block; clear: left; text-align: left; }
+.form_items dt { margin-left: 0; padding-left: 0; width: 150px; display: block; clear: left; text-align: left; }
 .form_items dd { margin-left: 0; padding-left: 0; display: block; float: left; clear: left; }
 .add_header { padding: 20px 0 0 20px; }
 .form_label_text { color: #DDD; font-size: 16px; }
@@ -131,8 +131,14 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .admin_table_row td { padding-left: 5px; padding-right: 5px; font-size: 0.9em; }
 .admin_table_header td { color: #ddd; font-style: italic; font-weight: bold; }
 .admin_table_fixed { font-style: italic; }
-#userblockfeedback { margin: 0 0 0 10px; clear: left; }
-
+#userblockfeedback { margin: 0 10px; }
+#progressbar-outer { width: 236px; border: 0; margin: 0 10px; background-color: #587F7E; }
+#progressbar-inner { border: 1px solid #BBFFBB; background-color: #325C5E; }
+#progressbar-text { width: 236px; text-align: center; color: #BBFFBB; }
+.ftp_refresh_button { margin: 0 5px; }
+.ftp_tags { width:326px; position: relative; top: -1px; background-color: #587F7E; border-color: #587F7E;
+                     color: white; display: block; float: left; }
+.ftp_count_message { color: white; }
 
 
 /* 7.  Gallery selectors */
