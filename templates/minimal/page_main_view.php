@@ -8,7 +8,7 @@
     <p>
       Image
     </p>
-    <moatag type="GalleryAdminLinks" location="home">
+    <moatag type="AdminLinks" location="home">
     <moatag type="GallerySubgalleryThumbnails" hide="image">
 	</div>
 </div>

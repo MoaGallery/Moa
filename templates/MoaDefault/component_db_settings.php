@@ -38,6 +38,13 @@
             <dd>
               <input type="text" name="setting_CookieName" id="setting_CookieName" value="<moatag type="SettingsValue_CookieName">"/>
             </dd>
+
+            <dt class='settings_label_text'>
+              Relative server path for FTP \ archive upload.
+            </dt>
+            <dd>
+              <input type="text" name="setting_IncomingPath" id="setting_IncomingPath" value="<moatag type="SettingsValue_IncomingPath">"/>
+            </dd>
           </dl>
         </div>
 

@@ -1,46 +1,62 @@
 
 
+NEXT TIME - 
+
 TODO -
     Image thumbnails need a container moatag (aperture needs it for <ul>s).
+    Minimal has no admin_maintain_form.
+    Home button at end of update.
 Bugs -
     galleryfuncs stuff returns false if it fails, we need to check it.
     Popup appears on top left if page is loaded with thumbnail under the mouse.
     Moadefault - long image descriptions expand the desc box and gets pushed below due to the float: left;
     Tags containing the seperator char are broken up on the tag admin page. Should be replaced.
-	Replacing an image with a different sized file will keep the old dimensions in the DB.
+	  Replacing an image with a different sized file will keep the old dimensions in the DB.
     
 Fixed -
-    * Changing template to Aperture shows an error about 2 settings not being done.  
-	* Showing thumbs+galleries isn't showing the galleries.
-	* Handle thumbnail sizes.
-	* Add gallery - labels wrong colour.
+
  
- 
- 
- 
+
  
 Done -
-    Make Sure all path variables terminate with a '/'
-    Let parsers return false for no output and check with ===. (and all mod_x.php param getters)
 
 
 
-
-
-
-  Pre-release (1.2.1) -
+  Pre-release (1.2.2) -
   * Add error checking to new code.
   * Escape all variables used in queries (mysql_real_escape_string).
   * Check all queries include _utf8 when setting text fields.
   * Bugs/todo items.
   * Check all files verify login status before proceeding to process actions.
   * Global search for TODO.
-  * Update install.php and upgrade.php (Write version detection code!).
+  * Update install.php and upgrade.php.
   * Version number change.
   * Come out of debug mode.
   * Final check with/without magic quotes.
   * WC3 validation.
   * Check in different browsers.
-  * Update Documentation.
-    Update perl script.
-    Check changelog.
+    Update Documentation and release files.
+  * Update perl script.
+  * Check changelog.
+
+    
+    
+// Active assert and make it quiet
+assert_options(ASSERT_ACTIVE, 1);
+assert_options(ASSERT_WARNING, 0);
+assert_options(ASSERT_QUIET_EVAL, 1);
+
+// Create a handler function
+function my_assert_handler($file, $line, $code)
+{
+    echo "<hr>Assertion Failed:
+        File '$file'<br />
+        Line '$line'<br />
+        Code '$code'<br /><hr />";
+}
+
+// Set up the callback
+assert_options(ASSERT_CALLBACK, 'my_assert_handler');
+
+// Make an assertion that should fail
+assert('mysql_query("")');

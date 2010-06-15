@@ -21,31 +21,25 @@
   </div>
 </div>
 
-    <div class= "top_aligned new_line imagepreview">
-      <moatag type="ImagePreview">
-    </div>
-    <div class= "top_aligned imageinfo">
-      <div class="testbox_tl">
-        <div class="testbox_tr">
-          <div class="testbox_bl">
-            <div class="testbox_br">
-              <p class="testboxheader">
-                Image
-              </p>
-              <div class="testboxcontent">
-                <div id='imageblockinfo'>
-                  <div class="adminlinks">
-                    <moatag type="AdminLinks" location="image">
-                  </div>
-                  <div class="image_desc new_line" id="imageblockdesc"><moatag type="ImageDescription"></div><br/>
-                  <img width='300' height='1' src='media/trans-pixel.png' alt=""/>
-                  <div class="image_desc">
-                    Size: <moatag type="ImageSize" format="both"><br/>
-                 </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class= "top_aligned new_line imagepreview">
+  <moatag type="ImagePreview">
+</div>
+<div class= "top_aligned imageinfo">
+  <div class="mainblock">
+    <p class="mainblockheader">
+      Image
+    </p>
+    <div class="mainblockcontent">
+      <div id='imageblockinfo'>
+        <div class="adminlinks">
+          <moatag type="AdminLinks" location="image">
         </div>
+        <div class="image_desc new_line" id="imageblockdesc"><moatag type="ImageDescription"></div><br/>
+        <img width='300' height='1' src='media/trans-pixel.png' alt=""/>
+        <div class="image_desc">
+          Size: <moatag type="ImageSize" format="both"><br/>
+       </div>
       </div>
     </div>
+  </div>
+</div>

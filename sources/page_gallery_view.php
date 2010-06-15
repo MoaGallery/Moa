@@ -8,7 +8,9 @@
   }
 
   include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
-
+  
+  $Gallery = new Gallery();
+  
   // Get gallery id
   $no_gallery_id = false;
   if (!isset($_REQUEST["gallery_id"]))
@@ -17,8 +19,8 @@
   } else
   {
     $gallery_id = $_REQUEST["gallery_id"];
-    $parent_id = _galleryGetValue($gallery_id, "IDParent");
-    $pre_cache = true;
+    $parent_id = $Gallery->getValue($gallery_id, "IDParent");
+    $preCache = true;
     $pre_gallery_id = $gallery_id;
   }
 
@@ -31,9 +33,9 @@
   }
 
   // Complain if invalid id is supplied
-  if ((!_GalleryExists($gallery_id)) && ("0000000000" != $gallery_id))
+  if ((!$Gallery->exists($gallery_id)) && ("0000000000" != $gallery_id))
   {
-    $bodycontent .= _GalleryExists($gallery_id);
+    $bodycontent .= $Gallery->exists($gallery_id);
     moa_warning("Invalid gallery ID supplied.");
     $proceed = false;
   }
@@ -50,7 +52,7 @@
       }
     }
 
-    $pre_cache = true;
+    $preCache = true;
 	  include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
     // Only include Javascript if a user is logged in
@@ -84,7 +86,7 @@
       $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 
 	    $bodycontent .= "  var gallery = new Gallery('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
-	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Name"))."', '".js_var_display_safe(_galleryGetValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
+	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Name"))."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
       $bodycontent .= " //]]>\n";
 	    $bodycontent .= "</script>\n";
 	  }
@@ -98,11 +100,11 @@
 		$bodycontent .= "  if ('".$gallery_id."' == '0000000000')\n";
 		$bodycontent .= "  {\n";
 		$bodycontent .= "    document.location = 'index.php';\n";
-		$bodycontent .= "  }\n";
+		$bodycontent .= "  }\n";		
     $bodycontent .= "   </script>\n";
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-    $gal_shortname = _galleryGetValue($gallery_id, "Name");
+    $gal_shortname = $Gallery->getValue($gallery_id, "Name");
     if ($CFG["TITLE_DESC_LENGTH"] < strlen($gal_shortname))
     {
       $gal_shortname = substr($gal_shortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";

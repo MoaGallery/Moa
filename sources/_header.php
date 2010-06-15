@@ -6,7 +6,9 @@
     echo "Hacking attempt.";
     die();
   }
-
+  
+  $headercontent = '';
+  
   if (false === isset($INSTALLING)) {
     $INSTALLING = false;
   }
@@ -24,11 +26,13 @@
   	$CFG["DEBUG_MODE"] = false;
   }
 
-  if (!$CFG["DEBUG_MODE"])
+  if ((!$CFG["DEBUG_MODE"]) &&
+      (UserIsLoggedIn()))
   {
     if ((is_file($CFG["MOA_PATH"]."install.php")) && (is_file($CFG["MOA_PATH"]."config.php")) && (false == isset($FRESH_INSTALL)) && (!$INSTALLING))
     {
-      moa_warning("Please delete or rename install.php");
+      include_once($CFG["MOA_PATH"]."sources/common.php");
+    	$headercontent = moa_warning_ret("Please delete or rename install.php");
     }
   }
 
@@ -38,14 +42,14 @@
   	// If logged in
   	if (UserIsLoggedIn())
   	{
-  	  moa_warning("Upgraded files have been installed. Please click <a href='index.php?action=upgrade'><i>here</i></a> to complete the upgrade.", false);
+  	  $headercontent = moa_warning_ret("Upgraded files have been installed. Please click <a href='index.php?action=upgrade'><i>here</i></a> to complete the upgrade.", false);
   	} else
   	{
-  		moa_warning("Upgrade in progress, things may not work as expected until it has completed.", false);
+  		$headercontent = moa_warning_ret("Upgrade in progress, things may not work as expected until it has completed.", false);
   	}
   }
-
-  $bodycontent .= LoadTemplateRoot("component_header.php");
+  
+  $headercontent .= LoadTemplateRoot("component_header.php");
 
   // Check gallery exists and set to home if it doesn't
   if (!$INSTALLING)

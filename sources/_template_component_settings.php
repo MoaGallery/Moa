@@ -176,6 +176,20 @@
     return $output;
   }
 
+  function TagParseSettingsValue_IncomingPath($p_tag_options)
+  {
+    global $CFG;
+
+    $output = " ";
+
+    if (0 < strlen($CFG["BULKUPLOAD_PATH"]))
+    {
+      $output = $CFG["BULKUPLOAD_PATH"];
+    }
+
+    return $output;
+  }
+
   function TagParseSettingsValue_CookieName($p_tag_options)
   {
     global $CFG;

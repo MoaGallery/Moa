@@ -1,4 +1,6 @@
 <?php
+  header('Cache-Control: no-cache');
+
   // Guard against false config variables being passed via the URL
   // if the register_globals php setting is turned on
   if (isset($_REQUEST["CFG"]))
@@ -329,7 +331,7 @@
   }
 
   // Only call this if we are running stand-alone (not included from index.php)
-  if (false === isset($pre_cache))
+  if (false === isset($preCache))
   {
     UserAjaxMain();
   }

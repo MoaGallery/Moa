@@ -25,6 +25,7 @@ function check_all()
   check_empty("ThumbPath");
   check_empty("CookiePath");
   check_empty("CookieName");
+  check_empty("IncomingPath");
   check_empty("DBHost");
   check_empty("DBName");
   check_empty("DBUser");
@@ -60,6 +61,7 @@ addEvent(document.getElementById("setting_MoaPath"), "keyup", function (e) {chec
 addEvent(document.getElementById("setting_ImagePath"), "keyup", function (e) {check_empty("ImagePath");});
 addEvent(document.getElementById("setting_ThumbPath"), "keyup", function (e) {check_empty("ThumbPath");});
 addEvent(document.getElementById("setting_CookiePath"), "keyup", function (e) {check_empty("CookiePath");});
+addEvent(document.getElementById("setting_IncomingPath"), "keyup", function (e) {check_empty("IncomingPath");});
 addEvent(document.getElementById("setting_CookieName"), "keyup", function (e) {check_empty("CookieName");});
 addEvent(document.getElementById("setting_DBHost"), "keyup", function (e) {check_empty("DBHost");});
 addEvent(document.getElementById("setting_DBName"), "keyup", function (e) {check_empty("DBName");});

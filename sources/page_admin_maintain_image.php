@@ -124,9 +124,9 @@
 	          $height = imagesy($src_img);
 	          imagedestroy($src_img);
 
-	          _ImageChangeValue($image_id, "Width", $width);
-	          _ImageChangeValue($image_id, "Height", $height);
-            _ImageChangeValue($image_id, "Format", $src_type);
+	          ImageSetValue($image_id, "Width", $width);
+	          ImageSetValue($image_id, "Height", $height);
+            ImageSetValue($image_id, "Format", $src_type);
 
 	          thumbnail( $new_fileid, $src_type, true);
 

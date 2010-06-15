@@ -17,7 +17,7 @@
 
   	$g_message_text = "Not logged in";
   	$g_message_type = "Warning";
-  	echo LoadTemplateRoot("page_message.php");
+  	$bodycontent .= LoadTemplateRoot("page_message.php");
   } else
   {
   	include_once($CFG["MOA_PATH"]."sources/common.php");

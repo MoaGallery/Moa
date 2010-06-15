@@ -44,9 +44,10 @@ a img {
 .install_list {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
-        width: 500px;
+        width: 650px;
         display: block;
         float: left;
+        clear: left;
 }
 
 .install_list_fail {
@@ -63,7 +64,7 @@ a img {
 
 a.admin_link {
         font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-size: 0.8em;
+        font-size: 11px;
         color: gray;
         cursor: pointer;
 }
@@ -155,6 +156,19 @@ a.admin_link:hover {
         height: 16px;
 }
 
+.picture_thumb {
+        float: left;
+        -moz-box-shadow: 5px 5px 5px #888;
+        -webkit-box-shadow: 5px 5px 5px #888;
+        border: 1px solid #797979;
+        margin: 10px;
+        background: white;
+}
+
+.picture_thumb a {
+	      display: block;
+}
+
 .picture-shadow {
         float: left;
         background: url(../media/shadowAlpha.png) no-repeat bottom right;
@@ -181,25 +195,14 @@ a.admin_link:hover {
         display: block;
 }
 
-.gallery-shadow {
-        float: left;
-        background: url(../media/shadowAlpha.png) no-repeat bottom right;
-        margin: 10px 0 0 10px;
-        float:left;
-}
-
-.gallery-shadow2 {
-        border: 0px solid #a9a9a9;
-        background: url(../media/shadow-pale.png) no-repeat top left !important;
-        background: url(../media/shadow-pale.gif) no-repeat top left;
-        padding: 0 6px 6px 0;
-}
-
-.gallery-shadow3 {
-        color: #777;
-        background-color: #fff;
-        border: 1px solid #797979;
-        padding: 0;
+.gallery_thumb {
+	      float: left;
+	      -moz-box-shadow: 5px 5px 5px #888;
+	      -webkit-box-shadow: 5px 5px 5px #888;
+	      border: 1px solid #797979;
+	      margin: 10px;
+	      background: white;
+	      overflow:auto;
 }
 
 .tag_name {
@@ -371,66 +374,56 @@ a.admin_link:hover {
         padding: 2px;
 }
 
-.testbox_tl {
-        background: transparent url(../media/testbox-tl.png) no-repeat top left;
-        overflow: auto;
-}
-
-.testbox_tr {
-        background: transparent url(../media/testbox-tr.png) no-repeat top right;
-        overflow: auto;
-}
-
-.testbox_bl {
-        background: transparent url(../media/testbox-bl.png) no-repeat bottom left;
-        overflow: auto;
-}
-
-.testbox_br {
-        background: transparent url(../media/testbox-br.png) no-repeat bottom right;
-        overflow: auto;
-}
-
-.testboxheader {
+.mainblockheader {
+	      background-color: #41B25B;
+	      background: -moz-linear-gradient(center bottom, rgb(65,178,91) 0%, rgb(08,131,67) 100%);
+	      background-image: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, rgb(65,178,91)), color-stop(1, rgb(48,131,67)));
+	      -moz-border-radius-topleft: 8px;
+        -moz-border-radius-topright: 8px;
+        -webkit-border-top-left-radius: 8px;
+        -webkit-border-top-right-radius: 8px;
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 0.7em;
+        font-weight: bold;
         text-align:center;
         margin: 0;
         padding: 5px;
 }
 
-.testboxcontent {
+.mainblockcontent {
+	      background-color: #E0FFE0;
+	      border: 1px solid #41b25b;
+	      overflow: auto;
+        -moz-border-radius-bottomleft: 8px;
+        -moz-border-radius-bottomright: 8px;
+        -webkit-border-bottom-left-radius: 8px;
+        -webkit-border-bottom-right-radius: 8px;
         padding: 10px;
         overflow: auto;
 }
 
-.headertop-left {
-        background-color: #41b25b;
-        background: transparent url(../media/header1-left.png) no-repeat top left;
-}
-
-.headertop-right {
-        background: transparent url(../media/header1-right.png) no-repeat top right;
-}
-
 .headertop {
+	      background-color: #41b25b;
+	      border: 1px solid #41b25b;
+	      background: -moz-linear-gradient(center bottom, rgb(65,178,91) 0%, rgb(08,131,67) 100%);
+	      background-image: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, rgb(65,178,91)), color-stop(1, rgb(48,131,67)));
         padding: 2px;
         height: 165px;
         min-width: 580px;
+        -moz-border-radius-topleft: 8px;
+        -moz-border-radius-topright: 8px;
+        -webkit-border-top-left-radius: 8px;
+        -webkit-border-top-right-radius: 8px;
 }
 
 .headerbottom {
         background-color: #E0FFE0;
         margin: 0;
         overflow: auto;
-}
-
-.headerbottom-left {
-        background: transparent url(../media/header2-left.png) no-repeat bottom left;
-}
-
-.headerbottom-right {
-        background: transparent url(../media/header2-right.png) no-repeat bottom right;
+        -moz-border-radius-bottomleft: 8px;
+        -moz-border-radius-bottomright: 8px;
+        -webkit-border-bottom-left-radius: 8px;
+        -webkit-border-bottom-right-radius: 8px;
 }
 
 .breadcrumbframe {
@@ -454,7 +447,7 @@ a.admin_link:hover {
 
 .headerinfoblock div p {
         font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-size: 0.7em;
+        font-size: 12px;
         margin: 0;
 }
 
@@ -498,15 +491,16 @@ a.admin_link:hover {
         top: 0;
 }
 
-.footer-left {
+.footer {
         clear: both;
-        background: transparent url(../media/footer-left.png) no-repeat bottom left;
+        background-color: #41b25b;
+        border: 1px solid #41b25b;
+        background: -moz-linear-gradient(center bottom, rgb(53,146,75) 0%, rgb(64,175,90) 100%);
+        background-image: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, rgb(64,175,90)), color-stop(1, rgb(53,146,75)));
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
         margin: 20px 0 0 0;
         overflow: auto;
-}
-
-.footer-right {
-        background: transparent url(../media/footer-right.png) no-repeat bottom right;
 }
 
 .logoutstatus {
@@ -530,7 +524,7 @@ a.admin_link:hover {
 	      clear: left;
 	      float: left;
 	      width: 120px;
-        margin: 2px 0 2px 0;           
+        margin: 2px 0 2px 0;
         vertical-align: middle;
         line-height: 20px;
 }
@@ -567,12 +561,12 @@ a.admin_link:hover {
 
 .settings_label_text {
         font-size: 14px;
-        font-family: Verdana, Arial, Helvetica, sans-serif; 
+        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .settings_section_break {
         font-size: 20px;
-        font-family: Verdana, Arial, Helvetica, sans-serif;	
+        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .admin_maintain_image_container {
@@ -931,3 +925,23 @@ a.admin_link:hover {
           line-height: 16px;
           vertical-align: top;
 }
+
+#progressbar-outer {
+          width: 500px;
+          border: 1px solid #41b25b;
+          padding: 0 10px 0 0;
+          margin: 0 0 10px;
+          background: #E0FFE0;
+}
+
+#progressbar-inner {
+        padding: 5px;
+        background: #61D27B;
+}
+
+#progressbar-text {
+        width: 500px;
+        padding: 5px;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+

@@ -526,6 +526,37 @@
       @fclose($fp);
       @unlink("images/thumbs/temp.tmp");
     }
+    
+    // check Incoming directory is writable
+    echo "Checking 'incoming' directory has the correct permissions - ";
+    $fp = @fopen("incoming/temp.tmp", "w+");
+    if (!$fp)
+    {
+      echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
+      $check = true;
+    } else
+    {
+      $result = @fwrite($fp, "Hello");
+      if (!$result)
+      {
+        echo "<span style='color: red'>Failed - not writable (or not a directory)</span><br/>\n";
+      $check = true;
+      } else
+      {
+        @fseek($fp, 0);
+        $result = @fread($fp, 5);
+        if (!$result)
+        {
+          echo "<span style='color: red'>Failed - not readable</span><br/>\n";
+          $check = true;
+        } else
+        {
+          echo "<span style='color: green'>Success</span><br/>\n";
+        }
+      }
+      @fclose($fp);
+      @unlink("incoming/temp.tmp");
+    }
 
     echo "<br/>\n";
     echo "<table width='600'><tr><td>\n";
@@ -760,6 +791,7 @@
       fwrite($file, "  \$CFG['CONFIG_DISPLAY_MAX_WIDTH'] = 640;\n");
       fwrite($file, "  \$CFG['THUMB_PATH']  = 'images/thumbs/';\n");
       fwrite($file, "  \$CFG['IMAGE_PATH']  = 'images/';\n");
+      fwrite($file, "  \$CFG['BULKUPLOAD_PATH']  = 'incoming/';\n");
       fwrite($file, "  \$CFG['THUMB_WIDTH'] = 150;\n");
       fwrite($file, "  \$CFG['DISPLAY_PLAIN_SUBGALLERIES'] = true;\n");
       fwrite($file, "  \$CFG['COOKIE_NAME'] = '".strip_tags($_REQUEST["cookiename"])."';\n");
@@ -873,7 +905,7 @@
   function Stage3B()
   {
     global $CFG;
-    global $ErrorString;
+    global $errorString;
 
     ShowProgressStart(2, true);
     echo "<b><div style='width:200px; margin-left:auto; margin-right:auto; font-size: 30px;'>Installing...</div></b><br/>\n";
@@ -933,7 +965,7 @@
       echo "<span style='color: green'>Success</span><br/>\n";
     } else
     {
-      echo "<span style='color: red'>Failed - (".$ErrorString.")</span><br/>\n";
+      echo "<span style='color: red'>Failed - (".$errorString.")</span><br/>\n";
       $check = true;
     }
 
@@ -1058,8 +1090,8 @@
   <body>
     <?php
       include_once ("sources/_header.php");
-      echo $bodycontent;
-      $bodycontent = "";
+      echo $headercontent;
+      $headercontent = "";
     ?>
     <script type='text/javascript'>
       document.getElementById("imagestats").innerHTML = "&nbsp";

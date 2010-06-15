@@ -41,6 +41,7 @@
     $CFG["tab_prefix"] = $tab_prefix;
   }
 
+  
   // Only used if the code for 1.2.1 or above is present, but they haven't done an upgrade yet.
   // Prevents a broken system due to config vars not being found.
   function MigrateMainConfig()
@@ -64,6 +65,7 @@
     global $MOA_MINOR_VERSION;
     global $MOA_REVISION;
     global $MOA_PATCH;
+    global $BULKUPLOAD_PATH;
 
     $CFG["DEBUG_MODE"] = $DEBUG_MODE;
     $CFG["DISPLAY_PLAIN_SUBGALLERIES"] = $DISPLAY_PLAIN_SUBGALLERIES;
@@ -82,8 +84,10 @@
     $CFG["MOA_MINOR_VERSION"] = $MOA_MINOR_VERSION;
     $CFG["MOA_REVISION"] = $MOA_REVISION;
     $CFG["MOA_PATCH"] = $MOA_PATCH;
+    $CFG["BULKUPLOAD_PATH"] = $BULKUPLOAD_PATH;
   }
 
+  
   function LoadSettings()
   {
     global $db;
@@ -107,6 +111,8 @@
     global $MOA_PATH;
     global $COOKIE_PATH;
     global $COOKIE_NAME;
+    global $BULKUPLOAD_PATH;
+    global $errorString;
 
     // Set some default settings
     $CFG["DEBUG_MODE"] = false;
@@ -121,18 +127,41 @@
 
     // Load database settings from a file
     include_once($CFG["MOA_PATH"]."private/db_config.php");
+    // Load any vars in the config file, used to pre-populate versions below 1.2.1
+    include($CFG["MOA_PATH"]."config.php");
 
     // Allow for the upgrade to 1.2.1 or above;
     if (isset($db_host))
     {
       MigrateDBConfig();
+      
+      // Keep our generated MOA_PATH in case the saved one is broken
+      $mp = $CFG["MOA_PATH"];
+      MigrateMainConfig();
+      $CFG["MOA_PATH"] = $mp;
+      if (0 < strlen($IMAGE_PATH))
+      {
+        $CFG['IMAGE_PATH'] .= '/';
+        $CFG['THUMB_PATH'] .= '/';
+        $CFG['BULKUPLOAD_PATH'] = 'incoming/';
+      }
     }
 
-    // Load any vars in the config file, used to pre-populate versions below 1.2.1
-    include($CFG["MOA_PATH"]."config.php");
     // Initialise any database stuff
     include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
 
+    // Check settings are OK
+    include_once($CFG["MOA_PATH"]."sources/_integrity_funcs.php");
+    
+    $errorString = '';
+    $result = CheckDB();
+    if (false === $result)
+    {
+      echo 'Fatal Error with database config (edit <moapath>/private/db_config.php and/or the database to change settings) - <br/><br/>';
+      echo nl2br($errorString);
+      die();
+    }
+    
     $db = DBConnect();
 
     $query = "SHOW TABLES LIKE '".$CFG["tab_prefix"]."settings';";
@@ -175,6 +204,15 @@
     include($CFG["MOA_PATH"]."config.php");
     include($CFG["MOA_PATH"]."private/db_config.php");
 
+    $errorString = '';
+    $result = CheckPaths();
+    if (false === $result)
+    {
+      echo 'Fatal Error with Moa path settings (edit database to fix) - <br/><br/>';
+      echo nl2br($errorString);
+      die();
+    }
+    
     // Allow for the upgrade to 1.2.1 or above;
     if (isset($db_host))
     {

@@ -17,7 +17,7 @@ function Image( p_delim)
   var m_edit_toggle = false;
   var m_add_mode = false;
   var m_newlistcount = 0;
-  var m_newlist = ["", "", "", "", ""];
+  var m_newlist = ['', '', '', '', ''];
   var m_enabletaglist = false;
   var m_descexpand = false;
   var m_delimiter = p_delim;
@@ -25,6 +25,16 @@ function Image( p_delim)
   var m_taglist = new TagList( m_delimiter);
 
   var m_parent_url = document.referrer;
+  
+  var m_fileList = [];
+  var m_count = 0;
+  
+  var m_oneFile = 0.0;
+  var m_curWidth = 0;
+  
+  var m_resend = false;
+  
+  var m_submitWording = '';
   
   this.PreLoad = function(p_image_id, p_desc, p_width, p_height, p_from)
   {
@@ -35,19 +45,71 @@ function Image( p_delim)
     m_from = p_from;
    
     m_short_desc = ShortName(m_desc);
-    m_old_desc = "";
-    m_old_tags = "";
-
+    m_old_desc = '';
+    m_old_tags = '';
     
     m_taglist.PreLoad(all_tags, cur_tags);
     m_tags = m_taglist.StringList();
         
-    if ("" == m_image_id)
+    if ('' == m_image_id)
     {
       m_add_mode = true;
-      m_formobject = new httpForm( "imageform", "imageformupload", that.AddCallback, "image.loaded");
+      m_formobject = new httpForm( 'imageform', 'imageformupload', that.AddCallback, 'image.loaded');
     }
   };
+  
+  this.CreateProgressBar = function()
+  {
+    divWidth = 0;
+    
+    text  = "<div id='progressbar-outer' style='position: relative; '>";
+    text += "<div id='progressbar-text' style='position: absolute; top: 0; left: 0; '></div>";
+    text += "<div id='progressbar-inner' style='width: 0px;'>&nbsp;</div></div">;
+      
+    $('#imageblockfeedback').html(text);
+    
+    divWidth = $('#progressbar-outer').width();
+    m_oneFile = divWidth / m_fileList.length;
+    m_curWidth = m_oneFile * m_count;
+    
+    that.UpdateProgressBar();
+  }
+  
+  this.UpdateProgressBar = function()
+  {
+    if (m_count == m_fileList.length)
+    {
+      $('#progressbar-text').html('Done');        
+      $('#progressbar-inner').width(m_fileList.length * m_oneFile);
+    }
+    else
+    {         
+      $('#progressbar-inner').width(m_curWidth);
+      $('#progressbar-text').html('Adding file '+m_count+' of '+m_fileList.length);
+      
+      divWidth = $('#progressbar-outer').width();
+      textWidth = $('#progressbar-text').width();
+      
+      $('#progressbar-text').css('left', (((divWidth/2)-(textWidth/2)))+'px');     
+    }
+  }
+  
+  this.RemoveProgressBar = function()
+  {    
+    $('#imageblockfeedback').html('');    
+  }
+  
+  this.UpdateImageCount = function()
+  {            
+    // Only update the header if they are displaying the count
+    var hdr_imagecount = document.getElementById('hdr_imagecount');
+    if (null != hdr_imagecount)
+    {
+      var img_count = hdr_imagecount.innerHTML;
+      img_count++;
+      hdr_imagecount.innerHTML = img_count;
+    }
+  }
   
   this.Edit = function()
   {
@@ -103,9 +165,20 @@ function Image( p_delim)
     	m_edit_toggle = false;
     } else
     {
+      if (m_count > 0) 
+      {
+        $('#imageformsubmit').attr("disabled", true);
+        $('#imageformcancel').attr("disabled", true);               
+        
+        m_resend = true;
+        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});        
+        
+        return;
+      }
+           
       m_formobject.submit("Uploading '"+document.getElementById("imageformfilename").value+"'...");
       document.getElementById("imageform").submit();
-      m_formobject.reset();
+      m_formobject.reset();      
     }
   	
   	m_taglist.Assimilate(m_tags);
@@ -126,24 +199,29 @@ function Image( p_delim)
   
   this.PageTitle = function()
   {
-    document.title = 'Image';
+    title = 'Image';
     if (m_short_desc.length > 0)
     {
-      document.title += " - '";
-      document.title += m_short_desc;
-      document.title += "' - Moa";
+      title += " - '";
+      title += m_short_desc;
+      title += "' - Moa";
     }
+
+    document.title = title;
   };
   
   this.SubmitRollback = function()
   {
     m_desc = m_old_desc;
     m_tags = m_old_tags;
-    document.getElementById("imageblockdesc").innerHTML = EscapeNewLine(EscapeHTMLChars(m_desc));
-    m_old_desc = "";
-    m_old_tags = "";
+    
+    $('#imageblockdesc').html(EscapeNewLine(EscapeHTMLChars(m_desc)));
+    
+    m_old_desc = '';
+    m_old_tags = '';
     
     m_short_desc = ShortName(m_desc);
+    
     that.PageTitle();
   };
   
@@ -151,64 +229,181 @@ function Image( p_delim)
   {
     if (p_status != 200)
     {
-      document.getElementById("imageblockfeedback").innerHTML = FeedbackBox("Server returned code " + p_status + ".", false);   
+      $('#imageblockfeedback').html(FeedbackBox('Server returned code ' + p_status + '.', false));   
       that.SubmitRollback();
       return;
     }
-    if ("OK" != p_text.substr(0, 2))
+    if ('OK' != p_text.substr(0, 2))
     {
-      document.getElementById("imageblockfeedback").innerHTML = FeedbackBox(p_text, false);      
+      $('#imageblockfeedback').html(FeedbackBox(p_text, false));      
       that.SubmitRollback();
       return;
     }
-    m_old_desc = "";
-    m_old_tags = "";
+    m_old_desc = '';
+    m_old_tags = '';       
   };
   
-  this.AddCallback = function(p_result)
+  this.UpdateRecentUploads = function(p_filename)
   {
-    if ("OK" != p_result.substr(0, 2))
+    var fname = p_filename;
+    fname += "<br/>\n";
+    
+    if (m_newlistcount < 5)
     {
-      document.getElementById("imageblockfeedback").innerHTML = FeedbackBox(p_result, false);      
-      return;
-    } else
+      m_newlist[m_newlistcount] = fname;
+      m_newlistcount++;
+    } 
+    else
     {
-      var fname = p_result.substr(3);
-      document.getElementById("imageblockfeedback").innerHTML = FeedbackBox("Image '"+fname+"' added.", true);
-      
-      document.getElementById("imageformnewlist").innerHTML = "Recently added -<br/>\n";
-      
-      // Only update the header if they are displaying the count
-      var hdr_imagecount = document.getElementById("hdr_imagecount");
-      if (null != hdr_imagecount)
-      {
-        var img_count = hdr_imagecount.innerHTML;
-        img_count++;
-        hdr_imagecount.innerHTML = img_count;
-      }
-      
-      fname += "<br/>\n";
-      
-      if (m_newlistcount < 5)
-      {
-        m_newlist[m_newlistcount] = fname;
-        m_newlistcount++;
-      } else
-      {
-        m_newlist[0] = m_newlist[1];
-        m_newlist[1] = m_newlist[2];
-        m_newlist[2] = m_newlist[3];
-        m_newlist[3] = m_newlist[4];
-        m_newlist[4] = fname;
-      }
-      
-      for (var i = 0; i < m_newlistcount; i++)
-      {
-        document.getElementById("imageformnewlist").innerHTML += m_newlist[i];
-      }
+      m_newlist[0] = m_newlist[1];
+      m_newlist[1] = m_newlist[2];
+      m_newlist[2] = m_newlist[3];
+      m_newlist[3] = m_newlist[4];
+      m_newlist[4] = fname;
     }
-    m_old_desc = "";
-    m_old_tags = "";
+
+    document.getElementById("imageformnewlist").innerHTML = "Recently added -<br/>\n";
+    
+    for (var i = 0; i < m_newlistcount; i++)
+    {
+      document.getElementById("imageformnewlist").innerHTML += m_newlist[i];
+    }
+  }
+  
+  this.StepCallBack = function(p_result)
+  {
+    var crPos = p_result.indexOf("\n") + 1;
+    var action = p_result.substring(crPos, crPos + 5);        
+    var status = p_result.substring(0, crPos - 1);        
+    
+    if ('OK' != status)
+	  {
+      feedback = $('#imageblockfeedback').html();
+      errorMessage = 'Unknown response from server';
+      supressError = false;      
+      
+      if ((status == 'ERROR') || (status == 'IERROR')) 
+      {               
+        if (m_resend) 
+        {
+          if (p_result.indexOf('is not an image') == -1) {
+            errorMessage = p_result.substring(crPos);
+          }
+          else
+          {
+            supressError = true;
+          }
+          m_resend = false;
+        }
+      }
+      else
+      {
+        status = 'ERROR';
+      }
+
+      if (!supressError)
+      {
+        $('#imageblockfeedback').html(feedback+FeedbackBox(status + "\n" + errorMessage), false);
+      }
+	  } else
+	  {    
+      that.UpdateRecentUploads(m_fileList[m_count]);
+      that.UpdateImageCount();
+	  }
+     
+    m_curWidth = m_curWidth + m_oneFile;
+    m_count++;
+    
+    that.UpdateProgressBar();       
+    
+    if (m_count == m_fileList.length)
+    {
+      m_fileList = [];
+      m_count = 0;
+             
+      $('#imageformsubmit').attr('value', m_submitWording);
+      
+      $('#imageformsubmit').removeAttr("disabled");
+      $('#imageformcancel').removeAttr("disabled");
+    }
+    else
+    {
+      $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});     
+	  }    
+  };
+
+  this.AddCallbackFail = function(p_request, p_status, p_errorThrown)
+  {
+    $('#imageformsubmit').removeAttr("disabled");
+    $('#imageformcancel').removeAttr("disabled");
+  }
+  
+  this.AddCallback = function(p_result)
+  {    
+    /* Silly hack to keep IE happy with pre formatted text takening from an IFRAME */
+    p_result = str_replace(p_result , "<PRE>", "");
+    p_result = str_replace(p_result , "</PRE>", "");
+    p_result = str_replace(p_result , "<pre>", "");
+    p_result = str_replace(p_result , "</pre>", "");
+    
+    p_result = str_replace(p_result , "\r", "");        
+    
+    var crPos = p_result.indexOf("\n") + 1;
+    var action = p_result.substring(crPos, crPos + 5);        
+    var status = p_result.substring(0, crPos - 1);        
+    
+    if (status != 'OK')
+    {               	    	
+      var feedback = $("#imageblockfeedback").html();
+      var errorMessage = 'Unknown response from server';
+      
+      if ((status == 'ERROR') || (status == 'IERROR')) 
+      {               
+        errorMessage = p_result.substring(crPos);
+      }
+      else
+      {
+        status = 'ERROR';
+      }
+
+      $('#imageblockfeedback').html(feedback+FeedbackBox(status + '\n' + errorMessage), false);
+    }
+    else
+    {      
+      if (status == "OK")
+      {               
+        m_fileList = json_parse( p_result.substr(3));
+        m_count = 1;               
+                        
+        that.UpdateRecentUploads(m_fileList[0]);        
+        that.UpdateImageCount();
+        
+        if (m_fileList.length == 1) {
+          feedback = $("#imageblockfeedback").html();
+          
+          $('#imageblockfeedback').html(feedback+FeedbackBox('Added - ' + m_fileList[0]), true);
+
+          m_fileList = [];
+          m_count = 0;
+          
+          return;
+        }
+                
+        that.CreateProgressBar();
+        
+        var buttonSubmit = $('#imageformsubmit');        
+        buttonSubmitText = buttonSubmit.text();                
+        buttonSubmit.attr('text', '');
+        m_submitWording = buttonSubmit.attr('value');
+        buttonSubmit.attr('text', buttonSubmitText);
+        buttonSubmit.attr('value', 'Continue');
+        
+        $('#imageformsubmit').attr("disabled", "true");
+        $('#imageformcancel').attr("disabled", "true");               
+                
+        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
+      }                                 
+    }
   };
 
   this.Delete = function()
@@ -255,19 +450,25 @@ function Image( p_delim)
     m_taglist.Feedback("image");
   };
   
+  this.RegisterEvents = function()
+  {    
+    addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", null);});
+    addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
+    addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});   
+  }
+  
   this.PopulateForm = function()
   {
     if (m_add_mode)
     {
-      document.getElementById("imageformtags").value = m_taglist.StringList(); 
-      document.getElementById("imageformdesc").focus();
+      $("#imageformtags").val(m_taglist.StringList());  
+      $("#imageformdesc").focus(); 
+      that.RegisterEvents();
       m_taglist.Feedback("image");
-      addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", null);});
-      addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
-      addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
     } else
     {
-      document.getElementById("imageformdesc").focus();
+      $("#imageformdesc").focus();
+      that.RegisterEvents();
       m_taglist.Feedback("image");
     }
   };
@@ -301,15 +502,17 @@ function Image( p_delim)
   {
     if (m_descexpand)
     {
-      document.getElementById("imageformdesc").rows = 4;
-      document.getElementById("imageformdesc").cols = 37;
-      document.getElementById("imageformexpandlink").innerHTML = "[Expand]";
+      $("#imageformdesc").attr('rows', 4);
+      $("#imageformdesc").attr('cols', 37);
+      $("#imageformexpandlink").html("[Expand]");           
+                 
       m_descexpand = false;
     } else
     {
-      document.getElementById("imageformdesc").rows = 14;
-      document.getElementById("imageformdesc").cols = 60;
-      document.getElementById("imageformexpandlink").innerHTML = "[Shrink]";
+      $("#imageformdesc").attr('rows', 14);
+      $("#imageformdesc").attr('cols', 60);      
+      $("#imageformexpandlink").html("[Shrink]");
+      
       m_descexpand = true;
     }
   };

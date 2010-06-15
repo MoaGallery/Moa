@@ -8,6 +8,7 @@
   }
 
   include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_bulkupload_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/_integrity_funcs.php");
 
   function TagParseAdminUserAddLink($p_tag_options)
@@ -58,8 +59,10 @@
       {
         $popup = "onmouseover='return overlib(\"".popup_display_safe($image->m_description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
       }
-      $width = _ImageGetValue($image->m_id, "Width");
-      $height = _ImageGetValue($image->m_id, "Height");
+      $Image = new Image();
+      $Image->loadId($image->id);
+      $width = $Image->width;
+      $height = $Image->height;
 
       if ((null == $width) || (null == $height))
       {
@@ -94,8 +97,8 @@
       }
 
       $thumb = ParseVar($thumb, "ImageThumbID", $image->m_id);
-      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($CFG["THUMB_WIDTH"]));
-      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbWidth", $width);
+      $thumb = ParseVar($thumb, "ImageThumbHeight", $height);
       $thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
       $thumb = ParseVar($thumb, "ImageThumbGlobalHeight", str_display_safe(ceil($CFG["THUMB_WIDTH"]*0.75)));
       $thumb = ParseVar($thumb, "ImagePopup", $popup);
@@ -139,8 +142,10 @@
       {
         $popup = "onmouseover='return overlib(\"".popup_display_safe($image->m_description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
       }
-      $width = _ImageGetValue($image->m_id, "Width");
-      $height = _ImageGetValue($image->m_id, "Height");
+      $Image = new Image();
+      $Image->loadId($image->id);
+      $width = $Image->width;
+      $height = $Image->height;
 
       if ((null == $width) || (null == $height))
       {
@@ -175,8 +180,8 @@
       }
 
       $thumb = ParseVar($thumb, "ImageThumbID", $image->m_id);
-      $thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($CFG["THUMB_WIDTH"]));
-      $thumb = ParseVar($thumb, "ImageThumbHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
+      $thumb = ParseVar($thumb, "ImageThumbWidth", $width);
+      $thumb = ParseVar($thumb, "ImageThumbHeight", $height);
       $thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
       $thumb = ParseVar($thumb, "ImageThumbGlobalHeight", str_display_safe(ceil($CFG["THUMB_WIDTH"]*0.75)));
       $thumb = ParseVar($thumb, "ImagePopup", $popup);
@@ -258,9 +263,11 @@
 
     while ($image = mysql_fetch_array($result))
     {
-      $ext = _ImageGetValue($image["IDImage"], "Format");
-      $image_exists = file_exists($CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$image["IDImage"].".".$ext);
-      $thumb_exists = file_exists($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image["IDImage"].".jpg");
+      $Image = new Image();
+      $Image->loadId($image["IDImage"]);
+      $ext = $Image->format;
+      $image_exists = file_exists($CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$Image->id.".".$ext);
+      $thumb_exists = file_exists($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$Image->id.".jpg");
 
       if ((!$image_exists) || (!$thumb_exists))
       {
@@ -269,7 +276,7 @@
         {
           $line = $fixed_line;
           // Create Thumbnail from existing full image
-          thumbnail($image["IDImage"], $ext, true);
+          createImageThumbnail($Image->id, $ext, true);
         }
 
         $main_status = $p_tag_options["notfoundtext"];
@@ -293,8 +300,8 @@
         $line = ParseVar( $line, "ImageMainStatus"  , $main_status);
         $line = ParseVar( $line, "ImageThumbStatus" , $thumb_status);
         $line = ParseVar( $line, "ImageDescription" , html_display_safe($desc));
-        $line = ParseVar( $line, "ImageID"          , $image["IDImage"]);
-        $line = ParseVar( $line, "ImageFileName"    , html_display_safe($image["Filename"]));
+        $line = ParseVar( $line, "ImageID"          , $Image->id);
+        $line = ParseVar( $line, "ImageFileName"    , html_display_safe($Image->originalFilename));
 
         $output .= $line;
       }
@@ -306,4 +313,5 @@
     }
     return $output;
   }
+
 ?>

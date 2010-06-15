@@ -24,14 +24,19 @@
   function TagParseHeaderImageCount($p_tag_options)
   {
     global $CFG;
-    global $ErrorString;
+    global $errorString;
     global $INSTALLING;
 
     if (!$INSTALLING)
     {
+      $row = '0';
+      
       $query = "SELECT count(1) as Count FROM ".$CFG["tab_prefix"]."image";
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-      $row = mysql_fetch_array($result);
+      if (false !== $result)
+      {
+        $row = mysql_fetch_array($result);
+      }
       return $row["Count"];
     } else
     {
@@ -42,14 +47,19 @@
   function TagParseHeaderGalleryCount($p_tag_options)
   {
     global $CFG;
-    global $ErrorString;
+    global $errorString;
     global $INSTALLING;
 
     if (!$INSTALLING)
     {
+      $row = '0';
+      
       $query = "SELECT count(1) as Count FROM ".$CFG["tab_prefix"]."gallery";
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-      $row = mysql_fetch_array($result);
+      if (false !== $result)
+      {
+        $row = mysql_fetch_array($result);
+      }
       return $row["Count"];
     } else
     {

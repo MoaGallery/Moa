@@ -6,7 +6,16 @@ Key -
  + = New feature
  b = Bugfix
 
-1.2.1 - 
+1.2.2 - Bulk upload - 16th June 2010
+ +  Added BULKUPLOAD_PATH setting in database.
+ *  Redirect admin pages to login if not logged in.
+ +  Bulk upload via FTP or .zip file.
+ +  Settings integrity check on page load.
+ +  Settings integrity check on settings change.
+ -  Removed file type from file dialog to allow .zip files on Opera by default.
+ *  Converted MoaDefault to use CSS3 to help IE6 render errors and help on bandwidth. 
+
+1.2.1 - Settings page, PNG/GIF support - 15th December 2009
  *  Moved the main config variables from a file to the database.
  +  Added a config screen in admin.
  +  Added support for PNG and GIF file formats.

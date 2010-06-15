@@ -1,4 +1,6 @@
 <?php
+  header('Cache-Control: no-cache');
+
   // Guard against false config variables being passed via the URL
   // if the register_globals php setting is turned on
   if (isset($_REQUEST["CFG"]))
@@ -25,7 +27,8 @@
     }
 
     // Check that it is a real tag
-    if (false === _TagExists($tag_id))
+    $Tag = new Tag();
+    if (false === $Tag->exists($tag_id))
     {
       RaiseFatalError($tag_id." Tag does not exist.");
     }
@@ -42,6 +45,8 @@
       return false;
     }
 
+    $Tag = new Tag();
+
     // Get the value
     $newvalue = GetParam($p_varname);
     if (false === $newvalue)
@@ -53,7 +58,7 @@
     if ('Name' == $p_field)
     {
       // Check if tag name already exists
-      $luid = _TagLookUp($newvalue);
+      $luid = $Tag->lookUp($newvalue);
       if (false !== $luid)
       {
         RaiseFatalError("This tag already exists.");
@@ -62,7 +67,7 @@
     }
 
     // Try to change the value
-    if (false === _TagChangeValue($p_id, $p_field, $newvalue))
+    if (false === $Tag->changeValue($p_id, $p_field, $newvalue))
     {
       RaiseFatalError("Could not set new ".$p_varname.".", false);
       return false;
@@ -76,7 +81,8 @@
 
   function TagGetValue($p_id, $p_field, $p_short = false)
   {
-    $value = _TagGetValue($p_id, $p_field);
+    $Tag = new Tag();
+    $value = $Tag->getValue($p_id, $p_field);
 
     if (false === $value)
     {
@@ -97,7 +103,7 @@
 
   function TagDelete($p_id)
   {
-    global $ErrorString;
+    global $errorString;
 
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
@@ -107,9 +113,10 @@
     }
 
     // Try to delete the tag
-    if (false === _TagDelete($p_id))
+    $Tag = new Tag();
+    if (false === $Tag->delete($p_id))
     {
-      RaiseFatalError("Could not delete tag.".$ErrorString, false);
+      RaiseFatalError("Could not delete tag.".$errorString, false);
       return false;
     }
 
@@ -120,7 +127,7 @@
 
   function TagAdd()
   {
-    global $ErrorString;
+    global $errorString;
 
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
@@ -138,7 +145,8 @@
     }
 
     // Check if tag already exists
-    $id = _TagLookUp($newname);
+    $Tag = new Tag();
+    $id = $Tag->lookUp($newname);
     if (false !== $id)
     {
       RaiseFatalError("This tag already exists.");
@@ -146,7 +154,7 @@
     }
 
     // Try to add the tag
-    $id = _TagAdd($newname);
+    $id = $Tag->add($newname);
     if (false === $id)
     {
       RaiseFatalError("Cound not add tag.");
@@ -203,7 +211,7 @@
   }
 
   // Only call this if this file is stand-alone. not if it is included from index.php
-  if (false === isset($pre_cache))
+  if (false === isset($preCache))
   {
     TagAjaxMain();
   }

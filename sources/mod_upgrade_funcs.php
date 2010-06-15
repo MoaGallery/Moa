@@ -23,8 +23,6 @@
     $new_ver = _UpgradeGetNewVersionID();
     $cur_ver = _UpgradeGetCurrentVersionID();
 
-    //echo $cur_ver." -> ".$new_ver;
-
     if ($cur_ver < $new_ver)
     {
       return true;
@@ -32,7 +30,7 @@
     return false;
   }
 
-  // Returns the id of the current Moa config files
+  // Returns the id of the current installed Moa
   // (id is 5 digit based on version number - 1.1.0 = 10100)
   function _UpgradeGetCurrentVersionID()
   {
@@ -48,11 +46,8 @@
     if (false === $result)
     {
       $version = 10200;
-      
-      $query = "SELECT * FROM ".$CFG["tab_prefix"]."v_gallery_images;";
-      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-      if (false === $result)
+      if (0 == strlen($CFG["TEMPLATE"]))
       {
         $version = 10199;
 
@@ -69,6 +64,9 @@
           }
         }
       }
+    } else
+    {
+      $version = _UpgradeGetDBVersionID();
     }
 
     return $version;
@@ -77,15 +75,25 @@
   // Returns the id of the current Moa source files
   function _UpgradeGetNewVersionID()
   {
-  	global $CFG;
+  	global $MOA_MAJOR_VERSION;
+  	global $MOA_MINOR_VERSION;
+  	global $MOA_REVISION;
 
-  	return (($CFG["MOA_MAJOR_VERSION"]*10000)+($CFG["MOA_MINOR_VERSION"]*100)+$CFG["MOA_REVISION"]);
+  	return (($MOA_MAJOR_VERSION *10000)+($MOA_MINOR_VERSION*100)+$MOA_REVISION);
+  }
+
+  // Returns the id according to the current Moa database
+  function _UpgradeGetDBVersionID()
+  {
+    global $CFG;
+
+    return (($CFG['MOA_MAJOR_VERSION'] *10000)+($CFG['MOA_MINOR_VERSION']*100)+$CFG['MOA_REVISION']);
   }
 
   // Adds a new config variable to config.php
   function _AddFileConfigVar($p_name, $p_value, $p_test = true)
   {
-    global $ErrorString;
+    global $errorString;
 
     include ("../config.php");
 
@@ -93,7 +101,7 @@
 
     if (!$fp)
     {
-      $ErrorString = "Could not open config.php for writing.";
+      $errorString = "Could not open config.php for writing.";
       return false;
     }
 
@@ -111,7 +119,7 @@
         $line = fgets($fp);
         if (!is_bool(mb_strpos($line, $p_name)))
         {
-          $ErrorString = "Config var '".$p_name."' already exists in config.php.";
+          $errorString = "Config var '".$p_name."' already exists in config.php.";
           return false;
         }
         if (!is_bool(mb_strpos($line, "?>")))
@@ -120,7 +128,7 @@
           $result = fwrite($fp, "  ".$p_name." = ".$p_value.";\n?>");
           if (!$result)
           {
-            $ErrorString = "Could not write to config.php.";
+            $errorString = "Could not write to config.php.";
             return false;
           }
         }
@@ -135,23 +143,23 @@
   {
     global $CFG;
     global $db;
-    global $ErrorString;
+    global $errorString;
 
     if ($db === false)
     {
-      $ErrorString = "Database connection not present";
+      $errorString = "Database connection not present";
       return false;
     }
 
     if ($p_test) {
       if (0 == strlen($p_name)) {
-        $ErrorString = "Setting name must not be blank";
+        $errorString = "Setting name must not be blank";
       	return false;
       }
 
     	return true;
-    }
-    else {
+    } else
+    {
 	    if (isset($CFG[$p_name])) {
 	      $query = "UPDATE `".$CFG["tab_prefix"]."settings` SET Value = '".$p_value."' WHERE Name = '".$p_name."';";
 	    }
@@ -163,7 +171,7 @@
 	    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 	    if (false === $result)
 	    {
-	      $ErrorString = "Could not set value for setting '".$p_name."'";
+	      $errorString = "Could not set value for setting '".$p_name."'";
 	      return false;
 	    }
       return true;
@@ -173,7 +181,7 @@
   function _UpgradeDelFile($p_filename, $p_test = true)
   {
     global $CFG;
-    global $ErrorString;
+    global $errorString;
 
     // Return true if the file doesn't exist anyway
     if (!file_exists($CFG["MOA_PATH"].$p_filename))
@@ -184,13 +192,13 @@
     {
       if (!is_writeable($CFG["MOA_PATH"].$p_filename))
       {
-        $ErrorString = $p_filename." exists but cannot be deleted (check permissions)";
+        $errorString = $p_filename." exists but cannot be deleted (check permissions)";
         return false;
       }
       $dir = dirname($CFG["MOA_PATH"].$p_filename);
       if (!is_writeable($dir))
       {
-        $ErrorString = "cannot delete from directory '".$dir."' (check permissions)";
+        $errorString = "cannot delete from directory '".$dir."' (check permissions)";
         return false;
       }
 
@@ -208,7 +216,7 @@
   function _ModifyDB($p_filename, $p_test = true)
   {
     global $CFG;
-    global $ErrorString;
+    global $errorString;
 
     if ($p_test)
     {
@@ -219,12 +227,12 @@
           return true;
         } else
         {
-          $ErrorString = "Table prefix in private/db_config.php is not set.";
+          $errorString = "Table prefix in private/db_config.php is not set.";
           return false;
         }
       } else
       {
-        $ErrorString = "SQL file does not exist.";
+        $errorString = "SQL file does not exist.";
         return false;
       }
     } else
@@ -232,7 +240,7 @@
       $result = RunSQLFile($CFG["MOA_PATH"]."SQL/upgrade/".$p_filename);
       if (!$result)
       {
-        $ErrorString = "Error running SQL.";
+        $errorString = "Error running SQL.";
         return false;
       }
 
@@ -256,18 +264,18 @@
     global $db_pass;
     global $tab_prefix;
     global $INSTALLING;
-    global $ErrorString;
+    global $errorString;
 
     if (!file_exists($CFG["MOA_PATH"]."config.php"))
     {
-      $ErrorString = "config.php does not exist.";
+      $errorString = "config.php does not exist.";
       return false;
     }
 
     $fp = @fopen($CFG["MOA_PATH"]."config.php", "a");
     if (false === $fp)
     {
-      $ErrorString = "Could not open config.php for writing.";
+      $errorString = "Could not open config.php for writing.";
       return false;
     }
     fclose($fp);
@@ -275,7 +283,7 @@
     $fp = @fopen($CFG["MOA_PATH"]."private/db_config.php", "a");
     if (false === $fp)
     {
-      $ErrorString = "Could not open private/db_config.php for writing.";
+      $errorString = "Could not open private/db_config.php for writing.";
       return false;
     }
     fclose($fp);
@@ -295,7 +303,7 @@
     {
       if (false === $db)
       {
-        $ErrorString = "Could not connect to database";
+        $errorString = "Could not connect to database";
         return false;
       }
     } else
@@ -320,7 +328,7 @@
       	{
       		/* Type is a string by default */
           $cfg_type = "STRING";
-      		$value_string = "'".$cfg_type."'";
+      		//$value_string = "'".$cfg_type."'";
 
       	  /* Determine type */
       	  if (is_integer($cfg_value))
@@ -340,25 +348,27 @@
               $cfg_type = "BOOLEAN";
             } else
             {
-              $value_string = "'".$cfg_value."'";
+              //$value_string = "'".$cfg_value."'";
+              $value_string = $cfg_value;
             }
       	  }
 
           if ((0 == strcmp($cfg_name, "MOA_PATH")) ||
               (0 == strcmp($cfg_name, "COOKIE_PATH")) ||
+              (0 == strcmp($cfg_name, "BULKUPLOAD_PATH")) ||
               (0 == strcmp($cfg_name, "IMAGE_PATH")) ||
               (0 == strcmp($cfg_name, "THUMB_PATH")))
           {
-            $end = substr($value_string, -2, 1);
+            $end = substr($value_string, -1, 1);
             if (0 != strcmp($end, "/"))
             {
-              $value_string = substr($value_string, 0, (strlen($value_string)-1));
-              $value_string .= "/'";
+              $value_string = substr($value_string, 0, (strlen($value_string)));
+              $value_string .= "/";
             }
           }
 
       		$query = "INSERT INTO `".$CFG["tab_prefix"]."settings` (Name, Value, Type)".
-      	           "VALUES ('".$cfg_name."', ".$value_string.", '".$cfg_type."')";
+      	           "VALUES ('".$cfg_name."', '".mysql_real_escape_string($value_string)."', '".mysql_real_escape_string($cfg_type)."')";
 
       		$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
@@ -395,13 +405,6 @@
     return true;
   }
 
-  function _upgrade_10201_MoveConfigtoDB($p_test = true)
-  {
-    $result = _UpgradeConfigFile($p_test);
-
-    return $result;
-  }
-
   function _upgrade_10201_AddImageFormats($p_test = true)
   {
     global $CFG;
@@ -412,7 +415,7 @@
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
       if (false === $result)
       {
-        $ErrorString = "Could not set image formats in the database";
+        $errorString = "Could not set image formats in the database";
         return false;
       }
     }
@@ -427,18 +430,22 @@
     global $MOA_MINOR_VERSION;
     global $MOA_REVISION;
     global $MOA_PATCH;
-    global $ErrorString;
+    global $errorString;
 
     if ($p_test)
     {
       if (!is_writeable($CFG["MOA_PATH"].$CFG["IMAGE_PATH"]))
       {
-        $ErrorString = "Images directory does not have write permissions.";
+        $errorString = "Images directory does not have write permissions.";
         return false;
       }
       if (!is_writeable($CFG["MOA_PATH"].$CFG["THUMB_PATH"]))
       {
-        $ErrorString = "Thumbnail directory does not have write permissions.";
+        $errorString = "Thumbnail directory does not have write permissions.";
+        return false;
+      }
+      if (!$result = _UpgradeConfigFile($p_test))
+      {
         return false;
       }
     } else
@@ -460,6 +467,10 @@
       }
       $result = _AddDBConfigVar( "MOA_PATCH", $MOA_PATCH, $p_test);
       if ($result == false)
+      {
+        return false;
+      }
+      if (!$result = _UpgradeConfigFile($p_test))
       {
         return false;
       }

@@ -12,7 +12,9 @@
   {
     global $image_id;
 
-    $desc = _ImageGetValue($image_id, "Description");
+    $Image = new Image();
+    $Image->loadId($image_id);
+    $desc = $Image->description;
     if (0 == strlen($desc))
     {
       $desc = " ";
@@ -24,7 +26,9 @@
   {
     global $image_id;
 
-    $filename = _ImageGetValue($image_id, "Filename");
+    $Image = new Image();
+    $Image->loadId($image_id);
+    $filename = $Image->originalFilename;
     if (0 == strlen($filename))
     {
       $filename = " ";
@@ -45,7 +49,9 @@
   {
     global $image_id;
 
-    $format = _ImageGetValue($image_id, "Format");
+    $Image = new Image();
+    $Image->loadId($image_id);
+    $format = $Image->format;
     if (0 == strlen($format))
     {
       $format = " ";
@@ -58,8 +64,10 @@
     global $image_id;
     global $CFG;
 
-    $width = _ImageGetValue($image_id, "Width");
-    $height = _ImageGetValue($image_id, "Height");
+    $Image = new Image();
+    $Image->loadId($image_id);
+    $width = $Image->width;
+    $height = $Image->height;
     $str = "";
 
     switch ($p_tag_options["format"])
@@ -139,7 +147,8 @@
     global $image_id;
     global $parent_id;
 
-    $result = _GalleryGetNextImage($parent_id, $image_id);
+    $Gallery = new Gallery();
+    $result = $Gallery->getNextImage($parent_id, $image_id);
 
     if ((is_bool($result)) && (!$result))
     {
@@ -154,7 +163,8 @@
     global $image_id;
     global $parent_id;
 
-    $result = _GalleryGetPreviousImage($parent_id, $image_id);
+    $Gallery = new Gallery();
+    $result =$Gallery->getPreviousImage($parent_id, $image_id);
 
     if ((is_bool($result)) && (!$result))
     {
@@ -174,8 +184,10 @@
       return 0;
     }
 
-    $width = _ImageGetValue($image_id, "Width");
-    $height = _ImageGetValue($image_id, "Height");
+    $Image = new Image();
+    $Image->loadId($image_id);
+    $width = $Image->width;
+    $height = $Image->height;
 
     $max_height = $CFG["CONFIG_DISPLAY_MAX_WIDTH"] / 1.33333333;
     $aspectratio = $width / $height;
@@ -215,8 +227,10 @@
     global $CFG;
     global $image_id;
 
-    $width = _ImageGetValue($image_id, "Width");
-    $height = _ImageGetValue($image_id, "Height");
+    $Image = new Image();
+    $Image->loadId($image_id);
+    $width = $Image->width;
+    $height = $Image->height;
 
     $max_height = $CFG["CONFIG_DISPLAY_MAX_WIDTH"] / 1.33333333;
     $aspectratio = $width / $height;

@@ -1,10 +1,10 @@
 <form id='imageform' method='post' enctype='multipart/form-data' action='sources/mod_image.php?action=add'>
-  <ul class="form_items">
+  <dl class="form_items">
 	  <dt class='form_label_text'>
 	    File:
 	  </dt>
 	  <dd>
-		  <input class='form_text' type='file' id='imageformfilename' size='30' name='filename' accept='image/jpg'></input>
+		  <input class='form_text' type='file' id='imageformfilename' size='30' name='filename'></input>
 		  <input type='hidden' name='imageform' value='true' />
 		</dd>
 
@@ -41,6 +41,6 @@
 		    &nbsp;
 		  </div>
     </dd>
-  </ul>
+  </dl>
 </form>
 <div class="new_line height_1px">&nbsp;</div>

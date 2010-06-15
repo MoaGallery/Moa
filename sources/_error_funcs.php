@@ -9,35 +9,30 @@
 
   include_once($CFG["MOA_PATH"]."sources/_template_parser.php");
 
-  $ErrorString = '';
+  $errorString = '';
 
   function moa_feedback($p_text, $p_type)
   {
     global $bodycontent;
 
-    $box = LoadTemplate("component_feedback_box.php");
-
-    $box = ParseVar($box, "FeedbackText", $p_text);
-    $box = ParseVar($box, "FeedbackType", $p_type);
-
-    $bodycontent .= $box;
+    $bodycontent .= moa_feedback_ret($p_text, $p_type);
   }
 
   function moa_feedback_js()
   {
-    $box = LoadTemplateForJavaScript("component_feedback_box.php");
+    $feedback = LoadTemplateForJavaScript("component_feedback_box.php");
 
-    return $box;
+    return $feedback;
   }
 
   function moa_feedback_ret($p_text, $p_type = "Success")
   {
-    $box = LoadTemplate("component_feedback_box.php");
+    $feedback = LoadTemplate("component_feedback_box.php");
 
-    $box = ParseVar($box, "FeedbackText", $p_text);
-    $box = ParseVar($box, "FeedbackType", $p_type);
+    $feedback = ParseVar($feedback, "FeedbackText", $p_text);
+    $feedback = ParseVar($feedback, "FeedbackType", $p_type);
 
-    return $box;
+    return $feedback;
   }
 
   function moa_warning($p_text)
@@ -45,6 +40,11 @@
     moa_feedback($p_text, "Warning");
   }
 
+  function moa_warning_ret($p_text)
+  {
+    return moa_feedback_ret($p_text, "Warning");
+  }
+  
   function moa_error($p_text)
   {
     moa_feedback($p_text, "Error");
@@ -54,13 +54,13 @@
   {
     global $bodycontent;
 
-    $box = LoadTemplate("component_feedback_fatal_error_box.php");
+    $feedback = LoadTemplate("component_feedback_fatal_error_box.php");
 
-    $box = ParseVar($box, "FeedbackText", $p_text);
-    $box = ParseVar($box, "FeedbackFile", $p_file);
-    $box = ParseVar($box, "FeedbackLine", $p_line);
+    $feedback = ParseVar($feedback, "FeedbackText", $p_text);
+    $feedback = ParseVar($feedback, "FeedbackFile", $p_file);
+    $feedback = ParseVar($feedback, "FeedbackLine", $p_line);
 
-    $bodycontent .= $box;
+    $bodycontent .= $feedback;
   }
 
   function moa_success($p_text)

@@ -24,7 +24,7 @@
     Checks on database that a user exists for the given id.
   */
   function _UserExists($p_id) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "SELECT 1 FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
@@ -40,7 +40,7 @@
     Returns the ID of a username.
   */
   function _UserLookup($p_name) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "SELECT IDUser FROM `".$CFG["tab_prefix"]."users` WHERE Name = '".mysql_real_escape_string($p_name)."'";
@@ -57,7 +57,7 @@
     Changes the value of field named by $field to $value for user identified by $id.
   */
   function _UserChangeValue($p_id, $p_field, $p_value) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "UPDATE `".$CFG["tab_prefix"]."users` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
@@ -72,7 +72,7 @@
     Returns the value of field named by $field for user specified by $id.
   */
   function _UserGetValue($p_id, $p_field ) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "SELECT ".mysql_real_escape_string($p_field)." FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
@@ -90,7 +90,7 @@
     DOES NOT RETURN PASSWORD OR SALT for security reasons.
   */
   function _UserGetAllValues($p_id) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "SELECT Name, Admin FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
@@ -114,7 +114,7 @@
     DOES NOT RETURN PASSWORD OR SALT for security reasons.
    */
   function _UserGetUsers() {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "SELECT IDUser, Name, Admin FROM `".$CFG["tab_prefix"]."users`;";
@@ -141,7 +141,7 @@
     Deletes the user indentified by $id.
   */
   function _UserDelete($p_id) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "DELETE FROM `".$CFG["tab_prefix"]."users` WHERE IDUser = '".mysql_real_escape_string($p_id)."'";
@@ -157,7 +157,7 @@
     Adds a user.
   */
   function _UserAdd($p_name, $p_admin, $p_pass) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $admin_val = 0;
@@ -181,7 +181,7 @@
     Edits the user indentified by $id.
   */
   function _UserEdit($p_id, $p_name, $p_admin, $p_pass) {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $admin_val = 0;

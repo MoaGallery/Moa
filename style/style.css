@@ -68,9 +68,10 @@ a img {
 .install_list {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
-        width: 500px;
+        width: 650px;
         display: block;
         float: left;
+        clear: left;
 }
 
 .install_list_fail {

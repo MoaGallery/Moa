@@ -6,7 +6,7 @@
 
   // Returns the description of the home gallery.
   function _MainGetDescription() {
-    global $ErrorString;
+    global $errorString;
     global $CFG;
 
     $query = "SELECT Description FROM `".$CFG["tab_prefix"]."frontpage`";
@@ -23,7 +23,7 @@
   };
 
   function _MainEdit( $p_new_description) {
-  	global $ErrorString;
+  	global $errorString;
   	global $CFG;
 
     $query = "UPDATE `".$CFG["tab_prefix"]."frontpage` SET Description = _utf8'".TypeSafeMysqlRealEscapeString( $p_new_description)."'";

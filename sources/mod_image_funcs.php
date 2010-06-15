@@ -14,229 +14,437 @@
   include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
 
-  /*
-   Holds information for a single image
-  */
-  class Image{
-  	var $m_id;
-  	var $m_description;
-  	var $m_height;
-  	var $m_width;
-  };
+  class Image
+  {
+    public $id = 0;
+    public $description = '';
+    public $height = 0;
+    public $width = 0;
+    public $originalFilename = '';
+    public $format = '';
+    public $localFilename = '';
+
+    private $isLive = false;
+
+    public function loadId ($p_id)
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "SELECT * FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".TypeSafeMysqlRealEscapeString($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $row = mysql_fetch_array($result);
+
+      $this->id               = $p_id;
+      $this->description      = $row["Description"];
+      $this->height           = $row["Height"];
+      $this->width            = $row["Width"];
+      if (isset($row["Format"]))
+      {
+        $this->format           = $row["Format"];
+      } else
+      {
+        $this->format = 'jpg';
+      }
+      $this->originalFilename = $row["Filename"];
+      $this->localFilename    = $CFG['MOA_PATH'].$CFG['IMAGE_PATH'].$p_id.$this->format;
+      $this->isLive = true;
+
+      return true;
+    }
+
+    /*
+      Changes the value of all fields for image identified by $id.
+    */
+    public function edit($p_desc, $p_tags)
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "UPDATE `".$CFG["tab_prefix"]."image` SET Description = _utf8'".mysql_real_escape_string($p_desc)."' WHERE IDImage = '".mysql_real_escape_string($this->id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage='".mysql_real_escape_string($this->id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $Tag = new Tag();
+      $result = $Tag->linkTagsToImage($this->id, $p_tags);
+      if (false === $result) {
+        return false;
+      }
+
+      return true;
+    }
+
+    /*
+      Add a submitted image.
+    */
+    public function addSubmitted($p_tagList)
+    {
+      global $errorString;
+      global $CFG;
+
+      $this->getImageInfoFromFile();
+
+      $this->id = $this->addImagetoDatabase();
+      if (false === $this->id)
+      {
+      	return false;
+      }
+
+      $this->addTagsToDatabase($p_tagList);
+
+      $imageIdString = sprintf("%010s",$this->id);
+      $imageDestinationFilename = $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$imageIdString.".".$this->format;
+
+      $result = @move_uploaded_file( $this->localFilename, $imageDestinationFilename);
+
+      $this->localFilename = $imageDestinationFilename;
+
+      if (!$result)
+      {
+      	return false;
+      }
+
+      createImageThumbnail( $imageIdString, $this->format);
+
+      return $this->originalFilename;
+    }
+
+    /*
+      Add an image from the bulk upload folder.
+    */
+    public function addBulkUpload($p_tagList)
+    {
+      global $errorString;
+      global $CFG;
+
+      $result = $this->getImageInfoFromFile();
+      if (false == $result)
+      {
+      	return false;
+      }
+
+      $localFilename = $this->localFilename;
+
+      $this->id = $this->addImagetoDatabase();
+      if (false === $this->id)
+      {
+      	return false;
+      }
+
+      $this->addTagsToDatabase($p_tagList);
+
+      $imageIdString = sprintf("%010s",$this->id);
+      $imageDestinationFilename = $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$imageIdString.".".$this->format;
+      $result = rename( $localFilename, $imageDestinationFilename);
+
+      $this->localFilename = $imageDestinationFilename;
+
+      if (!$result)
+      {
+      	return false;
+      }
+
+      createImageThumbnail( $imageIdString, $this->format);
+
+      return $this->originalFilename;
+    }
+
+    /*
+      Deletes the image indentified by $id.
+    */
+    public function delete()
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage = '".mysql_real_escape_string($this->id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".mysql_real_escape_string($this->id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      DeleteImageFile($this->id, $this->format);
+      DeleteThumbFile($this->id);
+
+      $this->isLive = false;
+
+      return true;
+    }
+
+    public function getTagObjectArray()
+    {
+      global $CFG;
+
+      $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage = '".mysql_real_escape_string($this->id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $tags = array();
+
+      while (false !== ($row = mysql_fetch_array($result))) {
+        $tags[] = $row["IDTag"];
+      }
+
+      return $tags;
+    }
+
+    private function getImageInfoFromFile()
+    {
+    	$imageHandle = openImage($this->localFilename);
+      if (false === $imageHandle)
+      {
+      	return false;
+      }
+
+      $this->width = imagesx($imageHandle);
+      $this->height = imagesy($imageHandle);
+      $this->format = detectImageFormat($this->localFilename);
+
+      imagedestroy($imageHandle);
+
+      return true;
+    }
+
+    private function addTagsToDatabase($p_tagList)
+    {
+      $Tag = new Tag();
+      $result = $Tag->linkTagsToImage($this->id, $p_tagList);
+      if (false === $result) {
+        return false;
+      }
+      return true;
+    }
+
+    private function addImagetoDatabase()
+    {
+      global $CFG;
+
+      $query =  "INSERT INTO `".$CFG["tab_prefix"]."image` ";
+      $query .= "(Filename, Width, Height, Description, Format) ";
+      $query .= "VALUES(_utf8'".$this->originalFilename."', ";
+      $query .=        "'".$this->width."', ";
+      $query .=        "'".$this->height."', ";
+      $query .=        "_utf8'".$this->description."', ";
+      $query .=        "_utf8'".$this->format."');";
+
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $imageID = mysql_insert_id();
+      return $imageID;
+    }
+  }
 
   /*
-   Checks on database that a image exists for the given id.
+     Checks on database that a image exists for the given id.
   */
-  function _ImageExists($p_id) {
-    global $ErrorString;
+  function ImageExists($p_id)
+  {
     global $CFG;
 
-  	$query = "SELECT 1 FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
-  	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    $query = "SELECT 1 FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-  	if ((false === $result) || (0 == mysql_num_rows($result))) {
+    if ((false === $result) || (0 == mysql_num_rows($result))) {
       return false;
     }
     return true;
-  };
+  }
 
-  /*
-   Changes the value of field named by $field to $value for image identified by $id.
-  */
-  function _ImageChangeValue($p_id, $p_field, $p_value) {
-  	global $ErrorString;
-  	global $CFG;
+  function AddImageFromSubmit($p_desc, $p_tags, $p_local_filename, $p_orig_filename)
+  {
+    global $CFG;
 
-  	$query = "UPDATE `".$CFG["tab_prefix"]."image` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDImage = '".$p_id."'";
-  	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-  	if (false === $result) {
+    $Image = new Image;
+    $Image->description = $p_desc;
+    $Image->originalFilename = $p_orig_filename;
+    $Image->localFilename = $p_local_filename;
+
+    return $Image->addSubmitted($p_tags);
+  }
+
+  function AddImageFromIncoming($p_desc, $p_tags, $p_filename)
+  {
+    global $CFG;
+
+    $Image = new Image;
+    $Image->description = $p_desc;
+    $Image->originalFilename = $p_filename;
+    $Image->localFilename = $CFG['MOA_PATH'].$CFG['BULKUPLOAD_PATH'].$p_filename;
+
+    return $Image->addBulkUpload($p_tags);
+  }
+
+  function AddImageFromForm($p_desc, $p_tags)
+  {
+    GLOBAL $errorString;
+    GLOBAL $CFG;
+
+  	$localFilename = $_FILES["filename"]["tmp_name"];
+  	$origFilename = $_FILES["filename"]["name"];
+  	$images = array();
+  	$isArchive = false;
+
+  	$tmpPath = $CFG['MOA_PATH'].$CFG['BULKUPLOAD_PATH'].'moaTmp';
+
+  	$permissionsError = false;
+  	$permissions = CheckFolderPerms($CFG['BULKUPLOAD_PATH']);
+
+  	if ($permissions === false) {
+  	  $errorString .= 'Path "'.$CFG['BULKUPLOAD_PATH'].'" does not exist.'."\n";
   	  return false;
   	}
-  	return true;
-  };
 
-  /*
-    Changes the value of all fields for image identified by $id.
-  */
-  function _ImageEdit($p_id, $p_desc, $p_tags) {
-    global $ErrorString;
-    global $CFG;
-
-    $query = "UPDATE `".$CFG["tab_prefix"]."image` SET Description = _utf8'".mysql_real_escape_string($p_desc)."' WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-
-    $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage='".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-
-    $alltags = _TagGetTags();
-    $taglist = explode($CFG["STR_DELIMITER"], $p_tags);
-
-    foreach ($taglist as $newtag)
+  	if (!$permissions->readable)
     {
-      $newtag = trim($newtag);
-      if (0 != strlen($newtag))
+      $errorString .= 'Path "'.$CFG['BULKUPLOAD_PATH'].'" is not readable.'."\n";
+      $permissionsError = true;
+    }
+    if (!$permissions->writeable)
+    {
+      $errorString .= 'Path "'.$CFG['BULKUPLOAD_PATH'].'" is not writeable.'."\n";
+      $permissionsError = true;
+    }
+    if ($permissionsError)
+    {
+      return false;
+    }
+
+  	if (!file_exists($tmpPath)) {
+     	@mkdir($tmpPath, 0777);
+  	}
+
+  	if (is_image($localFilename))
+    {
+      $result = AddImageFromSubmit($p_desc, $p_tags, $localFilename, $origFilename);
+      $images[] = $origFilename;
+    } else
+    {
+      if (is_zip($localFilename))
       {
-        $found = false;
-        foreach ($alltags as $oldtag)
-        {
-          if (0 == strcmp(strtolower($oldtag->m_name), strtolower($newtag)))
+      	$isArchive = true;
+        $zipFile = new ZipArchive();
+        $zipHandle = $zipFile->open( $localFilename);
+        if (true === $zipHandle) {
+          $zipFile->extractTo($tmpPath);
+          $zipFile->close();
+
+          _FlattenDirectoryStructure($tmpPath.'/', $tmpPath.'/');
+
+          $dirHandle = @opendir($tmpPath.'/');
+          $imageCount = 0;
+
+          while (false !== ($fileName = @readdir($dirHandle)))
           {
-            // Tag already exists, just create the link
-            $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".mysql_real_escape_string($p_id)."', '".$oldtag->m_id."')";
-            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-            if (false === $result) {
-              return false;
+            $fullName = $tmpPath.'/'.$fileName;
+            if ((!is_dir($fullName)) &&
+                (is_image($fullName)))
+            {
+            	$imageCount++;
             }
-            $found = true;
+
+          	$fullName = $tmpPath.'/'.$fileName;
+          	if ((!is_dir($fullName)) &&
+                (is_image($fullName)))
+            {
+	            $images[] = $fileName;
+            }
           }
-        }
-        if (!$found)
+        } else
         {
-          // Add as a new tag
-          $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($newtag)."')";
-          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-          if (false === $result) {
-            return false;
-          }
-          // Get the new ID
-          $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name='".mysql_real_escape_string($newtag)."'";
-          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-          if (false === $result) {
-            return false;
-          }
-          $row = mysql_fetch_array($result);
-          $newid = $row["IDTag"];
-          // Make the link
-          $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".mysql_real_escape_string($p_id)."', '".$newid."')";
-          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-          if (false === $result) {
-            return false;
-          }
+          $errorString .= 'A problem occured when trying to uncompress archive.';
+          return false;
         }
+
+        if ($imageCount > 0) {
+           $result = AddImageFromBulkTemp($p_desc, $p_tags, $images[0]);
+        }
+      } else
+      {
+        $errorString .= 'File is not an image or an archive.';
+        return false;
       }
     }
 
+    /* Send back encoded list */
+    return json_encode($images);
+  }
+
+  function AddImageFromBulkTemp($p_desc, $p_tags, $p_filename)
+  {
+    GLOBAL $errorString;
+    GLOBAL $CFG;
+
+    $tmpPath = $CFG['MOA_PATH'].$CFG['BULKUPLOAD_PATH'].'moaTmp';
+
+    $fullName = $tmpPath.'/'.$p_filename;
+    if ((!is_dir($fullName)) &&
+        (is_image($fullName)))
+    {
+      $image = new Image;
+      $image->description = mysql_real_escape_string($p_desc);
+      $image->originalFilename = mysql_real_escape_string($p_filename);
+      $image->localFilename = mysql_real_escape_string($fullName);
+    }
+    else
+    {
+      $errorString = $p_filename.' is not an image';
+      return false;
+    }
+
+    $result = $image->addBulkUpload($p_tags);
+
+    if (IsDirectoryEmpty($tmpPath))
+    {
+      @rmdir($tmpPath);
+    }
+
+    return $result;
+  }
+
+  /*
+     Changes the value of field named by $field to $value for image identified by $id.
+  */
+  function ImageSetValue($p_id, $p_field, $p_value)
+  {
+    global $CFG;
+
+    $query = "UPDATE `".$CFG["tab_prefix"]."image` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDImage = '".$p_id."'";
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    if (false === $result) {
+      return false;
+    }
     return true;
-  };
+  }
 
   /*
-    Add a new image.
+     Returns the value of field named by $field for image specified by $id.
   */
-  function _ImageAdd($p_desc, $p_tags) {
-    global $ErrorString;
-    global $CFG;
-
-    if (!CheckImageMemory($_FILES["filename"]["tmp_name"]))
-    {
-      return false;
-    }
-
-    // Try loading it as a jpeg
-    $src_img = @imagecreatefromjpeg($_FILES["filename"]["tmp_name"]);
-    $src_fmt = "jpg";
-
-    // Didn't load, try it as PNG
-    if (!$src_img)
-    {
-      $src_img = @imagecreatefrompng($_FILES["filename"]["tmp_name"]);
-      $src_fmt = "png";
-    }
-
-    // Didn't load, try it as GIF
-    if (!$src_img)
-    {
-      $src_img = @imagecreatefromgif($_FILES["filename"]["tmp_name"]);
-      $src_fmt = "gif";
-    }
-
-    // Didn't load, fail
-    if (!$src_img)
-    {
-      return false;
-    }
-
-    $new_desc = mysql_real_escape_string($p_desc);
-    $new_filename = mysql_real_escape_string($_FILES["filename"]["name"]);
-    $origw=imagesx($src_img);
-    $origh=imagesy($src_img);
-    imagedestroy($src_img);
-
-    $query = "INSERT INTO `".$CFG["tab_prefix"]."image` (Filename, Width, Height, Description, Format) VALUES(_utf8'".$new_filename."', '".$origw."', '".$origh."', _utf8'".$new_desc."', _utf8'".$src_fmt."');";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-    $id = mysql_insert_id();
-
-    $alltags = _TagGetTags();
-    $taglist = explode($CFG["STR_DELIMITER"], $p_tags);
-
-    foreach ($taglist as $newtag)
-    {
-      $newtag = trim($newtag);
-      if (0 != strlen($newtag))
-      {
-        $found = false;
-        foreach ($alltags as $oldtag)
-        {
-          if (0 == strcmp(strtolower($oldtag->m_name), strtolower($newtag)))
-          {
-            // Tag already exists, just create the link
-            $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".$id."', '".$oldtag->m_id."')";
-            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-            if (false === $result) {
-              return false;
-            }
-            $found = true;
-          }
-        }
-        if (!$found)
-        {
-          // Add as a new tag
-          $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($newtag)."')";
-          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-          if (false === $result) {
-            return false;
-          }
-          // Get the new ID
-          $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name='".mysql_real_escape_string($newtag)."'";
-          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-          if (false === $result) {
-            return false;
-          }
-          $row = mysql_fetch_array($result);
-          $newid = $row["IDTag"];
-          // Make the link
-          $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".$id."', '".$newid."')";
-          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-          if (false === $result) {
-            return false;
-          }
-        }
-      }
-    }
-
-    $new_filename = sprintf("%010s",$id);
-
-    move_uploaded_file( $_FILES["filename"]["tmp_name"]       // source file
-                      , "../".$CFG["IMAGE_PATH"].$new_filename.".".$src_fmt); // dest file
-
-    thumbnail( $new_filename, $src_fmt, false);
-
-    return $_FILES["filename"]["name"];
-  };
-
-  /*
-    Returns the value of field named by $field for image specified by $id.
-  */
-  function _ImageGetValue($p_id, $p_field ) {
-    global $ErrorString;
+  function GetImageValueFromDatabase($p_id, $p_field )
+  {
+    global $errorString;
     global $CFG;
 
     $query = "SELECT ".TypeSafeMysqlRealEscapeString($p_field)." FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".TypeSafeMysqlRealEscapeString($p_id)."'";
@@ -247,82 +455,20 @@
 
     $row = mysql_fetch_array($result);
     return $row[$p_field];
-  };
-
-  /*
-    Returns the values of all image fields for image specified by $id.
-  */
-  function _ImageGetAllValues($p_id) {
-    global $ErrorString;
-    global $CFG;
-
-    $query = "SELECT * FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".TypeSafeMysqlRealEscapeString($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-
-    $row = mysql_fetch_array($result);
-
-    $image = new Image;
-    $image->m_id          = $p_id;
-    $image->m_description = $row["Description"];
-    $image->m_height      = $row["Height"];
-    $image->m_width       = $row["Width"];
-
-    return $image;
-  };
-
-  /*
-    Deletes the image indentified by $id.
-  */
-  function _ImageDelete($p_id) {
-    global $ErrorString;
-    global $CFG;
-
-    $ext = _ImageGetValue($p_id, "Format");
-
-    $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-
-    $query = "DELETE FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-
-    if (file_exists( $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$p_id.".".$ext)) {
-      unlink( $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$p_id.".".$ext);
-    }
-
-    if (file_exists( $CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$p_id.".jpg")) {
-      unlink( $CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$p_id.".jpg");
-    }
-
-    return true;
-  };
-
-  /*
-    Returns list of tags for image identified by $id
-  */
-  function _ImageGetTagList($p_id) {
-    global $CFG;
-
-    $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-
-    $tags = array();
-
-    while (false !== ($row = mysql_fetch_array($result))) {
-      $tags[] = $row["IDTag"];
-    }
-
-    return $tags;
   }
+
+  function DeleteImageFile($p_id, $p_ext)
+  {
+    global $CFG;
+    $filename = $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$p_id.".".$p_ext;
+    DeleteFile($filename);
+  }
+
+  function DeleteThumbFile($p_id)
+  {
+    global $CFG;
+    $filename = $CFG["MOA_PATH"].$CFG["THUMB_PATH"].$p_id.".jpg";
+    DeleteFile($filename);
+  }
+
 ?>

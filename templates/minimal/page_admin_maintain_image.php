@@ -1,6 +1,6 @@
 <div class="pageoutline">
   <div class="outlinetitle">page_admin_maintain_image.php</div>
-	<moatag type="AdminLinks">
+	<moatag type="AdminLinks" location="admin">
   <p>
     Upload missing image file
   </p>

@@ -52,3 +52,16 @@ p {
 .tag_buttons {
 	      display: none;
 }
+
+#progressbar-outer {
+          width: 500px;
+          border: 1px solid;
+}
+
+#progressbar-inner {
+	      border: 1px solid;
+}
+
+#progressbar-text {
+	      width: 500px;
+}

@@ -14,150 +14,292 @@
   include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
 
   //  Structure for a single tag
-  class Tag
+  class TagRecord
   {
     var $m_id;
     var $m_name;
-  };
+  }
 
-  function _TagExists($p_id)
+  class Tag
   {
-    global $ErrorString;
-    global $CFG;
+    function exists($p_id)
+    {
+      global $errorString;
+      global $CFG;
 
-    $query = "SELECT 1 FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      $query = "SELECT 1 FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-    if ((false === $result) || (0 == mysql_num_rows($result))) {
-      return false;
-    }
-    return true;
-  };
-
-  function _TagLookup($p_name)
-  {
-    global $ErrorString;
-    global $CFG;
-
-    $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name = '".mysql_real_escape_string($p_name)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-
-    if ((false === $result) || (0 == mysql_num_rows($result))) {
-      return false;
-    }
-    $row = mysql_fetch_array($result);
-    return $row["IDTag"];
-  };
-
-  function _TagChangeValue($p_id, $p_field, $p_value)
-  {
-    global $ErrorString;
-    global $CFG;
-
-    $query = "UPDATE `".$CFG["tab_prefix"]."tag` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDTag = '".$p_id."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
-    }
-    return true;
-  };
-
-  function _TagGetValue($p_id, $p_field )
-  {
-    global $ErrorString;
-    global $CFG;
-
-    $query = "SELECT ".mysql_real_escape_string($p_field)." FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+      if ((false === $result) || (0 == mysql_num_rows($result))) {
+        return false;
+      }
+      return true;
     }
 
-    $row = mysql_fetch_array($result);
-    return $row[$p_field];
-  };
+    function lookup($p_name)
+    {
+      global $errorString;
+      global $CFG;
 
-  function _TagGetAllValues($p_id)
-  {
-    global $ErrorString;
-    global $CFG;
+      $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name = '".mysql_real_escape_string($p_name)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
-    $query = "SELECT * FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+      if ((false === $result) || (0 == mysql_num_rows($result))) {
+        return false;
+      }
+      $row = mysql_fetch_array($result);
+      return $row["IDTag"];
     }
 
-    $row = mysql_fetch_array($result);
+    function changeValue($p_id, $p_field, $p_value)
+    {
+      global $errorString;
+      global $CFG;
 
-    $tag = new Tag;
-    $tag->m_id          = $p_id;
-    $tag->m_name        = $row["Name"];
-
-    return $tag;
-  };
-
-  function _TagGetTags()
-  {
-    global $ErrorString;
-    global $CFG;
-
-    $query = "SELECT * FROM `".$CFG["tab_prefix"]."tag`;";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+      $query = "UPDATE `".$CFG["tab_prefix"]."tag` SET ".mysql_real_escape_string($p_field)." = _utf8'".mysql_real_escape_string($p_value)."' WHERE IDTag = '".$p_id."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+      return true;
     }
 
-    $tags = array();
+    function getValue($p_id, $p_field )
+    {
+      global $errorString;
+      global $CFG;
 
-    while ($row = mysql_fetch_array($result)) {
-      $tag = new Tag;
-      $tag->m_id   = $row["IDTag"];
-      $tag->m_name = $row["Name"];
+      $query = "SELECT ".mysql_real_escape_string($p_field)." FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
 
-      $tags[] = $tag;
+      $row = mysql_fetch_array($result);
+      return $row[$p_field];
     }
 
-    return $tags;
-  };
+    function getAllValues($p_id)
+    {
+      global $errorString;
+      global $CFG;
 
-  function _TagDelete($p_id)
-  {
-    global $ErrorString;
-    global $CFG;
+      $query = "SELECT * FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
 
-    $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+      $row = mysql_fetch_array($result);
+
+      $tag = new TagRecord;
+      $tag->m_id          = $p_id;
+      $tag->m_name        = $row["Name"];
+
+      return $tag;
     }
 
-    $query = "DELETE FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+    function getTags()
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "SELECT * FROM `".$CFG["tab_prefix"]."tag`;";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $tags = array();
+
+      while ($row = mysql_fetch_array($result)) {
+        $tag = new TagRecord;
+        $tag->m_id   = $row["IDTag"];
+        $tag->m_name = $row["Name"];
+
+        $tags[] = $tag;
+      }
+
+      return $tags;
     }
 
-    $query = "DELETE FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+    function getTagStringForGallery($p_gallery_id)
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "SELECT Name FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag IN "
+              ."(SELECT IDTag FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDGallery = '".mysql_real_escape_string($p_gallery_id)."');";
+
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $tagString = '';
+      $firstTag = true;
+
+      while ($row = mysql_fetch_array($result)) {
+
+      	if ($firstTag)
+      	{
+        	$firstTag = false;
+        } else
+        {
+          $tagString .= str_display_safe($CFG["STR_DELIMITER"]);
+        }
+
+      	$tagString .= $row["Name"];
+
+      }
+
+      return $tagString;
     }
 
-    return true;
-  };
+    function delete($p_id)
+    {
+      global $errorString;
+      global $CFG;
 
-  function _TagAdd($p_name)
-  {
-    global $ErrorString;
-    global $CFG;
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
 
-    $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($p_name)."')";
-    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-    if (false === $result) {
-      return false;
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."gallerytaglink` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag = '".mysql_real_escape_string($p_id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      return true;
     }
 
-    return sprintf("%010s",mysql_insert_id());
-  };
+    function add($p_name)
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($p_name)."')";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      return sprintf("%010s",mysql_insert_id());
+    }
+
+    function linkTagsToImage($p_image_id, $p_tags)
+    {
+      global $CFG;
+
+      $currentTags = $this->getTags();
+      $imageTags = explode($CFG["STR_DELIMITER"], $p_tags);
+
+      foreach ($imageTags as $tag)
+      {
+        $tag = trim($tag);
+        if (0 != strlen($tag))
+        {
+          $tagFound = false;
+          foreach ($currentTags as $tagExisting)
+          {
+            if (0 == strcmp(strtolower($tagExisting->m_name), strtolower($tag)))
+            {
+              // Tag already exists, just create the link
+              $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".$p_image_id."', '".$tagExisting->m_id."')";
+              $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+              if (false === $result) {
+                return false;
+              }
+              $tagFound = true;
+            }
+          }
+          if (!$tagFound)
+          {
+            // Add as a new tag
+            $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($tag)."')";
+            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+            if (false === $result) {
+              return false;
+            }
+            // Get the new ID
+            $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name='".mysql_real_escape_string($tag)."'";
+            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+            if (false === $result) {
+              return false;
+            }
+            $row = mysql_fetch_array($result);
+            $tagID = $row["IDTag"];
+            // Make the link
+            $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".$p_image_id."', '".$tagID."')";
+            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+            if (false === $result) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    function linkTagsToGallery($p_gallery_id, $p_tags)
+    {
+      global $CFG;
+
+      $currentTags = $this->getTags();
+      $galleryTags = explode($CFG["STR_DELIMITER"], $p_tags);
+
+      foreach ($galleryTags as $tag)
+      {
+        $tag = trim($tag);
+        if (0 != strlen($tag))
+        {
+          $tagFound = false;
+          foreach ($currentTags as $tagExisting)
+          {
+            if (0 == strcmp(strtolower($tagExisting->m_name), strtolower($tag)))
+            {
+              // Tag already exists, just create the link
+              $query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".$p_gallery_id."', '".$tagExisting->m_id."')";
+              $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+              if (false === $result) {
+                return false;
+              }
+              $tagFound = true;
+            }
+          }
+          if (!$tagFound)
+          {
+            // Add as a new tag
+            $query = "INSERT INTO `".$CFG["tab_prefix"]."tag` (Name) VALUES (_utf8'".mysql_real_escape_string($tag)."')";
+            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+            if (false === $result) {
+              return false;
+            }
+            // Get the new ID
+            $query = "SELECT IDTag FROM `".$CFG["tab_prefix"]."tag` WHERE Name='".mysql_real_escape_string($tag)."'";
+            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+            if (false === $result) {
+              return false;
+            }
+            $row = mysql_fetch_array($result);
+            $tagID = $row["IDTag"];
+            // Make the link
+            $query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".$p_gallery_id."', '".$tagID."')";
+            $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+            if (false === $result) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+  }
 ?>

@@ -15,7 +15,7 @@
   } else
   {
     $image_id = $_REQUEST["image_id"];
-    $pre_cache = true;
+    $preCache = true;
     $pre_image_id = $image_id;
   }
 
@@ -41,10 +41,14 @@
 
 	  include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
+	  $Image = new Image();
+    $Image->loadId($image_id);
+
     // Only include Javascript if a user is logged in
     if (UserIsLoggedIn())
 		{
-		  $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
+		  $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
+			$bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
 		  $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
 		  $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
 		  $bodycontent .= "<script type='text/javascript'>\n";
@@ -71,7 +75,7 @@
 
       $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 		  $bodycontent .= "  var image = new Image('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
-		  $bodycontent .= "  image.PreLoad('".$image_id."', '".js_var_display_safe(_ImageGetValue($image_id, "Description"))."', "._ImageGetValue($image_id, "Width").", "._ImageGetValue($image_id, "Height").", '".$from."');\n";
+		  $bodycontent .= "  image.PreLoad('".$image_id."', '".js_var_display_safe($Image->description)."', ".$Image->width.", ".$Image->height.", '".$from."');\n";
       $bodycontent .= " //]]>\n";
 		  $bodycontent .= "</script>\n";
 		}
@@ -81,7 +85,7 @@
     $bodycontent .= " //]]>\n";
 		$bodycontent .= "</script>\n";
 
-	  $pre_cache = true;
+	  $preCache = true;
 	  $pre_image_id = $image_id;
 	  $pre_parent_id = $_REQUEST["parent_id"];
 
@@ -91,11 +95,11 @@
 
 	  $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-    $img_shortname = _imageGetValue($image_id, "Description");
-    if ($CFG["TITLE_DESC_LENGTH"] < strlen($img_shortname))
+    $imgShortname = $Image->description;
+    if ($CFG["TITLE_DESC_LENGTH"] < strlen($imgShortname))
     {
-      $img_shortname = substr($img_shortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";
+      $imgShortname = substr($imgShortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";
     }
-    $bodytitle .= "Image '".$img_shortname."' - Moa";
+    $bodytitle .= "Image '".$imgShortname."' - Moa";
   }
 ?>

@@ -1,6 +1,6 @@
 <div class="pageoutline">
   <div class="outlinetitle">page_admin_maintain.php</div>
-	<moatag type='AdminLinks'>
+	<moatag type="AdminLinks" location="admin">
 	<div id='orphanblockfeedback'>
 	  <moatag type="GalleryDeleteFeedback">
 	  &nbsp;

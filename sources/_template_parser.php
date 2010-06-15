@@ -17,11 +17,12 @@
   include_once($CFG["MOA_PATH"]."sources/_template_component_generic.php");
   include_once($CFG["MOA_PATH"]."sources/_template_component_settings.php");
   include_once($CFG["MOA_PATH"]."sources/_template_component_main.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_ftp.php");
 
   function LoadTemplate($p_filename)
   {
     global $template_name;
-    global $pre_cache;
+    global $preCache;
     global $CFG;
 
     $filename = $CFG["MOA_PATH"]."templates/".$template_name."/".$p_filename;

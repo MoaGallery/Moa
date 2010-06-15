@@ -5,7 +5,7 @@
     <p>
       Gallery
     </p>
-    <moatag type="GalleryAdminLinks" location="gallery">
+    <moatag type="AdminLinks" location="gallery">
     <div id='galleryblocktitles'>
       <div id="galleryblockname">
         <moatag type="GalleryName">

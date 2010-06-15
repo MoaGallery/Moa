@@ -10,7 +10,7 @@
   function TagParseFooterMoaCopyright($p_tag_options)
   {
     global $CFG;
-    return "<a href='http://www.moagallery.net/'>Moa ".$CFG["MOA_VERSION"]."</a> &copy; 2008-2009";
+    return "<a href='http://www.moagallery.net/'>Moa ".$CFG["MOA_VERSION"]."</a> &copy; 2008-2010";
   }
 
   function TagParseFooterLink($p_tag_options)

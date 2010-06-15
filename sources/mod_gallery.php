@@ -1,4 +1,6 @@
 <?php
+  header('Cache-Control: no-cache');
+
   // Guard against false config variables being passed via the URL
   // if the register_globals php setting is turned on
   if (isset($_REQUEST["CFG"]))
@@ -33,7 +35,8 @@
     }
 
     // Check that it is a real gallery
-    if (false === _galleryExists($gallery_id))
+    $Gallery = new Gallery();
+    if (false === $Gallery->exists($gallery_id))
     {
       RaiseFatalError($gallery_id." Gallery does not exist.");
       return false;
@@ -60,7 +63,8 @@
     }
 
     // Try to change the value
-    if (false === _galleryChangeValue($p_id, $p_field, $newvalue))
+    $Gallery = new Gallery();
+    if (false === $Gallery->changeValue($p_id, $p_field, $newvalue))
     {
       RaiseFatalError("Could not set new ".$p_varname, false);
       return false;
@@ -75,7 +79,8 @@
   	{
   		return;
   	}
-  	$value = _galleryGetValue($p_id, $p_field);
+  	$Gallery = new Gallery();
+  	$value = $Gallery->getValue($p_id, $p_field);
 
   	if (false === $value)
   	{
@@ -96,7 +101,7 @@
 
   function GalleryDelete($p_id)
   {
-    global $ErrorString;
+    global $errorString;
 
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
@@ -106,9 +111,10 @@
     }
 
     // Try to delete the gallery
-    if (false === _galleryDelete($p_id))
+    $Gallery = new Gallery();
+    if (false === $Gallery->delete($p_id))
     {
-      RaiseFatalError("Could not delete gallery.".$ErrorString, false);
+      RaiseFatalError("Could not delete gallery.".$errorString, false);
       return false;
     }
 
@@ -121,10 +127,10 @@
   	global $CFG;
     global $gallery_id;
     global $template_name;
-    global $ErrorString;
+    global $errorString;
 
     // Set global vars if needed
-    if (!isset($pre_cache))
+    if (!isset($preCache))
     {
       $gallery_id = $p_id;
 
@@ -180,14 +186,24 @@
 
     // Get the tags
     $newtags = GetParam("tags");
-    if (false === $newtags)
+    if (false !== $newtags) {
+      $newtags = trim($newtags);
+
+      if (strlen($newtags) == 0)
+      {
+        RaiseFatalError("Whitespace may not be used as a tag.");
+        return false;
+      }
+    }
+    else
     {
       RaiseFatalError("No tags supplied.");
       return false;
     }
 
     // Try to change the value
-    if (false === _galleryEdit($p_id, $newname, $newdesc, $newpid, $newtags))
+    $Gallery = new Gallery();
+    if (false === $Gallery->edit($p_id, $newname, $newdesc, $newpid, $newtags))
     {
       RaiseFatalError("Could not change gallery.", false);
       return false;
@@ -234,14 +250,24 @@
 
     // Get the tags
     $newtags = GetParam("tags");
-    if (false === $newtags)
+    if (false !== $newtags) {
+      $newtags = trim($newtags);
+
+      if (strlen($newtags) == 0)
+      {
+        RaiseFatalError("Whitespace may not be used as a tag.");
+        return false;
+      }
+    }
+    else
     {
       RaiseFatalError("No tags supplied.");
       return false;
     }
 
-    // Try to change the value
-    if (false === _galleryAdd($newname, $newdesc, $newpid, $newtags))
+    // Try to add the values
+    $Gallery = new Gallery();
+    if (false === $Gallery->add($newname, $newdesc, $newpid, $newtags))
     {
       RaiseFatalError("Could not add gallery.", false);
       return false;
@@ -367,7 +393,7 @@
 	  }
   }
 
-  if ((false === isset($pre_cache)) && ($gallery_first))
+  if ((false === isset($preCache)) && ($gallery_first))
   {
     GalleryAjaxMain();
   }

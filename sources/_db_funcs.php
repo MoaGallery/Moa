@@ -50,39 +50,40 @@
     $SQLfile = fread($file, $fstat["size"]);
     fclose($file);
 
-    $count = 0;
-    $tok = strtok($SQLfile, ";");
+    $queryError = false;
+    $queryCount = 0;
+    $token = strtok($SQLfile, ";");
 
     // Loop through each statement from the SQL file and execute it in turn
-    while ($tok != false)
+    while ($token != false)
     {
-      if (mb_strlen($tok) >= 10)
+      if (mb_strlen($token) >= 10)
       {
-        $sql_statement = str_replace( '<prefix>', $CFG["tab_prefix"], $tok);
+        $sqlStatement = str_replace( '<prefix>', $CFG["tab_prefix"], $token);
 
-        $result = mysql_query($sql_statement);
+        $result = mysql_query($sqlStatement);
         if (false === $result)
         {
           echo mysql_error()."\n\n<br>";
-          $error = true;
+          $queryError = true;
         }
-        $count++;
+        $queryCount++;
       }
-      $tok = strtok(";");
+      $token = strtok(";");
     }
-    if ($error)
+    if ($queryError)
     {
       return false;
     } else
     {
-      return $count;
+      return $queryCount;
     }
   }
 
   // Returns a string containing the last MySQL error formated with file of origin and line number.
   function DBMakeErrorString($p_file,$p_line) {
-  	global $ErrorString;
+  	global $errorString;
 
-  	$ErrorString = mysql_error()."<br/>\n in ".basename($p_file)." (Line: ".$p_line.")";
+  	$errorString = mysql_error()."<br/>\n in ".basename($p_file)." (Line: ".$p_line.")";
   }
 ?>

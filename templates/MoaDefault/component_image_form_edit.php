@@ -20,10 +20,11 @@
       <span id='formtaglistfeedback'></span>
     </dd>
 
-    <dt class='form_label_text'>
+    <dt class="form_label_text" id="edit_left_hack">
       &nbsp;
     </dt>
     <dd>
+      <br />
       <input type='button' value='Submit' id='imageformsubmit' onclick='image.SubmitEdit();'/>
       <input type='button' value='Cancel' id='imageformcancel' onclick='image.CancelEdit();'/>
       <br/>

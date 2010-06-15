@@ -16,7 +16,8 @@
   	global $CFG;
     global $bodycontent;
 
-  	$tags = _TagGetTags();
+    $Tag = new Tag();
+  	$tags = $Tag->getTags();
 
     foreach ($tags as $tag)
     {
@@ -29,7 +30,8 @@
   	global $CFG;
     global $bodycontent;
 
-    $tags = _galleryGetTagList($p_id);
+    $Gallery = new Gallery();
+    $tags = $Gallery->getTagObjectArray($p_id);
 
     foreach ($tags as $tag)
     {
@@ -42,7 +44,9 @@
     global $CFG;
     global $bodycontent;
 
-    $tags = _ImageGetTagList($p_id);
+    $Image = new Image();
+    $Image->loadId($p_id);
+    $tags = $Image->getTagObjectArray();
 
     foreach ($tags as $tag)
     {

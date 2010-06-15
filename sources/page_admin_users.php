@@ -19,7 +19,7 @@
 
   	$g_message_text = "Not logged in";
   	$g_message_type = "Warning";
-  	cLoadTemplateRoot("page_message.php");
+  	LoadTemplateRoot("page_message.php");
   }
 
   // If we are logged in

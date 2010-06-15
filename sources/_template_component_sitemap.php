@@ -17,7 +17,7 @@
     	$spacing = $p_tag_options['spacing'];
     }
 
-    $output .= get_sub_galleries( "0000000000", 0, $output, $spacing);
+    $output .= _GetSubGalleries( "0000000000", 0, $output, $spacing);
 
     return $output;
   }
@@ -29,7 +29,7 @@
 
 
   // Recurse through all galleries
-  function get_sub_galleries( $p_parent_id, $p_level, $p_output, $p_spacing)
+  function _GetSubGalleries( $p_parent_id, $p_level, $p_output, $p_spacing)
   {
     global $CFG;
 
@@ -72,7 +72,7 @@
         $node = ParseVar( $node, "SiteMapNodeSpacer"     , $spacer);
         $node = ParseVar( $node, "SpacerWidth"     , $p_spacing*$p_level);
 
-        $p_output .= get_sub_galleries( $gallery["IDGallery"], $p_level + 1, $node, $p_spacing);
+        $p_output .= _GetSubGalleries( $gallery["IDGallery"], $p_level + 1, $node, $p_spacing);
       }
     }
     return $p_output;

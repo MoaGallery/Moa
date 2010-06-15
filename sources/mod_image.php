@@ -31,7 +31,7 @@
     }
 
     // Check that it is a real image
-    if (false === _imageExists($image_id))
+    if (false === ImageExists($image_id))
     {
       RaiseFatalError($image_id." Image does not exist.");
       return false;
@@ -58,7 +58,7 @@
     }
 
     // Try to change the value
-    if (false === _ImageChangeValue($p_id, $p_field, $newvalue))
+    if (false === ImageSetValue($p_id, $p_field, $newvalue))
     {
       RaiseFatalError("Could not set new ".$p_varname, false);
       return false;
@@ -69,7 +69,7 @@
 
   function ImageGetValue($p_id, $p_field, $p_short = false)
   {
-    $value = _ImageGetValue($p_id, $p_field);
+    $value = GetImageValueFromDatabase($p_id, $p_field);
 
     if (false === $value)
     {
@@ -98,7 +98,9 @@
     }
 
     // Try to delete the image
-    if (false === _ImageDelete($p_id))
+    $Image = new Image();
+    $Image->loadId($p_id);
+    if (false === $Image->delete())
     {
       RaiseFatalError("Could not delete image.", false);
       return false;
@@ -126,14 +128,25 @@
 
     // Get the tags
     $newtags = GetParam("tags");
-    if (false === $newtags)
+    if (false !== $newtags) {
+      $newtags = trim($newtags);
+
+      if (strlen($newtags) == 0)
+      {
+        RaiseFatalError("Whitespace may not be used as a tag.");
+        return false;
+      }
+    }
+    else
     {
       RaiseFatalError("No tags supplied.");
       return false;
     }
 
     // Try to change the value
-    if (false === _ImageEdit($p_id, $newdesc, $newtags))
+    $Image = new Image();
+    $Image->loadId($p_id);
+    if (false === $Image->edit($newdesc, $newtags))
     {
       RaiseFatalError("Could not change image.", false);
       return false;
@@ -208,21 +221,79 @@
 
     // Get the tags
     $newtags = GetParam("imageformtags");
-    if (false === $newtags)
+
+    if (false !== $newtags) {
+      $newtags = trim($newtags);
+
+      if (strlen($newtags) == 0)
+      {
+        RaiseFatalError("Whitespace may not be used as a tag.");
+        return false;
+      }
+    }
+    else
     {
       RaiseFatalError("No tags supplied.");
       return false;
     }
 
     // Try to add it
-    $result = _ImageAdd($newdesc, $newtags);
+    $result = AddImageFromForm($newdesc, $newtags);
     if (false === $result)
     {
-      RaiseFatalError("Could not add image.", false);
+      RaiseFatalError("Could not add file.", false);
       return false;
     }
 
     echo "OK\n".$result;
+
+    return true;
+  }
+
+  function ImageAddStep()
+  {
+    // Get the description
+    $newdesc = GetParam("imageformdesc");
+    if (false === $newdesc)
+    {
+      $newdesc = "";
+    }
+
+    // Get the filename
+    $filename = GetParam("filename");
+
+    if (false === $filename) {
+      RaiseFatalError("Filename must be given.");
+      return false;
+    }
+
+    // Get the tags
+    $newtags = GetParam("imageformtags");
+
+    if (false !== $newtags) {
+      $newtags = trim($newtags);
+
+      if (strlen($newtags) == 0)
+      {
+        RaiseFatalError("Whitespace may not be used as a tag.");
+        return false;
+      }
+    }
+    else
+    {
+      RaiseFatalError("No tags supplied.");
+      return false;
+    }
+
+    // Try to add it
+    $result = AddImageFromBulkTemp($newdesc, $newtags, $filename);
+    if (false === $result)
+    {
+      RaiseFatalError("Could not add file.", false);
+      return false;
+    }
+
+    echo "OK\nAdded - ".$result;
 
     return true;
   }
@@ -236,12 +307,12 @@
       RaiseFatalError("No action supplied.");
     }
 
-    DBConnect();
-
     switch ($action)
     {
       case "changedesc" :
       {
+      	header('Cache-Control: no-cache'); // Do not cache this response
+      	
       	$image_id = ImageCheckExists();
         if (false !== $image_id)
         {
@@ -254,11 +325,26 @@
       }
       case "add" :
       {
+        header('Cache-Control: no-cache'); // plain text file
+        //header('Content-Type: text/html; Cache-Control: no-cache'); // plain text file
+        
+        /* Silly hack to keep IE happy with pre formatted text takening from an IFRAME */
+        echo "<pre>"; 
         ImageAdd();
+        echo "</pre>";
+        break;
+      }
+      case "addstep" :
+      {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
+        ImageAddStep();
         break;
       }
       case "edit" :
       {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
       	$image_id = ImageCheckExists();
         if (false !== $image_id)
         {
@@ -271,15 +357,19 @@
       }
       case "getdesc" :
       {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
       	$image_id = ImageCheckExists();
         if (false !== $image_id)
         {
-          ImageGetValue($image_id,"Description");
+          GetImageValueFromDatabase($image_id,"Description");
         }
         break;
       }
       case "delete" :
       {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
       	$image_id = ImageCheckExists();
         if (false !== $image_id)
         {
@@ -289,14 +379,19 @@
       }
       default :
       {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
         RaiseFatalError("Unknown action.");
         break;
       }
     }
   }
 
-  if ((false === isset($pre_cache)) && ($image_first))
+  if ((false === isset($preCache)) && ($image_first))
   {
     ImageAjaxMain();
+  }
+  else {
+    header('Cache-Control: no-cache'); // Do not cache this response
   }
 ?>

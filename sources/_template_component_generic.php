@@ -30,8 +30,7 @@
     {
       if (0 == strcmp($p_tag_options["style"], "divbg"))
       {
-        $str .= "<div class='debug_mode'>";
-        $str .= "</div>";
+        $str .= "<div class='debug_mode'></div>";
       }
       if (0 == strcmp($p_tag_options["style"], "img"))
       {
@@ -116,6 +115,7 @@
         $links = ParseVar($links, "AdminSettingsLink", "index.php?action=admin_settings");
         $links = ParseVar($links, "AdminOrphanLink", "index.php?action=admin_orphans");
         $links = ParseVar($links, "AdminIntegrityLink", "index.php?action=admin_maintain");
+        $links = ParseVar($links, "AdminFTPLink", "index.php?action=admin_ftp");
         return $links;
       }
       return "";

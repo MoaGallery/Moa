@@ -24,19 +24,12 @@
 
   include_once("common.php");
 
-  if (isset($_REQUEST["display_width"])) {
-    $display_max_width = $_REQUEST["display_width"];
-  }
-  else
+  $displayMaxWidth = $CFG["CONFIG_DISPLAY_MAX_WIDTH"];
+  if (isset($_REQUEST["display_width"]))
   {
-    $display_max_width = $CFG["CONFIG_DISPLAY_MAX_WIDTH"];
+    $displayMaxWidth = $_REQUEST["display_width"];
   }
-
-  $width = 0;
-  $height = 0;
-  $w = 0;
-  $h = 0;
-
+  
   if (isset($_REQUEST["image_name"]) == false)
   {
     // Image Name is not set
@@ -49,55 +42,59 @@
   		header("Location: ../media/img_scale_error.png");
   		exit();
   	}
+  	
     if (mb_strpos($_REQUEST["image_name"], "/") != false) {
-      $src_img = @imagecreatefrompng($_REQUEST["image_name"]);
+      $imageHandle = @imagecreatefrompng($_REQUEST["image_name"]);
     }
     else
     {
-      $src_img = @imagecreatefromjpeg("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]);
-
-      if (!$src_img)
+      $filename = "../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"];
+      
+      $imageHandle = openImage($filename);
+      if (false === $imageHandle)
       {
-        $src_img = @imagecreatefrompng("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]);
-      }
-
-      if (!$src_img)
-      {
-        $src_img = @imagecreatefromgif("../".$CFG["IMAGE_PATH"].$_REQUEST["image_name"]);
+        return false;
       }
     }
 
-    if (!$src_img )
+    if (!$imageHandle )
     {
-      header("Location: ../media/img_scale_error.png");
+      //header("Location: ../media/img_scale_error.png");
     }
     else {
       header("Content-type: image/jpg");
 
-      $width = imagesx($src_img);
-      $height = imagesy($src_img);
+      $imageWidth = imagesx($imageHandle);
+      $imageHeight = imagesy($imageHandle);
 
-      if (($width > $display_max_width) or ($height > ($display_max_width*0.75)))
+      $resizedWidth = $imageWidth;
+      $resizedHeight = $imageHeight;
+      $aspectRatio = $imageWidth / $imageHeight;
+
+      if (!(($imageWidth <= $displayMaxWidth) && ($imageHeight <= ($displayMaxWidth * 0.75))))
       {
-        $w = $width / $display_max_width;
-        $h = $height / ($display_max_width * 0.75);
-        if ($w > $h)
+        if ($aspectRatio > 1.3333333)
         {
-          $width = $display_max_width;
-          $height = $height / $w;
+          $resizedWidth = $displayMaxWidth;
+          $divisor = $imageWidth / $resizedWidth;
+          $resizedHeight = $imageHeight / $divisor;
         } else
         {
-          $width = $width / $h;
-          $height = $display_max_width * 0.75;
+          $resizedHeight = $displayMaxWidth * 0.75;
+          $divisor = $imageHeight / $resizedHeight;
+          $resizedWidth = $imageWidth / $divisor;
         }
       }
 
-      $dst_img = imagecreatetruecolor($width,floor($height));
-      imageAntiAlias($dst_img, true);
-      imagecopyresampled($dst_img,$src_img,0,0,0,0,$width,$height,imagesx($src_img),imagesy($src_img));
+      $resizedImageHandle = imagecreatetruecolor($resizedWidth,floor($resizedHeight));
+      imageAntiAlias($resizedImageHandle, true);
+      imagecopyresampled($resizedImageHandle,$imageHandle,
+                         0,0,0,0,
+                         $resizedWidth,$resizedHeight,
+                         $imageWidth, $imageHeight);
 
-      imagejpeg($dst_img);
-      imagedestroy($src_img);
+      imagejpeg($resizedImageHandle);
+      imagedestroy($imageHandle);
     }
   }
 ?>

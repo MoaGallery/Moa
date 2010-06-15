@@ -1,4 +1,5 @@
 <?php
+  header('Cache-Control: no-cache');
 
   // Guard against false config variables being passed via the URL
   // if the register_globals php setting is turned on
@@ -19,7 +20,7 @@
 	// Adds a new config variable to config.php or (from 1.2.1 onwards) the database
 	function UpgradeAddConfigVar()
   {
-    global $ErrorString;
+    global $errorString;
 
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
@@ -55,25 +56,10 @@
       return false;
     }
 
-    // Get the destination
-    $dest = GetParam("dest");
-    if (false === $dest)
+    if (!_AddFileConfigVar($newname, $newvalue, $testflag))
     {
-      RaiseFatalError("No destination supplied.");
-      return false;
-    }
-
-    if (0 == strcmp($dest, "file"))
-    {
-      if (!_AddFileConfigVar($newname, $newvalue, $testflag))
-      {
-      	RaiseFatalError("Could not add new var.");
-      	return false;
-      }
-    } else
-    {
-      RaiseFatalError("Can only save config vars to a file in this release.");
-      return false;
+    	RaiseFatalError("Could not add new var.");
+    	return false;
     }
 
     OutputPrefix("OK");
@@ -176,7 +162,7 @@
 
   function RunFunc()
   {
-    global $ErrorString;
+    global $errorString;
 
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
@@ -231,7 +217,7 @@
 
     if (false === $result)
     {
-      RaiseFatalError($ErrorString);
+      RaiseFatalError($errorString);
       return false;
     }
 
@@ -281,7 +267,7 @@
   }
 
   // Only do this if we are running stand-alone (not included from index.php)
-  if (false === isset($pre_cache))
+  if (false === isset($preCache))
   {
     UpgradeAjaxMain();
   }

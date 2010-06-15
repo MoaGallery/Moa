@@ -1,4 +1,6 @@
 <?php
+  header('Cache-Control: no-cache');
+
   // Guard against false config variables being passed via the URL
   // if the register_globals php setting is turned on
   if (isset($_REQUEST["CFG"]))
@@ -7,10 +9,15 @@
     die();
   }
 
+  global $errorString;
   global $CFG;
 
+  $bodycontent = '';
+  $headercontent = '';
+  $errorString = '';
+
   // Tell included files not to run in "stand-alone" mode
-  $pre_cache = true;
+  $preCache = true;
 
   // if no config run the install, else include the config
   if (is_file("config.php") == false)
@@ -98,16 +105,22 @@
   $bodycontent = "";
   $bodytitle = "";
 
-  if ($show_headers)
+  // Redirect admin access for anyone not logged in
+  if ((!UserIsLoggedIn()) && (0 == strcmp(substr($action, 0, 5), 'admin')))
   {
-    include_once ("sources/_header.php");
+    $action = 'login';
   }
-
+  
   switch($action)
   {
     case "admin" :
     {
       include_once("sources/page_admin.php");
+      break;
+    }
+    case "admin_ftp" :
+    {
+      include_once("sources/page_admin_ftp.php");
       break;
     }
     case "admin_settings" :
@@ -196,6 +209,7 @@
 
   if ($show_headers)
   {
+  	include_once ("sources/_header.php");
     $bodycontent .= LoadTemplateRoot("component_footer.php");
   }
 ?>
@@ -216,7 +230,15 @@
   </head>
   <body>
      <?php
+       echo $headercontent;
        echo $bodycontent;
+       if ($CFG["DEBUG_MODE"])
+       {
+       	 if (0 !== strlen($errorString))
+       	 {
+       	   echo moa_feedback_ret($errorString, 'Error');
+       	 }
+       }
      ?>
   </body>
 </html>

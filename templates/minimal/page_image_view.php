@@ -21,11 +21,12 @@
     Image
   </p>
   <div id='imageblockinfo'>
-    <moatag type="ImageAdminLinks">
+    <moatag type="AdminLinks" location="image">
     <div id="imageblockdesc">
       <moatag type="ImageDescription">
     </div>
     <br/>
     Size: <moatag type="ImageSize" format="both"><br/>
+    Filename: <moatag type="ImageFileName"><br/>
   </div>
 </div>

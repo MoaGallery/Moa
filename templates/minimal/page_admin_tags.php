@@ -1,6 +1,6 @@
 <div class="pageoutline">
   <div class="outlinetitle">page_admin_tags.php</div>
-	<moatag type="AdminLinks">
+	<moatag type="AdminLinks" location="admin">
 	<div id='tagblockfeedback'>
 	  &nbsp;
 	</div>

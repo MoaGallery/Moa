@@ -12,7 +12,7 @@
   {
     if (0 == strcmp($_REQUEST["action"], "logout"))
     {
-      $c = setcookie($CFG["COOKIE_NAME"], NULL, time()-100000, $CFG["COOKIE_PATH"], false, false, false);
+      $cookie = setcookie($CFG["COOKIE_NAME"], NULL, time()-100000, $CFG["COOKIE_PATH"], false, false, false);
       $_COOKIE[$CFG["COOKIE_NAME"]] = NULL;
       session_start();
       session_unset();

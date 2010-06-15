@@ -101,6 +101,7 @@
     }
   }
 
+  
   $g_write_db_config = false;
 
   function UpdateDBConfig($p_requestname, $p_varname)
@@ -129,6 +130,7 @@
     }
   }
 
+  
   function WriteDBConfig()
   {
     global $CFG;
@@ -153,31 +155,117 @@
     }
   }
 
-  if (null != $Userinfo->m_id)
+  
+  
+  
+  $valid = true;
+  
+  global $SETTINGS_FEEDBACK;
+  
+  // Check paths are valid or don't allow an update
+  $errorString = '';
+  if ((isset($_REQUEST['setting_ImagePath'])) &&
+      (!CheckPathIsValid($_REQUEST['setting_ImagePath'], 'IMAGE_PATH')))
   {
-    UpdateDBVar("ShowEmptyDescPopups", "SHOW_EMPTY_DESC_POPUPS", "boolean");
-    UpdateDBVar("DisplayPlainSubgalleries", "DISPLAY_PLAIN_SUBGALLERIES", "boolean");
-    UpdateDBVar("Template", "TEMPLATE", "text");
-    UpdateDBVar("EmptyDescPopupText", "EMPTY_DESC_POPUP_TEXT", "text");
-    UpdateDBVar("StrDelimiter", "STR_DELIMITER", "text");
-    UpdateDBVar("ConfigDisplayMaxWidth", "CONFIG_DISPLAY_MAX_WIDTH", "integer");
-    UpdateDBVar("ThumbWidth", "THUMB_WIDTH", "integer");
-    UpdateDBVar("TitleDescLength", "TITLE_DESC_LENGTH", "integer");
-
-    if ($Userinfo->m_admin)
+    $SETTINGS_FEEDBACK .= $errorString;
+    $valid = false;
+  }
+  
+  $errorString = '';
+  if ((isset($_REQUEST['setting_ThumbPath'])) &&
+      (!CheckPathIsValid($_REQUEST['setting_ThumbPath'], 'THUMB_PATH')))
+  {
+    $SETTINGS_FEEDBACK .= $errorString;
+    $valid = false;
+  }
+  
+  $errorString = '';
+  if ((isset($_REQUEST['setting_IncomingPath'])) &&
+      (!CheckPathIsValid($_REQUEST['setting_IncomingPath'], 'BULKUPLOAD_PATH')))
+  {
+    $SETTINGS_FEEDBACK .= $errorString;
+    $valid = false;
+  }
+  
+  // Check database settings are valid or don't allow an update
+  $dbHost = '';
+  $dbName = '';
+  $dbUser = '';
+  $dbPass = '';
+  $tabPrefix = '';
+  
+  if (isset($_REQUEST['setting_DBHost']))
+  {
+    $dbHost = $_REQUEST['setting_DBHost'];
+  }
+  if (isset($_REQUEST['setting_DBName']))
+  {
+    $dbName = $_REQUEST['setting_DBName'];
+  }
+  if (isset($_REQUEST['setting_DBUser']))
+  {
+    $dbUser = $_REQUEST['setting_DBUser'];
+  }
+  if (isset($_REQUEST['setting_DBPass']))
+  {
+    $dbPass = $_REQUEST['setting_DBPass'];
+  }
+  if (isset($_REQUEST['setting_TabPrefix']))
+  {
+    $tabPrefix = $_REQUEST['setting_TabPrefix'];
+  }
+  
+  $errorString = '';
+  $dbValid = true;
+  $result = CheckDBSettings($dbHost, $dbUser, $dbPass, $dbName);
+  if (!$result)
+  {
+    $SETTINGS_FEEDBACK .= $errorString;
+    $valid = false;
+    $dbValid = false;
+  }
+  
+  if ($dbValid)
+  {
+    $result = CheckDBTable('image', $tabPrefix);
+    if (!$result)
     {
-      UpdateDBVar("ThumbPath", "THUMB_PATH", "text");
-      UpdateDBVar("ImagePath", "IMAGE_PATH", "text");
-      UpdateDBVar("CookieName", "COOKIE_NAME", "text");
-      UpdateDBVar("CookiePath", "COOKIE_PATH", "text");
-      UpdateDBVar("MoaPath", "MOA_PATH", "text");
-
-      UpdateDBConfig("DBHost", "db_host");
-      UpdateDBConfig("DBName", "db_name");
-      UpdateDBConfig("DBUser", "db_user");
-      UpdateDBConfig("DBPass", "db_pass");
-      UpdateDBConfig("TabPrefix", "tab_prefix");
-      WriteDBConfig();
+      $SETTINGS_FEEDBACK .= 'Database table prefix invalid';
+      $valid = false;
+    }
+  }
+  
+  $db = DBConnect();
+  
+  if (true === $valid)
+  {
+    if (null != $Userinfo->m_id)
+    {
+      UpdateDBVar("ShowEmptyDescPopups", "SHOW_EMPTY_DESC_POPUPS", "boolean");
+      UpdateDBVar("DisplayPlainSubgalleries", "DISPLAY_PLAIN_SUBGALLERIES", "boolean");
+      UpdateDBVar("Template", "TEMPLATE", "text");
+      UpdateDBVar("EmptyDescPopupText", "EMPTY_DESC_POPUP_TEXT", "text");
+      UpdateDBVar("StrDelimiter", "STR_DELIMITER", "text");
+      UpdateDBVar("ConfigDisplayMaxWidth", "CONFIG_DISPLAY_MAX_WIDTH", "integer");
+      UpdateDBVar("ThumbWidth", "THUMB_WIDTH", "integer");
+      UpdateDBVar("TitleDescLength", "TITLE_DESC_LENGTH", "integer");
+  
+      if ($Userinfo->m_admin)
+      {
+        UpdateDBVar("ThumbPath", "THUMB_PATH", "text");
+        UpdateDBVar("ImagePath", "IMAGE_PATH", "text");
+        UpdateDBVar("CookieName", "COOKIE_NAME", "text");
+        UpdateDBVar("CookiePath", "COOKIE_PATH", "text");
+        UpdateDBVar("IncomingPath", "BULKUPLOAD_PATH", "text");
+        UpdateDBVar("MoaPath", "MOA_PATH", "text");
+  
+        UpdateDBConfig("DBHost", "db_host");
+        UpdateDBConfig("DBName", "db_name");
+        UpdateDBConfig("DBUser", "db_user");
+        UpdateDBConfig("DBPass", "db_pass");
+        UpdateDBConfig("TabPrefix", "tab_prefix");
+        WriteDBConfig();
+      }
     }
   }
 ?>
