@@ -6,6 +6,8 @@ TODO -
     Image thumbnails need a container moatag (aperture needs it for <ul>s).
     Minimal has no admin_maintain_form.
     Home button at end of update.
+    After add gallery/image, give a link to it.
+    Implement a image storage quata system for Moa.  (Usefull for reselling gallery space)
 Bugs -
     galleryfuncs stuff returns false if it fails, we need to check it.
     Popup appears on top left if page is loaded with thumbnail under the mouse.

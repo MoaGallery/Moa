@@ -405,6 +405,9 @@ function Upgrade(p_oldver, p_newver)
           var new_func = new Func();
           new_func.m_funcname = "upgrade_10201_AddImageFormats";
           stage_4_list[stage_4_list.length] = new_func;
+          var new_func = new Func();
+          new_func.m_funcname = "upgrade_10201_UpgradeConfigFile";
+          stage_4_list[stage_4_list.length] = new_func;
           break;          
         }        
         default :

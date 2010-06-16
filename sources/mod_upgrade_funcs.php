@@ -367,9 +367,8 @@
             }
           }
 
-      		$query = "INSERT INTO `".$CFG["tab_prefix"]."settings` (Name, Value, Type)".
+      		$query = "REPLACE `".$CFG["tab_prefix"]."settings` (Name, Value, Type)".
       	           "VALUES ('".$cfg_name."', '".mysql_real_escape_string($value_string)."', '".mysql_real_escape_string($cfg_type)."')";
-
       		$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
           if (false === $result)
@@ -389,7 +388,8 @@
       fclose($file);
 
       /* Write out db_config file */
-      if (!$INSTALLING) {
+      if (!$INSTALLING)
+      {
   	    $file = fopen($CFG["MOA_PATH"]."private/db_config.php", "wt");
   	    fwrite($file, "<?php\n");
   	    fwrite($file, '  $CFG["db_host"] = "'.$db_host."\";\n");
@@ -416,6 +416,19 @@
       if (false === $result)
       {
         $errorString = "Could not set image formats in the database";
+        return false;
+      }
+    }
+
+    return true;
+  }
+  
+  function _upgrade_10201_UpgradeConfigFile($p_test = true)
+  {
+    if (false === $p_test)
+    {
+      if (!$result = _UpgradeConfigFile($p_test))
+      {
         return false;
       }
     }
@@ -467,10 +480,6 @@
       }
       $result = _AddDBConfigVar( "MOA_PATCH", $MOA_PATCH, $p_test);
       if ($result == false)
-      {
-        return false;
-      }
-      if (!$result = _UpgradeConfigFile($p_test))
       {
         return false;
       }

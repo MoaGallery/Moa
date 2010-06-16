@@ -142,7 +142,13 @@
       if (0 < strlen($IMAGE_PATH))
       {
         $CFG['IMAGE_PATH'] .= '/';
+      }
+      if (0 < strlen($THUMB_PATH))
+      {
         $CFG['THUMB_PATH'] .= '/';
+      }
+      if (0 < strlen($BULKUPLOAD_PATH))
+      {
         $CFG['BULKUPLOAD_PATH'] = 'incoming/';
       }
     }
@@ -204,6 +210,13 @@
     include($CFG["MOA_PATH"]."config.php");
     include($CFG["MOA_PATH"]."private/db_config.php");
 
+    // Add defaults for any paths that might cause upgrade issues
+    if (!isset($CFG['BULKUPLOAD_PATH']))
+    {
+      $CFG['BULKUPLOAD_PATH'] = 'incoming/';
+      $BULKUPLOAD_PATH = 'incoming/';
+    }
+    
     $errorString = '';
     $result = CheckPaths();
     if (false === $result)
