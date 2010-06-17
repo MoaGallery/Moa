@@ -203,6 +203,11 @@
         $result = _upgrade_10201_AddImageFormats($testflag);
         break;
       }
+      case "upgrade_10201_UpgradeConfigFile" :
+      {
+        $result = _upgrade_10201_UpgradeConfigFile($testflag);
+        break;
+      }
       case "upgrade_complete" :
       {
         $result = _upgrade_complete($testflag);
