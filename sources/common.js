@@ -6,7 +6,7 @@ function str_replace(p_haystack, p_needle, p_replacement)
 }
 
 // Returns a shortened version of a string greater than 30 characters as the
-// first 27 characters of that string post fixed with "...".
+// first x characters of that string post fixed with "...".
 function ShortName(p_name)
 {
   var newName = p_name;
@@ -226,7 +226,7 @@ function addEvent( p_obj, p_type, p_fn )
     p_obj[p_type+p_fn] = function() { p_obj["e"+p_type+p_fn]( window.event ); }
     p_obj.attachEvent( "on"+p_type, p_obj[p_type+p_fn] );
   }   
-}
+};
 
 //Remove an event function from a DOM object
 function removeEvent( p_obj, p_type, p_fn )

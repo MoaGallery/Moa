@@ -58,9 +58,11 @@
     // Only include Javascript if a user is logged in
     if (UserIsLoggedIn())
 	  {
+	    $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
 	    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
 	  	$bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
 	    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+	    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 	  	$bodycontent .= "<script type='text/javascript'>\n";
 	    $bodycontent .= "  //<![CDATA[\n";
       $bodycontent .= "all_tags = '"; ViewAllTagList();
@@ -87,6 +89,7 @@
 
 	    $bodycontent .= "  var gallery = new Gallery('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
 	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Name"))."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
+	    $bodycontent .= "  FormCheckSetup('gallery_view');\n";
       $bodycontent .= " //]]>\n";
 	    $bodycontent .= "</script>\n";
 	  }
@@ -100,7 +103,7 @@
 		$bodycontent .= "  if ('".$gallery_id."' == '0000000000')\n";
 		$bodycontent .= "  {\n";
 		$bodycontent .= "    document.location = 'index.php';\n";
-		$bodycontent .= "  }\n";		
+		$bodycontent .= "  }\n";
     $bodycontent .= "   </script>\n";
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 

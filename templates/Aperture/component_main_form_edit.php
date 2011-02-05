@@ -1,25 +1,24 @@
 <div id="main_edit" class="gallery_edit">
   <div class="gallery_edit_bg">
-    <dl class="form_items">
+    <fieldset class="formFieldset">
+      <ul class="formList">
 
-      <dt class='form_label_text'>
-        Description:
-        <a class='admin_link' id='mainformexpandlink'>
-          [Expand]
-        </a>
-      </dt>
-      <dd>
-        <textarea class='form_text gallery_name_desc' name='mainformdesc' id='mainformdesc' rows='4' cols='45'></textarea>
-        <br/>
-      </dd>
-
-      <dt class='form_label_text'>
-        &nbsp
-      </dt>
-      <dd>
-        <input type='button' value='Submit' id='mainformsubmit' onclick='main.SubmitEdit();'/>
-        <input type='button' value='Cancel' id='mainformcancel' onclick='main.CancelEdit();'/>
-      </dd>
-    </dl>
+        <li>
+          <label for="mainformdesc" class="formLabelNewLine">
+            Description:
+            <a class='admin_link' id='mainformexpandlink'>
+              [Expand]
+            </a>
+          </label>
+          <img src="templates/Aperture/media/help.png" class="popupImage" width="16" height="16" title="<moatag type="FormPopupHelp" field="main_desc">" alt="popup help" />
+          <textarea class='form_text gallery_name_desc' name='mainformdesc' id='mainformdesc' rows='4' cols='45'></textarea>
+        </li>
+  
+        <li class="formButtonsLeft">
+          <input type='button' value='Submit' id='mainformsubmit' onclick='main.SubmitEdit();'/>
+          <input type='button' value='Cancel' id='mainformcancel' onclick='main.CancelEdit();'/>
+        </li>
+      </ul>
+    </fieldset>
   </div>
 </div>

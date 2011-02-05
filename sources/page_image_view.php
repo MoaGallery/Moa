@@ -51,6 +51,7 @@
 			$bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
 		  $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
 		  $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+		  $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 		  $bodycontent .= "<script type='text/javascript'>\n";
       $bodycontent .= "  //<![CDATA[\n";
 		  $bodycontent .= "  all_tags = '"; ViewAllTagList();
@@ -76,6 +77,7 @@
       $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 		  $bodycontent .= "  var image = new Image('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
 		  $bodycontent .= "  image.PreLoad('".$image_id."', '".js_var_display_safe($Image->description)."', ".$Image->width.", ".$Image->height.", '".$from."');\n";
+		  $bodycontent .= "  FormCheckSetup('image_view');\n";
       $bodycontent .= " //]]>\n";
 		  $bodycontent .= "</script>\n";
 		}

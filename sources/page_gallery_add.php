@@ -28,9 +28,11 @@
     $parent_id = "0000000000";
   }
 
+  $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
   $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
   $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
   $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+  $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
   $bodycontent .= "<script type='text/javascript'>\n";
   $bodycontent .= "  all_tags = '"; ViewAllTagList();
   $bodycontent .= "';\n";
@@ -53,6 +55,7 @@
   $bodycontent .= "  //]]>\n";
   $bodycontent .= "  var gallery = new Gallery('".$CFG["STR_DELIMITER"]."');\n";
   $bodycontent .= "  gallery.PreLoad('', '', '', '".$parent_id."');\n";
+  $bodycontent .= "  FormCheckSetup('gallery_add');\n";
   $bodycontent .= "</script>\n";
 
   $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";

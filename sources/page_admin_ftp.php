@@ -135,6 +135,7 @@
     $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/JSON/json_parse.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/mod_bulkupload.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 
     $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     $bodycontent .= LoadTemplateRoot('page_admin_ftp.php');
@@ -154,6 +155,7 @@
     $bodycontent .= "  bulkUpload = new BulkUpload(delimiter,fileList);\n";
     $bodycontent .= "  bulkUpload.RegisterEvents();\n";
     $bodycontent .= " //]]>\n";
+    $bodycontent .= "  FormCheckSetup('admin_ftp');\n";
     $bodycontent .= "</script>\n";
 
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";

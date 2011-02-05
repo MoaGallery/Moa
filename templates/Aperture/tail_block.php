@@ -56,10 +56,10 @@
     var block_bg = document.getElementById(type+"_edit_bg");
     if (expanded)
     {
-      block.style.height = "510px";
+      block.style.height = "550px";
     } else
     {
-      block.style.height = "335px";
+      block.style.height = "375px";
     }
   }
 
@@ -70,7 +70,7 @@
       addEvent(document.getElementById(type+"formexpandlink"), "click", ClickExpand);
       addEvent(document.getElementById(type+"formsubmit"), "click", ClickSubmit);
       var block = document.getElementById(type+"_edit");
-      block.style.height = "335px";
+      block.style.height = "375px";
     }
   }
 

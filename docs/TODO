@@ -3,22 +3,21 @@
 NEXT TIME - 
 
 TODO -
-    Image thumbnails need a container moatag (aperture needs it for <ul>s).
+    Move events code from page_gallery_add into the js file.
     Minimal has no admin_maintain_form.
     Home button at end of update.
     After add gallery/image, give a link to it.
-    Implement a image storage quata system for Moa.  (Usefull for reselling gallery space)
+    
 Bugs -
     galleryfuncs stuff returns false if it fails, we need to check it.
     Popup appears on top left if page is loaded with thumbnail under the mouse.
     Moadefault - long image descriptions expand the desc box and gets pushed below due to the float: left;
     Tags containing the seperator char are broken up on the tag admin page. Should be replaced.
 	  Replacing an image with a different sized file will keep the old dimensions in the DB.
-    
+	  
 Fixed -
 
  
-
  
 Done -
 
@@ -37,9 +36,9 @@ Done -
   * Final check with/without magic quotes.
   * WC3 validation.
   * Check in different browsers.
-    Update Documentation and release files.
+  * Update Documentation and release files.
   * Update perl script.
-  * Check changelog.
+   Check changelog.
 
     
     

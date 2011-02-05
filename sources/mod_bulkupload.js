@@ -39,7 +39,7 @@ function BulkUpload(p_delimiter, p_fileList)
   {
     $.ajax({url:"sources/mod_bulkupload.php?action=list", success: that.ListCallback, error: that.ListCallbackFail, cache:false});
     return false;
-  }
+  };
 
   this.ExpandClick = function()
   {
@@ -97,13 +97,13 @@ function BulkUpload(p_delimiter, p_fileList)
       $("#ftpfeedback").html(FeedbackBox("ERROR\nCannot refresh", false));
       m_refreshed = false;
     }
-  }
+  };
 
   this.ListCallbackFail = function(p_request, p_status, p_errorThrown)
   {
     $("#ftpfeedback").html(FeedbackBox("ERROR\nRefresh failed with status '" + p_status + "'", false));
     m_refreshed = false;
-  }
+  };
 
   this.CreateProgressBar = function()
   {
@@ -118,7 +118,7 @@ function BulkUpload(p_delimiter, p_fileList)
     divWidth = $("#progressbar-outer").width();
     m_oneFile = divWidth / m_fileList.length;
     m_curWidth = m_oneFile * m_count;
-  }
+  };
 
   this.UpdateProgressBar = function()
   {
@@ -137,15 +137,20 @@ function BulkUpload(p_delimiter, p_fileList)
 
       $("#progressbar-text").css('left', (((divWidth/2)-(textWidth/2)))+'px');
     }
-  }
+  };
 
   this.RemoveProgressBar = function()
   {
     $("#ftpfeedback").html('');
-  }
+  };
 
   this.StartAddingFiles = function()
   {
+    if (!FormCheck())
+    {
+      return false;
+    }
+    
     if (m_fileList.length == 0)
     {
       $("#ftpfeedback").html(FeedbackBox("ERROR\nThere are no files to load", false));
@@ -158,7 +163,7 @@ function BulkUpload(p_delimiter, p_fileList)
 
     that.AddOneImage("OK\nStart");
     return false;
-  }
+  };
 
   this.AddImageFail = function(p_request, p_status, p_errorThrown)
   {
@@ -166,7 +171,7 @@ function BulkUpload(p_delimiter, p_fileList)
 
     m_refreshed = false;
     $("#ftpfeedback").html(FeedbackBox("ERROR\nAdd image failed with status '" + p_status + "'", false));
-  }
+  };
 
   //TODO: Restructure this function as it has duplicate code in it
   this.AddOneImage = function(p_result)
@@ -244,5 +249,5 @@ function BulkUpload(p_delimiter, p_fileList)
     }
 
     return false;
-  }
+  };
 }

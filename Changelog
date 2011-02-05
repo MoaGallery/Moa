@@ -6,6 +6,12 @@ Key -
  + = New feature
  b = Bugfix
 
+1.2.3 - Form validation - 5th February 2011
+ *  Made all forms use validation, have pop-up help icons and use better HTML.
+ b  Bulk upload ignored order of files.
+ b  Aperture image add filled up with success messages if a lot of images were added.
+ b  Bulk upload additional tags created duplicates.
+
 1.2.2 - Bulk upload - 16th June 2010
  +  Added BULKUPLOAD_PATH setting in database.
  *  Redirect admin pages to login if not logged in.

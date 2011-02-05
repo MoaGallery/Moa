@@ -27,10 +27,11 @@
   {
   	include_once($CFG["MOA_PATH"]."sources/mod_user_view.php");
 
+  	$bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/mod_userlist.js'></script>\n";
-    //ViewUserBlock();
+    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 
     $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     $bodycontent .= LoadTemplateRoot("page_admin_users.php");

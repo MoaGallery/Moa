@@ -9,7 +9,7 @@
         Image integrity
       </h1>
 
-      <p>Images that have no image/thumbnail files associated</p>
+      <p class="staticFormValue">Images that have no image/thumbnail files associated</p>
       <moatag type="AdminNoFileMaintain" success="All ok">
     </div>
   </div>

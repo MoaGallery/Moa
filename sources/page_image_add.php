@@ -34,6 +34,7 @@
     $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/JSON/json_parse.js'></script>\n";
     $bodycontent .= "<script type='text/javascript' src='sources/mod_bulkupload.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
     $bodycontent .= "<script type='text/javascript'>\n";
     $bodycontent .= "  all_tags = '"; ViewAllTagList();
     $bodycontent .= "';\n";
@@ -65,6 +66,7 @@
     $bodycontent .= "  document.getElementById(\"imageaddform\").innerHTML = editform;\n";
     $bodycontent .= "  image.PreLoad('', '', '', '".$parent_id."');\n";
     $bodycontent .= "  image.PopulateForm();\n";
+    $bodycontent .= "  FormCheckSetup('image_add');\n";
     $bodycontent .= "</script>\n";
 
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";

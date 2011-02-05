@@ -2,33 +2,45 @@ A rough plan of what we plan to add and in which version.
 This can (and is likely to) change.
 
   Important - 1.2.x (User-centric) -
-  
+
     Floating (parallel to main releases) -
         Redo install to be interactive.
         Redo upgrade to be better.
         Tests (unit, ajax and javascript).
-        
-    1.2.3 -
-	    Search (with option to make new gallery from results).
-	    Provide friendly URL rewriting. (Via HTAccess)
-	    Image Filenames should be what they are originally uploaded as for SEO.
-      Edit controls to have popup help.
-      Convert forms to use <fieldset>.
-        
-    1.2.4    
-      Add username so login is not shown.
-      Filmstrip.
-      Cache scaled image.
-      On template change need to be able to regenerate thumbnails.
 
-    1.3.0
-	    Update javascript to use a framework.
-        Simple UI animation (feedback vanishes, deleted items scroll up, etc).
-        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
+    1.2.4 -
+        
+        Make tags optional (hard-linked to galleries).
+        
+    1.2.5 -
+        
+        Search (with option to make new gallery from results).
+
+    1.2.6 -
+        Provide friendly URL rewriting. (Via HTAccess)
+        Image Filenames should be what they are originally uploaded as for SEO.
+
+    1.2.7 -
+        Add username so login is not shown.
+        Cache scaled image.
+        On template change need to be able to regenerate thumbnails.
+        Add xml file to each template to give standard info (Creator, version, etc).
+        
+    1.2.8 -
+        Filmstrip.
+
+    1.2.9 - Bug check.
+
+    1.3.0 -
         Image/gallery manager on admin pages.
-        Move user/tag admin to image/gallery manager system.
         Re-Arrange images on a gallery via the admin manager.
         User-defined thumbnails on galleries.
+    
+	      Update javascript to use a framework.
+        Simple UI animation (feedback vanishes, deleted items scroll up, etc).
+        Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
+        Move user/tag admin to image/gallery manager system.
+        
 
     1.3 series (Expanding content) -
         Display movie clips.
@@ -54,11 +66,12 @@ This can (and is likely to) change.
 
 
    Patch (Can be added at any point, sooner rather than later if poss) -
+       Move all strings into a language array.
        Try different sized images to test for the jpeg decoder overhead.
        Add more corruption detection in the admin section (Look for images that can't exist in any gallery)
        Image Integrity->no image/thumb needs to have a delete option.
        Add sub-gallery, changing parent doesn't update tags (confirm box - do you want to set tags to be the same?).
-       Split CSS up into different types.
+       Implement a image storage quota system for Moa.  (Useful for reselling gallery space)
        Images with no main image should show thumbnail on the 'fix' screen.
        Boolean Tag Operators for galleries.
        Copy tags from other gallery.
@@ -69,7 +82,6 @@ This can (and is likely to) change.
        Watermark/Logo stamp on pics.
        Replace image.
        User action logging.
-       Gallery/image titles can be too long to fit on the preview without messing up the layout.
        On maintain image, redirect back to maintain image when new image added.
        Javascript generated globals should be passed into the constructors.
        Option to unmask password boxes.

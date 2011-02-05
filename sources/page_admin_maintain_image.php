@@ -128,7 +128,7 @@
 	          ImageSetValue($image_id, "Height", $height);
             ImageSetValue($image_id, "Format", $src_type);
 
-	          thumbnail( $new_fileid, $src_type, true);
+	          createImageThumbnail( $new_fileid, $src_type);
 
             global $g_message_type;
     			  global $g_message_text;
@@ -152,9 +152,26 @@
 
 	    if ($show_form)
 	    {
+	      $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
+	      $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
+	      $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 	    	$bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
   	    $bodycontent .= LoadTemplateRoot("page_admin_maintain_image.php");
 
+  	    $bodycontent .= "<script type='text/javascript'>\n";
+        $bodycontent .= "  FormCheckSetup('admin_maintain_image');\n";
+        $bodycontent .= "  \n";
+        $bodycontent .= "  function check()\n";
+        $bodycontent .= "  {\n";
+        $bodycontent .= "    if (!FormCheck())\n";
+        $bodycontent .= "    {\n";
+        $bodycontent .= "      return false;\n";
+        $bodycontent .= "    }\n";
+        $bodycontent .= "  }\n";
+        $bodycontent .= "  \n";
+        $bodycontent .= "  $('#imageformsubmit').click(check);\n";
+        $bodycontent .= "</script>\n";
+  	    
   	    $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
 	    }

@@ -16,7 +16,7 @@
       </div>
       <div>
         <moatag type="GallerySubgalleryThumbnails" hide="image">
-        <div id="galleryblockimagethumbs" class="drag">
+        <div id="galleryblockimagethumbs">
           <moatag type="GalleryImageThumbnails">
         </div>
     </div>

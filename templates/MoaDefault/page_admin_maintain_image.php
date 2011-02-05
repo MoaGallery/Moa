@@ -5,32 +5,27 @@
   </p>
   <div class="mainblockcontent">
     <form id="image_add" method="post" action="index.php?action=admin_maintain_image&amp;image_id=<moatag type="ImageID">" enctype="multipart/form-data">
-      <dl class="form_items">
-        <dt class='form_label_text'>
-          Original filename:
-        </dt>
-        <dd class='form_label_text'>
-          <moatag type="ImageFileName">
-        </dd>
+      <fieldset class="formFieldset">
+        <ul class="formList">
+          <li>
+            <label class="formLabelNoIcon">Original name:</label>
+            <moatag type="ImageFileName">
+          </li>
+  
+          <li>
+            <label for="imageformfilename" class="formLabel">File:</label>
+            <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="file">" alt="popup help" />
+            <input type="hidden" name="FORM_SUBMITTED" value="true"/>
+            <input class='form_label_text' type='file' id='imageformfilename' size='30' name='filename' accept='image/jpg'></input>
+          </li>
 
-        <dt class='form_label_text'>
-          File:
-        </dt>
-        <dd>
-          <input type="hidden" name="FORM_SUBMITTED" value="true"/>
-          <input class='form_label_text' type='file' id='imageformfilename' size='30' name='filename' accept='image/jpg'></input>
-        </dd>
-
-        <br/>
-        <br/>
-
-        <dt class='form_label_text'>
-          &nbsp
-        </dt>
-        <dd>
-          <input type='submit' value='Add image' id='imageformsubmit'/>
-        </dd>
-      </dl>
+          <li class="formButtons">
+            <input type='submit' value='Add image' id='imageformsubmit'/>
+          </li>
+          
+          <li id='imageformfilenamecomment' class='invalidfieldcomment invalidfieldstyle'>No file selected.</li>
+        </ul>
+      </fieldset>
     </form>
   </div>
 </div>

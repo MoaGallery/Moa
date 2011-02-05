@@ -204,10 +204,6 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
   {
     m_userlistHTML = document.getElementById('userblock').innerHTML;
     document.getElementById('userblock').innerHTML = userform;
-    addEvent(document.getElementById('username'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
-    addEvent(document.getElementById('useradmin'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
-    addEvent(document.getElementById('userpass1'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
-    addEvent(document.getElementById('userpass2'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
     
     for (var i = 0; i < m_users.length; i++)
     {
@@ -221,6 +217,7 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
         }
       }
     }
+    FormCheckSetup('user_edit');
     document.getElementById('username').focus();
     m_add_mode = false;
   };
@@ -230,11 +227,8 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
   {
     m_userlistHTML = document.getElementById('userblock').innerHTML;
     document.getElementById('userblock').innerHTML = userform;
+    FormCheckSetup('user_add');
     document.getElementById('username').focus();
-    addEvent(document.getElementById('username'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
-    addEvent(document.getElementById('useradmin'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
-    addEvent(document.getElementById('userpass1'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
-    addEvent(document.getElementById('userpass2'), "keypress", function (e) {checkKey(e, "formsubmit", "formcancel");});
     m_add_mode = true;
   };
   
@@ -337,26 +331,16 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
   // Submit button pressed
   this.FormSubmit = function()
   {
+    if (!FormCheck())
+    {
+      return false;
+    }
     var name = document.getElementById("username").value;
     var pass1 = document.getElementById("userpass1").value;
     var pass2 = document.getElementById("userpass2").value;
     var admin = document.getElementById("useradmin").checked;
     var id = document.getElementById("userid").value;
     var valid = true;
-    
-    // Check for a name
-    if ("" == name)
-    {
-      alert("You must supply a user name.");
-      valid = false;
-    }
-    
-    // Check for mismatched passwords
-    if (pass1 != pass2)
-    {
-      alert("The passwords do not match.");
-      valid = false;
-    }
     
     // All seems ok, submit it
     if (valid)

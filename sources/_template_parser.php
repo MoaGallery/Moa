@@ -18,6 +18,7 @@
   include_once($CFG["MOA_PATH"]."sources/_template_component_settings.php");
   include_once($CFG["MOA_PATH"]."sources/_template_component_main.php");
   include_once($CFG["MOA_PATH"]."sources/_template_component_ftp.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_popup_help.php");
 
   function LoadTemplate($p_filename)
   {

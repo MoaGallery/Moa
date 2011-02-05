@@ -51,6 +51,8 @@
   include_once($CFG["MOA_PATH"]."sources/mod_upgrade_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/_template_parser.php");
 
+  LanguageEnglish();
+  
   // Fill in vars early if available
   if (isset($_REQUEST["image_id"]))
   {

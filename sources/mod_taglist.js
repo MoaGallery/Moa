@@ -183,8 +183,8 @@ function TagList(p_delim, p_tag_row_template) {
     }
 
     if (m_verbose_feedback) {
-      output = "<span onmouseup='" + p_source + ".FeedbackToggle();'>" + feedback
-          + "</span>";
+      output = "<div onmouseup='" + p_source + ".FeedbackToggle();'>" + feedback
+          + "</div>";
     } else {
       var mode = "add";
       if (0 == invalid.length) {
@@ -198,27 +198,27 @@ function TagList(p_delim, p_tag_row_template) {
 
       switch (mode) {
       case "fail":
-        output = "<span onmouseup='"
+        output = "<div onmouseup='"
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/fail.png' width='16' height='16' alt='no tags'/></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/fail.png' width='16' height='16' alt='no tags'/></div>";
         nd();
         break;
       case "add":
-        output = "<span onmouseup='"
+        output = "<div onmouseup='"
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/add.png' width='16' height='16' alt='new tag'/></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/add.png' width='16' height='16' alt='new tag'/></div>";
         nd();
         break;
       case "success":
-        output = "<span onmouseup='"
+        output = "<div onmouseup='"
             + p_source
             + ".FeedbackToggle();' onmouseover='overlib(\""
             + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/Success.png' width='16' height='16' alt='all tags ok'/></span>";
+            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/Success.png' width='16' height='16' alt='all tags ok'/></div>";
         nd();
         break;
       default:

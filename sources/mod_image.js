@@ -73,7 +73,7 @@ function Image( p_delim)
     m_curWidth = m_oneFile * m_count;
 
     that.UpdateProgressBar();
-  }
+  };
 
   this.UpdateProgressBar = function()
   {
@@ -92,12 +92,12 @@ function Image( p_delim)
 
       $('#progressbar-text').css('left', (((divWidth/2)-(textWidth/2)))+'px');
     }
-  }
+  };
 
   this.RemoveProgressBar = function()
   {
     $('#imageblockfeedback').html('');
-  }
+  };
 
   this.UpdateImageCount = function()
   {
@@ -109,7 +109,7 @@ function Image( p_delim)
       img_count++;
       hdr_imagecount.innerHTML = img_count;
     }
-  }
+  };
 
   this.Edit = function()
   {
@@ -120,9 +120,9 @@ function Image( p_delim)
     	document.getElementById("imageformdesc").value = str_replace(m_desc, "<br />", "\n");
     	document.getElementById("imageformtags").value = m_taglist.StringList();
     	addEvent(document.getElementById("imageformdesc"), "keypress", function (e) {return checkKey(e, null, "imageformcancel");});
-      addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", "imageformcancel");});
-      addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
-      addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
+        addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", "imageformcancel");});
+        addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
+        addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
     	document.getElementById("imageformdesc").focus();
     	m_taglist.Feedback("image");
     	m_edit_toggle = true;
@@ -141,6 +141,11 @@ function Image( p_delim)
     	}
   	}
 
+    if (!FormCheck())
+    {
+      return false;
+    }
+    
     m_old_desc = m_desc;
     m_old_tags = m_tags;
 
@@ -182,6 +187,8 @@ function Image( p_delim)
     }
 
   	m_taglist.Assimilate(m_tags);
+  	
+  	return true;
   };
 
   this.CancelEdit = function()
@@ -268,7 +275,7 @@ function Image( p_delim)
     {
       document.getElementById("imageformnewlist").innerHTML += m_newlist[i];
     }
-  }
+  };
 
   this.StepCallBack = function(p_result)
   {
@@ -336,7 +343,7 @@ function Image( p_delim)
   {
     $('#imageformsubmit').removeAttr("disabled");
     $('#imageformcancel').removeAttr("disabled");
-  }
+  };
 
   this.AddCallback = function(p_result)
   {
@@ -366,7 +373,7 @@ function Image( p_delim)
         status = 'ERROR';
       }
 
-      $('#imageblockfeedback').html(feedback+FeedbackBox(status + '\n' + errorMessage), false);
+      $('#imageblockfeedback').html(FeedbackBox(status + '\n' + errorMessage), false);
     }
     else
     {
@@ -381,7 +388,7 @@ function Image( p_delim)
         if (m_fileList.length == 1) {
           feedback = $("#imageblockfeedback").html();
 
-          $('#imageblockfeedback').html(feedback+FeedbackBox('Added - ' + m_fileList[0]), true);
+          $('#imageblockfeedback').html(FeedbackBox('Added - ' + m_fileList[0]), true);
 
           m_fileList = [];
           m_count = 0;
@@ -455,7 +462,8 @@ function Image( p_delim)
     addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", null);});
     addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
     addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
-  }
+    addEvent(document.getElementById("imageformsubmit"), "click", function (e) {image.SubmitEdit();});
+  };
 
   this.PopulateForm = function()
   {
@@ -482,13 +490,13 @@ function Image( p_delim)
   {
     m_enabletaglist = true;
     m_taglist.TagHintList(p_element);
-  }
+  };
 
   this.DisableTagHintList = function(p_element)
   {
     m_enabletaglist = false;
     nd();
-  }
+  };
 
   this.TagHintList = function(p_element)
   {

@@ -1,6 +1,5 @@
 
 
-
 /* 1.  Generic selectors */
 
 body { font-family: "Franklin Gothic Medium", sans-serif; }
@@ -10,12 +9,7 @@ a.admin_link { font-size: 11px; color: #c0c0c0; cursor: pointer; }
 a.admin_link:hover { color: white; text-decoration: underline; }
 h1 { font-size: 1.8em; font-weight: bold; color: #ddd; margin: 5px 0; padding: 0px; }
 h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0px; }
-.form_text { text-align: left; font-size: 14px; }
-.form_items { display: block; margin: 0; padding: 0; }
-.form_items dt { margin-left: 0; padding-left: 0; width: 150px; display: block; clear: left; text-align: left; }
-.form_items dd { margin-left: 0; padding-left: 0; display: block; float: left; clear: left; }
 .add_header { padding: 20px 0 0 20px; }
-.form_label_text { color: #DDD; font-size: 16px; }
 .content_wrapper { padding: 10px 20px 20px 20px; overflow: auto; }
 .cleared { clear: both; }
 .recently_added { padding: 10px; }
@@ -96,21 +90,13 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .admin_link_list { margin: 0px; padding: 10px; }
 .admin_link_list li { display: block; float: left; margin-right: 5px; }
 .login_block { width: 330px; margin-left:auto; margin-right:auto; }
-.login_box { color: white; text-align: center; margin: 30px 0; overflow: auto; }
+.login_box { color: white;  margin: 30px 0; overflow: auto; }
 .login_box h3 { font-size: 1.2em; font-weight: bold; color: white; }
-.login_box input, select { color: white; background-color: #587F7E; border-color: #587F7E; width: 150px; }
-#loginsubmit { color: white; background-color: #325C5E; border-color: #325C5E; }
 .loginbutton { width:60px; margin-left:auto; margin-right:auto; }
 .login_input_width { width: 150px; }
 .login_form_items { display: block; margin: 0; padding: 0; text-align: left; }
 .login_form_items dt { margin: 0; padding: 0; width: 150px; display: block; float: left; clear: left; height: 2.0em; }
 .login_form_items dd { margin: 0; padding: 0; text-align: right; display: block; float: left; height: 2.0em; }
-.settings_form_items { display: block; margin: 0; padding: 0; }
-.settings_form_items dt { margin-left: 20px; margin-bottom: 20px; padding-left: 0; float: left; display: block;
-                          clear: left; float: left; text-align: left; width: 390px; }
-.settings_section_break { clear: left; color: #c0c0c0; font-weight: bold; background-color: #325C5E; padding: 5px; }
-.settings_form_items dd { margin-left: 20px; margin-bottom: 20px; padding-left: 0; display: block; float: left; }
-.settings_label_text { color: #e0e0e0; font-size: 14px; }
 .settings_block { overflow: auto; }
 .settings_title_widget { font-size: 14px; font-family: terminal, fixed; line-height: 20px; vertical-align: top; }
 .settings_title_widget { color: #a0a0a0; }
@@ -128,7 +114,7 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .user_editform li { clear: left; display: block; padding: 1px; float: left; }
 .user_editformlabel { float: left; width: 150px; }
 .admin_table_row { clear: left; padding: 1px 1px 1px 8px; }
-.admin_table_row td { padding-left: 5px; padding-right: 5px; font-size: 0.9em; }
+.admin_table_row td { padding-left: 5px; padding-right: 5px; font-size: 0.9em; color: #E0E0E0; }
 .admin_table_header td { color: #ddd; font-style: italic; font-weight: bold; }
 .admin_table_fixed { font-style: italic; }
 #userblockfeedback { margin: 0 10px; }
@@ -136,8 +122,7 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 #progressbar-inner { border: 1px solid #BBFFBB; background-color: #325C5E; }
 #progressbar-text { width: 236px; text-align: center; color: #BBFFBB; }
 .ftp_refresh_button { margin: 0 5px; }
-.ftp_tags { width:326px; position: relative; top: -1px; background-color: #587F7E; border-color: #587F7E;
-                     color: white; display: block; float: left; }
+.ftp_tags { width:326px; position: relative; top: -1px; display: block; float: left; border: 2px inset #587F7E; }
 .ftp_count_message { color: white; }
 
 
@@ -162,12 +147,10 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .gallery_edit { position: relative; z-index: 100; width: 20px; }
 .gallery_edit_bg { position: absolute; background-color: #587F7E; border-style: solid; border-color: #21262A;
                    min-width: 380px; max-width: 1200px; padding: 15px; left: 20px; }
-                   .gallery_edit_name { width:379px; background-color: #587F7E; border-color: #587F7E; color: white; }
-.gallery_name_desc { background-color: #587F7E; border-color: #587F7E; border: 2px inset #587F7E; color: white; }
-.gallery_name_tags { width:356px; position: relative; top: -1px; background-color: #587F7E;
-                     border-color: #587F7E; color: white; display: block; float: left; }
+.gallery_edit_name { width:300px; border-color: #587F7E; }
+.gallery_name_desc { border-color: #587F7E; border: 2px inset #587F7E; }
+.gallery_name_tags { width:300px; position: relative; top: -1px; border-color: #587F7E; display: block; float: left; }
 .gallery_name_tag_icon { margin-left: 6px; display: block; float: left; }
-.gallery_name_parent { width:382px; background-color: #587F7E; border-color: #587F7E; color: white; }
 #galleryaddform { padding: 0 20px 20px 20px; overflow: auto; }
 .gallery_node { margin: 4px 0; }
 .subgallery_thumb_wrapper { overflow: hidden; }
@@ -186,10 +169,9 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .image_edit { position: relative; z-index: 100; width: 20px; }
 .image_edit_bg { position: absolute; background-color: #587F7E; border-style: solid; display: table; border-color: #21262A;
                  min-width: 380px; max-width: 1200px; padding: 15px; left: 20px; }
-.image_name_desc { background-color: #587F7E; border-color: #587F7E; border: 2px inset #587F7E; color: white; clear: both; }
-.image_name_tags { width:326px; position: relative; top: -1px; background-color: #587F7E; border-color: #587F7E;
-                   color: white; display: block; float: left; }
-.image_name_file { background-color: #587F7E; border-color: #587F7E; color: black; }
+.image_name_desc { border-color: #587F7E; border: 2px inset #587F7E; }
+.image_name_tags { width:326px; border-color: #587F7E; display: block; float: left; }
+.image_name_file { border-color: #587F7E; color: black; }
 #imageaddform { padding: 0 20px 20px 20px; overflow: auto; float: left; }
 #imageblockfeedback { padding: 20px 10px 0 10px; }
 .image_prevnextfull { float: left; border: 1px outset; border-color: #325C5E; background-color: #587F7E; height: 20px; line-height: 20px;
@@ -234,7 +216,42 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .main_edit { position: relative; z-index: 100; width: 20px; }
 .main_edit_bg { position: absolute; background-color: #587F7E; border-style: solid; border-color: #21262A;
                    min-width: 380px; max-width: 1200px; padding: 15px; left: 20px; }
-                   .gallery_edit_name { width:379px; background-color: #587F7E; border-color: #587F7E; color: white; }
+.main_edit_name { width:379px; background-color: #587F7E; border-color: #587F7E; color: white; }
 .main_name_desc { background-color: #587F7E; border-color: #587F7E; border: 2px inset #587F7E; color: white; }
 .main_desc { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0px; }
 #mainblockfeedback { margin: 0 0 0 10px; clear: left; }
+
+/* 12. Form selectors  */
+
+.formFieldset           { border: 0; padding: 0; margin: 0; }
+.formSettingsFieldset   { border: 0; padding: 0 0 0 20px; margin: 0; }
+.settingsErrorList      { margin: 0 0 30px 0; }
+.settings_section_break { background-color: #325C5E; clear: left; color: #C0C0C0; font-weight: bold;
+                          padding: 5px; display: block; width: 98%; margin: 17px 0; }
+.settings_label_text    { font-size: 14px; color: #E0E0E0; }
+.form_text              { font-family: "Franklin Gothic Medium",sans-serif; font-size: 80%; }
+.formList               { padding: 0; margin: 0; }
+.formList li            { margin: 5px 0; font-family: "Franklin Gothic Medium",sans-serif; font-size: 80%;
+                          list-style: none; clear: left; }
+.formListSettings       { padding: 0; margin: 10px 0 0 0; }
+.formListSettings li    { margin: 2px 0 15px 0; font-family: "Franklin Gothic Medium",sans-serif;
+                          list-style: none; clear: left; }
+.formLabel              { display: block; float: left; width: 120px; font-size: 14px; color: #E0E0E0; text-align: left; }
+.formLabelNoIcon        { display: block; float: left; width: 146px; font-size: 14px; color: #E0E0E0; text-align: left; }
+.formLabelNewLine       { display: block; text-align: left; margin: 10px 0 0 0; line-height: 16px; }
+.formLabelSettings      { display: block; float: left; width: 400px; font-size: 14px; color: #E0E0E0; text-align: left; }
+.tagPopup               { float: left; margin: 0 5px; }
+.formButtons            { padding: 25px 0 5px 146px; display: block; }
+.formRefreshButton      { padding: 0 0 5px 146px; display: block; }
+.formButtonsNewLine     { padding: 25px 0 5px 26px; display: block; }
+.formButtonsLeft        { padding: 25px 0 5px 24px; display: block; }
+.formButtonsSettings    { padding: 25px 0 5px 16px; display: block; }
+.formButtonsSettings li { display: block; }
+.popupImage             { margin: 0px; padding: 0 5px; vertical-align: middle; width: 16px; height: 16px;
+                          display: block; float: left; }
+.loginFormInputBorder   { border-color: #587F7E; width: 150px; }
+.adminUserFormInputBorder { border-color: #587F7E; width: 150px; }
+.invalidfieldcomment    { display: none; }
+.invalidfieldstyle      { font-style: italic; color: orange; list-style: none; }
+.invalidfield           { background-color: #ff8080; }
+.staticFormValue        { color: #E0E0E0; };

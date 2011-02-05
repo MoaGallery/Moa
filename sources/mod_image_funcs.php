@@ -372,6 +372,8 @@
 	            $images[] = $fileName;
             }
           }
+          
+          sort($images);
         } else
         {
           $errorString .= 'A problem occured when trying to uncompress archive.';

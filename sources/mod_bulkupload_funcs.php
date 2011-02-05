@@ -80,6 +80,11 @@
   	return $folderList;
   }
 
+  function _BulkUpload_ScanDir_cmp($a, $b)
+  {
+    return strcmp($a->name, $b->name);
+  }
+  
   function _BulkUpload_ScanDir()
   {
     global $CFG;
@@ -115,6 +120,9 @@
       }
     }
     @closedir($dirHandle);
+    
+    
+    usort($fileList, "_BulkUpload_ScanDir_cmp");
 
     return $fileList;
   }

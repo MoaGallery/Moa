@@ -112,7 +112,7 @@ function Func()
 function Upgrade(p_oldver, p_newver)
 {
   var that = this;
-  var versions = [10000, 10100, 10199.00, 10200, 10201, 10202];
+  var versions = [10000, 10100, 10199.00, 10200, 10201, 10202, 10203];
   var stage_1_list = new Array();
   var stage_2_list = new Array();
   var stage_3_list = new Array();

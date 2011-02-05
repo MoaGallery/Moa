@@ -25,15 +25,123 @@ a img {
         font-size: 70%;
 }
 
+.formFieldset {
+        border: 0;
+        padding: 0;
+        margin: 0;
+}
+
+.formSettingsFieldset {
+        border: 0;
+        padding: 0 0 0 30px;
+        margin: 0;
+}
+
+.settingsErrorList {
+        margin: 0 0 30px 0;
+}
+
 .form_text {
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
 }
 
-.form_label_text {
+.formList {
+        padding: 0;
+}
+
+.formList li {
+        margin: 5px 0;
         font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
+        list-style: none;
+        clear: left;
 }
+
+.secondFormList {
+        padding: 0;
+        margin: 0;
+}
+
+.secondFormList li {
+        margin: 0;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        list-style: none;
+        clear: left;
+}
+
+.formListSettings {
+        padding: 0;
+        margin: 10px 0 0 0;
+}
+
+.formListSettings li {
+        margin: 2px 0 15px 0;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 80%;
+        list-style: none;
+        clear: left;
+}
+
+.formLabel {
+	      display: block;
+        float: left;
+        width: 120px;
+}
+
+.formLabelNoIcon {
+        display: block;
+        float: left;
+        width: 146px;
+}
+
+.formLabelNewLine {
+        display: block;
+}
+
+.formLabelSettings {
+        display: block;
+        float: left;
+        width: 400px;
+        font-size: 12px;
+}
+
+.tagPopup {
+        float: left;
+        margin: 0 5px;
+}
+
+.formButtons {
+        padding: 5px 0 5px 146px;
+        display: block;
+}
+
+.formButtonsNewLine {
+        padding: 5px 0 5px 26px;
+        display: block;
+}
+
+.formButtonsSettings {
+        padding: 5px 0 5px 456px;
+        display: block;
+}
+
+.popupImage {
+	      margin: 0px;
+	      padding: 0 5px;
+	      vertical-align: middle;
+	      width: 16px;
+	      height: 16px;
+	      display: block;
+	      float: left;
+}
+
+.invalidfieldcomment { display: none; }
+
+.invalidfieldstyle { font-style: italic; color: red; list-style: none; }
+
+.invalidfield { background-color: #ff8080; }
 
 .install_list_header {
         font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -556,7 +664,7 @@ a.admin_link:hover {
         font-size: 20px;
         font-weight: bold;
         margin: 0;
-        padding: 20px 0;
+        padding: 0;
 }
 
 .settings_label_text {
@@ -570,7 +678,7 @@ a.admin_link:hover {
 }
 
 .admin_maintain_image_container {
-	      width: 450px;
+	      width: 500px;
 	      overflow: hidden;
 	      clear: left;
 	      margin: 10px 0 0 0;
@@ -706,6 +814,7 @@ a.admin_link:hover {
 .gallery_form_tags
 {
 	      width: 405px;
+	      float: left;
 }
 
 .gallery_form_parent
@@ -716,6 +825,7 @@ a.admin_link:hover {
 .image_form_tags
 {
         width: 300px;
+        float: left;
 }
 
 .image_nav_icon
@@ -945,3 +1055,8 @@ a.admin_link:hover {
         font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
+.ftp_form_tags
+{
+        width: 405px;
+        float: left;
+}

@@ -76,15 +76,12 @@ function Gallery(p_delim) {
       alert("An operation is already pending on this gallery.");
       return;
     }
-    if ("" == document.getElementById("galleryformname").value) {
-      alert("You must give the gallery a name.");
-      return;
+    
+    if (!FormCheck())
+    {
+      return false;
     }
-    if ("" == document.getElementById("galleryformtags").value) {
-      alert("You must give the gallery at least one tag.");
-      return;
-    }
-
+    
     m_old_name = m_name;
     m_old_desc = m_desc;
     m_old_tags = m_tags;
