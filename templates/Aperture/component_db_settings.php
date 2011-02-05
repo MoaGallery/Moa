@@ -7,7 +7,7 @@
               <label for="setting_MoaPath" class="formLabelSettings">
                 Absolute path on server to Moa.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_moapath">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_moapath">" alt="popup help" />
               <input type="text" name="setting_MoaPath" id="setting_MoaPath" value="<moatag type="SettingsValue_MoaPath">"/>
             </li>
 
@@ -15,7 +15,7 @@
               <label for="setting_ImagePath" class="formLabelSettings">
                 Relative path on server to the images.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_imagepath">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_imagepath">" alt="popup help" />
               <input type="text" name="setting_ImagePath" id="setting_ImagePath" value="<moatag type="SettingsValue_ImagePath">"/>
             </li>
 
@@ -23,7 +23,7 @@
               <label for="setting_ThumbPath" class="formLabelSettings">
                 Relative path on server to the thumbnails.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_thumbpath">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_thumbpath">" alt="popup help" />
               <input type="text" name="setting_ThumbPath" id="setting_ThumbPath" value="<moatag type="SettingsValue_ThumbPath">"/>
             </li>
 
@@ -31,7 +31,7 @@
               <label for="setting_CookiePath" class="formLabelSettings">
                 URL path to Moa (for cookies).
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_cookiepath">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_cookiepath">" alt="popup help" />
               <input type="text" name="setting_CookiePath" id="setting_CookiePath" value="<moatag type="SettingsValue_CookiePath">"/>
             </li>
 
@@ -39,7 +39,7 @@
               <label for="setting_CookieName" class="formLabelSettings">
                 Cookie name.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_cookiename">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_cookiename">" alt="popup help" />
               <input type="text" name="setting_CookieName" id="setting_CookieName" value="<moatag type="SettingsValue_CookieName">"/>
             </li>
 
@@ -47,7 +47,7 @@
               <label for="setting_IncomingPath" class="formLabelSettings">
                 Relative server path for FTP \ archive upload.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_incomingpath">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_incomingpath">" alt="popup help" />
               <input type="text" name="setting_IncomingPath" id="setting_IncomingPath" value="<moatag type="SettingsValue_IncomingPath">"/>
             </li>
           </ul>
@@ -71,7 +71,7 @@
               <label for="setting_DBHost" class="formLabelSettings">
                 Database host.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbhost">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbhost">" alt="popup help" />
               <input type="text" name="setting_DBHost" id="setting_DBHost" value="<moatag type="SettingsValue_DBHost">"/>
             </li>
 
@@ -79,7 +79,7 @@
               <label for="setting_DBName" class="formLabelSettings">
                 Database name.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbname">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbname">" alt="popup help" />
               <input type="text" name="setting_DBName" id="setting_DBName" value="<moatag type="SettingsValue_DBName">"/>
             </li>
 
@@ -87,7 +87,7 @@
               <label for="setting_DBUser" class="formLabelSettings">
                 Database username.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbuser">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbuser">" alt="popup help" />
               <input type="text" name="setting_DBUser" id="setting_DBUser" value="<moatag type="SettingsValue_DBUser">"/>
             </li>
 
@@ -95,7 +95,7 @@
               <label for="setting_DBPass" class="formLabelSettings">
                 Database password.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbpass">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_dbpass">" alt="popup help" />
               <input type="text" name="setting_DBPass" id="setting_DBPass" value="<moatag type="SettingsValue_DBPass">"/>
             </li>
 
@@ -103,7 +103,7 @@
               <label for="setting_TabPrefix" class="formLabelSettings">
                 Database prefix.
               </label>
-              <img src="templates/minimal/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_tabprefix">" alt="popup help" />
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_tabprefix">" alt="popup help" />
               <input type="text" name="setting_TabPrefix" id="setting_TabPrefix" value="<moatag type="SettingsValue_TabPrefix">"/>
             </li>
           </ul>
