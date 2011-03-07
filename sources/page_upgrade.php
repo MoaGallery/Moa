@@ -9,8 +9,8 @@
 
   $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
 
-  $bodycontent .= "<div class='install_list'>Completing upgrade to version ";
-  $bodycontent .= $CFG["MOA_MAJOR_VERSION"].".".$CFG["MOA_MINOR_VERSION"].".".$CFG["MOA_REVISION"].$CFG["MOA_PATCH"];
+  $bodycontent .= "<div class='install_list_top'>Completing upgrade to version ";
+  $bodycontent .= $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION.$MOA_PATCH;
   $bodycontent .= " <br/><br/></div><br/>\n";
   $bodycontent .= "  <input type=\"button\" value=\"Test upgrade\" id=\"testbutton\"/><br/><br/>\n";
   $bodycontent .= "<div id=\"upgradeprogress\">\n";

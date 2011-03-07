@@ -794,8 +794,10 @@
       fwrite($file, "  \$CFG['BULKUPLOAD_PATH']  = 'incoming/';\n");
       fwrite($file, "  \$CFG['THUMB_WIDTH'] = 150;\n");
       fwrite($file, "  \$CFG['DISPLAY_PLAIN_SUBGALLERIES'] = true;\n");
+      fwrite($file, "  \$CFG['IMAGES_PER_PAGE'] = 12;\n");
       fwrite($file, "  \$CFG['COOKIE_NAME'] = '".strip_tags($_REQUEST["cookiename"])."';\n");
-      fwrite($file, "  \$CFG['COOKIE_PATH'] = '".$cookie_path."';\n");      fwrite($file, "  \$CFG['SHOW_EMPTY_DESC_POPUPS'] = false;\n");
+      fwrite($file, "  \$CFG['COOKIE_PATH'] = '".$cookie_path."';\n");
+      fwrite($file, "  \$CFG['SHOW_EMPTY_DESC_POPUPS'] = false;\n");
       fwrite($file, "  \$CFG['EMPTY_DESC_POPUP_TEXT'] = 'No description';\n");
       fwrite($file, "  \$CFG['TITLE_DESC_LENGTH'] = 30;\n");
       fwrite($file, "  \$CFG['STR_DELIMITER'] = \",\";\n");
@@ -914,7 +916,7 @@
     echo "<form name='install_3b' method='post' action='install.php?stage=stage4' enctype='multipart/form-data'>\n";
 
     echo "Creating data structure - ";
-    $max_run = 22;
+    $max_run = 24;
     $datainstalled = true;
     $count = 0;
 

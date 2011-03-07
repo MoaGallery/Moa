@@ -64,9 +64,9 @@
 
     $bodycontent .= "<script type='text/javascript'>\n";
     $bodycontent .= "  document.getElementById(\"imageaddform\").innerHTML = editform;\n";
-    $bodycontent .= "  image.PreLoad('', '', '', '".$parent_id."');\n";
+    $bodycontent .= "  image.PreLoad('', '', '', '', '".$parent_id."');\n";
     $bodycontent .= "  image.PopulateForm();\n";
-    $bodycontent .= "  FormCheckSetup('image_add');\n";
+    $bodycontent .= "  FormCheckSetup('image_add', false);\n";
     $bodycontent .= "</script>\n";
 
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";

@@ -8,7 +8,7 @@ function Image( p_delim)
   var m_short_desc;
   var m_width;
   var m_height;
-  var m_from;
+  var m_parent_id;
   var m_formobject;
 
   var m_titles;
@@ -36,13 +36,13 @@ function Image( p_delim)
 
   var m_submitWording = '';
 
-  this.PreLoad = function(p_image_id, p_desc, p_width, p_height, p_from)
+  this.PreLoad = function(p_image_id, p_desc, p_width, p_height, p_parent_id)
   {
     m_image_id = p_image_id;
     m_desc = p_desc;
     m_width = p_width;
     m_height = p_height;
-    m_from = p_from;
+    m_parent_id = p_parent_id;
 
     m_short_desc = ShortName(m_desc);
     m_old_desc = '';
@@ -121,7 +121,7 @@ function Image( p_delim)
     	document.getElementById("imageformtags").value = m_taglist.StringList();
     	addEvent(document.getElementById("imageformdesc"), "keypress", function (e) {return checkKey(e, null, "imageformcancel");});
         addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", "imageformcancel");});
-        addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
+        addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); if (m_enabletaglist) {image.TagHintList(this);};});
         addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
     	document.getElementById("imageformdesc").focus();
     	m_taglist.Feedback("image");
@@ -176,7 +176,7 @@ function Image( p_delim)
         $('#imageformcancel').attr("disabled", true);
 
         m_resend = true;
-        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
+        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&parentid="+encodeURIComponent(m_parent_id)+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
 
         return;
       }
@@ -335,8 +335,9 @@ function Image( p_delim)
     }
     else
     {
-      $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
-	  }
+      
+      $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imagegalleryid="+encodeURIComponent(m_parent_id)+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
+    }
   };
 
   this.AddCallbackFail = function(p_request, p_status, p_errorThrown)
@@ -347,7 +348,7 @@ function Image( p_delim)
 
   this.AddCallback = function(p_result)
   {
-    /* Silly hack to keep IE happy with pre formatted text takening from an IFRAME */
+    /* Silly hack to keep IE happy with pre formatted text taken from an IFRAME */
     p_result = str_replace(p_result , "<PRE>", "");
     p_result = str_replace(p_result , "</PRE>", "");
     p_result = str_replace(p_result , "<pre>", "");
@@ -408,7 +409,7 @@ function Image( p_delim)
         $('#imageformsubmit').attr("disabled", "true");
         $('#imageformcancel').attr("disabled", "true");
 
-        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
+        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imagegalleryid="+encodeURIComponent(m_parent_id)+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
       }
     }
   };
@@ -436,13 +437,13 @@ function Image( p_delim)
       return;
     }
 
-    if (m_from == "orphan")
+    if (m_parent_id == "orphan")
     {
       document.location = "index.php?action=admin_orphans&deleted=image";
     }
     else
     {
-      document.location = "index.php?action=gallery_view&gallery_id=" + m_from + "&deleted=image";
+      document.location = "index.php?action=gallery_view&gallery_id=" + m_parent_id + "&deleted=image";
     }
   };
 

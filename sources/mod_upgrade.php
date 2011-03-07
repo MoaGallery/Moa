@@ -56,10 +56,24 @@
       return false;
     }
 
-    if (!_AddFileConfigVar($newname, $newvalue, $testflag))
+    if (10201 > _UpgradeGetCurrentVersionID())
     {
-    	RaiseFatalError("Could not add new var.");
-    	return false;
+      if (!is_numeric($newvalue))
+      {
+        $newvalue = "'".$newvalue."'";
+      }
+      if (!_AddFileConfigVar('$'.$newname, $newvalue, $testflag))
+      {
+      	RaiseFatalError("Could not add new var.");
+      	return false;
+      }
+    } else
+    {
+    if (!_AddDBConfigVar($newname, $newvalue, $testflag))
+      {
+      	RaiseFatalError("Could not add new var.");
+      	return false;
+      }
     }
 
     OutputPrefix("OK");
@@ -206,6 +220,11 @@
       case "upgrade_10201_UpgradeConfigFile" :
       {
         $result = _upgrade_10201_UpgradeConfigFile($testflag);
+        break;
+      }
+      case "upgrade_10204_AddGalleryIndices" :
+      {
+        $result = _upgrade_10204_AddGalleryIndices($testflag);
         break;
       }
       case "upgrade_complete" :

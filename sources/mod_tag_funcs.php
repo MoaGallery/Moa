@@ -178,6 +178,26 @@
       if (false === $result) {
         return false;
       }
+      
+      // Update indices
+      $query = "SELECT IDGallery FROM `".$CFG['tab_prefix']."gallery` WHERE UseTags = 0";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    	if (false === $result)
+    	{
+    		return false;
+    	}
+  
+    	while ($row = mysql_fetch_array($result))
+    	{
+      	$query = "DELETE FROM `".$CFG['tab_prefix']."galleryindex` WHERE IDGallery = '".$row['IDGallery']."'";
+        $result2 = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      	if (false === $result2)
+      	{
+      		return false;
+      	}
+    	
+    	  AddTaggedImagesToGallery($row['IDGallery']);
+    	}
 
       return true;
     }
@@ -202,6 +222,7 @@
 
       $currentTags = $this->getTags();
       $imageTags = explode($CFG["STR_DELIMITER"], $p_tags);
+      $added = Array();
 
       foreach ($imageTags as $tag)
       {
@@ -211,13 +232,19 @@
           $tagFound = false;
           foreach ($currentTags as $tagExisting)
           {
-            if (0 == strcmp(strtolower($tagExisting->m_name), strtolower($tag)))
+            if ((0 == strcmp(strtolower($tagExisting->m_name), strtolower($tag))) &&
+                (!$tagFound))
             {
               // Tag already exists, just create the link
-              $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".$p_image_id."', '".$tagExisting->m_id."')";
-              $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-              if (false === $result) {
-                return false;
+              
+              // Create the link if we haven't in this string already
+              if (!array_key_exists($tag, $added))
+              {
+                $query = "INSERT INTO `".$CFG["tab_prefix"]."imagetaglink` (IDImage, IDTag) VALUES ('".$p_image_id."', '".$tagExisting->m_id."')";
+                $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+                if (false === $result) {
+                  return false;
+                }
               }
               $tagFound = true;
             }
@@ -244,7 +271,15 @@
             if (false === $result) {
               return false;
             }
+            // Add the tag to the internal list to avoid duplicates in the string being added
+            $addedTag = new TagRecord;
+            $addedTag->m_id   = $tagID;
+            $addedTag->m_name = $tag;
+    
+            $currentTags[] = $addedTag;
           }
+          // Mark this tag as added for this string.
+          $added[$tag] = true;
         }
       }
     }
@@ -255,6 +290,7 @@
 
       $currentTags = $this->getTags();
       $galleryTags = explode($CFG["STR_DELIMITER"], $p_tags);
+      $added = Array();
 
       foreach ($galleryTags as $tag)
       {
@@ -264,13 +300,19 @@
           $tagFound = false;
           foreach ($currentTags as $tagExisting)
           {
-            if (0 == strcmp(strtolower($tagExisting->m_name), strtolower($tag)))
+            if ((0 == strcmp(strtolower($tagExisting->m_name), strtolower($tag))) &&
+                (!$tagFound))
             {
-              // Tag already exists, just create the link
-              $query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".$p_gallery_id."', '".$tagExisting->m_id."')";
-              $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
-              if (false === $result) {
-                return false;
+              // Tag already exists
+              
+              // Create the link if we haven't in this string already
+              if (!array_key_exists($tag, $added))
+              {
+                $query = "INSERT INTO `".$CFG["tab_prefix"]."gallerytaglink` (IDGallery, IDTag) VALUES ('".$p_gallery_id."', '".$tagExisting->m_id."')";
+                $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+                if (false === $result) {
+                  return false;
+                }
               }
               $tagFound = true;
             }
@@ -297,7 +339,15 @@
             if (false === $result) {
               return false;
             }
+            // Add the tag to the internal list to avoid duplicates in the string being added
+            $addedTag = new TagRecord;
+            $addedTag->m_id   = $tagID;
+            $addedTag->m_name = $tag;
+    
+            $currentTags[] = $addedTag;
           }
+          // Mark this tag as added for this string.
+          $added[$tag] = true;
         }
       }
     }

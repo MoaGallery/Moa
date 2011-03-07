@@ -138,7 +138,6 @@
     {
      $id = $parent_id;
     }
-
     return $id;
   }
 

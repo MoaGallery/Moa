@@ -66,6 +66,7 @@
     global $MOA_REVISION;
     global $MOA_PATCH;
     global $BULKUPLOAD_PATH;
+    global $IMAGES_PER_PAGE;
 
     $CFG["DEBUG_MODE"] = $DEBUG_MODE;
     $CFG["DISPLAY_PLAIN_SUBGALLERIES"] = $DISPLAY_PLAIN_SUBGALLERIES;
@@ -85,6 +86,7 @@
     $CFG["MOA_REVISION"] = $MOA_REVISION;
     $CFG["MOA_PATCH"] = $MOA_PATCH;
     $CFG["BULKUPLOAD_PATH"] = $BULKUPLOAD_PATH;
+    $CFG["IMAGES_PER_PAGE"] = $IMAGES_PER_PAGE;
   }
 
   
@@ -113,6 +115,7 @@
     global $COOKIE_NAME;
     global $BULKUPLOAD_PATH;
     global $errorString;
+    global $IMAGES_PER_PAGE;
 
     // Set some default settings
     $CFG["DEBUG_MODE"] = false;
@@ -231,7 +234,7 @@
     {
       MigrateMainConfig();
     }
-
+    
     $CFG["MOA_VERSION"] = $CFG["MOA_MAJOR_VERSION"].".".
                           $CFG["MOA_MINOR_VERSION"].".".
                           $CFG["MOA_REVISION"].

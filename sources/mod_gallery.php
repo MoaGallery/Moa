@@ -128,6 +128,7 @@
     global $gallery_id;
     global $template_name;
     global $errorString;
+    global $page;
 
     // Set global vars if needed
     if (!isset($preCache))
@@ -144,9 +145,10 @@
 		    }
 		  }
     }
-
+    
     OutputPrefix("OK");
 
+    $page = 1;
     echo LoadTemplateRoot("page_gallery_view.php");
 
     return true;
@@ -184,12 +186,21 @@
       return false;
     }
 
+    // Get the Tagged flag
+    $newtagged = GetParam("tagged");
+    if (false === $newtagged)
+    {
+      RaiseFatalError("No tagged flag supplied.");
+      return false;
+    }
+    
     // Get the tags
     $newtags = GetParam("tags");
     if (false !== $newtags) {
       $newtags = trim($newtags);
 
-      if (strlen($newtags) == 0)
+      if ((0 == strcmp($newtagged, "true")) &&
+          (strlen($newtags) == 0))
       {
         RaiseFatalError("Whitespace may not be used as a tag.");
         return false;
@@ -200,10 +211,10 @@
       RaiseFatalError("No tags supplied.");
       return false;
     }
-
+    
     // Try to change the value
     $Gallery = new Gallery();
-    if (false === $Gallery->edit($p_id, $newname, $newdesc, $newpid, $newtags))
+    if (false === $Gallery->edit($p_id, $newname, $newdesc, $newpid, $newtags, $newtagged))
     {
       RaiseFatalError("Could not change gallery.", false);
       return false;
@@ -216,8 +227,6 @@
   {
     global $Userinfo;
     global $CFG;
-    //print_r($CFG);
-    //print_r($Userinfo);
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
@@ -248,12 +257,21 @@
       return false;
     }
 
+    // Get the Tagged flag
+    $newtagged = GetParam("tagged");
+    if (false === $newtagged)
+    {
+      RaiseFatalError("No tagged flag supplied.");
+      return false;
+    }
+    
     // Get the tags
     $newtags = GetParam("tags");
     if (false !== $newtags) {
       $newtags = trim($newtags);
 
-      if (strlen($newtags) == 0)
+      if ((0 == strcmp($newtagged, "true")) &&
+          (strlen($newtags) == 0))
       {
         RaiseFatalError("Whitespace may not be used as a tag.");
         return false;
@@ -264,16 +282,17 @@
       RaiseFatalError("No tags supplied.");
       return false;
     }
-
+    
     // Try to add the values
     $Gallery = new Gallery();
-    if (false === $Gallery->add($newname, $newdesc, $newpid, $newtags))
+    $result = $Gallery->add($newname, $newdesc, $newpid, $newtags, $newtagged);
+    if (false === $result)
     {
       RaiseFatalError("Could not add gallery.", false);
       return false;
     }
 
-    return true;
+    return $result;
   }
 
   function GalleryAjaxMain()
@@ -325,9 +344,10 @@
 	    }
 	    case "add" :
       {
-        if (GalleryAdd())
+        $galID = GalleryAdd();
+        if (false !== $galID)
         {
-          echo "OK";
+          echo "OK\n".$galID;
         }
         break;
       }

@@ -9,6 +9,7 @@
 
   include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/common.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
   // Detects if the files and config/db match or not.
   // Returns true if a new version of the files seem to have been uploaded.
@@ -160,12 +161,27 @@
     	return true;
     } else
     {
+      /* Type is a string by default */
+      $cfg_type = "STRING";
+
+  	  /* Determine type */
+  	  if (is_numeric($p_value))
+      {
+  		  $cfg_type = "INTEGER";
+  	  }
+  	  else
+  	  {
+  	  	if (is_bool($p_value))
+        {
+          $cfg_type = "BOOLEAN";
+        }
+  	  }
 	    if (isset($CFG[$p_name])) {
-	      $query = "UPDATE `".$CFG["tab_prefix"]."settings` SET Value = '".$p_value."' WHERE Name = '".$p_name."';";
+	      $query = "UPDATE `".$CFG["tab_prefix"]."settings` SET Value = '".$p_value."', Type = '".$cfg_type."' WHERE Name = '".$p_name."';";
 	    }
 	    else
 	    {
-	     $query = "INSERT INTO `".$CFG["tab_prefix"]."settings` (Value, Name) VALUES ('".$p_value."', '".$p_name."');";
+	     $query = "INSERT INTO `".$CFG["tab_prefix"]."settings` (Value, Name, Type) VALUES ('".$p_value."', '".$p_name."', '".$cfg_type."');";
 	    }
 
 	    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
@@ -265,6 +281,7 @@
     global $tab_prefix;
     global $INSTALLING;
     global $errorString;
+    global $IMAGES_PER_PAGE;
 
     if (!file_exists($CFG["MOA_PATH"]."config.php"))
     {
@@ -348,7 +365,6 @@
               $cfg_type = "BOOLEAN";
             } else
             {
-              //$value_string = "'".$cfg_value."'";
               $value_string = $cfg_value;
             }
       	  }
@@ -359,11 +375,43 @@
               (0 == strcmp($cfg_name, "IMAGE_PATH")) ||
               (0 == strcmp($cfg_name, "THUMB_PATH")))
           {
+            // Add a trailing slash if there isn't one already
             $end = substr($value_string, -1, 1);
             if (0 != strcmp($end, "/"))
             {
               $value_string = substr($value_string, 0, (strlen($value_string)));
               $value_string .= "/";
+            }
+          }
+          
+        	// Strip quotes off start and end of strings.
+          if (0 == strcmp($cfg_type, "STRING"))
+          {
+            $stripDone = false;
+            // Check single quotes
+            if (2 <= strlen($value_string))
+            {
+              if (("'" == substr($value_string, 0, 1)) &&
+                  ("'" == substr($value_string, -1, 1)))
+              {
+                $value_string = substr($value_string, 1, strlen($value_string)-2);
+                $stripDone = true;
+              }
+            }
+            
+            
+           if (!$stripDone)
+           {
+             // Check double quotes
+             if (2 <= strlen($value_string))
+              {
+                if (('"' == substr($value_string, 0, 1)) &&
+                    ('"' == substr($value_string, -1, 1)))
+                {
+                  $value_string = substr($value_string, 1, strlen($value_string)-2);
+                  $stripDone = true;
+                }
+              } 
             }
           }
 
@@ -431,6 +479,29 @@
       {
         return false;
       }
+    }
+
+    return true;
+  }
+  
+  function _upgrade_10204_AddGalleryIndices($p_test = true)
+  {
+    global $CFG;
+    global $ErrorString; 
+      
+    if (false === $p_test)
+    {
+      $query = "SELECT IDGallery FROM `".$CFG['tab_prefix']."gallery`";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    	if (false === $result)
+    	{
+    		return false;
+    	}
+  
+    	while ($row = mysql_fetch_array($result))
+    	{
+    	  AddTaggedImagesToGallery($row['IDGallery']);
+    	}
     }
 
     return true;

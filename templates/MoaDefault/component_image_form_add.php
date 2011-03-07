@@ -6,6 +6,7 @@
         <img src="templates/MoaDefault/media/help.png" width="16" height="16" class="popupImage" title="<moatag type="FormPopupHelp" field="file">" alt="popup help" />
     	  <input class='form_text' type='file' id='imageformfilename' size='30' name='filename'></input>
     	  <input type='hidden' name='imageform' value='true' />
+    	  <input type='hidden' name='imagegalleryid' value='<moatag type="ParentID">' />
     	</li>
   
       <li>

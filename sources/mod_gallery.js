@@ -5,6 +5,7 @@ function Gallery(p_delim) {
   var m_name;
   var m_desc;
   var m_tags;
+  var m_tagged;
   var m_parent_id;
   var m_short_name;
   var m_short_desc;
@@ -14,6 +15,7 @@ function Gallery(p_delim) {
   var m_old_name;
   var m_old_desc;
   var m_old_tags;
+  var m_old_tagged;
   var m_old_parent_id;
   var m_edit_toggle = false;
   var m_add_mode = false;
@@ -25,13 +27,14 @@ function Gallery(p_delim) {
   
   var m_parent_url = document.referrer;
 
-  this.PreLoad = function(p_gal_id, p_name, p_desc, p_par_id, p_from) {
+  this.PreLoad = function(p_gal_id, p_name, p_desc, p_par_id, p_from, p_tagged) {
     nd();
     m_gallery_id = p_gal_id;
     m_name = p_name;
     m_desc = p_desc;
     m_parent_id = p_par_id;
     m_from = p_from;
+    m_tagged = p_tagged;
 
     m_short_name = ShortName(m_name);
     m_short_desc = ShortName(m_desc);
@@ -39,6 +42,7 @@ function Gallery(p_delim) {
     m_old_name = "";
     m_old_desc = "";
     m_old_tags = "";
+    m_old_tagged = false;
     m_old_parent_id = "";
     m_titles = "";
 
@@ -57,12 +61,15 @@ function Gallery(p_delim) {
       document.getElementById("galleryformname").value = m_name;
       document.getElementById("galleryformdesc").value = str_replace(m_desc, "<br/>", "\n");
       document.getElementById("galleryformtags").value = m_taglist.StringList();
+      document.getElementById("galleryformtagged").checked = m_tagged;
+      //alert(m_tagged);
       addEvent(document.getElementById("galleryformname"), "keypress", function(e) { return checkKey(e, "galleryformsubmit", "galleryformcancel"); });
       addEvent(document.getElementById("galleryformdesc"), "keypress", function(e) { return checkKey(e, null, "galleryformcancel"); });
       addEvent(document.getElementById("galleryformtags"), "keypress", function(e) { return checkKey(e, "galleryformsubmit", "galleryformcancel"); });
       addEvent(document.getElementById("galleryformparent_id"), "keypress", function(e) { return checkKey(e, "galleryformsubmit", "galleryformcancel"); });
       addEvent(document.getElementById("galleryformexpandlink"), "click", function(e) { gallery.ExpandClick(); });
-      addEvent(document.getElementById("galleryformtags"), "keyup", function(e) { gallery.Feedback(); gallery.TagHintList(this); });
+      addEvent(document.getElementById("galleryformtags"), "keyup", function(e) { gallery.Feedback(); if (m_enabletaglist) {gallery.TagHintList(this);}; });
+      addEvent(document.getElementById("galleryformtagged"), "click", function (e) {gallery.ChangeTaggedStatus();});
       document.getElementById("galleryformname").focus();
       m_taglist.Feedback("gallery");
       m_edit_toggle = true;
@@ -85,11 +92,13 @@ function Gallery(p_delim) {
     m_old_name = m_name;
     m_old_desc = m_desc;
     m_old_tags = m_tags;
+    m_old_tagged = m_tagged;
     m_old_parent_id = m_parent_id;
 
     m_name = document.getElementById("galleryformname").value;
     m_desc = document.getElementById("galleryformdesc").value;
     m_tags = document.getElementById("galleryformtags").value;
+    m_tagged = document.getElementById("galleryformtagged").checked;
     m_parent_id = document.getElementById("galleryformparent_id").value;
 
     m_short_name = ShortName(m_name);
@@ -107,6 +116,7 @@ function Gallery(p_delim) {
       url += "&gallery_id=" + m_gallery_id;
       url += "&parent_id=" + m_parent_id;
       url += "&tags=" + encodeURIComponent(m_tags);
+      url += "&tagged=" + encodeURIComponent(m_tagged);
       var request = new httpRequest("sources/mod_gallery.php", that.SubmitCallback, m_gallery_id);
       request.update(url, "GET");
       
@@ -118,6 +128,7 @@ function Gallery(p_delim) {
       url += "&desc=" + encodeURIComponent(m_desc);
       url += "&parent_id=" + m_parent_id;
       url += "&tags=" + encodeURIComponent(m_tags);
+      url += "&tagged=" + encodeURIComponent(m_tagged);
       var request = new httpRequest("sources/mod_gallery.php", that.SubmitCallback, "");
       request.update(url, "GET");
     }
@@ -158,6 +169,7 @@ function Gallery(p_delim) {
       m_name = m_old_name;
       m_desc = m_old_desc;
       m_tags = m_old_tags;
+      m_tagged = m_old_tagged;
       m_parent_id = m_old_parent_id;
       that.CancelEdit();
       document.getElementById("galleryblockname").innerHTML = EscapeHTMLChars(m_name);
@@ -165,6 +177,7 @@ function Gallery(p_delim) {
       m_old_name = "";
       m_old_desc = "";
       m_old_tags = "";
+      m_old_tagged = false;
       m_old_parent_id = "";
 
       m_short_name = ShortName(m_name);
@@ -185,9 +198,13 @@ function Gallery(p_delim) {
       that.SubmitRollback();
       return;
     } else {
-      if (m_add_mode) {
+      if (m_add_mode)
+      {
+        results = p_text.split("\n");
+        id = results[1];
+        
         document.getElementById("galleryblockfeedback").innerHTML = FeedbackBox(
-            "Gallery \"" + m_name + "\" added.", true);
+            "Gallery \"<a href=\"index.php?action=gallery_view&gallery_id="+id+"\">" + m_name + "</a>\" added.", true);
         
         // Only update the header if they are displaying the count
         var hdr_gallerycount = document.getElementById("hdr_gallerycount");
@@ -197,7 +214,8 @@ function Gallery(p_delim) {
           gal_count++;
           hdr_gallerycount.innerHTML = gal_count;
         }
-      } else {
+      } else
+      {
         document.getElementById("nav_tree_" + m_gallery_id).innerHTML = m_name;
         if (m_old_tags != m_tags) {
           url = "action=image_thumbs";
@@ -312,4 +330,10 @@ function Gallery(p_delim) {
   {
     return m_taglist.TagHintList(p_taglist);
   };
+
+  this.ChangeTaggedStatus = function() {
+    var status = $("#galleryformtagged").is(':checked');
+    FormCheckSetup('gallery_add', status);
+    //alert(status);
+  }
 }

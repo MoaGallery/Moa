@@ -3,10 +3,12 @@
 NEXT TIME - 
 
 TODO -
+    Split Gallery class into a class and utility funcs.
+    GetGalleryThumbnail returns image if subgalleries are present. Should use their thumbnails instead.
+
     Move events code from page_gallery_add into the js file.
-    Minimal has no admin_maintain_form.
+    Minimal has no admin_maintain_form and out of date (forms and images_per_page missing from options).
     Home button at end of update.
-    After add gallery/image, give a link to it.
     
 Bugs -
     galleryfuncs stuff returns false if it fails, we need to check it.
@@ -23,7 +25,7 @@ Done -
 
 
 
-  Pre-release (1.2.2) -
+  Pre-release (1.2.4) -
   * Add error checking to new code.
   * Escape all variables used in queries (mysql_real_escape_string).
   * Check all queries include _utf8 when setting text fields.
@@ -38,7 +40,7 @@ Done -
   * Check in different browsers.
   * Update Documentation and release files.
   * Update perl script.
-   Check changelog.
+  * Check changelog.
 
     
     

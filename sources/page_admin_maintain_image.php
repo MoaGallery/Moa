@@ -159,7 +159,7 @@
   	    $bodycontent .= LoadTemplateRoot("page_admin_maintain_image.php");
 
   	    $bodycontent .= "<script type='text/javascript'>\n";
-        $bodycontent .= "  FormCheckSetup('admin_maintain_image');\n";
+        $bodycontent .= "  FormCheckSetup('admin_maintain_image', false);\n";
         $bodycontent .= "  \n";
         $bodycontent .= "  function check()\n";
         $bodycontent .= "  {\n";

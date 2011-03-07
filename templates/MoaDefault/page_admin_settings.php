@@ -92,12 +92,21 @@
             <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_plain_subgalleries">" alt="popup help" />
             <input type="checkbox" name="setting_DisplayPlainSubgalleries" id="setting_DisplayPlainSubgalleries" <moatag type="SettingsValue_DisplayPlainSubgalleries">/>
           </li>
+          
+          <li>
+            <label for="setting_ImagesPerPage" class="formLabelSettings">
+              Number of images to show per gallery page.
+            </label>
+            <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_images_per_page">" alt="popup help" />
+            <input type="text" name="setting_ImagesPerPage" id="setting_ImagesPerPage" value="<moatag type="SettingsValue_ImagesPerPage">"/>
+          </li>
         </ul>
       </fieldset>
       
       <ul class="settingsErrorList">
         <li id='setting_ThumbWidthcomment' class='invalidfieldcomment invalidfieldstyle'>The thumbnail width must be a number.</li>
         <li id='setting_ConfigDisplayMaxWidthcomment' class='invalidfieldcomment invalidfieldstyle'>Image preview width must be a number.</li>
+        <li id='setting_ImagesPerPagecomment' class='invalidfieldcomment invalidfieldstyle'>Images per page must be a number.</li>
       </ul>  
 
 

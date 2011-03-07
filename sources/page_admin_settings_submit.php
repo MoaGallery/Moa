@@ -247,6 +247,7 @@
       UpdateDBVar("EmptyDescPopupText", "EMPTY_DESC_POPUP_TEXT", "text");
       UpdateDBVar("StrDelimiter", "STR_DELIMITER", "text");
       UpdateDBVar("ConfigDisplayMaxWidth", "CONFIG_DISPLAY_MAX_WIDTH", "integer");
+      UpdateDBVar("ImagesPerPage", "IMAGES_PER_PAGE", "integer");
       UpdateDBVar("ThumbWidth", "THUMB_WIDTH", "integer");
       UpdateDBVar("TitleDescLength", "TITLE_DESC_LENGTH", "integer");
   

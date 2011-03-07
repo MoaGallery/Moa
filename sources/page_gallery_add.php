@@ -55,7 +55,7 @@
   $bodycontent .= "  //]]>\n";
   $bodycontent .= "  var gallery = new Gallery('".$CFG["STR_DELIMITER"]."');\n";
   $bodycontent .= "  gallery.PreLoad('', '', '', '".$parent_id."');\n";
-  $bodycontent .= "  FormCheckSetup('gallery_add');\n";
+  $bodycontent .= "  FormCheckSetup('gallery_add', false);\n";
   $bodycontent .= "</script>\n";
 
   $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
@@ -69,6 +69,7 @@
   $bodycontent .= "addEvent(document.getElementById(\"galleryformparent_id\"), \"keypress\", function (e) {return checkKey(e, \"galleryformsubmit\", null);});\n";
   $bodycontent .= "addEvent(document.getElementById(\"galleryformtags\"), \"keyup\", function (e) {gallery.Feedback(); gallery.TagHintList(this);});\n";
   $bodycontent .= "addEvent(document.getElementById(\"galleryformexpandlink\"), \"click\", function (e) {gallery.ExpandClick();});\n";
+  $bodycontent .= "addEvent(document.getElementById(\"galleryformtagged\"), \"click\", function (e) {gallery.ChangeTaggedStatus();});\n";
   $bodycontent .= "\n";
   $bodycontent .= "gallery.Feedback();\n";
   $bodycontent .= "</script>\n";

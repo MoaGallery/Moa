@@ -89,12 +89,20 @@
             </li>
 
             <li>
-              <label for="setting_ConfigDisplayMaxWidth" class="formLabelSettings">
+              <label for="setting_DisplayPlainSubgalleries" class="formLabelSettings">
                 Hide image thumbnails if a subgallery is present.
               </label>
               <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_plain_subgalleries">" alt="popup help" />
               <input type="checkbox" name="setting_DisplayPlainSubgalleries" value="on" <moatag type="SettingsValue_DisplayPlainSubgalleries">/>
             </li>
+            
+            <li>
+            <label for="setting_ImagesPerPage" class="formLabelSettings">
+              Number of images to show per gallery page.
+            </label>
+            <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_images_per_page">" alt="popup help" />
+            <input type="text" name="setting_ImagesPerPage" id="setting_ImagesPerPage" value="<moatag type="SettingsValue_ImagesPerPage">"/>
+          </li>
           </ul>
         </fieldset>
         

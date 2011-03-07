@@ -38,6 +38,12 @@
             <moatag type="GalleryParentComboList">
           </select>
         </li>
+        
+        <li>
+          <label for="galleryformtagged" class="formLabelNewLine">Tagged gallery:</label>
+          <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="gal_tagged">" alt="popup help" />
+          <input class='form_text gallery_form_tagged' type='checkbox' id='galleryformtagged' />
+        </li>
   
         <li class="formButtonsLeft">
           <input type='button' value='Submit' id='galleryformsubmit' onclick='gallery.SubmitEdit();'/>

@@ -1,9 +1,5 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
---
--- Database: `photo`
---
-
 -- --------------------------------------------------------
 
 --
@@ -16,8 +12,27 @@ CREATE TABLE IF NOT EXISTS `<prefix>gallery` (
   `Name` varchar(255) NOT NULL default '',
   `Description` blob,
   `IDParent` int(10) unsigned zerofill NOT NULL default '0000000000',
+  `UseTags` tinyint(1) NOT NULL,
   PRIMARY KEY  (`IDGallery`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `<prefix>galleryindex`
+--
+
+DROP TABLE IF EXISTS `<prefix>galleryindex`;
+CREATE TABLE IF NOT EXISTS `<prefix>galleryindex` (
+  `IDGalleryIndex` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `IDGallery` int(10) unsigned zerofill NOT NULL,
+  `IDImage` int(10) unsigned zerofill NOT NULL,
+  `Seq` int(10) unsigned zerofill NOT NULL,
+  PRIMARY KEY (`IDGalleryIndex`),
+  KEY `Seq` (`Seq`),
+  KEY `IDGallery` (`IDGallery`),
+  KEY `IDImage` (`IDImage`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 

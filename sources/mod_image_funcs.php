@@ -13,6 +13,7 @@
   include_once($CFG["MOA_PATH"]."sources/_error_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/_db_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
+  include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
   class Image
   {
@@ -71,25 +72,74 @@
         return false;
       }
 
+      // Get current tagged galleries this image is in
+      $old = GetImageGalleriesFromTags($this->id);
+      
+      // Sort out tags
       $query = "DELETE FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage='".mysql_real_escape_string($this->id)."'";
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
       if (false === $result) {
         return false;
       }
-
+      
+      // Update tags
       $Tag = new Tag();
       $result = $Tag->linkTagsToImage($this->id, $p_tags);
       if (false === $result) {
         return false;
       }
 
+      // Get new tagged galleries this image is in
+      $new = GetImageGalleriesFromTags($this->id);
+      
+      // Check for links to delete
+      foreach($old as $oldGallery)
+      {
+        if (!isset($new[$oldGallery]))
+        {
+          // Not in this gallery any more, delete it!
+          $query = "DELETE FROM `".$CFG["tab_prefix"]."galleryindex` 
+                    WHERE IDImage='".mysql_real_escape_string($this->id)."' 
+                    AND IDGallery='".mysql_real_escape_string($oldGallery)."'";
+          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+          if (false === $result) {
+            return false;
+          }
+        }
+      }
+      
+      // Check for links to add
+      foreach($new as $newGallery)
+      {
+        if (!isset($old[$newGallery]))
+        {
+          // Not in this gallery originally, add it!
+          AddImageToGalleryIndex($newGallery, $this->id);
+        }
+      }
+      
       return true;
     }
 
+    public function AddIndices($p_gallery_id, $p_tag_length)
+    {
+      // If this is an indexed gallery add the image
+      if (false == DoesGalleryUseTags($p_gallery_id))
+      {
+        AddImageToGalleryIndex($p_gallery_id, $this->id);
+      }
+
+      // Check all galleries for tag matches if there are any
+      if (0 != $p_tag_length)
+      {
+        AddImageToTaggedGalleries($this->id);
+      } 
+    }
+    
     /*
       Add a submitted image.
     */
-    public function addSubmitted($p_tagList)
+    public function addSubmitted($p_tagList, $p_gallery_id)
     {
       global $errorString;
       global $CFG;
@@ -104,6 +154,9 @@
 
       $this->addTagsToDatabase($p_tagList);
 
+      $this->AddIndices($p_gallery_id, strlen($p_tagList));
+      
+      // Move the file
       $imageIdString = sprintf("%010s",$this->id);
       $imageDestinationFilename = $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$imageIdString.".".$this->format;
 
@@ -124,7 +177,7 @@
     /*
       Add an image from the bulk upload folder.
     */
-    public function addBulkUpload($p_tagList)
+    public function addBulkUpload($p_tagList, $p_gallery_id)
     {
       global $errorString;
       global $CFG;
@@ -137,13 +190,15 @@
 
       $localFilename = $this->localFilename;
 
-      $this->id = $this->addImagetoDatabase();
+      $this->id = $this->addImagetoDatabase($p_gallery_id);
       if (false === $this->id)
       {
       	return false;
       }
 
       $this->addTagsToDatabase($p_tagList);
+      
+      $this->AddIndices($p_gallery_id, strlen($p_tagList));
 
       $imageIdString = sprintf("%010s",$this->id);
       $imageDestinationFilename = $CFG["MOA_PATH"].$CFG["IMAGE_PATH"].$imageIdString.".".$this->format;
@@ -175,6 +230,12 @@
         return false;
       }
 
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDImage = '".mysql_real_escape_string($this->id)."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+      
       $query = "DELETE FROM `".$CFG["tab_prefix"]."image` WHERE IDImage = '".mysql_real_escape_string($this->id)."'";
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
       if (false === $result) {
@@ -246,13 +307,13 @@
       $query .=        "'".$this->height."', ";
       $query .=        "_utf8'".$this->description."', ";
       $query .=        "_utf8'".$this->format."');";
-
       $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
       if (false === $result) {
         return false;
       }
-
+      
       $imageID = mysql_insert_id();
+      
       return $imageID;
     }
   }
@@ -273,7 +334,7 @@
     return true;
   }
 
-  function AddImageFromSubmit($p_desc, $p_tags, $p_local_filename, $p_orig_filename)
+  function AddImageFromSubmit($p_desc, $p_tags, $p_local_filename, $p_orig_filename, $p_gallery_id)
   {
     global $CFG;
 
@@ -282,10 +343,10 @@
     $Image->originalFilename = $p_orig_filename;
     $Image->localFilename = $p_local_filename;
 
-    return $Image->addSubmitted($p_tags);
+    return $Image->addSubmitted($p_tags, $p_gallery_id);
   }
 
-  function AddImageFromIncoming($p_desc, $p_tags, $p_filename)
+  function AddImageFromIncoming($p_desc, $p_tags, $p_filename, $p_gallery_id)
   {
     global $CFG;
 
@@ -294,10 +355,10 @@
     $Image->originalFilename = $p_filename;
     $Image->localFilename = $CFG['MOA_PATH'].$CFG['BULKUPLOAD_PATH'].$p_filename;
 
-    return $Image->addBulkUpload($p_tags);
+    return $Image->addBulkUpload($p_tags, $p_gallery_id);
   }
 
-  function AddImageFromForm($p_desc, $p_tags)
+  function AddImageFromForm($p_desc, $p_tags, $p_gallery_id)
   {
     GLOBAL $errorString;
     GLOBAL $CFG;
@@ -338,7 +399,7 @@
 
   	if (is_image($localFilename))
     {
-      $result = AddImageFromSubmit($p_desc, $p_tags, $localFilename, $origFilename);
+      $result = AddImageFromSubmit($p_desc, $p_tags, $localFilename, $origFilename, $p_gallery_id);
       $images[] = $origFilename;
     } else
     {
@@ -381,7 +442,7 @@
         }
 
         if ($imageCount > 0) {
-           $result = AddImageFromBulkTemp($p_desc, $p_tags, $images[0]);
+           $result = AddImageFromBulkTemp($p_desc, $p_tags, $images[0], $p_gallery_id);
         }
       } else
       {
@@ -394,7 +455,7 @@
     return json_encode($images);
   }
 
-  function AddImageFromBulkTemp($p_desc, $p_tags, $p_filename)
+  function AddImageFromBulkTemp($p_desc, $p_tags, $p_filename, $p_gallery_id)
   {
     GLOBAL $errorString;
     GLOBAL $CFG;
@@ -416,7 +477,7 @@
       return false;
     }
 
-    $result = $image->addBulkUpload($p_tags);
+    $result = $image->addBulkUpload($p_tags, $p_gallery_id);
 
     if (IsDirectoryEmpty($tmpPath))
     {

@@ -6,6 +6,17 @@ Key -
  + = New feature
  b = Bugfix
 
+1.2.4 - No tags - 7th March 2011
+ +  Added pagination controls on the gallery view page.
+ *  Made it so that tags are optional. Defaults to not using tags and images are attached directly to the gallery.
+ *  When a gallery is added, the confirmation now gives a link directly to it.
+ b  Fixed a bug where adding or editting a gallery/image could allow multiple identical tags to be added.
+ b  Aperture had no style settings for the upgrade page. Changed all templates to put the upgrade test button below the heading.
+ b  Moadefault had a few serif fonts it shouldn't have. Used throughout now.
+ b  Form check code had an issue with windows drives and backslashes.
+ b  Edit image showed success message on failure.
+ b  Upgrade code sometimes left quotes around string values (delimiter and template are the two seen).
+ 
 1.2.3 - Form validation - 5th February 2011
  *  Made all forms use validation, have pop-up help icons and use better HTML.
  b  Bulk upload ignored order of files.

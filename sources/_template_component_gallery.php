@@ -39,6 +39,7 @@ function TagParseGalleryImageThumbnails($p_tag_options)
 {
 	global $gallery_id;
 	global $CFG;
+	global $page;
 
 	$Gallery = new Gallery();
 	if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != $Gallery->getSubGalleryCount($gallery_id)))
@@ -49,7 +50,7 @@ function TagParseGalleryImageThumbnails($p_tag_options)
 	$links = LoadTemplate("component_image_thumbnail.php");
 	$thumbs = "";
 
-	$images = $Gallery->getImages($gallery_id);
+	$images = $Gallery->getImages($gallery_id, $page);
 
 	foreach ($images as $image)
 	{
@@ -122,6 +123,137 @@ function TagParseGalleryImageThumbnails($p_tag_options)
 		$thumbs = " ";
 	}
 	return $thumbs;
+}
+
+function TagParseGalleryPagination($p_tag_options)
+{
+	global $gallery_id;
+	global $CFG;
+	global $page;
+
+	$element = LoadTemplate("component_gallery_pagination.php");
+	$elementNoLink = LoadTemplate("component_gallery_pagination_nolink.php");
+	$pagination = "";
+  $Gallery = new Gallery();
+	
+	$imagesCount = $Gallery->getImageCount($gallery_id);
+	$pageCount = ceil($imagesCount / $CFG['IMAGES_PER_PAGE']);
+
+	if ((1 == $pageCount) || (0 == $imagesCount))
+	{
+	  return " ";
+	}
+	
+	// Add a 'first' link
+	$part = $element;
+	$active = 'link';
+	if (1 == $page)
+	{
+	  $part = $elementNoLink;
+	  $active = 'inactive';
+	}
+
+	$part = ParseVar($part, 'Type', 'end');
+	$part = ParseVar($part, 'Active', $active);
+	$part = ParseVar($part, 'Text', 'First');
+	$part = ParseVar($part, 'Link', '?action=gallery_view&amp;gallery_id='.$gallery_id.'&amp;page=1');
+	$pagination .= $part;
+	
+	// Add a 'previous' link
+	$part = $element;
+	$active = 'link';
+  if (1 == $page)
+	{
+	  $part = $elementNoLink;
+	  $active = 'inactive';
+	}
+
+	$part = ParseVar($part, 'Type', 'previous');
+	$part = ParseVar($part, 'Active', $active);
+	$part = ParseVar($part, 'Text', 'Previous');
+	$part = ParseVar($part, 'Link', '?action=gallery_view&amp;gallery_id='.$gallery_id.'&amp;page='.($page-1));
+	$pagination .= $part;
+		
+	// Add pages
+	
+	$startPage = 1;
+	$endPage = $pageCount;
+	
+	if (7 < $pageCount)
+	{
+  	$startPage = $page - 3;
+  	$endPage = $page + 3;
+  	if ($startPage <= 0)
+  	{
+  	  $startPage = 1;
+  	  $endPage = $startPage + 6;
+  	}
+  	
+    if ($endPage > $pageCount)
+  	{
+  	  $endPage = $pageCount;
+  	  $startPage = $endPage - 6; 
+  	}
+	}
+	
+	for ($pageNum = ($startPage-1); $pageNum <= ($endPage-1); $pageNum++)
+	{
+		$part = $element;
+		$active = 'link';
+  	if (($pageNum+1) == $page)
+  	{
+  	  $part = $elementNoLink;
+  	  $active = 'inactive';
+  	}
+
+		$type = 'page';
+		if (($pageNum+1) == $page)
+		{
+		  $type = 'current_page';
+		}
+		
+		$part = ParseVar($part, 'Type', $type);
+		$part = ParseVar($part, 'Active', $active);
+		$part = ParseVar($part, 'Text', $pageNum+1);
+		$part = ParseVar($part, 'Link', '?action=gallery_view&amp;gallery_id='.$gallery_id.'&amp;page='.($pageNum+1));
+		$pagination .= $part;
+	}
+
+	// Add a 'next' link
+	$part = $element;
+	$active = 'link';
+  if ($pageCount == $page)
+	{
+	  $part = $elementNoLink;
+	  $active = 'inactive';
+	}
+
+	$part = ParseVar($part, 'Type', 'next');
+	$part = ParseVar($part, 'Active', $active);
+	$part = ParseVar($part, 'Text', 'Next');
+	$part = ParseVar($part, 'Link', '?action=gallery_view&amp;gallery_id='.$gallery_id.'&amp;page='.($page+1));
+	$pagination .= $part;
+	
+	// Add a 'last' link
+	$part = $element;
+	$active = 'link';
+  if ($pageCount == $page)
+	{
+	  $part = $elementNoLink;
+	  $active = 'inactive';
+	}
+
+	$part = ParseVar($part, 'Type', 'end');
+	$part = ParseVar($part, 'Active', $active);
+	$part = ParseVar($part, 'Text', 'Last');
+	$part = ParseVar($part, 'Link', '?action=gallery_view&amp;gallery_id='.$gallery_id.'&amp;page='.$pageCount);
+	$pagination .= $part;
+	
+	if (0 == strlen($pagination))
+	{
+		$pagination = " ";
+	}
+	return $pagination;
 }
 
 function TagParseGallerySubgalleryThumbBlock($p_tag_options)

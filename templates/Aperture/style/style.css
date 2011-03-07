@@ -40,7 +40,7 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
                   font-size: 100%; font-weight: bold; color: #ff0000; line-height: 40px; vertical-align: middle; }
 .Success_box { display: table; border: 2px solid; padding: 10px; border-style: solid; border-color: #bfb;
                border-width: 1px; background-color: #325C5E; font-size: 0.7em; color: #bfb; line-height: 40px; }
-
+.Success_box a:link { text-decoration: underline; color: #DDD; }
 
 
 /* 4.  Header selectors */
@@ -124,6 +124,14 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .ftp_refresh_button { margin: 0 5px; }
 .ftp_tags { width:326px; position: relative; top: -1px; display: block; float: left; border: 2px inset #587F7E; }
 .ftp_count_message { color: white; }
+.install_list_header { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 120%; font-weight: bold; }
+.install_list_top { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 80%; width: 650px;
+                    display: block; clear: left; padding: 20px 0 0 0; }
+.install_list { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 80%; width: 650px;
+                display: block; clear: left; float: left; }
+.install_list_fail { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 80%; color: red; }
+.install_list_success { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 80%; color: green; }
+
 
 
 /* 7.  Gallery selectors */
@@ -156,6 +164,14 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .subgallery_thumb_wrapper { overflow: hidden; }
 .subthumblink { font-size: 1.0em; }
 #galleryblockfeedback { margin: 0 0 0 10px; clear: left; }
+.pagination_block { padding: 5px 0; margin: 0 auto; width: 420px; overflow: auto; }
+.pagination_block li { margin: 0; padding: 4px; display: block; float: left; }
+a.pagination:link, a.pagination:visited { color: #BBBBBB; }
+a.pagination:hover { text-decoration: underline; color: #BBBBBB; }
+.pagination { color: #BBBBBB; }
+.pagination_page { color: #BBBBBB; width: 22px; }
+.pagination_inactive { color: #BBBBBB; }
+.pagination_current_page { font-weight: bold; font-size: 1.1em; color: white;   width: 24px; }
 
 
 /* 8.  Image selectors */
@@ -239,7 +255,7 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .formLabel              { display: block; float: left; width: 120px; font-size: 14px; color: #E0E0E0; text-align: left; }
 .formLabelNoIcon        { display: block; float: left; width: 146px; font-size: 14px; color: #E0E0E0; text-align: left; }
 .formLabelNewLine       { display: block; text-align: left; margin: 10px 0 0 0; line-height: 16px; }
-.formLabelSettings      { display: block; float: left; width: 400px; font-size: 14px; color: #E0E0E0; text-align: left; }
+.formLabelSettings      { display: block; float: left; width: 350px; font-size: 14px; color: #E0E0E0; text-align: left; }
 .tagPopup               { float: left; margin: 0 5px; }
 .formButtons            { padding: 25px 0 5px 146px; display: block; }
 .formRefreshButton      { padding: 0 0 5px 146px; display: block; }
@@ -255,3 +271,4 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .invalidfieldstyle      { font-style: italic; color: orange; list-style: none; }
 .invalidfield           { background-color: #ff8080; }
 .staticFormValue        { color: #E0E0E0; };
+

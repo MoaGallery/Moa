@@ -9,34 +9,41 @@ This can (and is likely to) change.
         Tests (unit, ajax and javascript).
 
     1.2.4 -
-        
         Make tags optional (hard-linked to galleries).
+        Pagination.
         
     1.2.5 -
-        
         Search (with option to make new gallery from results).
-
+        Site title (for titlebar).
+        Show list of tags on image/gallery pages.
+        Show which galleries an image is in on image page.
+        Path checks in settings should AJAX check to see if they are real.
+        
     1.2.6 -
+        Split options page up.
+        Theme chooser.
+        Add xml file to each template to give standard info (Creator, version, etc).
+        On template change need to be able to regenerate thumbnails.
+
+    1.2.7 -
         Provide friendly URL rewriting. (Via HTAccess)
         Image Filenames should be what they are originally uploaded as for SEO.
 
-    1.2.7 -
+    1.2.8 -
         Add username so login is not shown.
         Cache scaled image.
-        On template change need to be able to regenerate thumbnails.
-        Add xml file to each template to give standard info (Creator, version, etc).
         
-    1.2.8 -
+    1.2.9 -
         Filmstrip.
 
-    1.2.9 - Bug check.
+    1.2.10 - Bug check.
 
     1.3.0 -
         Image/gallery manager on admin pages.
         Re-Arrange images on a gallery via the admin manager.
         User-defined thumbnails on galleries.
     
-	      Update javascript to use a framework.
+	      Update javascript to use JQuery.
         Simple UI animation (feedback vanishes, deleted items scroll up, etc).
         Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
         Move user/tag admin to image/gallery manager system.

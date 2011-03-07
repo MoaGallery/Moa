@@ -130,12 +130,6 @@
     $newtags = GetParam("tags");
     if (false !== $newtags) {
       $newtags = trim($newtags);
-
-      if (strlen($newtags) == 0)
-      {
-        RaiseFatalError("Whitespace may not be used as a tag.");
-        return false;
-      }
     }
     else
     {
@@ -218,18 +212,19 @@
     {
       $newdesc = "";
     }
+    
+    // Get the gallery ID
+    $gallery_id = GetParam("imagegalleryid");
+    if (false === $gallery_id)
+    {
+      $gallery_id = "0000000000";
+    }
 
     // Get the tags
     $newtags = GetParam("imageformtags");
 
     if (false !== $newtags) {
       $newtags = trim($newtags);
-
-      if (strlen($newtags) == 0)
-      {
-        RaiseFatalError("Whitespace may not be used as a tag.");
-        return false;
-      }
     }
     else
     {
@@ -238,7 +233,7 @@
     }
 
     // Try to add it
-    $result = AddImageFromForm($newdesc, $newtags);
+    $result = AddImageFromForm($newdesc, $newtags, $gallery_id);
     if (false === $result)
     {
       RaiseFatalError("Could not add file.", false);
@@ -267,17 +262,18 @@
       return false;
     }
 
+    // Get the gallery ID
+    $gallery_id = GetParam("imagegalleryid");
+    if (false === $gallery_id)
+    {
+      $gallery_id = "0000000000";
+    }
+    
     // Get the tags
     $newtags = GetParam("imageformtags");
 
     if (false !== $newtags) {
       $newtags = trim($newtags);
-
-      if (strlen($newtags) == 0)
-      {
-        RaiseFatalError("Whitespace may not be used as a tag.");
-        return false;
-      }
     }
     else
     {
@@ -286,7 +282,7 @@
     }
 
     // Try to add it
-    $result = AddImageFromBulkTemp($newdesc, $newtags, $filename);
+    $result = AddImageFromBulkTemp($newdesc, $newtags, $filename, $gallery_id);
     if (false === $result)
     {
       RaiseFatalError("Could not add file.", false);

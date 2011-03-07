@@ -21,7 +21,7 @@
       <label for="galleryformtags" class="formLabel">Tags:</label>
       <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="gal_tags">" alt="popup help" />
       <input class='form_text gallery_form_tags' type='text' id='galleryformtags' onmouseover='gallery.EnableTagHintList(this);' onmouseout='gallery.DisableTagHintList(this);'/>
-      <span id='formtaglistfeedback'></span>
+      <span class="tagPopup" id='formtaglistfeedback'></span>
     </li>
   
     <li>
@@ -33,6 +33,12 @@
         </option>
         <moatag type="GalleryParentComboList">
       </select>
+    </li>
+  
+    <li>
+      <label for="galleryformtagged" class="formLabel">Tagged gallery:</label>
+      <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="gal_tagged">" alt="popup help" />
+      <input class='form_text gallery_form_tagged' type='checkbox' id='galleryformtagged' />
     </li>
   
     <li class="formButtons">

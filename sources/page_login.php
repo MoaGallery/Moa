@@ -22,7 +22,7 @@
   $bodycontent .= "  addEvent(document.getElementById('loginduration'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
   $bodycontent .= "  document.getElementById(\"loginname\").focus();\n";
   $bodycontent .= "  var login = new Login();\n";
-  $bodycontent .= "  FormCheckSetup('login');\n";
+  $bodycontent .= "  FormCheckSetup('login', false);\n";
   $bodycontent .= "</script>\n";
 
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";

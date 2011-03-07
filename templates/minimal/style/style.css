@@ -1,3 +1,7 @@
+.invalid {
+	      background-color: #ffa0a0;
+}
+
 p {
 	      margin: 5px;
 }
@@ -65,3 +69,19 @@ p {
 #progressbar-text {
 	      width: 500px;
 }
+
+.formLabel { display: block; }
+
+.formLabelText { float: left; width: 200px; display: block; }
+
+.formLabelTextNewLine { display: block; }
+
+.clearleft { clear: both; margin: 20px 0 20px 200px;}
+
+.invalidfieldcomment { display: none; }
+
+.invalidfieldstyle { font-style: italic; color: red; }
+
+.invalidfield { background-color: #ff8080; }
+
+.dispBlock { display: block }

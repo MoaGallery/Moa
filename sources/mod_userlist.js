@@ -217,7 +217,7 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
         }
       }
     }
-    FormCheckSetup('user_edit');
+    FormCheckSetup('user_edit', false);
     document.getElementById('username').focus();
     m_add_mode = false;
   };

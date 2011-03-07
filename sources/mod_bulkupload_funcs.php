@@ -47,7 +47,7 @@
 
     $tagString .= $tags;
 
-    if (AddImageFromIncoming( $desc, $tagString, $fileName))
+    if (AddImageFromIncoming( $desc, $tagString, $fileName, $parentID))
     {
       return $fileName;
     }

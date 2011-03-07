@@ -33,7 +33,7 @@
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
     
     $bodycontent .= "<script type='text/javascript'>\n";
-    $bodycontent .= "  FormCheckSetup('settings');\n";
+    $bodycontent .= "  FormCheckSetup('settings', false);\n";
     $bodycontent .= "  $('#settings_form').submit(function(){return submit_check();});\n";
     $bodycontent .= "</script>\n";
   }

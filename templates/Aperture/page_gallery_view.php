@@ -17,6 +17,9 @@
 
   <div class="right_column right_column_shadow">
     <div class="gallery_container">
+      <ul class="pagination_block">
+        <moatag type="GalleryPagination">
+      </ul>
       <moatag type="GallerySubGalleryThumbBlock">
       <ul class="image_thumbs_list">
         <moatag type="GalleryImageThumbnails">

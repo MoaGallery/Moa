@@ -155,7 +155,7 @@
     $bodycontent .= "  bulkUpload = new BulkUpload(delimiter,fileList);\n";
     $bodycontent .= "  bulkUpload.RegisterEvents();\n";
     $bodycontent .= " //]]>\n";
-    $bodycontent .= "  FormCheckSetup('admin_ftp');\n";
+    $bodycontent .= "  FormCheckSetup('admin_ftp', false);\n";
     $bodycontent .= "</script>\n";
 
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";

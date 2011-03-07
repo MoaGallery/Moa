@@ -1,38 +1,37 @@
 <div class="outline">
   <div class="outlinetitle">component_admin_user_form.php</div>
-<form name='edit_form' method='post' action='admin_users.php?action=view'  enctype='multipart/form-data'>
-  <dl>
-	  <dt>
-	    Name
-	  </dt>
-	  <dd>
-	    <input name='name' id='username' type='text' onKeyPress='' onKeyUp='' value=''></input>
-	    <input name='id' id='userid' type='hidden'></input>
-	  </dd>
+<fieldset>
+  <label for="userid" class="formLabel">
+    <span class="formLabelText">Name:</span>
+    <img src="templates/minimal/media/help.png" title="<moatag type="FormPopupHelp" field="admin_user_id">" />
+    <input name='name' id='username' type='text' onKeyPress='' onKeyUp='' value=''></input>
+    <input name='id' id='userid' type='hidden'></input>
+  </label>
 
-	  <dt>
-	    Admin
-	  </dt>
-	  <dd>
-	    <input name='admin' id='useradmin' type='checkbox' onKeyPress=''></input>
-	  </dd>
+  <label for="useradmin" class="formLabel">
+    <span class="formLabelText">Admin:</span>
+    <img src="templates/minimal/media/help.png" title="<moatag type="FormPopupHelp" field="admin_user_admin">" />
+    <input name='admin' id='useradmin' type='checkbox' onKeyPress=''></input>
+  </label>
 
-	  <dt>
-	    Password
-	  </dt>
-	  <dd>
-	    <input name='pass1' id='userpass1' type='password' onKeyPress='' value=''></input>
-	  </dd>
+  <label for="userpass1" class="formLabel">
+    <span class="formLabelText">Password:</span>
+    <img src="templates/minimal/media/help.png" title="<moatag type="FormPopupHelp" field="admin_user_password1">" />
+    <input name='pass1' id='userpass1' type='password' onKeyPress='' value=''></input>
+  </label>
 
-	  <dt>
-	    Confirm Password
-	  </dt>
-	  <dd>
-	    <input name='pass2' id='userpass2' type='password' onKeyPress='' value=''></input>
-	  </dd>
-  </dl>
-  <input name='id' type='hidden' value=''></input>
-  <input name='mode' type='hidden' value=''></input>
-  <input type='button' id='formsubmit' value='Submit' onclick='user_list.FormSubmit();'>
-  <input type='button' id='formcancel' value='Cancel' onclick='user_list.FormCancel();'>
-</form>
+	<label for="userpass2" class="formLabel">
+	  <span class="formLabelText">Confirm password:</span>  
+    <img src="templates/minimal/media/help.png" title="<moatag type="FormPopupHelp" field="admin_user_password2">" />
+    <input name='pass2' id='userpass2' type='password' onKeyPress='' value=''></input>
+  </label>
+
+  <div class="clearleft">
+    <input type='button' id='formsubmit' value='Submit' onclick='user_list.FormSubmit();'>
+    <input type='button' id='formcancel' value='Cancel' onclick='user_list.FormCancel();'>
+  </div>
+  
+  <div id='usernamecomment' class='invalidfieldcomment invalidfieldstyle'>No name supplied.</div>
+  <div id='userpass1comment' class='invalidfieldcomment invalidfieldstyle'>Password is blank.</div>
+  <div id='userpass2comment' class='invalidfieldcomment invalidfieldstyle'>Confirmation password does not match.</div>
+</fieldset>

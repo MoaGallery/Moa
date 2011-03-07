@@ -119,6 +119,20 @@
 
     return $output;
   }
+  
+  function TagParseSettingsValue_ImagesPerPage($p_tag_options)
+  {
+    global $CFG;
+
+    $output = " ";
+
+    if (0 < strlen($CFG["IMAGES_PER_PAGE"]))
+    {
+      $output = $CFG["IMAGES_PER_PAGE"];
+    }
+
+    return $output;
+  }
 
   function TagParseSettingsValue_MoaPath($p_tag_options)
   {

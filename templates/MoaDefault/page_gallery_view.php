@@ -14,6 +14,9 @@
           <moatag type="GalleryDescription">
         </div>
       </div>
+      <ul class="pagination_block">
+        <moatag type="GalleryPagination">
+      </ul>
       <div>
         <moatag type="GallerySubgalleryThumbnails" hide="image">
         <div id="galleryblockimagethumbs">

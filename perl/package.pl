@@ -3,12 +3,12 @@
 use File::Copy;
 use File::Path;
 
-my $ver = '1.2.2';
+my $ver = '1.2.4';
 my $path = 'Moa-'.$ver;
 
 sub MakeRepo
 {
-  system 'svn export svn://talbutt.co.uk/websites/gallery --force '.$path;
+  system 'svn export svn://www.moagallery.net/websites/gallery --force '.$path;
 
   rmtree $path.'/perl';
   rmtree $path.'/media/source';

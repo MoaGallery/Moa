@@ -9,7 +9,7 @@
   There are currently <moatag type="FTPCount"> image(s) to be added.<br/>
   
   <form id="ftpform" method="post" action="index.php?action=admin_ftp&pageaction=add" enctype="multipart/form-data">
-    <dl>
+    <fieldset>
       <dt>
         <div id='ftpformexpandblock'>
           <div>
@@ -47,7 +47,7 @@
       <dd>
         <input type="submit" value="Add images" id="ftpformsubmit"/>        
       </dd>
-    </dl>
+    </fieldset>
   </form>
   <form id="ftprefresh" method="post" action="index.php?action=admin_ftp" enctype="multipart/form-data">     
      <input type="submit" value="Refresh" id="ftprefreshsubmit"/>         

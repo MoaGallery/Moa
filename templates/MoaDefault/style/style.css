@@ -1,3 +1,7 @@
+body {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
 a {
         text-decoration: none;
         border-style: none;
@@ -21,7 +25,6 @@ a img {
 }
 
 .image_desc {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 70%;
 }
 
@@ -42,7 +45,6 @@ a img {
 }
 
 .form_text {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
 }
 
@@ -52,7 +54,6 @@ a img {
 
 .formList li {
         margin: 5px 0;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         list-style: none;
         clear: left;
@@ -65,7 +66,6 @@ a img {
 
 .secondFormList li {
         margin: 0;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         list-style: none;
         clear: left;
@@ -78,7 +78,6 @@ a img {
 
 .formListSettings li {
         margin: 2px 0 15px 0;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         list-style: none;
         clear: left;
@@ -144,13 +143,19 @@ a img {
 .invalidfield { background-color: #ff8080; }
 
 .install_list_header {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 120%;
         font-weight: bold;
 }
 
+.install_list_top {
+        font-size: 80%;
+        width: 650px;
+        display: block;
+        clear: left;
+        padding: 20px 0 0 0;
+}
+
 .install_list {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         width: 650px;
         display: block;
@@ -159,19 +164,16 @@ a img {
 }
 
 .install_list_fail {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         color: red;
 }
 
 .install_list_success {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         color: green;
 }
 
 a.admin_link {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 11px;
         color: gray;
         cursor: pointer;
@@ -201,7 +203,6 @@ a.admin_link:hover {
 }
 
 .nav_link, .nav_link:visited, .nav_link:active {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-weight: normal;
         font-size: 11px;
         color: black;
@@ -214,14 +215,12 @@ a.admin_link:hover {
 }
 
 .box_header {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 0.7em;
         vertical-align: middle;
         text-align:center
 }
 
 .footer_text {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 0.6em;
         vertical-align: middle;
         color: black;
@@ -239,23 +238,19 @@ a.admin_link:hover {
 }
 
 .gallery_name {
-        font-family: sans-serif;
         font-size: 30px;
         font-weight: bold;
 }
 
 .gallery_desc {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 14px;
 }
 
 .main_desc {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 14px;
 }
 
 .normal_text {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
 }
 
@@ -318,7 +313,6 @@ a.admin_link:hover {
         width: 300px;
         float: left;
         clear: left;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         height: 22px;
 }
 
@@ -356,7 +350,6 @@ a.admin_link:hover {
         width: 200px;
         float: left;
         clear: left;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         overflow: hidden;
 }
@@ -365,7 +358,6 @@ a.admin_link:hover {
         display: block;
         width: 80px;
         float: left;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 80%;
         text-align: left;
 }
@@ -388,7 +380,6 @@ a.admin_link:hover {
         font-size: 100%;
         padding: 0;
         border: none;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .footer_logo {
@@ -401,7 +392,6 @@ a.admin_link:hover {
         line-height: 40px;
         font-size: 100%;
         font-weight: bold;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .Feedback_box img {
@@ -448,6 +438,11 @@ a.admin_link:hover {
         color: #41b45c;
 }
 
+.Success_box a:link {
+        text-decoration: underline;
+        color: gray;
+}
+
 .tag_hint_outer {
         float: left;
         padding: 1px;
@@ -468,7 +463,6 @@ a.admin_link:hover {
         border-style: solid;
         border-width: 1px;
         font-size: 100%;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         padding: 2px;
 }
 
@@ -478,7 +472,6 @@ a.admin_link:hover {
         border-style: solid;
         border-width: 1px;
         font-size: 100%;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         padding: 2px;
 }
 
@@ -490,7 +483,6 @@ a.admin_link:hover {
         -moz-border-radius-topright: 8px;
         -webkit-border-top-left-radius: 8px;
         -webkit-border-top-right-radius: 8px;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 0.7em;
         font-weight: bold;
         text-align:center;
@@ -554,7 +546,6 @@ a.admin_link:hover {
 }
 
 .headerinfoblock div p {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 12px;
         margin: 0;
 }
@@ -571,7 +562,6 @@ a.admin_link:hover {
 
 .headerbutton a, .headerbutton a:link, .headerbutton a:hover, .headerbutton a:visited {
 	color: #eeeeee;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-style: italic;
         font-size: 13px;
 }
@@ -612,7 +602,6 @@ a.admin_link:hover {
 }
 
 .logoutstatus {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
         font-size: 110%;
         text-align:center;
         margin: 20px 0;
@@ -669,12 +658,10 @@ a.admin_link:hover {
 
 .settings_label_text {
         font-size: 14px;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .settings_section_break {
         font-size: 20px;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .admin_maintain_image_container {
@@ -833,7 +820,6 @@ a.admin_link:hover {
 	      height: 38px;
 	      font-size: 0.6em;
 	      line-height: 16px;
-	      font-family: Verdana,Arial,Helvetica,sans-serif;
 	      font-style: italic;
 }
 
@@ -1052,11 +1038,55 @@ a.admin_link:hover {
 #progressbar-text {
         width: 500px;
         padding: 5px;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .ftp_form_tags
 {
         width: 405px;
         float: left;
+}
+
+.pagination_block {
+        padding: 10px 0 5px 0;
+        margin: 0 auto;
+        width: 420px;
+        overflow: auto;        
+}
+
+.pagination_block li {
+        margin: 0;
+        padding: 4px;
+        display: block;
+        float: left;
+}
+
+a.pagination:link, a.pagination:visited {
+        color: black;
+}
+
+a.pagination:hover {
+        text-decoration: underline;
+        color: black;
+}
+
+.pagination {
+        color: black;
+        font-size: 14px;
+}
+
+.pagination_page {
+        color: black;
+        width: 22px;
+}
+
+.pagination_inactive {
+        color: grey;
+        line-height: 24px;
+}
+
+.pagination_current_page {
+        font-weight: bold;
+        font-size: 1.1em;
+        color: grey;
+        width: 24px;
 }

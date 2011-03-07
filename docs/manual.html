@@ -56,28 +56,31 @@
 	  <h3>How To Use Moa - <a name="Howto" title="Howto"></a></h3>
 	  <p>&nbsp;</p>
 	  <p>
-	    The key (and only, really) thing for getting to grips with Moa is to understand that it is tag (keyword) based.  Every image should have tags attached to identify what it is an image of.  Every gallery needs tags to tell it what it should contain.  How complex you make your tag system is up to you.  Images are not directly associated with galleries and can appear in multiple ones.  Images without any tags will not be displayed in any gallery.
-	  </p>
-	  <p>
-	    For example a gallery with tags of 'holiday' and 'Hawaii' will contain any image that has at least those two tags as well, even if they have others as well.  This lets you tag images in lots of ways to appear in more than one gallery.  An image in that example gallery could have tags of 'holiday', 'Hawaii', '2005', 'beach', 'dad' and 'family'.  The same image can appear in more than one gallery.
-	  </p>
-	  <p>
-	    Holding the mouse over the edit tag box will show you all available and used tags. By default, comma (",") is used to separate the tags, this can be changed in config.php by changing the $STR_DELIMITER variable. A suggested alternative is semi-colon (";") as it is unlikely to be used in normal phrases.
-	  </p>
-	  <p>
-	    Galleries can have sub-galleries inside them as well.  These do not have to inherit the tags of it's parent although they will be filled-in automatically when you create one. By default any gallery with sub-galleries will not show any images inside, just the list of sub-galleries. This can be changed by editing the config.php file and changing $DISPLAY_PLAIN_SUBGALLERIES to true.
-	  </p>
-	  <p>
-	    Bulk uploading images can be done by using an archive program to create a .zip file. This can be added to a gallery just like an image and will add any images it finds inside using the description, tags and parent gallery you have set. Another way to bulk upload is to use an FTP client to upload images into the <moa>/incoming/ directory and choosing 'FTP images' on the admin screen. 
-	  </p>
-	  <p>
+	    The simplest way to get started is to add one or more galleries then add images from inside them. You can add keywords to either the galleries or images if you want but they are not essential in normal mode. The main front page can't show images. If you try to add one you will need to choose a gallery for it to appear in on the "add image" screen.
+          </p>
+
+          <p>
+	    There is another way to arrange things. In the gallery add or edit form there is a checkbox named 'Tagged gallery'. If you check this box then that gallery will only show images that match tags with it. In this case at least some images should have tags attached to identify what it is an image of. This lets you show one image in multiple galleries. For example a tagged gallery with tags of 'holiday' and 'Hawaii' will contain any image that has at least those two tags as well, even if they have others as well.  An image in that example gallery could have tags of 'holiday', 'Hawaii', '2005', 'beach', 'dad' and 'family'.
+          </p>
+
+          <p>
+	    Holding the mouse over the edit tag box will show you all available and used tags. By default, comma (",") is used to separate the tags, this can be changed in the admin settings screen. A suggested alternative is semi-colon (";") as it is unlikely to be used in normal phrases.
+          </p>
+
+          <p>
+	    Galleries can have sub-galleries inside them as well. By default any gallery with sub-galleries will not show any images inside, just the list of sub-galleries. This can be changed in the admin setting "Hide image thumbnails if a sub-gallery is present" which will allow both sub-galleries and images to be shown.
+          </p>
+
+          <p>
+	    Bulk uploading images can be done by using an archive program to create a .zip file. This can be added to a gallery just like an image and will add any images it finds inside using the description, tags and parent gallery you have set. Another way to bulk upload is to use an FTP client to upload images into the <moa>/incoming/ directory and choosing 'FTP images' on the admin screen.
+          </p>
+
+          <p>
 	    To add, edit or delete galleries and images use the links just below the header. You need to be logged in to do this. Galleries and images can be added from the front page or inside another gallery. Edit and delete can be done on any gallery or image. Deleting a gallery with sub-galleries will move those sub-galleries to where the parent was.
-	  </p>
-	  <p>
+          </p>
+
+          <p>
 	    The admin button will let you do several things once you log in. You can create extra users or change your name/password. Extra users will all have access to the same galleries as you. The 'admin' tickbox against a user is whether to let them add/edit other users. You can add, edit and delete tags on the tag admin page. There is a page for changing moa settings. The last two pages are for finding any problems or lost images (not tagged).
-	  </p>
-	  <p>
-	    This manual is a work in progress and we will be working on a more detailed version during the 1.2.x releases. Please check back later.
 	  </p>
   </body>
 </html>

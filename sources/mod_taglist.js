@@ -226,8 +226,9 @@ function TagList(p_delim, p_tag_row_template) {
         break;
       }
     }
-
+    //alert(doGetCaretPosition(document.getElementById("galleryformtags")));
     document.getElementById('formtaglistfeedback').innerHTML = output;
+    //alert(doGetCaretPosition(document.getElementById("galleryformtags")));
   };
 
   // Take a string of tags and add any new ones to the master list

@@ -20,6 +20,7 @@
   	var $m_parent_id;
   	var $m_name;
   	var $m_description;
+  	var $m_usetags;
   }
   
   
@@ -82,12 +83,18 @@
     }
     
     // Changes the value of all fields for gallery identified by $p_id.
-    public function edit($p_id, $p_name, $p_desc, $p_pid, $p_tags)
+    public function edit($p_id, $p_name, $p_desc, $p_pid, $p_tags, $p_tagged)
     {
     	global $errorString;
     	global $CFG;
     
-    	$query = "UPDATE `".$CFG["tab_prefix"]."gallery` SET Name = _utf8'".mysql_real_escape_string($p_name)."', Description = _utf8'".mysql_real_escape_string($p_desc)."', IDParent = '".mysql_real_escape_string($p_pid)."' WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
+    	$tagged_val = 1;
+    	if (0 == strcmp($p_tagged, "true"))
+    	{
+    	  $tagged_val = 0;
+    	}
+    	
+    	$query = "UPDATE `".$CFG["tab_prefix"]."gallery` SET Name = _utf8'".mysql_real_escape_string($p_name)."', Description = _utf8'".mysql_real_escape_string($p_desc)."', IDParent = '".mysql_real_escape_string($p_pid)."', UseTags = _utf8'".$tagged_val."' WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result) {
     		return false;
@@ -101,17 +108,34 @@
     
     	$Tag = new Tag();
     	$Tag->linkTagsToGallery($p_id, $p_tags);
+
+      // Add indices to images in this gallery if needed
+      if (0 == strcmp($p_tagged, "true"))
+      {
+        $query = "DELETE FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
+        $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+        if (false === $result) {
+          return false;
+        }
+        AddTaggedImagesToGallery($p_id);
+      }
     	
     	return true;
     }
     
     // Adds a new gallery based on passed in fields values.
-    public function add($p_name, $p_desc, $p_parentid, $p_tags)
+    public function add($p_name, $p_desc, $p_parentid, $p_tags, $p_tagged)
     {
     	global $errorString;
     	global $CFG;
     
-    	$query = "INSERT INTO `".$CFG["tab_prefix"]."gallery` (Name, Description, IDParent) VALUES (_utf8'".mysql_real_escape_string($p_name)."', _utf8'".mysql_real_escape_string($p_desc)."', '".mysql_real_escape_string($p_parentid)."');";
+      $tagged_val = 1;
+    	if (0 == strcmp($p_tagged, "true"))
+    	{
+    	  $tagged_val = 0;
+    	}
+    	
+    	$query = "INSERT INTO `".$CFG["tab_prefix"]."gallery` (Name, Description, IDParent, UseTags) VALUES (_utf8'".mysql_real_escape_string($p_name)."', _utf8'".mysql_real_escape_string($p_desc)."', '".mysql_real_escape_string($p_parentid)."', _utf8'".$tagged_val."' );";
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result)
     	{
@@ -120,10 +144,17 @@
     	$newid = mysql_insert_id();
     	$id = sprintf("%010s", $newid);
     
+    	// Add gallery-tag links
     	$Tag = new Tag();
     	$Tag->linkTagsToGallery($newid, $p_tags);
-
-    	return true;
+    	
+    	// Add indices to images in this gallery
+      if (0 == strcmp($p_tagged, "true"))
+      {
+        AddTaggedImagesToGallery($newid);
+      }
+    	
+    	return $newid;
     }
     
     // Returns the value of field named by $field for gallery specified by $p_id.
@@ -198,13 +229,23 @@
     }
     
     // Returns a list of images where tag match those of the gallery specified by $p_id
-    public function getImages($p_id)
+    public function getImages($p_id, $p_page = 0)
     {
     	global $errorString;
     	global $CFG;
+    	$useTags = false;
+    	$images = array();
     
-    	$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage, `".$CFG["tab_prefix"]."image`.Description"
-    	, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
+      $limits = "";    	
+    	if (0 != $p_page)
+    	{
+    	  $number = $CFG['IMAGES_PER_PAGE'];
+    	  $start = ($p_page - 1) * $number;
+    	  
+    	  $limits = ' LIMIT '.$start.', '.$number;
+    	}
+    	
+  	  $query = "SELECT `IDImage` FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDGallery = '".mysql_real_escape_string($p_id)."' ORDER BY Seq".$limits;
     
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result)
@@ -221,7 +262,7 @@
     
     		$images[] = $image;
     	}
-    
+      	
     	return $images;
     }
     
@@ -230,8 +271,10 @@
     {
     	global $CFG;
     
-    	$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
-    	, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
+    	//$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
+    	//, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
+    	$query = "SELECT IDImage FROM `".$CFG["tab_prefix"]."galleryindex` 
+    	          WHERE IDGallery = '".mysql_real_escape_string($p_id)."' ORDER BY Seq LIMIT 1";
     
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result)
@@ -267,8 +310,8 @@
     {
     	global $CFG;
     
-    	$query = $this->buildContentQuery( "1"
-    	, "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_id)."'");
+    	$query = "SELECT 1 FROM `".$CFG["tab_prefix"]."galleryindex` 
+    	          WHERE IDGallery = '".mysql_real_escape_string($p_id)."'";
     
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result)
@@ -323,6 +366,12 @@
     	}
     
     	$query = "DELETE FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".$query_safe_id."'";
+    	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    	if (false === $result) {
+    		return false;
+    	}
+    	
+      $query = "DELETE FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDGallery = '".$query_safe_id."'";
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result) {
     		return false;
@@ -441,5 +490,134 @@
 		  
 		  return $optionHtml;
 		}
+  }
+  
+  function DoesGalleryUseTags($p_gallery_id)
+  {
+    global $CFG;
+
+    $query = "SELECT UseTags FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery = '".TypeSafeMysqlRealEscapeString($p_gallery_id)."'";
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    if (false === $result) {
+      return false;
+    }
+
+    $row = mysql_fetch_array($result);
+
+    if (0 == $row['UseTags'])
+    {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  function AddImageToGalleryIndex($p_gallery_id, $p_image_id)
+  {
+    global $CFG;
+
+    // Find highest sequence number for the gallery 
+    $query = "SELECT Seq FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDGallery = '".TypeSafeMysqlRealEscapeString($p_gallery_id)."' ORDER BY Seq DESC LIMIT 1";
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    if (false === $result) {
+      return false;
+    }
+
+    $row = mysql_fetch_array($result);
+    $high = $row['Seq'];
+    $high++;
+    
+    // Add new image
+    $query = "INSERT INTO `".$CFG["tab_prefix"]."galleryindex` (IDGallery, IDImage, Seq) VALUES ('".TypeSafeMysqlRealEscapeString($p_gallery_id)."', '".TypeSafeMysqlRealEscapeString($p_image_id)."', ".$high.")";
+
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    if (false === $result) {
+      return false;
+    }
+  }
+  
+  function AddOrderedImageToGalleryIndex($p_gallery_id, $p_image_id, $p_seq)
+  {
+    global $CFG;
+
+    // Add new image
+    $query = "INSERT INTO `".$CFG["tab_prefix"]."galleryindex` (IDGallery, IDImage, Seq) VALUES ('".TypeSafeMysqlRealEscapeString($p_gallery_id)."', '".TypeSafeMysqlRealEscapeString($p_image_id)."', ".$p_seq.")";
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    if (false === $result) {
+      return false;
+    }
+  }
+  
+  function AddImageToTaggedGalleries($p_image_id)
+  {
+    global $CFG;
+    global $ErrorString; 
+    
+    $gal = new Gallery;
+    $query = $gal->buildContentQuery( "`".$CFG["tab_prefix"]."gallery`.IDGallery",
+               "`".$CFG["tab_prefix"]."image`.IDImage = '".mysql_real_escape_string($p_image_id)."') AND (`".$CFG["tab_prefix"]."gallery`.UseTags = '0'");
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+  	if (false === $result)
+  	{
+  		return false;
+  	}
+
+  	while ($row = mysql_fetch_array($result))
+  	{
+  	  AddImageToGalleryIndex($row['IDGallery'], $p_image_id);
+  	}
+  }
+  
+  function AddTaggedImagesToGallery($p_gallery_id)
+  {
+    global $CFG;
+    global $ErrorString; 
+    
+    $gal = new Gallery;
+    $query = $gal->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage",
+                                        "`".$CFG["tab_prefix"]."gallery`.IDGallery = '".mysql_real_escape_string($p_gallery_id)."'");
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+  	if (false === $result)
+  	{
+  		return false;
+  	}
+
+  	$seq = 0;
+  	
+  	$query = "START TRANSACTION;";
+    mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+  	
+  	while ($row = mysql_fetch_array($result))
+  	{
+  	  AddOrderedImageToGalleryIndex($p_gallery_id, $row['IDImage'], $seq);
+  	  $seq++;
+  	}
+  	
+  	$query = "COMMIT;";
+    mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+  }
+  
+  function GetImageGalleriesFromTags($p_image_id)
+  {
+    global $CFG;
+    global $ErrorString; 
+    
+    $gal = new Gallery;
+    $query = $gal->buildContentQuery( "`".$CFG["tab_prefix"]."gallery`.IDGallery",
+               "`".$CFG["tab_prefix"]."image`.IDImage = '".mysql_real_escape_string($p_image_id)."') AND (`".$CFG["tab_prefix"]."gallery`.UseTags = '0'");
+    $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+  	if (false === $result)
+  	{
+  		return false;
+  	}
+
+  	$galleries = Array();
+  	
+  	while ($row = mysql_fetch_array($result))
+  	{
+  	  $galleries[$row['IDGallery']] = $row['IDGallery'];
+  	}
+  	
+  	return $galleries;
   }
 ?>

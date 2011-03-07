@@ -112,7 +112,7 @@ function Func()
 function Upgrade(p_oldver, p_newver)
 {
   var that = this;
-  var versions = [10000, 10100, 10199.00, 10200, 10201, 10202, 10203];
+  var versions = [10000, 10100, 10199.00, 10200, 10201, 10202, 10203, 10204];
   var stage_1_list = new Array();
   var stage_2_list = new Array();
   var stage_3_list = new Array();
@@ -257,7 +257,7 @@ function Upgrade(p_oldver, p_newver)
         case 10100 :
         {
           var new_opt = new Option();
-          new_opt.name = "$STR_DELIMITER";
+          new_opt.name = "STR_DELIMITER";
           new_opt.value = "\",\"";
           stage_1_list[stage_1_list.length] = new_opt;
           
@@ -266,7 +266,7 @@ function Upgrade(p_oldver, p_newver)
         case 10199.00 :
         {
           var new_opt = new Option();
-          new_opt.name = "$MOA_PATH";
+          new_opt.name = "MOA_PATH";
           new_opt.value = '"'+moa_path+'"';
           stage_1_list[stage_1_list.length] = new_opt;
           
@@ -275,7 +275,7 @@ function Upgrade(p_oldver, p_newver)
         case 10200.00 :
         {
           var new_opt = new Option();
-          new_opt.name = "$TEMPLATE";
+          new_opt.name = "TEMPLATE";
           new_opt.value = '"MoaDefault"';
           stage_1_list[stage_1_list.length] = new_opt;
           
@@ -284,8 +284,17 @@ function Upgrade(p_oldver, p_newver)
         case 10202.00 :
         {
           var new_opt = new Option();
-          new_opt.name = '$BULKUPLOAD_PATH';
-          new_opt.value = '"incoming/"';
+          new_opt.name = 'BULKUPLOAD_PATH';
+          new_opt.value = 'incoming';
+          stage_1_list[stage_1_list.length] = new_opt;
+          
+          break;
+        }
+        case 10204.00 :
+        {
+          var new_opt = new Option();
+          new_opt.name = 'IMAGES_PER_PAGE';
+          new_opt.value = '30';
           stage_1_list[stage_1_list.length] = new_opt;
           
           break;
@@ -384,7 +393,15 @@ function Upgrade(p_oldver, p_newver)
           new_file.filename = "upgrade-10201.sql";
           stage_3_list[stage_3_list.length] = new_file;
           break;
-        }        
+        }
+        case 10204.00 :
+        {
+          // Add galleryindex table
+          var new_file = new File();
+          new_file.filename = "upgrade-10204.sql";
+          stage_3_list[stage_3_list.length] = new_file;
+          break;
+        }
         default :
         {
           break;
@@ -409,7 +426,14 @@ function Upgrade(p_oldver, p_newver)
           new_func.m_funcname = "upgrade_10201_UpgradeConfigFile";
           stage_4_list[stage_4_list.length] = new_func;
           break;          
-        }        
+        }
+        case 10204.00 :
+        {
+          var new_func = new Func();
+          new_func.m_funcname = "upgrade_10204_AddGalleryIndices";
+          stage_4_list[stage_4_list.length] = new_func;
+          break;          
+        }
         default :
         {
           break;

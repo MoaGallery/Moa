@@ -31,7 +31,7 @@
     moa_warning("No gallery ID supplied.");
     $proceed = false;
   }
-
+  
   // Complain if invalid id is supplied
   if ((!$Gallery->exists($gallery_id)) && ("0000000000" != $gallery_id))
   {
@@ -51,6 +51,28 @@
         $from = "orphan";
       }
     }
+    
+    // Get page number (if any)
+    global $page;
+    $page = 1;
+    if (isset($_REQUEST["page"]))
+    {
+      $page = (integer)$_REQUEST["page"];
+      
+      // Clamp page to the start if needed
+      if ($page <= 0)
+      {
+        $page = 1;
+      }
+      
+      // Show all images if asked
+      if (0 == strcmp($_REQUEST["page"], "all"))
+      {
+        $page = 0;
+      }
+    }
+
+    
 
     $preCache = true;
 	  include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
@@ -65,7 +87,7 @@
 	    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 	  	$bodycontent .= "<script type='text/javascript'>\n";
 	    $bodycontent .= "  //<![CDATA[\n";
-      $bodycontent .= "all_tags = '"; ViewAllTagList();
+      $bodycontent .= "  all_tags = '"; ViewAllTagList();
       $bodycontent .= "';\n";
 	    $bodycontent .= "  cur_tags = '"; ViewGalleryCurrentTagList($gallery_id);
       $bodycontent .= "';\n";
@@ -88,8 +110,15 @@
       $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 
 	    $bodycontent .= "  var gallery = new Gallery('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
-	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Name"))."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."');\n";
-	    $bodycontent .= "  FormCheckSetup('gallery_view');\n";
+	    
+	    $useTags = $Gallery->getValue($gallery_id, "UseTags");
+	    $tagged = "false"; 
+	    if (0 == $useTags)
+	    {
+	      $tagged = "true";
+	    }
+	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Name"))."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."', ".$tagged.");\n";
+	    $bodycontent .= "  FormCheckSetup('gallery_view', ".$tagged.");\n";
       $bodycontent .= " //]]>\n";
 	    $bodycontent .= "</script>\n";
 	  }
