@@ -134,9 +134,20 @@ function TagParseGalleryPagination($p_tag_options)
 	$element = LoadTemplate("component_gallery_pagination.php");
 	$elementNoLink = LoadTemplate("component_gallery_pagination_nolink.php");
 	$pagination = "";
-  $Gallery = new Gallery();
+  $gallery = new Gallery();
+  
+  // Check if this gallery has sub-galleries and if images are being suppressed
+  $sg = $gallery->getSubGalleries($gallery_id);
+  if (0 < count($sg))
+  {
+    if ($CFG['DISPLAY_PLAIN_SUBGALLERIES'])
+    {
+      // Don't need to show paginataion
+      return " ";
+    }
+  } 
 	
-	$imagesCount = $Gallery->getImageCount($gallery_id);
+	$imagesCount = $gallery->getImageCount($gallery_id);
 	$pageCount = ceil($imagesCount / $CFG['IMAGES_PER_PAGE']);
 
 	if ((1 == $pageCount) || (0 == $imagesCount))

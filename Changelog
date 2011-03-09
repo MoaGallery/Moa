@@ -6,6 +6,10 @@ Key -
  + = New feature
  b = Bugfix
 
+1.2.4a - Bugfix - 9th March 2011
+ b  Pagination was showing up on gallery with sub-galleries but no visible images.
+ *  Copyright year in footer was still on 2010.
+
 1.2.4 - No tags - 7th March 2011
  +  Added pagination controls on the gallery view page.
  *  Made it so that tags are optional. Defaults to not using tags and images are attached directly to the gallery.
