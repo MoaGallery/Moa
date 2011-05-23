@@ -16,5 +16,5 @@
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
 
-  $bodytitle = "Sitemap - Moa";
+  $bodytitle = "Sitemap - ".html_display_safe($CFG['SITE_NAME']);
 ?>

@@ -19,6 +19,7 @@
   include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/id.php");
   include_once($CFG["MOA_PATH"]."sources/common.php");
+  include_once($CFG["MOA_PATH"]."sources/_template_component_image.php");
 
   function ImageCheckExists()
   {
@@ -294,6 +295,64 @@
     return true;
   }
 
+  function ImageInfoTags($p_id)
+  {
+    global $CFG;
+    global $image_id;
+    global $template_name;
+
+    // Set global vars if needed
+    if (!isset($preCache))
+    {
+      $image_id = $p_id;
+
+	    // Find out which template we should be using. Fall back to MoaDefault if none set
+		  $template_name = "MoaDefault";
+		  if (isset($CFG["TEMPLATE"]))
+		  {
+		    if (is_dir("../templates/".$CFG["TEMPLATE"]))
+		    {
+		      $template_name = $CFG["TEMPLATE"];
+		    }
+		  }
+    }
+    
+    OutputPrefix("OK");
+
+    echo TagParseImageTagList(null);
+
+    return true;
+  }
+  
+  function ImageInfoGalleries($p_id)
+  {
+    global $CFG;
+    global $image_id;
+    global $template_name;
+
+    // Set global vars if needed
+    if (!isset($preCache))
+    {
+      $image_id = $p_id;
+
+	    // Find out which template we should be using. Fall back to MoaDefault if none set
+		  $template_name = "MoaDefault";
+		  if (isset($CFG["TEMPLATE"]))
+		  {
+		    if (is_dir("../templates/".$CFG["TEMPLATE"]))
+		    {
+		      $template_name = $CFG["TEMPLATE"];
+		    }
+		  }
+    }
+    
+    OutputPrefix("OK");
+
+    echo TagParseImageGalleryList(null);
+
+    return true;
+  }
+  
   function ImageAjaxMain()
   {
     // Get the action
@@ -373,6 +432,28 @@
         }
       	break;
       }
+      case "getinfotags" :
+      {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
+      	$image_id = ImageCheckExists();
+        if (false !== $image_id)
+        {
+          ImageInfoTags($image_id);
+        }
+        break;
+      }
+      case "getinfogalleries" :
+      {
+        header('Cache-Control: no-cache'); // Do not cache this response
+        
+      	$image_id = ImageCheckExists();
+        if (false !== $image_id)
+        {
+          ImageInfoGalleries($image_id);
+        }
+        break;
+      }
       default :
       {
         header('Cache-Control: no-cache'); // Do not cache this response
@@ -383,6 +464,7 @@
     }
   }
 
+  
   if ((false === isset($preCache)) && ($image_first))
   {
     ImageAjaxMain();

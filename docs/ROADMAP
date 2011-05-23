@@ -8,22 +8,18 @@ This can (and is likely to) change.
         Redo upgrade to be better.
         Tests (unit, ajax and javascript).
 
-    1.2.4 -
-        Make tags optional (hard-linked to galleries).
-        Pagination.
-        
     1.2.5 -
-        Search (with option to make new gallery from results).
-        Site title (for titlebar).
-        Show list of tags on image/gallery pages.
-        Show which galleries an image is in on image page.
-        Path checks in settings should AJAX check to see if they are real.
+     *  Site title (for titlebar).
+     *  Show list of tags on image/gallery pages.
+     *  Show which galleries an image is in on image page.
         
     1.2.6 -
+        Search (with option to make new gallery from results).
         Split options page up.
         Theme chooser.
         Add xml file to each template to give standard info (Creator, version, etc).
         On template change need to be able to regenerate thumbnails.
+        Path checks in settings should AJAX check to see if they are real.
 
     1.2.7 -
         Provide friendly URL rewriting. (Via HTAccess)

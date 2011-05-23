@@ -38,5 +38,5 @@
     $bodycontent .= "</script>\n";
   }
 
-  $bodytitle .= "Settings - Moa";
+  $bodytitle .= "Settings - ".html_display_safe($CFG['SITE_NAME']);
 ?>

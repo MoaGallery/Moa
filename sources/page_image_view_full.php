@@ -20,10 +20,10 @@
   {
   	if (strlen($desc) > $CFG["TITLE_DESC_LENGTH"])
   	{
-  		$bodytitle .= " - \'" . html_display_safe(mb_substr($desc, 0, $CFG["TITLE_DESC_LENGTH"]-3)) . "...\'";
+  		$bodytitle .= " '" . html_display_safe(mb_substr($desc, 0, $CFG["TITLE_DESC_LENGTH"]-3)) . "...' - ".$CFG['SITE_NAME'];
   	} else
   	{
-  		$bodytitle .=  " - \'" . html_display_safe($desc) . "\'";
+  		$bodytitle .=  " '" . html_display_safe($desc) . "' - ".$CFG['SITE_NAME'];
   	}
   }
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";

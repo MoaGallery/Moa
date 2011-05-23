@@ -19,8 +19,7 @@
       $desc = " ";
     }
 
-    // Note: We are allowing HTML to be returned in the description
-    return StripHTMLTags($desc);
+    return html_display_safe($desc);
   }
 
   function TagParseMainDeleteFeedback($p_tag_options)

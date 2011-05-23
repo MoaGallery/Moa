@@ -76,5 +76,5 @@
 
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-  $bodytitle .= "Add gallery - Moa";
+  $bodytitle .= "Add gallery - ".html_display_safe($CFG['SITE_NAME']);
 ?>

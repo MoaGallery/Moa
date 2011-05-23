@@ -5,7 +5,7 @@
       (<moavar GalleryThumbChildCount> <moavar GalleryThumbChildTypeName>)
     </span>
   </p>
-  <div class="subgallery_thumb_wrapper thumbheight">
+  <div class="subgallery_thumb_wrapper thumbheight" <moavar GalleryThumbPopup>>
     <p class="thumbbox thumbsize">
       <a href="index.php?action=gallery_view&amp;gallery_id=<moavar GalleryThumbID>" class="subthumblink">
         <img src='<moavar GalleryThumb>' alt='<moavar GalleryThumbTitle> subgallery' title='' width="<moavar GalleryThumbWidth>" height = "<moavar GalleryThumbHeight>"/>

@@ -10,9 +10,16 @@
           <moatag type="ImageDescription">
         </h3>
         <br/>
-        <h3>
+        <hr class="image_info_hr" />
+        <h3 class="image_info">
           Size: <moatag type="ImageSize" format="both">
           <br/>
+        </h3>
+        <h3 class="image_info">
+          Tags: <span id="image_tag_list"><moatag type="ImageTagList"></span>
+        </h3>
+        <h3 class="image_info">
+          Galleries: <span id="image_gallery_list"><moatag type="ImageGalleryList"></span>
         </h3>
       </div>
     </div>

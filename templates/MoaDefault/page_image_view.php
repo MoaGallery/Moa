@@ -36,9 +36,16 @@
         </div>
         <div class="image_desc new_line" id="imageblockdesc"><moatag type="ImageDescription"></div><br/>
         <img width='300' height='1' src='media/trans-pixel.png' alt=""/>
-        <div class="image_desc">
-          Size: <moatag type="ImageSize" format="both"><br/>
-       </div>
+        <hr class="image_info_hr" />
+        <p class="image_info">
+          Size: <moatag type="ImageSize" format="both">
+        </p>
+        <p class="image_info">
+          Tags: <span id="image_tag_list"><moatag type="ImageTagList"></span>
+        </p>
+        <p class="image_info">
+          Galleries: <span id="image_gallery_list"><moatag type="ImageGalleryList"></span>
+        </p>
       </div>
     </div>
   </div>

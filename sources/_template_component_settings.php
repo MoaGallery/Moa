@@ -22,6 +22,34 @@
     return $output;
   }
 
+  function TagParseSettingsValue_SiteName($p_tag_options)
+  {
+    global $CFG;
+
+    $output = " ";
+
+    if (0 < strlen($CFG["SITE_NAME"]))
+    {
+      $output = $CFG["SITE_NAME"];
+    }
+
+    return $output;
+  }
+
+    function TagParseSettingsValue_SiteByline($p_tag_options)
+  {
+    global $CFG;
+
+    $output = " ";
+
+    if (0 < strlen($CFG["SITE_BYLINE"]))
+    {
+      $output = $CFG["SITE_BYLINE"];
+    }
+
+    return $output;
+  }
+  
   function TagParseSettingsValue_ShowEmptyDescPopups($p_tag_options)
   {
     global $CFG;

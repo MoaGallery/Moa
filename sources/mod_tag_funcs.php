@@ -155,6 +155,29 @@
 
       return $tagString;
     }
+    
+    function getTagListForImage($p_image_id)
+    {
+      global $errorString;
+      global $CFG;
+
+      $query = "SELECT Name FROM `".$CFG["tab_prefix"]."tag` WHERE IDTag IN "
+              ."(SELECT IDTag FROM `".$CFG["tab_prefix"]."imagetaglink` WHERE IDImage = '".mysql_real_escape_string($p_image_id)."');";
+
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      }
+
+      $tags = array();
+
+      while ($row = mysql_fetch_array($result))
+      {
+      	$tags[] = $row["Name"];
+      }
+
+      return $tags;
+    }
 
     function delete($p_id)
     {

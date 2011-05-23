@@ -66,5 +66,5 @@
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
 
-  $bodytitle .= "Users - Moa";
+  $bodytitle .= "Users - ".html_display_safe($CFG['SITE_NAME']);
 ?>

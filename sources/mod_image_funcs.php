@@ -269,6 +269,32 @@
       return $tags;
     }
 
+    public function getContainingGalleries()
+    {
+      global $CFG;
+      
+      if (!$this->isLive)
+      {
+        return false;
+      }
+      
+      $list = array();
+      
+      $query = "SELECT Name, IDGallery FROM `".$CFG["tab_prefix"]."gallery` WHERE IDGallery IN "
+              ."(SELECT IDGallery FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDImage = '".mysql_real_escape_string($this->id)."');";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+      if (false === $result) {
+        return false;
+      } 
+      
+      while ($row = mysql_fetch_array($result))
+      {
+      	$list[$row['Name']] = $row['IDGallery'];
+      }
+      
+      return $list;
+    }
+    
     private function getImageInfoFromFile()
     {
     	$imageHandle = openImage($this->localFilename);

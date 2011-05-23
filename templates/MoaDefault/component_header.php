@@ -1,9 +1,15 @@
 <div class="headertop">
-  <div class="logo">
+  <div class="site_lines">
     <a id="logolink" class="logolink" href="index.php">
-      <img src="<moatag type="TemplatePath">media/moa-logo-vector.png" alt="Moa logo"/>
-      <moatag type="DebugMode" style="divbg">
+      <!-- <img src="<moatag type="TemplatePath">media/moa-logo-vector.png" alt="Moa logo"/> -->
     </a>
+    <img src="<moatag type="TemplatePath">media/moa.png" width="71" height="100" class="logo" alt="Moa logo" />
+    <p class="site_name">
+      <moatag type="HeaderSiteName">
+    </p>
+    <p class="site_byline">
+      <moatag type="HeaderSiteByLine">
+    </p>
   </div>
   <div class="headerinfoblock">
     <div>

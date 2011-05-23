@@ -24,6 +24,8 @@
                              'popupHelp_ftp_desc'                     => 'Write a description that will be added to all the uploaded images',
                              'popupHelp_ftp_tags'                     => "Choose some tags, separated by the '".$CFG['STR_DELIMITER']."' character",
                              'popupHelp_main_desc'                    => 'Write a description for the front page or leave it blank',
+                             'popupHelp_setting_site_name'            => "The name displayed in the header and on window names",
+                             'popupHelp_setting_site_byline'          => "The line after the site name displayed in the header",
                              'popupHelp_setting_show_popups'          => "Whether to show image and gallery descriptions when you mouse over a thumbnail",
                              'popupHelp_setting_empty_desc_popup'     => "What text to show when mousing over a thumbnail with no description (if show popups is on)",
                              'popupHelp_setting_title_desc_length'    => "How many characters of the title/description to show in the browser title bar or tab",

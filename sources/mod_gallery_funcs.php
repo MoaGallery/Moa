@@ -23,7 +23,6 @@
   	var $m_usetags;
   }
   
-  
   class Gallery
   {
     // Function to return query that will return all gallery images meeting
@@ -407,10 +406,11 @@
     	global $CFG;
     
     	// Get just the first ID out of the next images in the same gallery
-    	$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
-    	, "((`".$CFG["tab_prefix"]."image`.IDImage > '".$p_image_id."') AND (`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."'))"
-    	, "`".$CFG["tab_prefix"]."image`.IDImage ASC LIMIT 1");
-    
+    	$query = 'SELECT IDImage FROM `'.$CFG["tab_prefix"].'galleryindex` '.
+    	         'WHERE IDGallery = '.$p_gallery_id.' AND Seq > (SELECT Seq FROM '.
+    	         '`'.$CFG["tab_prefix"].'galleryindex` WHERE '.
+    	         'IDImage = '.$p_image_id.' AND IDGallery = '.$p_gallery_id.') ORDER BY Seq ASC LIMIT 1';
+    	
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result) {
     		return false;
@@ -420,10 +420,8 @@
     	$found = mysql_num_rows($result);
     	if (0 == $found)
     	{
-    		// Get just the first ID out of the next images in the same gallery
-    		$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
-    		, "(`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."')"
-    		, "`".$CFG["tab_prefix"]."image`.IDImage ASC LIMIT 1");
+    		$query = 'SELECT IDImage FROM `'.$CFG["tab_prefix"].'galleryindex` '.
+    	         'WHERE IDGallery = '.$p_gallery_id.' ORDER BY Seq ASC LIMIT 1';
     
     		$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     		if (false === $result) {
@@ -440,9 +438,10 @@
     	global $CFG;
     
     	// Get just the first ID out of the previous images in the same gallery
-    	$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
-    	, "((`".$CFG["tab_prefix"]."image`.IDImage < '".$p_image_id."') AND (`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."'))"
-    	, "`".$CFG["tab_prefix"]."image`.IDImage DESC LIMIT 1");
+    	$query = 'SELECT IDImage FROM `'.$CFG["tab_prefix"].'galleryindex` '.
+    	         'WHERE IDGallery = '.$p_gallery_id.' AND Seq < (SELECT Seq FROM '.
+    	         '`'.$CFG["tab_prefix"].'galleryindex` WHERE '.
+    	         'IDImage = '.$p_image_id.' AND IDGallery = '.$p_gallery_id.') ORDER BY Seq DESC LIMIT 1';
     
     	$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     	if (false === $result) {
@@ -454,9 +453,8 @@
     	if (0 == $found)
     	{
     		// Get just the first ID out of the next images in the same gallery
-    		$query = $this->buildContentQuery( "`".$CFG["tab_prefix"]."image`.IDImage"
-    		, "(`".$CFG["tab_prefix"]."gallery`.IDGallery = '".$p_gallery_id."')"
-    		, "`".$CFG["tab_prefix"]."image`.IDImage DESC LIMIT 1");
+    		$query = 'SELECT IDImage FROM `'.$CFG["tab_prefix"].'galleryindex` '.
+    	         'WHERE IDGallery = '.$p_gallery_id.' ORDER BY Seq DESC LIMIT 1';
     
     		$result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
     		if (false === $result) {

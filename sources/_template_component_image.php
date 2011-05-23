@@ -7,6 +7,7 @@
     die();
   }
 
+  include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
 
   function TagParseImageDescription($p_tag_options)
   {
@@ -146,6 +147,13 @@
     global $image_id;
     global $parent_id;
 
+    if (0 == strcmp($parent_id, '0000000000'))
+    {
+      return $image_id;
+    }
+    
+    // TODO - Parent will be 0 if in orphan view. Return itself as a temporary fix.
+    // Should return previous image in orphan list.
     $Gallery = new Gallery();
     $result = $Gallery->getNextImage($parent_id, $image_id);
 
@@ -162,6 +170,13 @@
     global $image_id;
     global $parent_id;
 
+    // TODO - Parent will be 0 if in orphan view. Return itself as a temporary fix.
+    // Should return previous image in orphan list.
+    if (0 == strcmp($parent_id, '0000000000'))
+    {
+      return $image_id;
+    }
+    
     $Gallery = new Gallery();
     $result =$Gallery->getPreviousImage($parent_id, $image_id);
 
@@ -256,6 +271,83 @@
     }
 
     return floor($result);
+  }
+  
+  function TagParseImageTagList($p_tag_options)
+  {
+    global $CFG;
+    global $image_id;
+    
+    $tagTemplate = LoadTemplate("component_image_tag.php");
+
+    $firstTag = true;
+    
+    $tags = Tag::getTagListForImage($image_id);
+    
+    $tagList = "";
+    
+    foreach($tags as $tag)
+    {
+      $part = $tagTemplate;
+      if (!$firstTag)
+      {
+        $tagList .= $CFG['STR_DELIMITER'].' ';
+      } else
+      {
+        $firstTag = false;
+      }
+
+      $part = ParseVar($part, 'TagName', html_display_safe($tag));
+      
+      $tagList .= $part;
+    }
+
+    if (0 == strlen($tagList))
+    {
+      $tagList = " ";
+    }
+    
+    return $tagList;
+  }
+  
+  function TagParseImageGalleryList($p_tag_options)
+  {
+    global $CFG;
+    global $image_id;
+    
+    $galleryTemplate = LoadTemplate("component_image_gallery.php");
+
+    $firstGallery = true;
+    
+    $image = new Image();
+    $image->loadId($image_id);
+    $galleries = $image->getContainingGalleries();//array();
+    
+    $galleryList = "";
+    
+    foreach($galleries as $galleryName=>$galleryId)
+    {
+      $part = $galleryTemplate;
+      if (!$firstGallery)
+      {
+        $galleryList .= $CFG['STR_DELIMITER'].' ';
+      } else
+      {
+        $firstGallery = false;
+      }
+
+      $part = ParseVar($part, 'GalleryName', html_display_safe($galleryName));
+      $part = ParseVar($part, 'GalleryID', $galleryId);
+      
+      $galleryList .= $part;
+    }
+
+    if (0 == strlen($galleryList))
+    {
+      $galleryList = " ";
+    }
+    
+    return $galleryList;
   }
 
 ?>

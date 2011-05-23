@@ -51,7 +51,7 @@ function Main(p_delim) {
 		url += "&desc=" + encodeURIComponent(m_desc);
 		var request = new httpRequest("sources/mod_main.php",
 				that.SubmitCallback);
-		request.update(url, "GET");
+		request.update(url, "POST");
 
 		m_edit_toggle = false;
 	};

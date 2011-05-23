@@ -28,5 +28,5 @@
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
 
-  $bodytitle .= "Orphan admin";
+  $bodytitle .= "Orphan admin - ".html_display_safe($CFG['SITE_NAME']);
 ?>

@@ -260,7 +260,7 @@ function TagList(p_delim, p_tag_row_template) {
     var tag_line = m_tag_row_template;
     
     tag_line = str_replace(tag_line, "<moavar AdminTagID>", m_master[p_index].m_id);
-    tag_line = str_replace(tag_line, "<moavar AdminTagName>", m_master[p_index].m_name);
+    tag_line = str_replace(tag_line, "<moavar AdminTagName>", EscapeHTMLChars(m_master[p_index].m_name));
    
     return tag_line;
   };
@@ -568,7 +568,7 @@ function TagList(p_delim, p_tag_row_template) {
           fclass = "tag_hint_inner_match";
         }
       }
-      hintlist += "<li class='tag_hint_outer'><div class='"+fclass+"'>" + m_master[i].m_name + "</div></li>";
+      hintlist += "<li class='tag_hint_outer'><div class='"+fclass+"'>" + EscapeHTMLChars(m_master[i].m_name) + "</div></li>";
     }
     
     hintlist += "</ul>";

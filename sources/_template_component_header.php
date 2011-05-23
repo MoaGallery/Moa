@@ -21,6 +21,20 @@
     return html_display_safe($name);
   }
 
+  function TagParseHeaderSiteName($p_tag_options)
+  {
+    global $CFG;
+    $name = $CFG['SITE_NAME'];
+    return html_display_safe($name);
+  }
+  
+  function TagParseHeaderSiteByline($p_tag_options)
+  {
+    global $CFG;
+    $byline = $CFG['SITE_BYLINE'];
+    return html_display_safe($byline);
+  }
+  
   function TagParseHeaderImageCount($p_tag_options)
   {
     global $CFG;
@@ -194,7 +208,7 @@
         $node = ParseVar($node, "SpacerWidth", ($count*$p_tag_options["spacing"]));
       }
       $node = ParseVar($node, "NodeID", $nav_node->m_id);
-      $node = ParseVar($node, "NodeName", $nav_node->m_name);
+      $node = ParseVar($node, "NodeName", html_display_safe($nav_node->m_name));
       $nodes .= $node;
       $count++;
     }

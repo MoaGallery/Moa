@@ -142,6 +142,6 @@
       $gal_shortname = substr($gal_shortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";
     }
 
-    $bodytitle .= "Gallery '".$gal_shortname."' - Moa";
+    $bodytitle .= "Gallery '".$gal_shortname."' - ".html_display_safe($CFG['SITE_NAME']);
   }
 ?>

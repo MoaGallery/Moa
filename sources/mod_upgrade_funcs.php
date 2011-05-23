@@ -176,10 +176,12 @@
           $cfg_type = "BOOLEAN";
         }
   	  }
-	    if (isset($CFG[$p_name])) {
+	    $query = "SELECT * FROM `".$CFG["tab_prefix"]."settings` WHERE Name = '".$p_name."'";
+      $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+	    if (1 <= mysql_num_rows($result))
+	    {
 	      $query = "UPDATE `".$CFG["tab_prefix"]."settings` SET Value = '".$p_value."', Type = '".$cfg_type."' WHERE Name = '".$p_name."';";
-	    }
-	    else
+	    } else
 	    {
 	     $query = "INSERT INTO `".$CFG["tab_prefix"]."settings` (Value, Name, Type) VALUES ('".$p_value."', '".$p_name."', '".$cfg_type."');";
 	    }

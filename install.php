@@ -6,13 +6,15 @@
     echo "Hacking attempt.";
     die();
   }
-
+  
   $APACHE_MIN_VERSION = ARRAY( 2, 0, 0);
   $PHP_MIN_VERSION    = ARRAY( 5, 2, 0);
   $GD_MIN_VERSION     = ARRAY( 2, 0, 0);
   $MYSQL_MIN_VERSION  = ARRAY( 5, 0, 0);
 
   $template_name = "MoaDefault";
+  
+  
 
   session_start();
   session_unset();
@@ -803,6 +805,8 @@
       fwrite($file, "  \$CFG['STR_DELIMITER'] = \",\";\n");
       fwrite($file, "  \$CFG['MOA_PATH'] = '".$CFG["MOA_PATH"]."';\n");
       fwrite($file, "  \$CFG['TEMPLATE'] = 'MoaDefault';\n");
+      fwrite($file, "  \$CFG['SITE_BYLINE'] = '<your byline>';\n");
+      fwrite($file, "  \$CFG['SITE_NAME'] = '<your gallery name> ';\n");
       fwrite($file, "  \$CFG['MOA_MAJOR_VERSION'] = '".$MOA_MAJOR_VERSION."';\n");
       fwrite($file, "  \$CFG['MOA_MINOR_VERSION'] = '".$MOA_MINOR_VERSION."';\n");
       fwrite($file, "  \$CFG['MOA_REVISION'] = '".$MOA_REVISION."';\n");
@@ -1075,6 +1079,16 @@
        include_once("sources/_template_parser.php");
 
        $CFG["MOA_VERSION"] = $MOA_VERSION;
+       
+       // Set a few defaults;
+       if (!key_exists('SITE_NAME', $CFG))
+       {
+         $CFG['SITE_NAME'] = 'Moa gallery';
+       }
+       if (!key_exists('SITE_BYLINE', $CFG))
+       {
+         $CFG['SITE_BYLINE'] = 'installing...';
+       }
 
 	     if (isset($_REQUEST["action"]))
 	     {

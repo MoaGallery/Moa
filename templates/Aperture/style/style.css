@@ -40,7 +40,7 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
                   font-size: 100%; font-weight: bold; color: #ff0000; line-height: 40px; vertical-align: middle; }
 .Success_box { display: table; border: 2px solid; padding: 10px; border-style: solid; border-color: #bfb;
                border-width: 1px; background-color: #325C5E; font-size: 0.7em; color: #bfb; line-height: 40px; }
-.Success_box a:link { text-decoration: underline; color: #DDD; }
+.Success_box a:link, .Success_box a:hover, .Success_box a:visited { text-decoration: underline; color: #DDD; }
 
 
 /* 4.  Header selectors */
@@ -58,10 +58,12 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 .header_button_text a { color: #c0c0c0; }
 .header_button_text a:hover { color: white; text-decoration: underline; }
 .template_logo { margin: 10px 0 30px 30px; }
+.site_name { color: #325C5E; font-size: 60px; font-weight: bold; margin: 0; padding: 5px 0 0 40px; float: left; line-height: 80px; text-shadow: 2px 2px black; }
+.site_byline { color: #587F7E; font-size: 15px; font-weight: bold; margin: 0; padding: 21px 0 0 22px; float: left; line-height: 80px; text-shadow: 2px 2px black; }
 
-               
-               
-               
+
+
+
 /* 5.  Footer selectors */
 
 .footer_strip { background-color: #21262A; height: 35px; width: 960px; padding: 0px; clear: both; margin: 0 auto; }
@@ -196,6 +198,24 @@ a.pagination:hover { text-decoration: underline; color: #BBBBBB; }
 .image_full { float: right; }
 .image_toolbar { margin: 5px 20px; overflow: auto; }
 #imageformupload { padding: 10px; }
+.image_info_hr {
+        border: 1px inset #325C5E;
+}
+.image_info {
+        font-size: 70%;
+        margin: 3px 5px;
+}
+.single_tag {
+        font-style: italic;
+}
+
+.single_gallery a, .single_gallery a:link, .single_gallery a:visited {
+        color: white;
+}
+
+.single_gallery a:hover {
+        text-decoration: underline;
+}
 
 
 

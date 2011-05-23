@@ -19,6 +19,22 @@
           <input type="hidden" name="moa_form_submitted" value="true"/>
           <ul class="formListSettings">
             <li>
+              <label for="setting_SiteName" class="formLabelSettings">
+                Your gallerys name?
+              </label>
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_site_name">" alt="popup help" />
+              <input type="text" name="setting_SiteName" id="setting_SiteName" value="<moatag type="SettingsValue_SiteName">"/>
+            </li>
+            
+            <li>
+              <label for="setting_SiteByline" class="formLabelSettings">
+                Display a popup for items with no description?
+              </label>
+              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_site_byline">" alt="popup help" />
+              <input type="text" name="setting_SiteByline" id="setting_SiteByline" value="<moatag type="SettingsValue_SiteByline">"/>
+            </li>
+            
+            <li>
               <label for="setting_EmptyDescPopups" class="formLabelSettings">
                 Display a popup for items with no description?
               </label>

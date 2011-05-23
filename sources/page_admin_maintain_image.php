@@ -178,5 +178,5 @@
 	  }
 	}
 
-	$bodytitle = "Fix image - Moa";
+	$bodytitle = "Fix image - ".html_display_safe($CFG['SITE_NAME']);
 ?>

@@ -26,5 +26,5 @@
   $bodycontent .= "</script>\n";
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-  $bodytitle .= "Upgrade - Moa";
+  $bodytitle .= "Upgrade - ".html_display_safe($CFG['SITE_NAME']);
 ?>

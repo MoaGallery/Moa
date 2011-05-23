@@ -69,7 +69,7 @@
       }
     } else
     {
-    if (!_AddDBConfigVar($newname, $newvalue, $testflag))
+      if (!_AddDBConfigVar($newname, $newvalue, $testflag))
       {
       	RaiseFatalError("Could not add new var.");
       	return false;

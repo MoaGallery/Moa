@@ -102,6 +102,6 @@
     {
       $imgShortname = substr($imgShortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";
     }
-    $bodytitle .= "Image '".$imgShortname."' - Moa";
+    $bodytitle .= "Image '".$imgShortname."' - ".html_display_safe($CFG['SITE_NAME']);
   }
 ?>

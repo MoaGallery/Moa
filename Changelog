@@ -6,6 +6,22 @@ Key -
  + = New feature
  b = Bugfix
 
+1.2.5 - Stuff - ? March 2011
+ +  Added a site name and byline field that can show up in the template header.
+ +  Image view now shows the tags this image has (if any).
+ +  Image view now shows the galleries this image is in.
+ +  Made upgrade process less spammy.
+ b  Next/Prev on image view page didn't use the new index. Was still tag based.
+ b  New gallery link in aperture didn't have a visited/hover style.
+ b  Popup text for images couldn't have < or > in it. OverLib was confused.
+ b  Aperture didn't have popup gallery text.
+ b  Large gallery/image comments didn't get added on edit on the Suhosin version of PHP due to long URLs.
+ b  Tags and gallery names weren't always escaping HTML codes properly within them.
+ b  Orphan image view Prev/Next links went to an invalid image. Now points to itself pending a new screen for orphans.
+ *  Added the MoaDefault Firefox CSS3 eye candy (shadows, round corners, etc) to Opera, Chrome and Safari. IE9 supports some bits but not all.  
+
+
+
 1.2.4a - Bugfix - 9th March 2011
  b  Pagination was showing up on gallery with sub-galleries but no visible images.
  *  Copyright year in footer was still on 2010.

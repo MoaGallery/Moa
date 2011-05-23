@@ -161,5 +161,5 @@
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
 
-  $bodytitle .= "FTP add - Moa";
+  $bodytitle .= "FTP add - ".html_display_safe($CFG['SITE_NAME']);
 ?>

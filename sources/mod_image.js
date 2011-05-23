@@ -165,7 +165,7 @@ function Image( p_delim)
     	    url += "&tags="+encodeURIComponent(m_tags);
     	    url += "&image_id="+m_image_id;
     	var request = new httpRequest("sources/mod_image.php", that.SubmitCallback, m_image_id);
-    	request.update(url, "GET");
+    	request.update(url, "POST");
 
     	m_edit_toggle = false;
     } else
@@ -248,8 +248,30 @@ function Image( p_delim)
     }
     m_old_desc = '';
     m_old_tags = '';
+    $.ajax({url:"sources/mod_image.php?action=getinfotags&image_id="+encodeURIComponent(m_image_id), success: that.InfoTagsCallback, cache:false});
+    $.ajax({url:"sources/mod_image.php?action=getinfogalleries&image_id="+encodeURIComponent(m_image_id), success: that.InfoGalleriesCallback, cache:false});
   };
 
+  this.InfoTagsCallback = function(p_text, p_status, p_xml, p_note)
+  {
+    if ('OK' == p_text.substr(0, 2))
+    {
+      tags = p_text.substr(3, 1000000);
+      $('#image_tag_list').html(tags);
+      return;
+    }
+  };
+  
+  this.InfoGalleriesCallback = function(p_text, p_status, p_xml, p_note)
+  {
+    if ('OK' == p_text.substr(0, 2))
+    {
+      galleries = p_text.substr(3, 1000000);
+      $('#image_gallery_list').html(galleries);
+      return;
+    }
+  };
+  
   this.UpdateRecentUploads = function(p_filename)
   {
     var fname = p_filename;

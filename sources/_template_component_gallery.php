@@ -52,70 +52,73 @@ function TagParseGalleryImageThumbnails($p_tag_options)
 
 	$images = $Gallery->getImages($gallery_id, $page);
 
-	foreach ($images as $image)
+	if (false !== $images)
 	{
-		$thumb = "";
-
-		if (mb_strlen($image->description) <= 0) {
-			if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
-			{
-				$popup = "";
-			} else
-			{
-				$popup = "onmouseover='overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
-			}
-		} else
-		{
-			$popup = "onmouseover='overlib(\"".popup_display_safe($image->description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
-		}
-		$Image = new Image();
-		$Image->loadId($image->id);
-		$width = $Image->width;
-		$height = $Image->height;
-
-		if ((null == $width) || (null == $height))
-		{
-			$width = 150;
-			$height = 112;
-		}
-
-		if (($width > $CFG["THUMB_WIDTH"]) or ($height > ($CFG["THUMB_WIDTH"]*0.75)))
-		{
-			$w = $width / $CFG["THUMB_WIDTH"];
-			$h = $height / ($CFG["THUMB_WIDTH"] * 0.75);
-			if ($w > $h)
-			{
-				$width = $CFG["THUMB_WIDTH"];
-				$height = $height / $w;
-			} else
-			{
-				$width = $width / $h;
-				$height = $CFG["THUMB_WIDTH"] * 0.75;
-			}
-		}
-
-		$thumb = $links;
-
-		if (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image->id.".jpg"))
-		{
-			$thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image->id.".jpg");
-		}
-		else
-		{
-			$thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
-		}
-
-		$thumb = ParseVar($thumb, "ImageThumbID", $image->id);
-		$thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
-		$thumb = ParseVar($thumb, "ImageThumbGlobalHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
-		$thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($width));
-		$thumb = ParseVar($thumb, "GalleryThumbHeight", str_display_safe(ceil($height)));
-		$thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($width));
-		$thumb = ParseVar($thumb, "ImageThumbHeight", str_display_safe(ceil($height)));
-		$thumb = ParseVar($thumb, "ImagePopup", $popup);
-		$thumb = ParseVar($thumb, "GalleryID", $gallery_id);
-		$thumb = ParseVar($thumb, "Referer", "");
-		$thumbs .= $thumb;
+  	foreach ($images as $image)
+  	{
+  		$thumb = "";
+  
+  		if (mb_strlen($image->description) <= 0) {
+  			if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
+  			{
+  				$popup = "";
+  			} else
+  			{
+  				$popup = "onmouseover='overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+  			}
+  		} else
+  		{
+  			$popup = "onmouseover='overlib(\"".popup_display_safe($image->description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+  		}
+  		$Image = new Image();
+  		$Image->loadId($image->id);
+  		$width = $Image->width;
+  		$height = $Image->height;
+  
+  		if ((null == $width) || (null == $height))
+  		{
+  			$width = 150;
+  			$height = 112;
+  		}
+  
+  		if (($width > $CFG["THUMB_WIDTH"]) or ($height > ($CFG["THUMB_WIDTH"]*0.75)))
+  		{
+  			$w = $width / $CFG["THUMB_WIDTH"];
+  			$h = $height / ($CFG["THUMB_WIDTH"] * 0.75);
+  			if ($w > $h)
+  			{
+  				$width = $CFG["THUMB_WIDTH"];
+  				$height = $height / $w;
+  			} else
+  			{
+  				$width = $width / $h;
+  				$height = $CFG["THUMB_WIDTH"] * 0.75;
+  			}
+  		}
+  
+  		$thumb = $links;
+  
+  		if (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image->id.".jpg"))
+  		{
+  			$thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image->id.".jpg");
+  		}
+  		else
+  		{
+  			$thumb = ParseVar($thumb, "ImageThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
+  		}
+  
+  		$thumb = ParseVar($thumb, "ImageThumbID", $image->id);
+  		$thumb = ParseVar($thumb, "ImageThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
+  		$thumb = ParseVar($thumb, "ImageThumbGlobalHeight", (ceil($CFG["THUMB_WIDTH"]*0.75)));
+  		$thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($width));
+  		$thumb = ParseVar($thumb, "GalleryThumbHeight", str_display_safe(ceil($height)));
+  		$thumb = ParseVar($thumb, "ImageThumbWidth", str_display_safe($width));
+  		$thumb = ParseVar($thumb, "ImageThumbHeight", str_display_safe(ceil($height)));
+  		$thumb = ParseVar($thumb, "ImagePopup", $popup);
+  		$thumb = ParseVar($thumb, "GalleryID", $gallery_id);
+  		$thumb = ParseVar($thumb, "Referer", "");
+  		$thumbs .= $thumb;
+  	}
 	}
 
 	if (0 == strlen($thumbs))

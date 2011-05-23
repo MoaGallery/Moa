@@ -21,6 +21,6 @@
   	$bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     $bodycontent .= LoadTemplateRoot("page_admin.php");
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
-    $bodytitle .= "Admin - Moa";
+    $bodytitle .= "Admin - ".html_display_safe($CFG['SITE_NAME']);
   }
 ?>

@@ -51,5 +51,5 @@
   $bodycontent .= LoadTemplateRoot("page_main_view.php");
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-  $bodytitle =  "Main gallery - Moa";
+  $bodytitle =  "Main gallery - ".html_display_safe($CFG['SITE_NAME']);
 ?>

@@ -72,5 +72,5 @@
     $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
   }
 
-  $bodytitle = "Add image - Moa";
+  $bodytitle = "Add image - ".html_display_safe($CFG['SITE_NAME']);
 ?>

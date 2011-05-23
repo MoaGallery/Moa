@@ -118,7 +118,7 @@ function Gallery(p_delim) {
       url += "&tags=" + encodeURIComponent(m_tags);
       url += "&tagged=" + encodeURIComponent(m_tagged);
       var request = new httpRequest("sources/mod_gallery.php", that.SubmitCallback, m_gallery_id);
-      request.update(url, "GET");
+      request.update(url, "POST");
       
       m_edit_toggle = false;
     } else 
@@ -130,7 +130,7 @@ function Gallery(p_delim) {
       url += "&tags=" + encodeURIComponent(m_tags);
       url += "&tagged=" + encodeURIComponent(m_tagged);
       var request = new httpRequest("sources/mod_gallery.php", that.SubmitCallback, "");
-      request.update(url, "GET");
+      request.update(url, "POST");
     }
 
     m_taglist.Assimilate(m_tags);

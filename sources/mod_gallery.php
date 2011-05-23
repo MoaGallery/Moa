@@ -177,7 +177,7 @@
     {
       $newdesc = "";
     }
-
+    
     // Get the ParentID
     $newpid = GetParam("parent_id");
     if (false === $newpid)

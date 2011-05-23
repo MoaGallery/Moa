@@ -9,7 +9,7 @@ if (isset($_REQUEST["CFG"]))
 
 $MOA_MAJOR_VERSION = 1;
 $MOA_MINOR_VERSION = 2;
-$MOA_REVISION = 4;
+$MOA_REVISION = 5;
 $MOA_PATCH = "";
 $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION.$MOA_PATCH;
 
@@ -62,8 +62,13 @@ function edit_display_safe( $p_text) {
 function popup_display_safe($p_text)
 {
 	$result = str_display_safe(addslashes($p_text));
-	$result = str_replace("<","&lt;",$result);
-	$result = str_replace(">","&gt;",$result);
+	$result = str_replace('<','\&amp;lt;',$result);
+	$result = str_replace('>','\&amp;gt;',$result);
+	$result = str_replace('&lt;','&amp;lt;',$result);
+	$result = str_replace('&gt;','&amp;gt;',$result);
+	
+	// Undo line break replacements
+	$result = str_replace('\&amp;lt;br /\&amp;gt;','<br />',$result);
 
 	return $result;
 }

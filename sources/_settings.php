@@ -94,6 +94,7 @@
   {
     global $db;
     global $CFG;
+    global $INSTALLING;
     global $db_user;
     global $db_pass;
     global $db_name;
@@ -118,15 +119,24 @@
     global $IMAGES_PER_PAGE;
 
     // Set some default settings
-    $CFG["DEBUG_MODE"] = false;
-    $CFG["DISPLAY_PLAIN_SUBGALLERIES"] = true;
-    $CFG["SHOW_EMPTY_DESC_POPUPS"] = false;
-    $CFG["THUMB_WIDTH"] = 150;
-    $CFG["TEMPLATE"] = "Aperture";
-    $CFG["EMPTY_DESC_POPUP_TEXT"] = "No description";
-    $CFG["TITLE_DESC_LENGTH"] = 30;
-    $CFG["STR_DELIMITER"] = ",";
-    $CFG["CONFIG_DISPLAY_MAX_WIDTH"] = 640;
+    $CFG['DEBUG_MODE'] = false;
+    $CFG['DISPLAY_PLAIN_SUBGALLERIES'] = true;
+    $CFG['SHOW_EMPTY_DESC_POPUPS'] = false;
+    $CFG['THUMB_WIDTH'] = 150;
+    $CFG['TEMPLATE'] = 'Aperture';
+    $CFG['EMPTY_DESC_POPUP_TEXT'] = 'No description';
+    $CFG['TITLE_DESC_LENGTH'] = 30;
+    $CFG['STR_DELIMITER'] = ',';
+    $CFG['CONFIG_DISPLAY_MAX_WIDTH'] = 640;
+    $CFG['IMAGES_PER_PAGE'] = 12;
+    $CFG['SITE_NAME'] = '<your gallery name>';
+    $CFG['SITE_BYLINE'] = '<your byline>';
+
+    if ($INSTALLING)
+    {
+      $CFG['SITE_NAME'] = 'Moa';
+      $CFG['SITE_BYLINE'] = 'Installing...';
+    }
 
     // Load database settings from a file
     include_once($CFG["MOA_PATH"]."private/db_config.php");

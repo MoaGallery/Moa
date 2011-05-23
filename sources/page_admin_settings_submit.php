@@ -60,7 +60,7 @@
         }
         if ($var != $CFG["$p_fieldname"])
         {
-          $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = '".mysql_real_escape_string($varstr)."' WHERE Name = '".$p_fieldname."';";
+          $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = _utf8'".mysql_real_escape_string($varstr)."' WHERE Name = '".$p_fieldname."';";
           $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
           $CFG["$p_fieldname"] = $var;
@@ -74,7 +74,7 @@
           $var = $_REQUEST["setting_".$p_requestname];
           if ($var != $CFG["$p_fieldname"])
           {
-            $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = '".mysql_real_escape_string($var)."' WHERE Name = '".$p_fieldname."';";
+            $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = _utf8'".mysql_real_escape_string($var)."' WHERE Name = '".$p_fieldname."';";
             $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
             $CFG["$p_fieldname"] = $var;
@@ -91,7 +91,7 @@
         }
         if (0 != strcmp($var, $CFG["$p_fieldname"]))
         {
-          $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = '".mysql_real_escape_string($var)."' WHERE Name = '".$p_fieldname."';";
+          $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = _utf8'".mysql_real_escape_string($var)."' WHERE Name = '".$p_fieldname."';";
           $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
 
           $CFG["$p_fieldname"] = $var;
@@ -241,6 +241,8 @@
   {
     if (null != $Userinfo->m_id)
     {
+      UpdateDBVar("SiteName", "SITE_NAME", "text");
+      UpdateDBVar("SiteByline", "SITE_BYLINE", "text");
       UpdateDBVar("ShowEmptyDescPopups", "SHOW_EMPTY_DESC_POPUPS", "boolean");
       UpdateDBVar("DisplayPlainSubgalleries", "DISPLAY_PLAIN_SUBGALLERIES", "boolean");
       UpdateDBVar("Template", "TEMPLATE", "text");
