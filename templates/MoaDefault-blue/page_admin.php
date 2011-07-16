@@ -1,0 +1,1 @@
+ <moatag type="AdminLinks" location="admin">
