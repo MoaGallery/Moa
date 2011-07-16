@@ -3,7 +3,7 @@
 use File::Copy;
 use File::Path;
 
-my $ver = '1.2.4';
+my $ver = '1.2.5';
 my $path = 'Moa-'.$ver;
 
 sub MakeRepo

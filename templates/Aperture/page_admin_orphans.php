@@ -12,12 +12,7 @@
       </h1>
 
       <div class="gallery_desc">
-        <p>Images with no tags</p>
-        <ul class="image_thumbs_list">
-          <moatag type="AdminOrphanNonTagged" success="All ok">
-        </ul>
-        <hr class="cleared"/>
-        <p>Images with tags that are in no gallery</p>
+        <p>Images that are in no gallery</p>
         <ul class="image_thumbs_list">
           <moatag type="AdminOrphanNoGallery" success="All ok">
         </ul>

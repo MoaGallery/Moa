@@ -10,12 +10,7 @@
     </p>
     <div class="mainblockcontent">
       <div class="gallery_desc">
-        <p>Images with no tags</p>
-        <p>
-          <moatag type="AdminOrphanNonTagged" success="All ok">
-        </p>
-        <hr class="orphansplit"/>
-        <p>Images with tags that are in no gallery</p>
+        <p>Images that are in no gallery</p>
         <p>
           <moatag type="AdminOrphanNoGallery" success="All ok">
         </p>

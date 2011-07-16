@@ -124,7 +124,7 @@
     public function AddIndices($p_gallery_id, $p_tag_length)
     {
       // If this is an indexed gallery add the image
-      if (false == DoesGalleryUseTags($p_gallery_id))
+      if (false === DoesGalleryUseTags($p_gallery_id))
       {
         AddImageToGalleryIndex($p_gallery_id, $this->id);
       }

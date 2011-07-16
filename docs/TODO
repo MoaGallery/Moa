@@ -1,49 +1,46 @@
 
 
-NEXT TIME - 
+NEXT TIME -
 
 TODO -
-    Split Gallery class into a class and utility funcs.
-    GetGalleryThumbnail returns image if subgalleries are present. Should use their thumbnails instead.
+    TODO - Orphan image view has prev/next links that point to itself. Make new image view just for orphans that return correct IDs.
 
+    GetGalleryThumbnail returns image if subgalleries are present. Should use their thumbnails instead.
     Move events code from page_gallery_add into the js file.
     Minimal has no admin_maintain_form and out of date (forms and images_per_page missing from options).
-    Home button at end of update.
-    
+
 Bugs -
     galleryfuncs stuff returns false if it fails, we need to check it.
     Popup appears on top left if page is loaded with thumbnail under the mouse.
     Moadefault - long image descriptions expand the desc box and gets pushed below due to the float: left;
     Tags containing the seperator char are broken up on the tag admin page. Should be replaced.
 	  Replacing an image with a different sized file will keep the old dimensions in the DB.
-	  
-Fixed -
 
+
+
+  Pre-release (1.2.5) -
+ * Add error checking to new code.
+ * Escape all variables used in queries (mysql_real_escape_string).
+ * Check all queries include _utf8 when setting text fields.
+ * Bugs/todo items.
+ * Check all files verify login status before proceeding to process actions.
+ * Global search for TODO.
+ * Update and test install.php and upgrade.php.
+ * Version number change.
+ * Come out of debug mode.
+ * Final check with/without magic quotes.
+ * WC3 validation.
+ * Check in different browsers.
+ * Check changelog.
+ * Upgrade live site as a final test.
+   Update Documentation and release files.
+   Copy new code to sourceforge SVN.
+   Update perl script.
+   Update demo.
  
- 
-Done -
 
 
 
-  Pre-release (1.2.4) -
-  * Add error checking to new code.
-  * Escape all variables used in queries (mysql_real_escape_string).
-  * Check all queries include _utf8 when setting text fields.
-  * Bugs/todo items.
-  * Check all files verify login status before proceeding to process actions.
-  * Global search for TODO.
-  * Update install.php and upgrade.php.
-  * Version number change.
-  * Come out of debug mode.
-  * Final check with/without magic quotes.
-  * WC3 validation.
-  * Check in different browsers.
-  * Update Documentation and release files.
-  * Update perl script.
-  * Check changelog.
-
-    
-    
 // Active assert and make it quiet
 assert_options(ASSERT_ACTIVE, 1);
 assert_options(ASSERT_WARNING, 0);

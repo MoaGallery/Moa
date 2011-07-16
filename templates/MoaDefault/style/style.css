@@ -531,6 +531,7 @@ a.admin_link:hover {
         min-width: 580px;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
+        position: relative;
 }
 
 .headerbottom {
@@ -548,8 +549,9 @@ a.admin_link:hover {
 .headerinfoblock {
         position: relative;
         min-height: 138px !important;
-        float: right;
-        width: 400px;
+        position: absolute;
+        right: 10px;
+        width: 320px;
 }
 
 .headerinfoblock div {

@@ -514,6 +514,11 @@
   {
     global $CFG;
 
+    if ('0000000000' === $p_gallery_id)
+    {
+      return false;
+    }
+    
     // Find highest sequence number for the gallery 
     $query = "SELECT Seq FROM `".$CFG["tab_prefix"]."galleryindex` WHERE IDGallery = '".TypeSafeMysqlRealEscapeString($p_gallery_id)."' ORDER BY Seq DESC LIMIT 1";
     $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
