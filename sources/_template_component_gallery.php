@@ -9,12 +9,22 @@ if (isset($_REQUEST["CFG"]))
 
 include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
+function TagParseGallerySubmitLink($p_tag_options)
+{
+  return "onclick='gallery.SubmitEdit();'";
+}
+  
+function TagParseGalleryCancelLink($p_tag_options)
+{
+  return "onclick='gallery.CancelEdit();'";
+}
+
 function TagParseGalleryDescription($p_tag_options)
 {
 	global $gallery_id;
 
-	$Gallery = new Gallery();
-	$desc = $Gallery->getValue($gallery_id, "Description");
+	$Gallery = new Gallery($gallery_id);
+	$desc = $Gallery->description;
 	if (0 == strlen($desc))
 	{
 		$desc = " ";
@@ -26,8 +36,8 @@ function TagParseGalleryName($p_tag_options)
 {
 	global $gallery_id;
 
-	$Gallery = new Gallery();
-	$name = $Gallery->getValue($gallery_id, "Name");
+	$Gallery = new Gallery($gallery_id);
+	$name = $Gallery->name;
 	if (0 == strlen($name))
 	{
 		$name = " ";
@@ -41,8 +51,8 @@ function TagParseGalleryImageThumbnails($p_tag_options)
 	global $CFG;
 	global $page;
 
-	$Gallery = new Gallery();
-	if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != $Gallery->getSubGalleryCount($gallery_id)))
+	if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) &&
+	    (0 != Gallery::SubGalleryCount($gallery_id)))
 	{
 		return " ";
 	}
@@ -50,7 +60,7 @@ function TagParseGalleryImageThumbnails($p_tag_options)
 	$links = LoadTemplate("component_image_thumbnail.php");
 	$thumbs = "";
 
-	$images = $Gallery->getImages($gallery_id, $page);
+	$images = Gallery::GetImages($gallery_id, $page);
 
 	if (false !== $images)
 	{
@@ -64,14 +74,14 @@ function TagParseGalleryImageThumbnails($p_tag_options)
   				$popup = "";
   			} else
   			{
-  				$popup = "onmouseover='overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+  				$popup = "onmouseover='showOverlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\");' onmouseout='return hideOverlib();'";
   			}
   		} else
   		{
-  			$popup = "onmouseover='overlib(\"".popup_display_safe($image->description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+  			$popup = "onmouseover='showOverlib(\"".popup_display_safe($image->description)."\");' onmouseout='return hideOverlib();'";
   		}
-  		$Image = new Image();
-  		$Image->loadId($image->id);
+  		
+  		$Image = new Image($image->id);
   		$width = $Image->width;
   		$height = $Image->height;
   
@@ -97,10 +107,10 @@ function TagParseGalleryImageThumbnails($p_tag_options)
   		}
   
   		$thumb = $links;
-  
-  		if (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".$image->id.".jpg"))
+
+  		if (is_file($CFG["MOA_PATH"].$CFG["THUMB_PATH"]."thumb_".str_pad($image->id, 10, '0', STR_PAD_LEFT).".jpg"))
   		{
-  			$thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".$image->id.".jpg");
+  			$thumb = ParseVar($thumb, "ImageThumb", str_display_safe($CFG["THUMB_PATH"])."thumb_".str_pad($image->id, 10, '0', STR_PAD_LEFT).".jpg");
   		}
   		else
   		{
@@ -137,10 +147,9 @@ function TagParseGalleryPagination($p_tag_options)
 	$element = LoadTemplate("component_gallery_pagination.php");
 	$elementNoLink = LoadTemplate("component_gallery_pagination_nolink.php");
 	$pagination = "";
-  $gallery = new Gallery();
   
   // Check if this gallery has sub-galleries and if images are being suppressed
-  $sg = $gallery->getSubGalleries($gallery_id);
+  $sg = Gallery::GetSubGalleries($gallery_id);
   if (0 < count($sg))
   {
     if ($CFG['DISPLAY_PLAIN_SUBGALLERIES'])
@@ -150,9 +159,14 @@ function TagParseGalleryPagination($p_tag_options)
     }
   } 
 	
-	$imagesCount = $gallery->getImageCount($gallery_id);
+	$imagesCount = Gallery::ImageCount($gallery_id);
 	$pageCount = ceil($imagesCount / $CFG['IMAGES_PER_PAGE']);
 
+	if ($page > $pageCount)
+	{
+	  $page = $pageCount;
+	}
+	
 	if ((1 == $pageCount) || (0 == $imagesCount))
 	{
 	  return " ";
@@ -275,11 +289,8 @@ function TagParseGallerySubgalleryThumbBlock($p_tag_options)
 	global $CFG;
 	global $gallery_id;
 
-	$Gallery = new Gallery();
-	$subs = $Gallery->getSubGalleryCount($gallery_id);
-	$images = $Gallery->getImageCount($gallery_id);
+	$subs = Gallery::SubGalleryCount($gallery_id);
 	if (0 == $subs)
-	//if ((0 == $subs) || (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != $images)) || ((0 != $subs) && (0 == $images) && (!$CFG["DISPLAY_PLAIN_SUBGALLERIES"])))
 	{
 		return " ";
 	}
@@ -292,13 +303,11 @@ function TagParseGallerySubGalleryThumbnails($p_tag_options)
 	global $gallery_id;
 	global $CFG;
 
-	$Gallery = new Gallery();
-
 	// Check if the hidden flag is set
 	if (isset($p_tag_options["hide"]))
 	{
 		// Sub-galleries should be hidden and we have some
-		if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != $Gallery->getSubGalleryCount($gallery_id)))
+		if (($CFG["DISPLAY_PLAIN_SUBGALLERIES"]) && (0 != Gallery::SubGalleryCount($gallery_id)))
 		{
 			if (0 == strcmp($p_tag_options["hide"], "noimage"))
 			{
@@ -310,26 +319,28 @@ function TagParseGallerySubGalleryThumbnails($p_tag_options)
 	$links = LoadTemplate("component_subgallery_thumbnail.php");
 	$thumbs = "";
 
-	$galleries = $Gallery->getSubGalleries($gallery_id);
+	$galleries = Gallery::GetSubGalleries($gallery_id);
+
 	foreach ($galleries as $gallery)
 	{
 		// Create an Overlib popup description
-		if (mb_strlen($gallery->m_description) <= 0) {
+		if (mb_strlen($gallery->description) <= 0) {
 			if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
 			{
 				$popup = "";
 			} else
 			{
-				$popup = "onmouseover='return overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+				$popup = "onmouseover='return showOverlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\");' onmouseout='return hideOverlib();'";
 			}
 		} else
 		{
-			$popup = "onmouseover='return overlib(\"".popup_display_safe($gallery->m_description)."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+			$popup = "onmouseover='return showOverlib(\"".popup_display_safe($gallery->description)."\");' onmouseout='return hideOverlib();'";
 		}
 
 		// Choose captions of the thumbnail
-		$subgallery_count = $Gallery->getSubGalleryCount($gallery->m_id);
-		$image_count = $Gallery->getImageCount($gallery->m_id);
+		$subgallery_count = Gallery::SubGalleryCount($gallery->id);
+		$image_count = Gallery::ImageCount($gallery->id);
+		
 		$cap = "";
 		if ($CFG["DISPLAY_PLAIN_SUBGALLERIES"])
 		{
@@ -377,9 +388,8 @@ function TagParseGallerySubGalleryThumbnails($p_tag_options)
 			}
 		}
 
-		$image_id = $Gallery->getThumbNail($gallery->m_id);
-		$Image = new Image();
-		$Image->LoadId($image_id);
+		$image_id = Gallery::getThumbNailID($gallery->id);
+		$Image = new Image($image_id);
 		$width = $Image->width;
 		$height = $Image->height;
 
@@ -404,7 +414,7 @@ function TagParseGallerySubGalleryThumbnails($p_tag_options)
 			}
 		}
 
-		$thumb = ParseVar($links, "GalleryThumbID", $gallery->m_id);
+		$thumb = ParseVar($links, "GalleryThumbID", $gallery->id);
 		$thumb = ParseVar($thumb, "GalleryThumbGlobalWidth", str_display_safe($CFG["THUMB_WIDTH"]));
 		$thumb = ParseVar($thumb, "GalleryThumbGlobalHeight", str_display_safe(ceil($CFG["THUMB_WIDTH"]*0.75)));
 		$thumb = ParseVar($thumb, "GalleryThumbWidth", str_display_safe($width));
@@ -423,10 +433,10 @@ function TagParseGallerySubGalleryThumbnails($p_tag_options)
 			$thumb = ParseVar($thumb, "GalleryThumb", "sources/_image_scaler.php?image_name=../media/img_scale_error.png&amp;display_width=".$CFG["THUMB_WIDTH"]);
 		}
 
-		$short_desc = $gallery->m_description;
-		if (60 < strlen($gallery->m_description))
+		$short_desc = $gallery->description;
+		if (60 < strlen($gallery->description))
 		{
-			$short_desc = substr($gallery->m_description, 0, 60);
+			$short_desc = substr($gallery->description, 0, 60);
 			$split = explode("\n", $short_desc);
 			$short_desc = $split[0]."...";
 		}
@@ -439,8 +449,8 @@ function TagParseGallerySubGalleryThumbnails($p_tag_options)
 		$thumb = ParseVar($thumb, "GalleryThumbChildTypeName", $child_name);
 		$thumb = ParseVar($thumb, "GalleryThumbDesc", $short_desc);
 		$thumb = ParseVar($thumb, "GalleryID", $gallery_id);
-		$thumb = ParseVar($thumb, "GalleryThumbTitle", str_display_safe($gallery->m_name));
-		$thumb = ParseVar($thumb, "GalleryThumbTitleShort", str_display_safe(substr($gallery->m_name, 0, $CFG["TITLE_DESC_LENGTH"])."..."));
+		$thumb = ParseVar($thumb, "GalleryThumbTitle", str_display_safe($gallery->name));
+		$thumb = ParseVar($thumb, "GalleryThumbTitleShort", str_display_safe(substr($gallery->name, 0, $CFG["TITLE_DESC_LENGTH"])."..."));
 		$thumbs .= $thumb;
 	}
 
@@ -466,10 +476,8 @@ function TagParseGalleryDeleteFeedback($p_tag_options)
 function TagParseGalleryParentComboList($p_tag_options)
 {
 	global $parent_id;	
-	
-	$Gallery = new Gallery();
-	
-	$optionHtml = $Gallery->makeHtmlOptionsFromGalleryNames($parent_id);
+
+  $optionHtml = Gallery::MakeHtmlOptionsList($parent_id);
 
 	if (0 == strlen($optionHtml))
 	{
@@ -506,4 +514,20 @@ function TagParseThumbHeight($p_tag_options)
 	$str = str_display_safe((($CFG["THUMB_WIDTH"]*0.75))+ $result);
 	return $str;
 }
+
+function TagParseGallerySlideshow($p_tag_options)
+{
+  global $gallery_id;
+  global $CFG;
+  
+  $str = ' ';
+  
+  if (0 != Gallery::ImageCount($gallery_id))
+  {
+    $str = '<a href="index.php?action=slideshow&amp;gallery_id='.$gallery_id.'">View slideshow</a>';
+  } 
+  
+  return $str;
+}
+
 ?>

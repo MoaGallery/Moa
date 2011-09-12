@@ -26,77 +26,26 @@
 
   function GalleryCheckExists()
   {
+    $returnInfo = DefaultAjaxResult( 'GalleryExists');
+    
     // Get the ID
     $gallery_id = GetParam("gallery_id");
     if (false === $gallery_id)
     {
-      RaiseFatalError("No gallery id supplied.");
+      $returnInfo['Result'] = 'No gallery id supplied.';
+      echo json_encode($returnInfo);
       return false;
     }
 
     // Check that it is a real gallery
-    $Gallery = new Gallery();
-    if (false === $Gallery->exists($gallery_id))
+    if (false === Gallery::Exists($gallery_id))
     {
-      RaiseFatalError($gallery_id." Gallery does not exist.");
+      $returnInfo['Result'] = 'Gallery does not exist.';
+      echo json_encode($returnInfo);
       return false;
     }
 
     return $gallery_id;
-  }
-
-  function GalleryChangeValue($p_id, $p_field, $p_varname)
-  {
-    // Only proceed if a user is logged in
-    if (!UserIsLoggedIn())
-    {
-      RaiseFatalError("Not logged in.");
-      return false;
-    }
-
-    // Get the value
-    $newvalue = GetParam($p_varname);
-    if (false === $newvalue)
-    {
-      RaiseFatalError("No ".$p_varname." supplied.");
-      return false;
-    }
-
-    // Try to change the value
-    $Gallery = new Gallery();
-    if (false === $Gallery->changeValue($p_id, $p_field, $newvalue))
-    {
-      RaiseFatalError("Could not set new ".$p_varname, false);
-      return false;
-    }
-
-    return true;
-  }
-
-  function GalleryGetValue($p_id, $p_field, $p_short = false)
-  {
-  	if ('0000000000' == $p_id)
-  	{
-  		return;
-  	}
-  	$Gallery = new Gallery();
-  	$value = $Gallery->getValue($p_id, $p_field);
-
-  	if (false === $value)
-  	{
-  		RaiseFatalError("Could not get value for field '".$p_field."'", false);
-  		return false;
-  	}
-
-  	OutputPrefix("OK");
-  	if (($p_short) && (20 < mb_strlen($value)))
-  	{
-  		echo mb_substr($value, 0, 17)."...";
-  	} else
-  	{
-  	  echo $value;
-  	}
-  	return true;
   }
 
   function GalleryDelete($p_id)
@@ -106,20 +55,23 @@
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
+    $returnInfo = DefaultAjaxResult( 'GalleryDelete');
+    
     // Try to delete the gallery
-    $Gallery = new Gallery();
-    if (false === $Gallery->delete($p_id))
+    if (false === Gallery::Delete($p_id))
     {
-      RaiseFatalError("Could not delete gallery.".$errorString, false);
-      return false;
+      $returnInfo['Result'] = 'Could not delete gallery.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function GalleryImageThumbs($p_id)
@@ -129,7 +81,7 @@
     global $template_name;
     global $errorString;
     global $page;
-
+    
     // Set global vars if needed
     if (!isset($preCache))
     {
@@ -146,29 +98,41 @@
 		  }
     }
     
-    OutputPrefix("OK");
+    // Get the page
+    $page = GetParam("page");
+    if (false === $page)
+    {
+      $page = 1;
+    }
+    
+    $returnInfo = DefaultAjaxResult( 'GetThumbnails');
 
-    $page = 1;
-    echo LoadTemplateRoot("page_gallery_view.php");
+    $thumbs = LoadTemplateRoot("page_gallery_view.php");
+    
+    $returnInfo['HTML'] = $thumbs;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
 
-    return true;
+    return $returnInfo;
   }
 
   function GalleryEdit($p_id)
   {
+    $returnInfo = DefaultAjaxResult( 'GalleryEdit');
+
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
-    {
-      RaiseFatalError("Not logged in.");
-      return false;
+    {      
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the name
     $newname = GetParam("name");
     if (false === $newname)
     {
-      RaiseFatalError("No name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No name supplied.';
+      return $returnInfo;
     }
 
     // Get the description
@@ -181,17 +145,17 @@
     // Get the ParentID
     $newpid = GetParam("parent_id");
     if (false === $newpid)
-    {
-      RaiseFatalError("No parent ID supplied.");
-      return false;
+    {      
+      $returnInfo['Result'] = 'No parent ID supplied.';
+      return $returnInfo;
     }
 
     // Get the Tagged flag
     $newtagged = GetParam("tagged");
     if (false === $newtagged)
-    {
-      RaiseFatalError("No tagged flag supplied.");
-      return false;
+    {           
+      $returnInfo['Result'] = 'No tagged flag supplied.';
+      return $returnInfo;
     }
     
     // Get the tags
@@ -201,45 +165,56 @@
 
       if ((0 == strcmp($newtagged, "true")) &&
           (strlen($newtags) == 0))
-      {
-        RaiseFatalError("Whitespace may not be used as a tag.");
-        return false;
+      {       
+        $returnInfo['Result'] = 'Whitespace may not be used as a tag.';
+        return $returnInfo;
       }
     }
     else
     {
-      RaiseFatalError("No tags supplied.");
-      return false;
+      $returnInfo['Result'] = 'No tags supplied.';
+      return $returnInfo;      
     }
     
-    // Try to change the value
-    $Gallery = new Gallery();
-    if (false === $Gallery->edit($p_id, $newname, $newdesc, $newpid, $newtags, $newtagged))
+    // Try to change the gallery
+    $Gallery = new Gallery($p_id);
+    $Gallery->name = $newname;
+    $Gallery->description = $newdesc;
+    $Gallery->parent_id = $newpid;
+    $Gallery->tags = $newtags;
+    $Gallery->useTags = (0 == strcmp($newtagged, 'true')) ? true : false;
+    
+    if (false === $Gallery->Commit())
     {
-      RaiseFatalError("Could not change gallery.", false);
-      return false;
+      $returnInfo['Result'] = 'Could not update gallery.';
+      return $returnInfo;
     }
 
-    return true;
+    unset($returnInfo['Result']);
+    $returnInfo['Status'] = 'SUCCESS';
+    return $returnInfo;
   }
 
   function GalleryAdd()
-  {
+  {       
     global $Userinfo;
     global $CFG;
+    
+    $returnInfo = DefaultAjaxResult( 'GalleryAdd');    
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
-    {
-      RaiseFatalError("Not logged in.");
-      return false;
+    {      
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the name
     $newname = GetParam("name");
     if (false === $newname)
     {
-      RaiseFatalError("No name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No name supplied.';
+      return $returnInfo;
     }
 
     // Get the description
@@ -253,16 +228,16 @@
     $newpid = GetParam("parent_id");
     if (false === $newpid)
     {
-      RaiseFatalError("No parent ID supplied.");
-      return false;
+      $returnInfo['Result'] = 'No parent ID supplied.';
+      return $returnInfo;
     }
 
     // Get the Tagged flag
     $newtagged = GetParam("tagged");
     if (false === $newtagged)
     {
-      RaiseFatalError("No tagged flag supplied.");
-      return false;
+      $returnInfo['Result'] = 'No tagged flag supplied.';
+      return $returnInfo;
     }
     
     // Get the tags
@@ -273,26 +248,36 @@
       if ((0 == strcmp($newtagged, "true")) &&
           (strlen($newtags) == 0))
       {
-        RaiseFatalError("Whitespace may not be used as a tag.");
-        return false;
+        $returnInfo['Result'] = 'Whitespace may not be used as a tag.';
+        return $returnInfo;
       }
     }
     else
     {
-      RaiseFatalError("No tags supplied.");
-      return false;
+      $returnInfo['Result'] = 'No tags supplied.';
+      return $returnInfo;
     }
     
-    // Try to add the values
+    // Try to add the gallery
     $Gallery = new Gallery();
-    $result = $Gallery->add($newname, $newdesc, $newpid, $newtags, $newtagged);
+    $Gallery->name = $newname;
+    $Gallery->description = $newdesc;
+    $Gallery->parent_id = $newpid;
+    $Gallery->tags = $newtags;
+    $Gallery->useTags = (0 == strcmp($newtagged, 'true')) ? true : false;
+    
+    $result = $Gallery->Commit();
     if (false === $result)
     {
-      RaiseFatalError("Could not add gallery.", false);
-      return false;
+      $returnInfo['Result'] = 'Could not add gallery.';
+      return $returnInfo;
     }
 
-    return $result;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    $returnInfo['NewID'] = $Gallery->id;
+    return $returnInfo;
   }
 
   function GalleryAjaxMain()
@@ -301,115 +286,53 @@
 	  $action = GetParam("action");
 	  if (false === $action)
 	  {
-	    RaiseFatalError("No action supplied.");
+	    $returnInfo = DefaultAjaxResult( 'ActionCheck');
+	    $returnInfo['Result'] = 'No action supplied.';
+	    echo json_encode($returnInfo);
+	    return;
 	  }
 
 	  switch ($action)
 	  {
-	    case "changename" :
-	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-	    	{
-		      if (GalleryChangeValue($gallery_id, "Name", "name"))
-		      {
-		      	echo "OK";
-		      }
-	    	}
-			  break;
-			}
-	    case "changedesc" :
-	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-        {
-		      if (GalleryChangeValue($gallery_id, "Description", "desc"))
-		      {
-		      	echo "OK";
-		      }
-        }
-	      break;
-	    }
 	    case "edit" :
 	    {
-	    	$gallery_id = GalleryCheckExists();
+	      $gallery_id = GalleryCheckExists();
 	    	if (false !== $gallery_id)
-        {
-		      if (GalleryEdit($gallery_id))
-		      {
-		      	echo "OK";
-		      }
+	    	{
+	    	  echo json_encode(GalleryEdit($gallery_id));
         }
 	      break;
 	    }
 	    case "add" :
-      {
-        $galID = GalleryAdd();
-        if (false !== $galID)
-        {
-          echo "OK\n".$galID;
+        {                       
+          echo json_encode(GalleryAdd());
+          break;
         }
-        break;
-      }
-	    case "changeparent" :
-	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-        {
-		      GalleryChangeValue($gallery_id, "IDParent", "parent_id");
-        }
-	      break;
-	    }
-	    case "getname" :
-	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-        {
-	        GalleryGetValue($gallery_id,"Name");
-        }
-	      break;
-	    }
-	    case "getdesc" :
-	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-        {
-	        GalleryGetValue($gallery_id,"Description");
-        }
-	      break;
-	    }
-	    case "getparent" :
-	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-        {
-	        GalleryGetValue($gallery_id,"IDParent");
-        }
-	      break;
-	    }
 	    case "delete" :
 	    {
-	    	$gallery_id = GalleryCheckExists();
-	    	if (false !== $gallery_id)
-        {
-	        GalleryDelete($gallery_id);
-        }
-        break;
+          $gallery_id = GalleryCheckExists();
+          if (false !== $gallery_id)
+          {
+            echo json_encode(GalleryDelete($gallery_id));
+          }
+          break;
 	    }
 	    case "image_thumbs" :
-      {
-        $gallery_id = GalleryCheckExists();
-        if (false !== $gallery_id)
         {
-          GalleryImageThumbs($gallery_id);
+          $gallery_id = GalleryCheckExists();
+          if (false !== $gallery_id)
+          {
+            echo json_encode(GalleryImageThumbs($gallery_id));
+          }
+          break;
         }
-        break;
-      }
-	    default :
-			{
-				RaiseFatalError("Unknown action.");
-				break;
-			}
+        default :
+        {
+          $returnInfo = DefaultAjaxResult( 'ActionCheck');
+          $returnInfo['Result'] = 'Unknown action.';
+          echo json_encode($returnInfo);
+          break;
+        }
 	  }
   }
 

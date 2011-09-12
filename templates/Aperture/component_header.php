@@ -11,9 +11,6 @@
       <ul class="header_breadcrumb">
         <moatag type="BreadcrumbList" format="linear" spacing="18">
       </ul>
-      <!-- <p class="template_logo">
-        <img src="<moatag type="TemplatePath">media/aperture.gif" height="79" width="423" alt="logo"/>
-      </p> -->
       <p class="site_name">
         <moatag type="HeaderSiteName">
       </p>

@@ -12,7 +12,7 @@
       </h1>
 
       <div class="gallery_desc">
-        <p>Images that are in no gallery</p>
+        <p>Images that are in no gallery</p>        
         <ul class="image_thumbs_list">
           <moatag type="AdminOrphanNoGallery" success="All ok">
         </ul>

@@ -50,18 +50,4 @@
   }
   
   $headercontent .= LoadTemplateRoot("component_header.php");
-
-  // Check gallery exists and set to home if it doesn't
-  if (!$INSTALLING)
-  {
-    if (0 != strcmp("0000000000", $current_gallery))
-    {
-      $query = "SELECT Name FROM `".$CFG["tab_prefix"]."gallery` WHERE (IDGallery = '".mysql_real_escape_string($current_gallery)."')";
-      $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
-      if (0 == mysql_num_rows($result))
-      {
-        $current_gallery = "0000000000";
-      }
-    }
-  }
 ?>

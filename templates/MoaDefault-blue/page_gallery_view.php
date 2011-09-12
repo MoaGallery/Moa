@@ -1,4 +1,4 @@
-<div id="galleryblockfeedback"><moatag type="GalleryDeleteFeedback"></div>
+<div id='feedback_area'><moatag type="GalleryDeleteFeedback"></div>
 <div id="galleryblock">
   <div class="mainblock">
     <p class="mainblockheader">
@@ -14,11 +14,16 @@
           <moatag type="GalleryDescription">
         </div>
       </div>
-      <ul class="pagination_block">
-        <moatag type="GalleryPagination">
-      </ul>
       <div>
         <moatag type="GallerySubgalleryThumbnails" hide="image">
+        <div class="galleryControls">
+          <ul class="pagination_block">
+            <moatag type="GalleryPagination">
+          </ul>
+          <div class="slideshowLink">
+            <moatag type="GallerySlideshow">
+          </div>
+        </div>
         <div id="galleryblockimagethumbs">
           <moatag type="GalleryImageThumbnails">
         </div>

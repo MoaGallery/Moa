@@ -1,13 +1,18 @@
 <moatag type="AdminLinks" location="admin">
+
+<div id='feedback_area'>
+      <moatag type="FTPStatus">
+</div>
 <div class="mainblock">
   <p class="mainblockheader">
     FTP
   </p>
   <div class="mainblockcontent">
-    <div id='ftpfeedback'>
-      <moatag type="FTPStatus">
-    </div>
-    There are currently <moatag type="FTPCount"> image(s) to be added.<br/><br/>
+    <p class="ftpimagecount">
+      There are currently <moatag type="FTPCount"> image(s) to be added.
+    </p>
+
+    <div id='ftpprogressbar'> </div>
 
     <form id="ftpform" method="post" action="index.php?action=admin_ftp&amp;pageaction=add" enctype="multipart/form-data">
       <fieldset class="formFieldset">

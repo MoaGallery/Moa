@@ -18,11 +18,15 @@
 
   include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
+  $main = new Main();
+
+  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+  $bodycontent .= LoadTemplateRoot("page_main_view.php");
+  
   // Only include Javascript if a user is logged in
   if (UserIsLoggedIn())
   {
-    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_ui.js'></script>\n";
     $bodycontent .= "<script type='text/javascript'>\n";
     $bodycontent .= "  //<![CDATA[\n";
     $bodycontent .= "  title_max_length = ".$CFG["TITLE_DESC_LENGTH"].";\n";
@@ -42,13 +46,11 @@
     $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 
     $bodycontent .= "  var main = new Main('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
-    $bodycontent .= "  main.PreLoad('".js_var_display_safe(_MainGetDescription())."');\n";
+    $bodycontent .= "  main.PreLoad('".js_var_display_safe($main->description)."');\n";
     $bodycontent .= " //]]>\n";
     $bodycontent .= "</script>\n";
   }
 
-  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
-  $bodycontent .= LoadTemplateRoot("page_main_view.php");
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
   $bodytitle =  "Main gallery - ".html_display_safe($CFG['SITE_NAME']);

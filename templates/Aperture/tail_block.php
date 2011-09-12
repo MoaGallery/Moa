@@ -19,11 +19,11 @@
       return;
     }
 
-    var link = document.getElementById("edit_link");
+    var link = $('#edit_link');
 
-    if (null != link)
+    if (link.length)
     {
-      var check = document.getElementById("hidden_hack").innerHTML;
+      var check = $('#hidden_hack').html();
       if ("true" == check)
       {
         timeout--;
@@ -31,8 +31,8 @@
         return;
       } else
       {
-        addEvent(link, "click", ClickEdit);
-        document.getElementById("hidden_hack").innerHTML = "true";
+        link.click(ClickEdit);
+        $('#hidden_hack').html('true');
         timeout = 600;
         return;
       }
@@ -52,42 +52,48 @@
   {
     expanded = !expanded;
 
-    var block = document.getElementById(type+"_edit");
-    var block_bg = document.getElementById(type+"_edit_bg");
+    var block = $('#' + type + '_edit');
+    var block_bg = $('#' + type + '_edit_bg');
     if (expanded)
     {
-      block.style.height = "550px";
+      block.height('630px');
     } else
     {
-      block.style.height = "375px";
+      block.height('445px');
     }
   }
 
   function ClickEdit(e)
   {
-    if (null != document.getElementById(type+"formexpandlink"))
+    if ($('#' + type + 'formexpandlink').length)
     {
-      addEvent(document.getElementById(type+"formexpandlink"), "click", ClickExpand);
-      addEvent(document.getElementById(type+"formsubmit"), "click", ClickSubmit);
-      var block = document.getElementById(type+"_edit");
-      block.style.height = "375px";
+      $('#' + type + 'formexpandlink').click(ClickExpand);
+      $('#' + type + 'formsubmit').click(ClickSubmit);
+      var block = $('#' + type + '_edit');
+      block.height('445px');
     }
   }
 
   type = "gallery";
-  if (null == document.getElementById("add_link"))
+  if (!$('#add_link').length)
   {
     type = "image";
   }
-  if (null != document.getElementById("mainblockdesc"))
+  if ($('#mainblockdesc').length)
   {
     type = "main";
   }
 
-  var link = document.getElementById("edit_link");
-  if (null != link)
+  var link = $('#edit_link');
+  if (link.length)
   {
-    addEvent(link, "click", ClickEdit);
-    document.getElementById("hidden_hack").innerHTML = "true";
+    link.click(ClickEdit);
+    $('#hidden_hack').html('true');
   }
+
+  var node = $('#nav_tree_link_0000000000');
+  if (node.length)
+  {
+    node.attr('href', 'index.php');
+  }	
 </script>

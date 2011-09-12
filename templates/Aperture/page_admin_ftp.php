@@ -2,7 +2,7 @@
   <div class="left_column left_column_shadow">
     <moatag type="AdminLinks" location="admin">
     <br/>
-    <div id='ftpfeedback'>
+    <div id='feedback_area'>
       <moatag type="FTPStatus">
     </div>
   </div>
@@ -17,6 +17,8 @@
       There are currently <moatag type="FTPCount"> image(s) to be added.<br/>
     </span>
     <br/>
+    
+    <p id='ftpprogressbar'> </p>
 
     <form id="ftpform" method="post" action="index.php?action=admin_ftp&amp;pageaction=add" enctype="multipart/form-data">
       <fieldset class="formFieldset">

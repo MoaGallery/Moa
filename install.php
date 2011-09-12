@@ -6,6 +6,21 @@
     echo "Hacking attempt.";
     die();
   }
+
+  $CFG["MOA_PATH"] = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
+  include_once("sources/_db_funcs.php");
+  include_once("sources/id.php");
+  include_once("sources/common.php");
+  include_once("sources/_template_parser.php");  
+  
+  if (isset($_REQUEST["action"]))
+  {
+    if (strcmp($_REQUEST["action"], "dbcheck") == 0)
+    {
+      dbcheck();
+      die();
+    }
+  }
   
   $APACHE_MIN_VERSION = ARRAY( 2, 0, 0);
   $PHP_MIN_VERSION    = ARRAY( 5, 2, 0);
@@ -579,41 +594,34 @@
   // Stage 2A = Gather system settings
   function Stage2A()
   {
-    echo "<script type='text/javascript' src='sources/_request.js'></script>\n";
     echo "<script type='text/javascript' src='sources/common.js'></script>\n";
     echo "<script type='text/javascript'>\n";
     echo "function dbcheck()\n";
     echo "{\n";
-	  echo "  var l_dbname = document.getElementById('dbname').value;\n";
-	  echo "  var l_dbuser = document.getElementById('dbuser').value;\n";
-	  echo "  var l_dbpass = document.getElementById('dbpass').value;\n";
-	  echo "  var l_dbhost = document.getElementById('servername').value;\n";
+	  echo "  var l_dbname = $('#dbname').val();\n";
+	  echo "  var l_dbuser = $('#dbuser').val();\n";
+	  echo "  var l_dbpass = $('#dbpass').val();\n";
+	  echo "  var l_dbhost = $('#servername').val();\n";
     echo "\n";
-	  echo "  var url = 'action=dbcheck' +\n";
-	  echo "            '&dbname='+l_dbname +\n";
-	  echo "            '&dbuser='+l_dbuser +\n";
-	  echo "            '&dbpass='+l_dbpass +\n";
-	  echo "            '&dbhost='+l_dbhost;\n";
+	  echo "  var params = '?action=dbcheck' +\n";
+	  echo "               '&dbname='+l_dbname +\n";
+	  echo "               '&dbuser='+l_dbuser +\n";
+	  echo "               '&dbpass='+l_dbpass +\n";
+	  echo "               '&dbhost='+l_dbhost;\n";
 	  echo "\n";
-	  echo "  var request = new httpRequest('install.php', Stage2ACallback, null);\n";
-	  echo "  request.update(url, 'GET');\n";
+	  echo "  $.ajax({ url: 'install.php' + params, success: Stage2ACallback, cache: false});\n";
     echo "}\n";
     echo "\n";
-    echo "function Stage2ACallback(text, status, xml, note)\n";
+    echo "function Stage2ACallback(p_result)\n";
     echo "{\n";
-	  echo "  if (status != 200)\n";
+	  echo "  if ('OK' != p_result.substr(0, 2))\n";
 	  echo "  {\n";
-	  echo "    document.getElementById('checkresultdb').innerHTML = 'Server returned code ' + status;\n";
-	  echo "    return;\n";
-	  echo "  }\n";
-	  echo "  if ('OK' != text.substr(0, 2))\n";
-	  echo "  {\n";
-    echo "    text = str_replace(text, 'IERROR\\n', '');";
-	  echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
+    echo "    result = str_replace(p_result, 'IERROR\\n', '');";
+	  echo "    $('#checkresultdb').html(result);\n";
 	  echo "    return;\n";
 	  echo "  } else\n";
 	  echo "  {\n";
-    echo "    document.getElementById('checkresultdb').innerHTML = text;\n";
+    echo "    $('#checkresultdb').html(p_result);\n";
 	  echo "  }\n";
     echo "}\n";
     echo "</script>\n";
@@ -656,7 +664,7 @@
     echo "<td><input id='checklogin' type='button' value='Check Login'/></td><td><span id='checkresultdb'></span></td></tr>\n";
 
     echo "<script type='text/javascript'>\n";
-    echo "addEvent( document.getElementById('checklogin'), 'click', function(e) {dbcheck();});\n";
+    echo "$('#checklogin').click(function(e) {dbcheck();});\n";
     echo "</script>\n";
 
     // Spacer for titles
@@ -807,6 +815,7 @@
       fwrite($file, "  \$CFG['TEMPLATE'] = 'MoaDefault';\n");
       fwrite($file, "  \$CFG['SITE_BYLINE'] = '<your byline>';\n");
       fwrite($file, "  \$CFG['SITE_NAME'] = '<your gallery name> ';\n");
+      fwrite($file, "  \$CFG['SLIDESHOW_DELAY'] = 8000;\n");
       fwrite($file, "  \$CFG['MOA_MAJOR_VERSION'] = '".$MOA_MAJOR_VERSION."';\n");
       fwrite($file, "  \$CFG['MOA_MINOR_VERSION'] = '".$MOA_MINOR_VERSION."';\n");
       fwrite($file, "  \$CFG['MOA_REVISION'] = '".$MOA_REVISION."';\n");
@@ -1071,13 +1080,6 @@
        $INSTALLING = true;
        $template_name = "MoaDefault";
        $bodycontent = "";
-       $CFG["MOA_PATH"] = str_replace( "\\", "/", dirname(realpath(__FILE__)))."/";
-
-       include_once("sources/_db_funcs.php");
-       include_once("sources/id.php");
-       include_once("sources/common.php");
-       include_once("sources/_template_parser.php");
-
        $CFG["MOA_VERSION"] = $MOA_VERSION;
        
        // Set a few defaults;
@@ -1090,17 +1092,9 @@
          $CFG['SITE_BYLINE'] = 'installing...';
        }
 
-	     if (isset($_REQUEST["action"]))
-	     {
-	       if (strcmp($_REQUEST["action"], "dbcheck") == 0)
-	       {
-	         dbcheck();
-	         die();
-	       }
-	     }
-
        include_once ("sources/_html_head.php");
        echo "<title>Moa install</title>";
+       echo "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
      ?>
   </head>
   <body>
@@ -1110,9 +1104,9 @@
       $headercontent = "";
     ?>
     <script type='text/javascript'>
-      document.getElementById("imagestats").innerHTML = "&nbsp";
-      document.getElementById("buttonblock").innerHTML = "&nbsp";
-      document.getElementById("breadcrumbframe").innerHTML = "&nbsp";
+      $('#imagestats').html('&nbsp');
+      $('#buttonblock').html('&nbsp');
+      $('#breadcrumbframe').html('&nbsp');
     </script>
     <?php
       $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
@@ -1189,10 +1183,10 @@
       echo "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
     ?>
     <script type='text/javascript'>
-      var node = document.getElementById('logolink');
-      if (node != null)
+      var node = $('#logolink');
+      if (node.length)
       {
-        node.href = "#";
+        node.attr('href', '#');
       }
     </script>
   </body>

@@ -1,15 +1,27 @@
 body {
         font-family: Verdana, Arial, Helvetica, sans-serif;
+        height: 100%;
 }
 
 a {
         text-decoration: none;
         border-style: none;
+        color: black;
+}
+
+a:visited, a:hover {
+        text-decoration: none;
+        border-style: none;
+        color: black;
 }
 
 a img {
         text-decoration: none;
         border-style: none;
+}
+
+p {
+        margin: 0;
 }
 
 .area {
@@ -539,7 +551,7 @@ a.admin_link:hover {
         margin: 0;
         overflow: auto;
         border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
+        border-bottom-right-radius: 8px;        
 }
 
 .breadcrumbframe {
@@ -547,11 +559,11 @@ a.admin_link:hover {
 }
 
 .headerinfoblock {
-        position: relative;
-        min-height: 138px !important;
         position: absolute;
-        right: 10px;
+        min-height: 138px !important;
+        float: right;
         width: 320px;
+        right: 10px;        
 }
 
 .headerinfoblock div {
@@ -750,6 +762,7 @@ a.admin_link:hover {
         margin: 0;
         padding: 0;
         display: block;
+        overflow: auto;
 }
 
 #tag_add_line {
@@ -1052,7 +1065,8 @@ a.admin_link:hover {
         padding: 10px 0 5px 0;
         margin: 0 auto;
         width: 420px;
-        overflow: auto;        
+        overflow: auto;  
+        clear: both;      
 }
 
 .pagination_block li {
@@ -1117,4 +1131,172 @@ a.pagination:hover {
         float: left;
         display: block;
         padding: 10px 20px 0 20px;
+}
+
+.ftpimagecount {
+        margin: 0 0 20px 0; 
+}
+
+.template_list {
+        font-size: 12px;
+}
+
+.template_list li {
+        display: block;
+        width: 302px;
+        height: 400px;
+        float: left;
+        margin: 10px;
+        padding: 5px;
+        border: 1px solid black;
+        box-shadow: 5px 5px 5px #888;
+        -webkit-box-shadow: 5px 5px 5px #888;
+        background-color: white;
+}
+
+.template_list p {
+        margin: 2px 0;
+}
+
+.template_image img {
+        display: block;
+}
+
+.template_name {
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+}
+
+.galleryControls {
+        margin-top: 20px;
+        position: relative;
+        height: 40px;
+}
+
+.slideshowLink {
+        margin-left: 10px;
+        position: absolute;
+        top: 15px;
+}
+
+.slideshowLink a, .slideshowLink a:visited {
+        font-weight: bold;
+        color: grey;
+}
+
+.slideshowLink a:hover {
+        font-weight: bold;
+        color: grey;
+        text-decoration: underline;
+}
+
+.slideshowFullscreen {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+}
+
+.slideshowImage {
+        position: absolute;
+        display: hidden;
+}
+
+.slideshowDetails {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        text-align: center;
+        color: white;
+}
+
+.slideshowName {
+        display: block;
+        color: white;
+        font-size: 40px;
+        padding: 0 0 10px;
+}
+
+.slideshowDesc {
+        width: 50%;
+        margin: 0 auto;
+        display: block;
+        color: #c0c0c0;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 5px 5px 65px 5px;
+}
+
+.slideshowControls {
+        color: white;
+        position: absolute;
+        left: 50%;
+        bottom: 4px;
+}
+
+.slideshowControlsInner {
+        position: absolute;
+        width: 420px;
+        left: -180px;
+        bottom: 0;
+}
+
+.slideshowPrevious {
+        float: left;
+}
+
+.slideshowPause {
+        float: left;
+}
+
+.slideshowNext {
+        float: left;
+}
+
+.slideshowProgressBar {
+        float: left;
+        width: 300px;
+        border: 1px solid #c0c0c0;
+}
+
+.slideshowProgressBar div {
+        background-color: #c0c0c0;
+        border: 1px solid #000000;
+        width: 0;
+}
+
+.slideshowLoading {
+        color: #c0c0c0;
+        float: left;
+        padding-left: 29px;
+        background: url(../../../media/loading.gif) no-repeat;
+        margin-left: 5px;
+        display: none;
+        left: 180px;
+        bottom: 4px;
+        height: 24px;
+        position: absolute;
+}
+
+.slideshowOptions {
+        color: #c0c0c0;
+        position: absolute;
+        left: 5px;
+        bottom: 0px;
+        border: #202020 solid 1px;
+        border-bottom: 0;
+        width: 200px;
+        height: 20px;
+        border-radius: 10px 10px 0 0;
+        padding: 5px 10px;
+        background-color: #000000;
+}
+
+#slideshowOptionDelay {
+        width: 50px;
+}
+
+#slideshowOptionsForm hr {
+        background-color: #ff0000;
 }

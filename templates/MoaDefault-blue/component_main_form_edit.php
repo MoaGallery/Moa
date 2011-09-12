@@ -12,8 +12,8 @@
     </li>
   
     <li class="formButtons">
-      <input type='button' value='Submit' id='mainformsubmit' onclick='main.SubmitEdit();'/>
-      <input type='button' value='Cancel' id='mainformcancel' onclick='main.CancelEdit();'/>
+      <input type='button' value='Submit' id='mainformsubmit' <moatag type="MainSubmitLink">/>
+      <input type='button' value='Cancel' id='mainformcancel' <moatag type="MainCancelLink">/>
     </li>
   </ul>
 </fieldset>

@@ -28,9 +28,14 @@
       return false;
     }
 
-    OutputPrefix("OK");
+    $returnInfo = DefaultAjaxResult( 'ftpGetFileList');
 
-    echo _BulkUpload_JSONFileList();
+    $returnInfo['FileList'] = _BulkUpload_FileList();
+    
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function BulkUploadStep()
@@ -45,6 +50,8 @@
       return false;
     }
 
+    $returnInfo = DefaultAjaxResult( 'ftpAddOneFile');
+    
     $fileName = GetParam('filename');
     $parentID = GetParam('parentid');
     $tags = GetParam('tags');
@@ -55,35 +62,32 @@
         (false === $tags) ||
         (false === $desc))
     {
-    	OutputPrefix('ERROR');
-    	echo 'The server expected more information than was sent.  This could be a network problem or a bug.';
-    	return false;
+      $returnInfo['Result'] = 'The server expected more information than was sent.  This could be a network problem or a bug.';
+      return $returnInfo;
     }
 
     if ((strcmp( $parentID, 'blank') == 0) && (strlen($tags) == 0))
     {
-      OutputPRefix('ERROR');
-      echo 'No tags or target gallery specified';
-      return false;
+      $returnInfo['Result'] = 'No tags or target gallery specified.';
+      return $returnInfo;
     }
 
-
+    // TODO - BulkUpload class - using errorString
     $result = _BulkUpload_AddFile($fileName, $parentID, $tags, $desc);
 
-    if (is_string($result))
-    {
-      OutputPrefix("OK");
-    	echo "Added - ".$result;
-    } else
+    if (!is_string($result))
     {
       if (true !== $result)
       {
-        OutputPrefix("ERROR");
-      	echo $errorString;
+        $returnInfo['Result'] = 'Could not add the file. '.$errorString;
+        return $returnInfo;
       }
     }
 
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function BulkUploadAjaxMain()
@@ -92,25 +96,30 @@
     $action = GetParam("action");
     if (false === $action)
     {
-      RaiseFatalError("No action supplied.");
+      $returnInfo = DefaultAjaxResult( 'ActionCheck');
+	    $returnInfo['Result'] = 'No action supplied.';
+	    echo json_encode($returnInfo);
+	    return;
     }
 
     switch ($action)
     {
-    	case "list" :
-    	{
-    	  BulkUploadList();
-    		break;
-    	}
+      case "list" :
+      {
+        echo json_encode(BulkUploadList());
+      	break;
+      }
       case "step" :
       {
-        BulkUploadStep();
+        echo json_encode(BulkUploadStep());
         break;
       }
       default :
       {
-        RaiseFatalError("Unknown action.");
-        break;
+        $returnInfo = DefaultAjaxResult( 'Unknown');
+	      $returnInfo['Result'] = 'Unknown action.';
+	      echo json_encode($returnInfo);
+	      return;
       }
     }
   }

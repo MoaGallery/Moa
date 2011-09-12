@@ -10,8 +10,7 @@
   include_once($CFG["MOA_PATH"]."sources/mod_image_funcs.php");
   $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
   $bodycontent .= "    <a onclick='history.go(-1)'><img src='".$CFG["IMAGE_PATH"].$_REQUEST["image_id"];
-  $Image = new Image();
-  $Image->loadId($_REQUEST["image_id"]);
+  $Image = new Image($_REQUEST["image_id"]);
   $ext = $Image->format;
   $bodycontent .= ".".$ext."' onmouseover='this.style.cursor=\"hand\"' alt='Full size image' /></a>";
   $bodytitle = "Image";

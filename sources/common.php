@@ -9,10 +9,20 @@ if (isset($_REQUEST["CFG"]))
 
 $MOA_MAJOR_VERSION = 1;
 $MOA_MINOR_VERSION = 2;
-$MOA_REVISION = 5;
+$MOA_REVISION = 6;
 $MOA_PATCH = "";
 $MOA_VERSION = $MOA_MAJOR_VERSION.".".$MOA_MINOR_VERSION.".".$MOA_REVISION.$MOA_PATCH;
 
+function DefaultAjaxResult( $p_operation)
+{
+  $returnInfo = array();
+  $returnInfo['Status'] = 'ERR';
+  $returnInfo['Operation'] = $p_operation;
+  $returnInfo['Result'] = 'Unknown error.';
+
+  return $returnInfo;
+}
+    
 // Function for retrieving date\time at page load
 function get_time_at_page_load() {
 	date_default_timezone_set("GMT");
@@ -150,6 +160,14 @@ function strip_magic_quotes($p_text)
 function magic_url_decode($p_text)
 {
 	return strip_magic_quotes($p_text);
+}
+
+function magic_url_encode($p_text)
+{
+  $result = str_replace('"', '\"', $p_text);
+	$result = str_replace("'", "\'", $result);
+
+	return $result;
 }
 
 function OutputPrefix($p_message)

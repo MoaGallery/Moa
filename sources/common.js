@@ -120,31 +120,14 @@ function UnEscapeNewLine(p_text)
 
 function FeedbackBox(p_text, p_success)
 {
-  var p_type = "Success";
-
   var newtext = feedback_box;
 
-  // Strip out ERROR and IERROR
-  var stub = p_text.substring(0, 5);
-  if ("ERROR" == stub)
-  {
-	  p_text = p_text.substring(6, 4096);
-	  p_type = "Error";
+  p_type = "Error";
+  if (p_success)
+  {	 
+	 p_type = "Success";
   }
-  
-  stub = p_text.substring(0, 6);
-  if ("IERROR" == stub)
-  {
-	  p_text = p_text.substring(7, 4096);
-	  p_type = "Error";
-  }
-
-  stub = p_text.substring(0, 2);
-  if ("OK" == stub)
-  {
-    p_text = p_text.substring(3, 4096);
-  }
-
+     
   newtext = str_replace(newtext, "<moavar FeedbackType>", p_type);
   newtext = str_replace(newtext, "<moavar FeedbackText>", p_text);
 
@@ -154,17 +137,13 @@ function FeedbackBox(p_text, p_success)
 //Applies neccesary styles to a DIV in order to hide id from view on a page.
 function hide_div( p_name)
 {
-   document.getElementById(p_name).style.display = "none";
-   //document.getElementById(p_name).style.position = "absolute";
-   //document.getElementById(p_name).style.cssFloat = "none";
+  $('#' + p_name).hide();
 }
 
 // Applies neccesary styles to a DIV in order to make it visable on a page.
 function show_div( p_name)
 {
-   //document.getElementById(p_name).style.position = "static";
-   //document.getElementById(p_name).style.cssFloat = "left";
-   document.getElementById(p_name).style.display = "block";
+  $('#' + p_name).show();
 }
 
 // Helper function that can be attached to the key event on a form input object.
@@ -173,7 +152,7 @@ function checkKey(p_e, p_submit, p_cancel)
 {
   var characterCode;
 
-  if(p_e && p_e.which)
+  if (p_e && p_e.which)
   {
     p_e = p_e;
     characterCode = p_e.which;
@@ -187,7 +166,8 @@ function checkKey(p_e, p_submit, p_cancel)
   // Check for enter
   if((characterCode == 13) && (null != p_submit))
   {
-    document.getElementById(p_submit).click();
+    $('#' + p_submit).click();
+    
     if(p_e.preventDefault)
     {
       p_e.preventDefault();
@@ -201,7 +181,8 @@ function checkKey(p_e, p_submit, p_cancel)
   // Check for escape
   if((characterCode == 27) && (null != p_cancel))
   {
-    document.getElementById(p_cancel).click();
+    $('#' + p_cancel).click();
+    
     if(p_e.preventDefault)
     {
       p_e.preventDefault();
@@ -215,51 +196,48 @@ function checkKey(p_e, p_submit, p_cancel)
   return true;
 }
 
-// Add an event function to a javascript DOM object
-function addEvent( p_obj, p_type, p_fn )
-{    
-  if (p_obj.addEventListener)
-    p_obj.addEventListener( p_type, p_fn, false );
-  else if (p_obj.attachEvent)
-  {	  
-    p_obj["e"+p_type+p_fn] = p_fn;
-    p_obj[p_type+p_fn] = function() { p_obj["e"+p_type+p_fn]( window.event ); }
-    p_obj.attachEvent( "on"+p_type, p_obj[p_type+p_fn] );
-  }   
-};
+var enableOverlib = false;
 
-//Remove an event function from a DOM object
-function removeEvent( p_obj, p_type, p_fn )
+function MouseMoved()
 {
-  if (p_obj.removeEventListener)
-    p_obj.removeEventListener( p_type, p_fn, false );
-  else if (p_obj.detachEvent)
+  enableOverlib = true;
+  $('body').unbind('mousemove');
+}
+
+function showOverlib(p_comment)
+{
+  if (enableOverlib)
   {
-    p_obj.detachEvent( "on"+p_type, p_obj[p_type+p_fn] );
-    p_obj[p_type+p_fn] = null;
-    p_obj["e"+p_type+p_fn] = null;
+    overlib(p_comment, ADAPTIVE_WIDTH, 100);
   }
 }
 
-function bin2hex(s) {
-  // Converts the binary representation of data to hex  
-  // 
-  // version: 812.316
-  // discuss at: http://phpjs.org/functions/bin2hex
-  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-  // +   bugfixed by: Onno Marsman
-  // +   bugfixed by: Linuxworld
-  // *     example 1: bin2hex('Kev');
-  // *     returns 1: '4b6576'
-  // *     example 2: bin2hex(String.fromCharCode(0x00));
-  // *     returns 2: '00'
-  var v,i, f = 0, a = [];
-  s += '';
-  f = s.length;
-  
-  for (i = 0; i<f; i++) {
-      a[i] = s.charCodeAt(i).toString(16).replace(/^([\da-f])$/,"0$1");
+function hideOverlib()
+{
+  if (enableOverlib)
+  {
+    return nd();
   }
-  
-  return a.join('');
 }
+
+function strPad(number, length)
+{
+  
+  var str = '' + number;
+  while (str.length < length) {
+      str = '0' + str;
+  }
+ 
+  return str;
+
+}
+
+$(document).ready(function()
+                   {
+                     $('body').mousemove(function()
+                                         {
+                                           MouseMoved();
+                                         }
+                                        );
+                   }
+                  );

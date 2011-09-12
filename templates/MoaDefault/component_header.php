@@ -3,7 +3,7 @@
     <a id="logolink" class="logolink" href="index.php">
       <!-- <img src="<moatag type="TemplatePath">media/moa-logo-vector.png" alt="Moa logo"/> -->
     </a>
-    <img src="<moatag type="TemplatePath">media/moa.png" width="71" height="100" class="logo" alt="Moa logo" />
+    <img src="<moatag type="TemplatePath">media/moa.png" width="71" height="100" class="logo" alt="Moa logo" alt="Moa logo" />
     <p class="site_name">
       <moatag type="HeaderSiteName">
     </p>

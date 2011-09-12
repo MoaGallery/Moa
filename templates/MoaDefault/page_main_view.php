@@ -1,4 +1,4 @@
-<div id="mainblockfeedback">
+<div id='feedback_area'>
   <moatag type="MainDeleteFeedback">
 </div>
 <div id="mainblock">

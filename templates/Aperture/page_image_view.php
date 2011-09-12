@@ -4,6 +4,7 @@
     <div>
       <moatag type="AdminLinks" location="image">
       <br/>
+      <div id='feedback_area'></div>
       <div id="imageblockinfo">
         <br/>
         <h3 id='imageblockdesc'>
@@ -27,12 +28,12 @@
   <div class="right_column right_column_shadow">
     <div class="right_image_column_image">
       <div class="image_toolbar">
-        <a href="index.php?action=image_view&amp;image_id=<moatag type="ImagePreviousID">&amp;parent_id=<moatag type="ParentID">">
+        <a href="index.php?action=image_view&amp;image_id=<moatag type="ImagePreviousID">&amp;parent_id=<moatag type="ParentID"><moatag type="ImageReferer">">
           <span class="image_prevnextfull">
             Previous
           </span>
         </a>
-        <a href="index.php?action=image_view&amp;image_id=<moatag type="ImageNextID">&amp;parent_id=<moatag type="ParentID">">
+        <a href="index.php?action=image_view&amp;image_id=<moatag type="ImageNextID">&amp;parent_id=<moatag type="ParentID"><moatag type="ImageReferer">">
           <span class="image_prevnextfull">
             Next
           </span>

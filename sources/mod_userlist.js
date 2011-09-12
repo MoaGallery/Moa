@@ -1,3 +1,11 @@
+var LastAction = 
+{ 
+  none: 0,   
+  addUser: 1,  
+  editUser: 2,
+  deleteUser: 3
+};
+
 // Used to sort users alphabetically
 function UserSort(p_a, p_b)
 {
@@ -121,54 +129,146 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
     return cont;
   };
 
-  // If the delete request fails, restore the user
-  this.DeleteRollback = function(p_id)
-  {
-    for (var i = 0; i < m_users.length; i++)
+  this.AjaxCallback = function(p_result)
+  { 
+    try
     {
-      if (m_users[i].m_id == p_id)
-      {
-        m_users[i].m_name = m_users[i].m_old_name;
-        m_users[i].m_admin = m_users[i].m_old_admin;
-        document.getElementById('user_'+p_id).innerHTML = m_users[i].m_old_innerHTML;
-        m_users[i].m_inuse = true;
-        m_users[i].m_old_name = "";
-        m_users[i].m_old_admin = "";
-        m_users[i].m_old_innerHTML = "";
-      }
+      var result = $.parseJSON(p_result);
     }
-  };
-  
-  // When the delete request returns from the server
-  this.DeleteCallback = function(p_text, p_status, p_xml, p_note)
-  {
-    if (p_status != 200)
+    catch(e)
     {
-      document.getElementById("userblockfeedback").innerHTML = FeedbackBox("Server returned code " + p_status, false);   
-      that.DeleteRollback(""+p_note);
+      var error = {status: '', statusText: 'Unknown response from server.'};
+      that.AjaxCallbackFail(error);
       return;
     }
-    if ("OK" != p_text.substr(0, 2))
-    {
-      document.getElementById("userblockfeedback").innerHTML = FeedbackBox(p_text, false);      
-      that.DeleteRollback(""+p_note);
-      return;
-    } else
-    {
-      var id = p_text.substr(3);
-      
-      for (var i = 0; i < m_users.length; i++)
+
+    if (result.Status === 'SUCCESS')
+    {       
+      switch (result.Operation)
       {
-        if ((m_users[i].m_id == id) && (!m_users[i].m_inuse))
+        case 'UserAdd':
         {
-          document.getElementById("userblockfeedback").innerHTML = FeedbackBox("Deleted \""+m_users[i].m_name+"\"", true);
-          document.getElementById('user_lines').removeChild(document.getElementById('user_'+p_note));
-          m_users[i].m_old_name = "";
-          m_users[i].m_old_admin = "";
-          m_users[i].m_old_innerHTML = "";
+          for (var i = 0; i < m_users.length; i++)
+          {
+            if ((m_users[i].m_id == result.fake_id) && (m_users[i].m_inuse))
+            {
+              m_users[i].m_id = result.UserID;
+              var line = $('#user_'+result.fake_id);
+              $('#user_'+result.fake_id).attr('id','user_'+result.UserID);
+
+              if (null != line)
+              {
+                $('#user_lines').html( user_list.ViewAll());
+              }
+              MoaUI.DisplayFeedback("User added ("+m_users[i].m_name+").", Feedback.success);
+            }
+          }
+          break;
+        }
+        case 'UserEdit':
+        {
+          for (var i = 0; i < m_users.length; i++)
+          {
+            if ((m_users[i].m_id == m_lastID) && (m_users[i].m_inuse))
+            {
+              m_users[i].m_old_name = "";
+              m_users[i].m_old_innerHTML="";
+              m_users[i].m_old_admin = false;
+            }
+          }
+          break;
+        }
+        case 'UserDelete':
+        {
+          for (var i = 0; i < m_users.length; i++)
+          {
+            if ((m_users[i].m_id == m_lastID) && (!m_users[i].m_inuse))
+            {
+              MoaUI.DisplayFeedback('Deleted "'+m_users[i].m_name+'"', Feedback.success);
+              m_users[i].m_old_name = "";
+              m_users[i].m_old_admin = "";
+              m_users[i].m_old_innerHTML = "";
+            }
+          }
+          break;
+        }
+        default:
+        { 
+          that.AjaxCallbackFail({status: 'Unknown error - ', statusText: result.Status});
         }
       }
     }
+    else
+    {
+      that.AjaxCallbackFail({status: '', statusText: result.Result});
+    }
+  };
+  
+  this.AjaxCallbackFail = function(p_request, p_status, p_errorThrown)
+  {
+    p_id = m_lastID;
+    
+    switch(m_lastAction)
+    {
+      case LastAction.addUser:
+      {
+        $('#user_'+m_lastID).remove();
+
+        for (var i = 0; i < m_users.length; i++)
+        {
+          if (m_users[i].m_id == m_lastID)
+          {
+            m_users[i].m_inuse = false;
+          }
+        }
+        break;
+      }
+      case LastAction.editUser:
+      {
+        for (var i = 0; i < m_users.length; i++)
+        {
+          if (m_users[i].m_id == m_lastID)
+          {
+            m_users[i].m_name = m_users[i].m_old_name;
+            m_users[i].m_admin = m_users[i].m_old_admin;
+            $('#username_'+m_lastID).html( m_users[i].m_name);
+            if (m_users[i].m_admin)
+            {
+              $('#useradmin_'+m_lastID).html('Admin');
+            } else
+            {
+              $('#useradmin_'+m_lastID).html( '&nbsp;');
+            }
+            m_users[i].m_inuse = true;
+            m_users[i].m_old_name = "";
+            m_users[i].m_old_admin = "";
+            m_users[i].m_old_innerHTML = "";
+          }
+        }
+        m_users.sort(UserSort);
+        $('#user_lines').html( user_list.ViewAll());
+        break;
+      }
+      case LastAction.deleteUser:
+      {
+        for (var i = 0; i < m_users.length; i++)
+        {
+          if (m_users[i].m_id == m_lastID)
+          {
+            m_users[i].m_name = m_users[i].m_old_name;
+            m_users[i].m_admin = m_users[i].m_old_admin;
+            $('#user_'+m_lastID).html( m_users[i].m_old_innerHTML);
+            m_users[i].m_inuse = true;
+            m_users[i].m_old_name = "";
+            m_users[i].m_old_admin = "";
+            m_users[i].m_old_innerHTML = "";
+          }
+        }
+        break;
+      }
+    }
+    
+    MoaUI.DisplayFeedback( 'Server returned "' + p_request.status + ' ' + p_request.statusText + '".', Feedback.error);
   };
   
   // Request a user to be deleted
@@ -188,11 +288,20 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
             m_users[i].m_inuse = false;
             m_users[i].m_old_name = m_users[i].m_name;
             m_users[i].m_old_admin = m_users[i].m_admin;
-            m_users[i].m_old_innerHTML = document.getElementById('user_'+p_id).innerHTML;
-            var url = "action=delete&user_id="+p_id;
-            var request = new httpRequest("sources/mod_user.php", that.DeleteCallback, m_users[i].m_id);
-            request.update(url, "GET");
-            document.getElementById('user_'+p_id).innerHTML = "";
+            m_users[i].m_old_innerHTML = $('#user_'+p_id).html();
+            
+            var params = '?action=delete';
+                params += '&user_id='+p_id;
+            
+            
+            m_lastAction = LastAction.deleteUser;   
+            m_lastID = p_id;
+            $.ajax({ url: 'sources/mod_user.php' + params,
+                     success: that.AjaxCallback,
+                     error: that.AjaxCallbackFail,
+                     cache: false});
+
+            $('#user_'+p_id).hide(500);
           }
         }
       }
@@ -202,130 +311,44 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
   // Show the edit form
   this.Edit = function(p_id)
   {
-    m_userlistHTML = document.getElementById('userblock').innerHTML;
-    document.getElementById('userblock').innerHTML = userform;
+    m_userlistHTML = $('#userblock').html();
+    $('#userblock').html( userform);
     
     for (var i = 0; i < m_users.length; i++)
     {
       if (m_users[i].m_id == p_id)
       {
-        document.getElementById('username').value = m_users[i].m_name;
-        document.getElementById('userid').value = p_id;
+        $('#username').val( m_users[i].m_name);
+        $('#userid').val( p_id);
         if (m_users[i].m_admin)
         {
-          document.getElementById('useradmin').checked = true;
+          $('#useradmin').attr('checked', true);
         }
       }
     }
     FormCheckSetup('user_edit', false);
-    document.getElementById('username').focus();
+    $('#username').focus();
     m_add_mode = false;
   };
   
   // Show the add form
   this.Add = function()
   {
-    m_userlistHTML = document.getElementById('userblock').innerHTML;
-    document.getElementById('userblock').innerHTML = userform;
+    m_userlistHTML = $('#userblock').html();
+    $('#userblock').html( userform);
     FormCheckSetup('user_add');
-    document.getElementById('username').focus();
+    $('#username').focus();
     m_add_mode = true;
   };
   
-  // The form submit failed so restore any edits made
-  this.FormRollback = function(p_id)
-  {
-    // Edit mode
-    if (!m_add_mode)
-    {
-      for (var i = 0; i < m_users.length; i++)
-      {
-        if (m_users[i].m_id == p_id)
-        {
-          m_users[i].m_name = m_users[i].m_old_name;
-          m_users[i].m_admin = m_users[i].m_old_admin;
-          document.getElementById('username_'+p_id).innerHTML = m_users[i].m_name;
-          if (m_users[i].m_admin)
-          {
-            document.getElementById('useradmin_'+p_id).innerHTML = "Admin";
-          } else
-          {
-            document.getElementById('useradmin_'+p_id).innerHTML = "&nbsp;";
-          }
-          m_users[i].m_inuse = true;
-          m_users[i].m_old_name = "";
-          m_users[i].m_old_admin = "";
-          m_users[i].m_old_innerHTML = "";
-        }
-      }
-      m_users.sort(UserSort);
-      document.getElementById('user_lines').innerHTML=user_list.ViewAll();
-    } else
-    // Add mode
-    {
-      var line = document.getElementById('user_'+p_id);
-      document.getElementById('user_lines').removeChild(line);
-      for (var i = 0; i < m_users.length; i++)
-      {
-        if (m_users[i].m_id == p_id)
-        {
-          m_users[i].m_inuse = false;
-        }
-      }
-    }
-  };
-  
-  // Form submit has completed
-  this.FormCallback = function(p_text, p_status, p_xml, p_note)
-  {
-    if (p_status != 200)
-    {
-      document.getElementById("userblockfeedback").innerHTML = FeedbackBox("Server returned code " + p_status, false);   
-      that.FormRollback(p_note);
-      return;
-    }
-    if ("OK" != p_text.substr(0, 2))
-    {
-      document.getElementById("userblockfeedback").innerHTML = FeedbackBox(p_text, false);      
-      that.FormRollback(p_note);
-      return;
-    } else
-    {
-      var id = p_text.substr(3);
-      
-      for (var i = 0; i < m_users.length; i++)
-      {
-        if ((m_users[i].m_id == p_note) && (m_users[i].m_inuse))
-        {
-          // Edit mode
-          if (!m_add_mode)
-          {
-            m_users[i].m_old_name = "";
-            m_users[i].m_old_innerHTML="";
-            m_users[i].m_admin = false;
-          } else
-          // Add mode
-          {
-            m_users[i].m_id = id;
-            var line = document.getElementById('user_'+p_note);
-            if (null != line)
-            {
-              document.getElementById('user_lines').innerHTML=user_list.ViewAll();
-            }
-            document.getElementById("userblockfeedback").innerHTML = FeedbackBox("User added ("+m_users[i].m_name+").", true);
-          }
-        }
-      }
-    }
-  };
-
   // Cancel button pressed 
   this.FormCancel = function()
   {
-    document.getElementById('userblock').innerHTML = m_userlistHTML;
+    $('#userblock').html( m_userlistHTML);
     m_users.sort(UserSort);
-    document.getElementById('user_lines').innerHTML = user_list.ViewAll();
+    $('#user_lines').html( user_list.ViewAll());
     m_userlistHTML = "";
+    $('#admin_user_add_link').click(function(){that.Add();});
   };
   
   // Submit button pressed
@@ -335,19 +358,19 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
     {
       return false;
     }
-    var name = document.getElementById("username").value;
-    var pass1 = document.getElementById("userpass1").value;
-    var pass2 = document.getElementById("userpass2").value;
-    var admin = document.getElementById("useradmin").checked;
-    var id = document.getElementById("userid").value;
+    var name = $('#username').val();
+    var pass1 = $('#userpass1').val();
+    var pass2 = $('#userpass2').val();
+    var admin = $('#useradmin').attr('checked');
+    var id = $('#userid').val();
     var valid = true;
     
     // All seems ok, submit it
     if (valid)
     {
-      document.getElementById('userblock').innerHTML = m_userlistHTML;
+      $('#userblock').html( m_userlistHTML);
       m_users.sort(UserSort);
-      document.getElementById('user_lines').innerHTML=user_list.ViewAll();
+      $('#user_lines').html( user_list.ViewAll());
       m_userlistHTML = "";
       // Edit mode
       if (!m_add_mode)
@@ -358,30 +381,34 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
           {
             m_users[i].m_old_name = m_users[i].m_name;
             m_users[i].m_old_admin = m_users[i].m_admin;
-            m_users[i].m_old_innerHTML = document.getElementById("user_"+id);
+            m_users[i].m_old_innerHTML = $('#user_'+id);
             
             m_users[i].m_name = name;
             m_users[i].m_admin = admin;
             
-            document.getElementById('username_'+id).innerHTML = m_users[i].m_name;
+            $('#username_'+id).html( m_users[i].m_name);
             if (m_users[i].m_admin)
             {
-              document.getElementById('useradmin_'+id).innerHTML = "Admin";
+              $('#useradmin_'+id).html( 'Admin');
             } else
             {
-              document.getElementById('useradmin_'+id).innerHTML = "&nbsp;";
+              $('#useradmin_'+id).html( '&nbsp;');
             }
             
-            var url = "action=edit";
-               url += "&user_id="+id;
-               url += "&name="+encodeURIComponent(name);
-               url += "&admin="+admin;
-               url += "&pass="+encodeURIComponent(pass1);
-            var request = new httpRequest("sources/mod_user.php", that.FormCallback, id);
-            request.update(url, "GET");
+            m_lastID = id;
+            m_lastAction = LastAction.editUser;
+            var params = "?action=edit";
+                params += "&user_id="+id;
+                params += "&name="+encodeURIComponent(name);
+                params += "&admin="+admin;
+                params += "&pass="+encodeURIComponent(pass1);
+            $.ajax({ url: 'sources/mod_user.php' + params,
+                     success: that.AjaxCallback,
+                     error: that.AjaxCallbackFail,
+                     cache: false});    
             
             m_users.sort(UserSort);
-            document.getElementById('user_lines').innerHTML=user_list.ViewAll();
+            $('#user_lines').html( user_list.ViewAll());
           }
         }
       } else
@@ -397,17 +424,23 @@ function UserList(p_delim, p_user_container_template, p_user_row_template)
         user.innerHTML = "";
         m_users[m_users.length] = user;
         
-        var url = "action=add";
-        url += "&name="+encodeURIComponent(name);
-        url += "&admin="+admin;
-        url += "&pass="+encodeURIComponent(pass1);
-        var request = new httpRequest("sources/mod_user.php", that.FormCallback, m_fake_id);
-        request.update(url, "GET");
+        m_lastID = m_fake_id;
+        m_lastAction = LastAction.addUser;
+        var params = "?action=add";
+            params += "&name="+encodeURIComponent(name);
+            params += "&admin="+admin;
+            params += "&fake_id="+m_fake_id;
+            params += "&pass="+encodeURIComponent(pass1);
+            
+        $.ajax({ url: 'sources/mod_user.php' + params,
+                 success: that.AjaxCallback,
+                 error: that.AjaxCallbackFail,
+                 cache: false});    
         
         m_fake_id--;
 
         m_users.sort(UserSort);
-        document.getElementById('user_lines').innerHTML=user_list.ViewAll();
+        $('#user_lines').html( user_list.ViewAll());
       }
     }
   };

@@ -18,152 +18,152 @@
 
   function TagCheckExists()
   {
+    $returnInfo = DefaultAjaxResult( 'TagExists');
+    
     // Get the action
     $tag_id = GetParam("tag_id");
     if (false === $tag_id)
     {
-      RaiseFatalError("No tag id supplied.");
+      $returnInfo['Result'] = 'No tag id supplied.';
+      echo json_encode($returnInfo);
       return false;
     }
 
     // Check that it is a real tag
-    $Tag = new Tag();
-    if (false === $Tag->exists($tag_id))
+    if (false === Tag::Exists($tag_id))
     {
-      RaiseFatalError($tag_id." Tag does not exist.");
+      $returnInfo['Result'] = 'Tag does not exist.';
+      echo json_encode($returnInfo);
+      return false;
     }
 
     return $tag_id;
   }
 
-  function TagChangeValue($p_id, $p_field, $p_varname)
-  {
-    // Only proceed if a user is logged in
-    if (!UserIsLoggedIn())
-    {
-      RaiseFatalError("Not logged in.");
-      return false;
-    }
-
-    $Tag = new Tag();
-
-    // Get the value
-    $newvalue = GetParam($p_varname);
-    if (false === $newvalue)
-    {
-      RaiseFatalError("No ".$p_varname." supplied.");
-      return false;
-    }
-
-    if ('Name' == $p_field)
-    {
-      // Check if tag name already exists
-      $luid = $Tag->lookUp($newvalue);
-      if (false !== $luid)
-      {
-        RaiseFatalError("This tag already exists.");
-        return false;
-      }
-    }
-
-    // Try to change the value
-    if (false === $Tag->changeValue($p_id, $p_field, $newvalue))
-    {
-      RaiseFatalError("Could not set new ".$p_varname.".", false);
-      return false;
-    }
-
-    OutputPrefix("OK");
-    echo $p_id;
-
-    return true;
-  }
-
-  function TagGetValue($p_id, $p_field, $p_short = false)
-  {
-    $Tag = new Tag();
-    $value = $Tag->getValue($p_id, $p_field);
-
-    if (false === $value)
-    {
-      RaiseFatalError("Could not get value for field '".$p_field."'", false);
-      return false;
-    }
-
-    OutputPrefix("OK");
-    if (($p_short) && (20 < mb_strlen($value)))
-    {
-      echo mb_substr($value, 0, 17)."...";
-    } else
-    {
-      echo $value;
-    }
-    return true;
-  }
-
-  function TagDelete($p_id)
+  function TagDelete($p_id = NULL)
   {
     global $errorString;
 
+    $returnInfo = DefaultAjaxResult( 'TagDelete');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Try to delete the tag
-    $Tag = new Tag();
-    if (false === $Tag->delete($p_id))
+    if (false === Tag::Delete($p_id))
     {
-      RaiseFatalError("Could not delete tag.".$errorString, false);
-      return false;
+      $returnInfo['Result'] = 'Could not delete tag.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    echo $p_id;
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+
+    return $returnInfo;
   }
 
   function TagAdd()
   {
     global $errorString;
 
+    $returnInfo = DefaultAjaxResult('TagAdd');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-    	return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the value
     $newname = GetParam('name');
     if (false === $newname)
     {
-      RaiseFatalError("No name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No name supplied.';
+      return $returnInfo;
+    }
+    
+    // Get the fake ID
+    $fake_id = GetParam('fake_id');
+    if (false === $fake_id)
+    {
+      $returnInfo['Result'] = 'No id supplied.';
+      return $returnInfo;
     }
 
-    // Check if tag already exists
-    $Tag = new Tag();
-    $id = $Tag->lookUp($newname);
+    // Check if tag already exists, we don't want duplicates
+    $id = Tag::LookUp($newname);
     if (false !== $id)
     {
-      RaiseFatalError("This tag already exists.");
-      return false;
+      $returnInfo['Result'] = 'Tag already exists.';
+      return $returnInfo;
     }
 
     // Try to add the tag
-    $id = $Tag->add($newname);
+    $tag = new Tag();
+    $tag->name = $newname;
+    $id = $tag->Commit();
     if (false === $id)
     {
-      RaiseFatalError("Cound not add tag.");
-      return false;
+      $returnInfo['Result'] = 'Could not add tag.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    echo $id;
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    $returnInfo['TagID'] = (int)$id;
+    $returnInfo['fake_id'] = $fake_id;
+    unset($returnInfo['Result']);
+
+    return $returnInfo;
+  }
+  
+  function TagEdit($p_id = NULL)
+  {
+    global $errorString;
+
+    $returnInfo = DefaultAjaxResult('TagEdit');
+    
+    // Only proceed if a user is logged in
+    if (!UserIsLoggedIn())
+    {
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
+    }
+
+    // Get the value
+    $newname = GetParam('name');
+    if (false === $newname)
+    {
+      $returnInfo['Result'] = 'No name supplied.';
+      return $returnInfo;
+    }
+    
+    // Check if tag already exists, we don't want duplicates
+    $id = Tag::LookUp($newname);
+    if (false !== $id)
+    {
+      $returnInfo['Result'] = 'Tag already exists.';
+      return $returnInfo;
+    }
+
+    // Try to add the tag
+    $tag = new Tag($p_id);
+    $tag->name = $newname;
+    $id = $tag->Commit();
+    if (false === $id)
+    {
+      $returnInfo['Result'] = 'Could not edit tag.';
+      return $returnInfo;
+    }
+
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+
+    return $returnInfo;
   }
 
   function TagAjaxMain()
@@ -172,7 +172,9 @@
     $action = GetParam("action");
     if (false === $action)
     {
-      RaiseFatalError("No action supplied.");
+      $returnInfo = DefaultAjaxResult( 'ActionCheck');
+	    $returnInfo['Result'] = 'No action supplied.';
+	    echo json_encode($returnInfo);
     }
 
     DBConnect();
@@ -181,30 +183,32 @@
     {
     	case "add" :
     	{
-    		TagAdd();
+        echo json_encode(TagAdd());
     		break;
     	}
       case "delete" :
       {
       	$tag_id =  TagCheckExists();
-      	TagDelete($tag_id);
+      	if (false !== $tag_id)
+      	{
+      	  echo json_encode(TagDelete($tag_id));
+      	}
         break;
       }
       case "edit" :
       {
-        $tag_id =  TagCheckExists();
-        TagChangeValue($tag_id, "Name", "name");
-        break;
-      }
-      case "getdesc" :
-      {
-        $tag_id =  TagCheckExists();
-      	TagGetValue($tag_id, "Description");
+        $tag_id = TagCheckExists();
+        if (false !== $tag_id)
+      	{
+      	  echo json_encode(TagEdit($tag_id));
+      	}
         break;
       }
       default :
       {
-        RaiseFatalError("Unknown action.");
+        $returnInfo = DefaultAjaxResult( 'Unknown');
+        $returnInfo['Result'] = 'Unknown action.';
+        echo  json_encode($returnInfo);
         break;
       }
     }

@@ -79,16 +79,6 @@
         <fieldset id="settings_visual" class="formSettingsFieldset settings_block">
           <ul class="formListSettings">
             <li>
-              <label for="setting_Template" class="formLabelSettings">
-                Template.
-              </label>
-              <img src="templates/Aperture/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_template">" alt="popup help" />
-              <select name="setting_Template" id="setting_Template">
-                <moatag type="SettingsValue_Template" style="select">
-              </select>
-            </li>
-
-            <li>
               <label for="setting_ThumbWidth" class="formLabelSettings">
                 Width of thumbnails in pixels.
               </label>

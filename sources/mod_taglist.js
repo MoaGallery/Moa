@@ -1,3 +1,11 @@
+var LastAction = 
+{ 
+  none: 0,   
+  addTag: 1,  
+  editTag: 2,
+  deleteTag: 3
+};
+
 // Used to sort tags alphabetically
 function TagSort(p_a, p_b) {
   if (p_a.m_name.toLowerCase() > p_b.m_name.toLowerCase()) {
@@ -37,6 +45,8 @@ function TagList(p_delim, p_tag_row_template) {
   var m_fake_id = -1; // To keep track of new tags before a page load
   var m_tag_row_template = p_tag_row_template; 
   var m_add_form = "";
+  var m_lastAction = LastAction.none;
+  var m_lastID = 0;
 
   // Load the existing tags as well as any for a local gallery/image
   this.PreLoad = function(p_master, p_current, p_add_form) {
@@ -147,8 +157,9 @@ function TagList(p_delim, p_tag_row_template) {
   };
 
   // Count valid/used tags for info 
-  this.Feedback = function(p_source) {
-    var taglist = document.getElementById(p_source + 'formtags').value;
+  this.Feedback = function(p_source)
+  {
+    var taglist = $('#' + p_source + 'formtags').val();
 
     var taginfo = that.StringSplit(taglist);
     var valid = taginfo.m_valid_count;
@@ -196,39 +207,46 @@ function TagList(p_delim, p_tag_row_template) {
         }
       }
 
-      switch (mode) {
-      case "fail":
-        output = "<div onmouseup='"
-            + p_source
-            + ".FeedbackToggle();' onmouseover='overlib(\""
-            + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/fail.png' width='16' height='16' alt='no tags'/></div>";
-        nd();
-        break;
-      case "add":
-        output = "<div onmouseup='"
-            + p_source
-            + ".FeedbackToggle();' onmouseover='overlib(\""
-            + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/add.png' width='16' height='16' alt='new tag'/></div>";
-        nd();
-        break;
-      case "success":
-        output = "<div onmouseup='"
-            + p_source
-            + ".FeedbackToggle();' onmouseover='overlib(\""
-            + feedback
-            + "\", WRAP);' onmouseout='nd();'><img src='"+template_path+"media/Success.png' width='16' height='16' alt='all tags ok'/></div>";
-        nd();
-        break;
-      default:
-        output = "";
-        break;
+      switch (mode)
+      {
+        case "fail":
+        {
+          output = "<div onmouseup='"
+              + p_source
+              + ".FeedbackToggle();' onmouseover='showOverlib(\""
+              + feedback
+              + "\");' onmouseout='hideOverlib();'><img src='"+template_path+"media/fail.png' width='16' height='16' alt='no tags'/></div>";
+          nd();
+          break;
+        }
+        case "add":
+        {
+          output = "<div onmouseup='"
+              + p_source
+              + ".FeedbackToggle();' onmouseover='showOverlib(\""
+              + feedback
+              + "\");' onmouseout='hideOverlib();'><img src='"+template_path+"media/add.png' width='16' height='16' alt='new tag'/></div>";
+          nd();
+          break;
+        }
+        case "success":
+        {
+          output = "<div onmouseup='"
+              + p_source
+              + ".FeedbackToggle();' onmouseover='showOverlib(\""
+              + feedback
+              + "\");' onmouseout='hideOverlib();'><img src='"+template_path+"media/Success.png' width='16' height='16' alt='all tags ok'/></div>";
+          nd();
+          break;
+        }
+        default:
+        {
+          output = "";
+          break;
+        }
       }
     }
-    //alert(doGetCaretPosition(document.getElementById("galleryformtags")));
-    document.getElementById('formtaglistfeedback').innerHTML = output;
-    //alert(doGetCaretPosition(document.getElementById("galleryformtags")));
+    $('#formtaglistfeedback').html(output);
   };
 
   // Take a string of tags and add any new ones to the master list
@@ -256,11 +274,18 @@ function TagList(p_delim, p_tag_row_template) {
   };
 
   // Generate an HTML table row for the specified tag 
-  this.ViewSingle = function(p_index) {
+  this.ViewSingle = function(p_index)
+  {
     var tag_line = m_tag_row_template;
     
-    tag_line = str_replace(tag_line, "<moavar AdminTagID>", m_master[p_index].m_id);
-    tag_line = str_replace(tag_line, "<moavar AdminTagName>", EscapeHTMLChars(m_master[p_index].m_name));
+    var tag = m_master[p_index];
+    
+    tag_line = str_replace(tag_line, "<moavar AdminTagID>", tag.m_id);
+    tag_line = str_replace(tag_line, "<moavar AdminTagName>", EscapeHTMLChars(tag.m_name));
+    tag_line = str_replace(tag_line, "<moavar AdminTagEditLink>", "onclick='tag_list.Edit(\""+tag.m_id+"\")'");
+    tag_line = str_replace(tag_line, "<moavar AdminTagDeleteLink>", "onclick='tag_list.Delete(\""+tag.m_id+"\")'");
+    tag_line = str_replace(tag_line, "<moavar AdminTagSubmitEditLink>", "onclick='tag_list.SubmitEdit(\""+tag.m_id+"\")'");
+    tag_line = str_replace(tag_line, "<moavar AdminTagCancelEditLink>", "onclick='tag_list.CancelEdit(\""+tag.m_id+"\")'");
    
     return tag_line;
   };
@@ -277,69 +302,43 @@ function TagList(p_delim, p_tag_row_template) {
   };
 
   // Submit a delete request
-  this.Delete = function(p_id) {
-    for ( var i = 0; i < m_master.length; i++) {
-      if ((m_master[i].m_id == p_id) && (m_master[i].m_inuse)) {
-        if ("" != m_master[i].m_oldname) {
+  this.Delete = function(p_id)
+  {
+    for ( var i = 0; i < m_master.length; i++)
+    {
+      if ((m_master[i].m_id == p_id) && (m_master[i].m_inuse))
+      {
+        if ("" != m_master[i].m_oldname)
+        {
           alert("An operation is already pending on this tag.");
-        } else {
-          if (confirm("Are you sure you want to delete this tag ("
-              + m_master[i].m_name + ")?")) {
+        } else
+        {
+          if (confirm("Are you sure you want to delete this tag (" + m_master[i].m_name + ")?"))
+          {
             m_master[i].m_inuse = false;
             m_master[i].m_oldname = m_master[i].m_name;
-            m_master[i].m_innerHTML = document.getElementById("tag_" + p_id).innerHTML;
+            m_master[i].m_innerHTML = $('#tag_' + p_id).html();
 
-            document.getElementById("tag_" + p_id).innerHTML = "";
+            $('#tag_' + p_id).animate({height:0}, 500);
 
-            var url = "action=delete&tag_id=" + p_id;
-            var request = new httpRequest("sources/mod_tag.php",
-                that.DeleteCallback, m_master[i].m_id);
-            request.update(url, "GET");
+            var params = '?action=delete';
+           		 params += '&tag_id=' + p_id;
+           		 
+         		m_lastAction = LastAction.deleteTag;   
+            m_lastID = m_master[i].m_id;
+            $.ajax({ url: 'sources/mod_tag.php' + params,
+                     success: that.AjaxCallback,
+                     error: that.AjaxCallbackFail,
+                     cache: false});
           }
         }
       }
     }
   };
 
-  // If delete request fails, restore the tag
-  this.DeleteRollback = function(p_id) {
-    for ( var i = 0; i < m_master.length; i++) {
-      if (m_master[i].m_id == p_id) {
-        m_master[i].m_name = m_master[i].m_oldname;
-        document.getElementById("tag_" + p_id).innerHTML = m_master[i].m_innerHTML;
-        m_master[i].m_oldname = "";
-        m_master[i].m_inuse = true;
-      }
-    }
-  };
-
-  // Called when the delete request returns
-  this.DeleteCallback = function(p_text, p_status, p_xml, p_note) {
-    if (p_status != 200) {
-      document.getElementById("tagblockfeedback").innerHTML = FeedbackBox(
-          "Server returned code " + p_status, false);
-      that.DeleteRollback(p_note);
-      return;
-    }
-    if ("OK" != p_text.substr(0, 2)) {
-      document.getElementById("tagblockfeedback").innerHTML = FeedbackBox(p_text, false);
-      that.DeleteRollback(p_note);
-      return;
-    } else {      
-      for ( var i = 0; i < m_master.length; i++) {
-        if ((m_master[i].m_id == p_note) && (!m_master[i].m_inuse)) {
-          document.getElementById('tag_lines').removeChild(
-              document.getElementById('tag_' + p_note));
-
-          document.getElementById("tagblockfeedback").innerHTML = FeedbackBox(
-              "Deleted \"" + m_master[i].m_name + "\"", true);
-        }
-      }
-    }
-  };
-
   // Enables the edit form
-  this.Edit = function(p_id) {
+  this.Edit = function(p_id) 
+  {
     hide_div("tag_edit_link_" + p_id);
     hide_div("tag_delete_link_" + p_id);
     hide_div("tag_name_" + p_id);
@@ -348,128 +347,226 @@ function TagList(p_delim, p_tag_row_template) {
     show_div("tag_edit_submit_" + p_id);
     show_div("tag_edit_cancel_" + p_id);
 
-    document.getElementById("tag_edit_box_" + p_id).style.clear = "left";
-    var name = document.getElementById("tag_name_" + p_id).innerHTML;
+    $('#tag_edit_box_' + p_id).css( 'clear' ,'left');
+    var name = $('#tag_name_' + p_id).html();
     name = name.replace("&lt;", "<");
     name = name.replace("&gt;", ">");
     name = name.replace("&amp;", "&");
     name = name.replace("&quote;", "\"");
     name = name.replace("&apos;", "\'");
     name = trim(name);
-    document.getElementById("tag_edit_input_" + p_id).value = name;
+    $('#tag_edit_input_' + p_id).val( name);
 
-    document.getElementById("tag_edit_input_" + p_id).focus();
+    $('#tag_edit_input_' + p_id).focus();
   };
 
-  this.CancelEdit = function(id) {
-    show_div("tag_edit_link_" + id);
-    show_div("tag_delete_link_" + id);
-    show_div("tag_name_" + id);
+  this.CancelEdit = function(p_id) 
+  {
+    show_div("tag_edit_link_" + p_id);
+    show_div("tag_delete_link_" + p_id);
+    show_div("tag_name_" + p_id);
 
-    hide_div("tag_edit_box_" + id);
-    hide_div("tag_edit_submit_" + id);
-    hide_div("tag_edit_cancel_" + id);
+    hide_div("tag_edit_box_" + p_id);
+    hide_div("tag_edit_submit_" + p_id);
+    hide_div("tag_edit_cancel_" + p_id);
 
-    document.getElementById("tag_edit_box_" + id).style.clear = "none";
+    $('#tag_edit_box_' + p_id).css( 'clear', 'none');
   };
 
   // Submits an edit request
-  this.SubmitEdit = function(p_id) {    
-    for ( var i = 0; i < m_master.length; i++) {
-      if ((m_master[i].m_id == p_id) && (m_master[i].m_inuse)) {
+  this.SubmitEdit = function(p_id) 
+  {    
+    for ( var i = 0; i < m_master.length; i++)
+    {
+      if ((m_master[i].m_id == p_id) && (m_master[i].m_inuse))
+      {
         if (("" != m_master[i].m_oldname)) {
           alert("An operation is already pending on this tag.");          
           return;
         }
-        if ("" == document.getElementById("tag_edit_input_" + p_id).value) {
+        if ("" == $('#tag_edit_input_' + p_id).val()) 
+        {
           alert("You must give the tag a name.");
           return;
         }
-
+        
         that.CancelEdit(p_id);
         
-        if (m_master[i].m_name == document.getElementById("tag_edit_input_" + p_id).value)
+        if (m_master[i].m_name == $('#tag_edit_input_' + p_id).val())
         {
-          //alert("The tag name has not changed.");
           return;
         }
         
         m_master[i].m_oldname = m_master[i].m_name;
-        m_master[i].m_name = document.getElementById("tag_edit_input_" + p_id).value;       
+        m_master[i].m_name = $('#tag_edit_input_' + p_id).val();       
         
-        document.getElementById("tag_name_" + p_id).innerHTML = m_master[i].m_name;                      
+        $('#tag_name_' + p_id).html( m_master[i].m_name);                      
         
-        var url = "action=edit";
-        url += "&tag_id=" + encodeURIComponent(m_master[i].m_id);
-        url += "&name=" + encodeURIComponent(m_master[i].m_name);
-        var request = new httpRequest("sources/mod_tag.php", that.EditCallback, m_master[i].m_id);
-        request.update(url, "GET");
-      }
-    }
-
-    m_master.sort(TagSort);
-    document.getElementById('tag_lines').innerHTML = that.ViewAll();
-  };
-
-  // If the edit request fails 
-  this.EditRollback = function(p_id) {
-    for ( var i = 0; i < m_master.length; i++) {
-      if (m_master[i].m_id == p_id) {
-        m_master[i].m_name = m_master[i].m_oldname;
-        document.getElementById("tag_edit_input_" + p_id).value = m_master[i].m_name;
-        m_master[i].m_oldname = "";
-      }
-    }
+        var params  = "?action=edit";
+        params += "&tag_id=" + encodeURIComponent(m_master[i].m_id);
+        params += "&name=" + encodeURIComponent(m_master[i].m_name);
     
+        m_lastAction = LastAction.editTag;   
+        m_lastID = m_master[i].m_id;
+        $.ajax({ url: 'sources/mod_tag.php' + params,
+                 success: that.AjaxCallback,
+                 error: that.AjaxCallbackFail,
+                 cache: false});
+      }
+    }
+
     m_master.sort(TagSort);
-    document.getElementById('tag_lines').innerHTML = that.ViewAll();    
+    $('#tag_lines').html( that.ViewAll());
   };
 
-  // Called when the edit request returns
-  this.EditCallback = function(p_text, p_status, p_xml, p_note) {
-    that.CancelEdit(p_note);
+  this.AjaxCallback = function(p_result)
+  { 
 
-    if (p_status != 200) {
-      document.getElementById("tagblockfeedback").innerHTML = FeedbackBox("Server returned code " + p_status, false);
-      that.EditRollback(p_note);
+    try
+    {
+      var result = $.parseJSON(p_result);
+    }
+    catch(e)
+    {
+      var error = {status: '', statusText: 'Unknown response from server.'};
+      that.AjaxCallbackFail(error);
       return;
     }
-    if ("OK" != p_text.substr(0, 2)) {
-      document.getElementById("tagblockfeedback").innerHTML = FeedbackBox(p_text, false);
-      that.EditRollback(p_note);
-      return;
-    } else {
-      for ( var i = 0; i < m_master.length; i++) {
-        if (m_master[i].m_id == p_note) {        
-          m_master[i].m_oldname = "";
+
+    if (result.Status === 'SUCCESS')
+    {       
+      switch (result.Operation)
+      {
+        case 'TagAdd':
+        {
+          that.CancelEdit(result.fake_id);
+
+          for ( var i = 0; i < m_master.length; i++)
+          {
+            if (m_master[i].m_id == result.fake_id)
+            {        
+              m_master[i].m_oldname = "";
+              m_master[i].m_id = result.TagID;
+              $('#tag_lines').html(that.ViewAll());
+            }
+          }      
+          break;
         }
-      }          
+        case 'TagEdit':
+        {
+          for ( var i = 0; i < m_master.length; i++)
+          {
+            if (m_master[i].m_id == m_lastID)
+            {        
+              m_master[i].m_oldname = "";
+            }
+          }
+          break;
+        }
+        case 'TagDelete':
+        {
+          id = m_lastID;
+          for ( var i = 0; i < m_master.length; i++)
+          {
+            if ((m_master[i].m_id == id) && (!m_master[i].m_inuse))
+            {
+              $('#tag_' + id).remove();
+
+              MoaUI.DisplayFeedback("Deleted \"" + m_master[i].m_name + "\"", Feedback.success);
+            }
+          }
+          break;
+        }
+        default:
+        {
+          that.AjaxCallbackFail({status: 'Unknown error - ', statusText: resultStatus});
+        }
+      }
+    }
+    else
+    {
+      that.AjaxCallbackFail({status: '', statusText: result.Result});
     }
   };
   
+  this.AjaxCallbackFail = function(p_request, p_status, p_errorThrown)
+  {
+    p_id = m_lastID;
+    
+    switch(m_lastAction)
+    {
+      case LastAction.addTag:
+      {
+        for ( var i = 0; i < m_master.length; i++)
+        {
+          if (m_master[i].m_id == p_id)
+          {
+            m_master[i].m_inuse = false;
+          }
+        }
+        
+        m_master.sort(TagSort);
+        $('#tag_lines').html(that.ViewAll());
+        break;
+      }
+      case LastAction.editTag:
+      {
+        for ( var i = 0; i < m_master.length; i++)
+        {
+          if (m_master[i].m_id == p_id)
+            {
+            m_master[i].m_name = m_master[i].m_oldname;
+            $('#tag_edit_input_' + p_id).val( m_master[i].m_name);
+            m_master[i].m_oldname = "";
+          }
+        }
+              
+        m_master.sort(TagSort);
+        $('#tag_lines').html(that.ViewAll());
+        break;
+      }
+      case LastAction.deleteTag:
+      {
+        for ( var i = 0; i < m_master.length; i++)
+        {
+          if (m_master[i].m_id == p_id)
+          {
+            m_master[i].m_name = m_master[i].m_oldname;
+            m_master[i].m_oldname = "";
+            m_master[i].m_inuse = true;
+          }
+          $('#tag_lines').html(that.ViewAll());
+        }
+        break;
+      }
+    }
+    
+    MoaUI.DisplayFeedback( 'Server returned "' + p_request.status + ' ' + p_request.statusText + '".', Feedback.error);
+  };
+
   // Show the inline add tag form
   this.ShowAdd = function()
   {       
-    document.getElementById("tag_add_line").innerHTML = m_add_form;
+    $('#tag_add_line').html( m_add_form);
     
     show_div("tag_add_box");
     show_div("tag_add_submit");
     show_div("tag_add_cancel");
     
-    addEvent(document.getElementById('tag_add_input'), "keyup", function (e) { return checkKey(e, "tag_add_submit_button", "tag_add_cancel_button");});
-    document.getElementById("tag_add_input").focus();
+    $('#tag_add_input'.keyup, function (e) { return checkKey(e, "tag_add_submit_button", "tag_add_cancel_button");});
+    $('#tag_add_input').focus();
   };
   
   // Hides the inline add form
   this.HideAdd = function ()
   {
-    document.getElementById("tag_add_input").blur();
+    $('#tag_add_input').blur();
     
     hide_div("tag_add_box");
     hide_div("tag_add_submit");
     hide_div("tag_add_cancel");
     
-    document.getElementById("tag_add_line").innerHTML=add_link;
+    $('#tag_add_line').html( add_link);
   };
   
   // Submit an add request
@@ -480,69 +577,55 @@ function TagList(p_delim, p_tag_row_template) {
       return;
     }
     
-    that.CancelAdd();
+    var duplicate = false;
     
-    var tag = new Tag();
+    for (i = 0; i < m_master.length; i++)
+    {
+      if (m_master[i].m_name == p_NewTagName)
+      {
+        duplicate = true;
+        i = m_master.length;
+      }
+    }
     
-    tag.m_id    = m_fake_id;
-    tag.m_name  = p_NewTagName;
-    tag.m_inuse = true;
-    
-    m_master[m_master.length] = tag;
-    m_fake_id--;
-    
-    var url = "action=add";
-        url += "&name=" + encodeURIComponent(p_NewTagName);
-    
-    var request = new httpRequest("sources/mod_tag.php", that.AddCallback, tag.m_id);
-    request.update(url, "GET");
-    
-    m_master.sort(TagSort);
-    document.getElementById('tag_lines').innerHTML = that.ViewAll();
+    if (!duplicate)
+    {
+      that.CancelAdd();
+      
+      var tag = new Tag();
+      
+      tag.m_id    = m_fake_id;
+      tag.m_name  = p_NewTagName;
+      tag.m_inuse = true;
+      
+      m_master[m_master.length] = tag;
+      
+      var params  = "?action=add";
+          params += "&name=" + encodeURIComponent(p_NewTagName);
+          params += "&fake_id=" + m_fake_id;
+      
+      m_lastAction = LastAction.addTag;      
+      $.ajax({ url: 'sources/mod_tag.php' + params,
+               success: that.AjaxCallback,
+               error: that.AjaxCallbackFail,
+               cache: false});
+  
+      m_lastID = m_fake_id;
+      m_fake_id--;
+      m_master.sort(TagSort);
+      $('#tag_lines').html(that.ViewAll());
+      
+      MoaUI.RemoveFeedback();
+    } else
+    {
+      MoaUI.DisplayFeedback('This tag already exists.', Feedback.warning)
+    }
   };
 
   // Cancel button pressed
   this.CancelAdd = function ()
   {
     that.HideAdd();   
-  };
-  
-  // Add request failed
-  this.AddRollback = function(p_id) {
-    for ( var i = 0; i < m_master.length; i++) {
-      if (m_master[i].m_id == p_id) {
-        m_master[i].m_inuse = false;
-      }
-    }
-    
-    m_master.sort(TagSort);
-    document.getElementById('tag_lines').innerHTML = that.ViewAll();    
-  };
-
-  // Called when the add request returns
-  this.AddCallback = function(p_text, p_status, p_xml, p_note) {
-    that.CancelEdit(p_note);
-
-    if (p_status != 200) {
-      document.getElementById("tagblockfeedback").innerHTML = FeedbackBox(
-          "Server returned code " + status, false);
-      that.AddRollback(p_note);
-      return;
-    }
-    if ("OK" != p_text.substr(0, 2)) {
-      document.getElementById("tagblockfeedback").innerHTML = FeedbackBox(p_text,
-          false);
-      that.AddRollback(p_note);
-      return;
-    } else {
-      for ( var i = 0; i < m_master.length; i++) {
-        if (m_master[i].m_id == p_note) {        
-          m_master[i].m_oldname = "";
-          m_master[i].m_id = p_text.substr( 3);
-          document.getElementById('tag_lines').innerHTML = that.ViewAll();
-        }
-      }      
-    }
   };
   
   // Generate a list of all tags, highlighting current ones
@@ -572,6 +655,6 @@ function TagList(p_delim, p_tag_row_template) {
     }
     
     hintlist += "</ul>";
-    return overlib(hintlist, ADAPTIVE_WIDTH, 50); 
+    return showOverlib(hintlist); 
   };
 }

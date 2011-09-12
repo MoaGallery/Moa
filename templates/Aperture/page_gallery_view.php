@@ -2,7 +2,7 @@
   <div id="hidden_hack" class="hidden_hack"></div>
   <div class="left_column left_column_shadow">
     <moatag type="AdminLinks" location="gallery">
-    <div id='galleryblockfeedback'>
+    <div id='feedback_area'>
       <moatag type="GalleryDeleteFeedback">
     </div>
     <div id="galleryblocktitles">
@@ -12,6 +12,9 @@
       <h3 id="galleryblockdesc">
         <moatag type="GalleryDescription">
       </h3>
+      <div class="slideshowLink">
+        <moatag type="GallerySlideshow">
+      </div>
     </div>
   </div>
 

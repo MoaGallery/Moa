@@ -7,14 +7,26 @@
     die();
   }
 
+  $nextOrphanID = null;
+  $previousOrphanID = null;
+  
   include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
 
+  function TagParseImageSubmitLink($p_tag_options)
+  {
+    return "onclick='image.SubmitEdit();'";
+  }
+    
+  function TagParseImageCancelLink($p_tag_options)
+  {
+    return "onclick='image.CancelEdit();'";
+  }
+  
   function TagParseImageDescription($p_tag_options)
   {
     global $image_id;
 
-    $Image = new Image();
-    $Image->loadId($image_id);
+    $Image = new Image($image_id);
     $desc = $Image->description;
     if (0 == strlen($desc))
     {
@@ -27,8 +39,7 @@
   {
     global $image_id;
 
-    $Image = new Image();
-    $Image->loadId($image_id);
+    $Image = new Image($image_id);
     $filename = $Image->originalFilename;
     if (0 == strlen($filename))
     {
@@ -50,8 +61,7 @@
   {
     global $image_id;
 
-    $Image = new Image();
-    $Image->loadId($image_id);
+    $Image = new Image($image_id);
     $format = $Image->format;
     if (0 == strlen($format))
     {
@@ -65,8 +75,7 @@
     global $image_id;
     global $CFG;
 
-    $Image = new Image();
-    $Image->loadId($image_id);
+    $Image = new Image($image_id);
     $width = $Image->width;
     $height = $Image->height;
     $str = "";
@@ -124,7 +133,7 @@
     $id = "0000000000";
     if (isset($image_id))
     {
-     $id = $image_id;
+     $id = str_pad($image_id, 10, '0', STR_PAD_LEFT);
     }
 
     return $id;
@@ -134,10 +143,10 @@
   {
     global $parent_id;
 
-    $id = "0000000000";
+    $id = "0";
     if (isset($parent_id))
     {
-     $id = $parent_id;
+     $id = (int)$parent_id;
     }
     return $id;
   }
@@ -146,43 +155,153 @@
   {
     global $image_id;
     global $parent_id;
+    global $from;
+    global $nextOrphanID;
+    global $previousOrphanID;
 
-    if (0 == strcmp($parent_id, '0000000000'))
+    $result = $image_id;
+    
+    if (0 != strcmp($from, 'orphan'))
     {
-      return $image_id;
+      $result = Gallery::GetNextImage($parent_id, $image_id);
+  
+      if ((is_bool($result)) && (!$result))
+      {
+        return "Error";
+      }
+    } else
+    {
+      if (null === $nextOrphanID)
+      {
+        $orphans = GetNoGalleryOrphans();
+        $index = -1;
+        $numOrphans = count($orphans);
+        
+        // Find the index of the current image
+        for($i = 0; $i < $numOrphans; $i++)
+        {
+          if ($orphans[$i]->id == $image_id)
+          {
+            $index = $i;
+          }
+        }
+
+        // If we got a result
+        if ($index > -1)
+        {
+          $nextIndex = $index + 1;
+          $previousIndex = $index - 1;
+          
+          // Loop around if needed
+          if ($nextIndex >= $numOrphans)
+          {
+            $nextIndex = 0;
+          }
+          
+          if ($previousIndex < 0)
+          {
+            $previousIndex = $numOrphans - 1;
+          }
+          
+          $nextOrphanID = $orphans[$nextIndex]->id;
+          $previousOrphanID = $orphans[$previousIndex]->id;
+          
+          $result = $nextOrphanID;
+        } else
+        {
+          // We didn't find a match
+          $nextOrphanID = $image_id;
+          $previousOrphanID = $image_id;
+        }
+      } else
+      {
+        $result = $nextOrphanID;
+      }
     }
     
-    // TODO - Parent will be 0 if in orphan view. Return itself as a temporary fix.
-    // Should return previous image in orphan list.
-    $Gallery = new Gallery();
-    $result = $Gallery->getNextImage($parent_id, $image_id);
-
-    if ((is_bool($result)) && (!$result))
-    {
-      return "Error";
-    }
-
     return $result;
   }
 
+  function TagParseImageReferer($p_tag_options)
+  {
+    global $from;
+    
+    $result = ' ';
+    
+    if (0 == strcmp($from, 'orphan'))
+    {
+      $result = '&referer=orphan';
+    }
+    
+    return $result;
+  }
+  
   function TagParseImagePreviousID($p_tag_options)
   {
     global $image_id;
     global $parent_id;
+    global $from;
+    global $nextOrphanID;
+    global $previousOrphanID;
 
-    // TODO - Parent will be 0 if in orphan view. Return itself as a temporary fix.
-    // Should return previous image in orphan list.
-    if (0 == strcmp($parent_id, '0000000000'))
-    {
-      return $image_id;
-    }
+    $result = $image_id;
     
-    $Gallery = new Gallery();
-    $result =$Gallery->getPreviousImage($parent_id, $image_id);
-
-    if ((is_bool($result)) && (!$result))
+    if (0 != strcmp($from, 'orphan'))
     {
-      return "Error";
+      $result = Gallery::GetPreviousImage($parent_id, $image_id);
+  
+      if ((is_bool($result)) && (!$result))
+      {
+        return "Error";
+      }
+    } else
+    {
+      if (null === $nextOrphanID)
+      {
+        $orphans = GetNoGalleryOrphans();
+        $index = -1;
+        $numOrphans = count($orphans);
+        
+        // Find the index of the current image
+        for($i = 0; $i < $numOrphans; $i++)
+        {
+          if ($orphans[$i]->id == $image_id)
+          {
+            $index = $i;
+          }
+        }
+
+      // If we got a result
+        if ($index > -1)
+        {
+          $nextIndex = $index + 1;
+          $previousIndex = $index - 1;
+          
+          // Loop around if needed
+          if ($nextIndex >= $numOrphans)
+          {
+            $nextIndex = 0;
+          }
+          
+          if ($previousIndex < 0)
+          {
+            $previousIndex = $numOrphans - 1;
+          }
+          
+          $nextOrphanID = $orphans[$nextIndex]->id;
+          $previousOrphanID = $orphans[$previousIndex]->id;
+          
+          $result = $previousOrphanID;
+        } else
+        {
+          // We didn't find a match
+          $nextOrphanID = $image_id;
+          $previousOrphanID = $image_id;
+        }
+      } else
+      {
+        $result = $previousOrphanID;
+      }
     }
 
     return $result;
@@ -198,8 +317,7 @@
       return 0;
     }
 
-    $Image = new Image();
-    $Image->loadId($image_id);
+    $Image = new Image($image_id);
     $width = $Image->width;
     $height = $Image->height;
 
@@ -241,8 +359,7 @@
     global $CFG;
     global $image_id;
 
-    $Image = new Image();
-    $Image->loadId($image_id);
+    $Image = new Image($image_id);
     $width = $Image->width;
     $height = $Image->height;
 
@@ -319,9 +436,7 @@
 
     $firstGallery = true;
     
-    $image = new Image();
-    $image->loadId($image_id);
-    $galleries = $image->getContainingGalleries();//array();
+    $galleries = Image::GetContainingGalleries($image_id);
     
     $galleryList = "";
     

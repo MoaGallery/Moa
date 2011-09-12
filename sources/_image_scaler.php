@@ -1,16 +1,4 @@
 <?php
-  /* -----------------------------------------------*/
-  /*  Image scaler 1.0 (PHP)                        */
-  /*  Copyright (c)2008 Richard Talbutt \ Dan Brown */
-  /*                                                */
-  /*  Loads and scales down a image to the given    */
-  /*  dimensions returning a JPG object that may be */
-  /*  used for display via an IMG tag.              */
-  /*                                                */
-  /*  URL Params: image_name                        */
-  /*                                                */
-  /* -----------------------------------------------*/
-
   // Guard against false config variables being passed via the URL
   // if the register_globals php setting is turned on
   if (isset($_REQUEST["CFG"]))
@@ -28,6 +16,12 @@
   if (isset($_REQUEST["display_width"]))
   {
     $displayMaxWidth = $_REQUEST["display_width"];
+  }
+  
+  $displayMaxHeight = $displayMaxWidth * 0.75;
+  if (isset($_REQUEST["display_height"]))
+  {
+    $displayMaxHeight = $_REQUEST["display_height"];
   }
   
   if (isset($_REQUEST["image_name"]) == false)
@@ -61,35 +55,47 @@
     {
       //header("Location: ../media/img_scale_error.png");
     }
-    else {
+    else
+    {
       header("Content-type: image/jpg");
 
       $imageWidth = imagesx($imageHandle);
       $imageHeight = imagesy($imageHandle);
-
+      
       $resizedWidth = $imageWidth;
       $resizedHeight = $imageHeight;
       $aspectRatio = $imageWidth / $imageHeight;
+      
+      //echo $displayMaxWidth.'<br />';
 
-      if (!(($imageWidth <= $displayMaxWidth) && ($imageHeight <= ($displayMaxWidth * 0.75))))
+      // Resize vertically if needed
+      if ($imageHeight > $displayMaxHeight)
       {
-        if ($aspectRatio > 1.3333333)
-        {
-          $resizedWidth = $displayMaxWidth;
-          $divisor = $imageWidth / $resizedWidth;
-          $resizedHeight = $imageHeight / $divisor;
-        } else
-        {
-          $resizedHeight = $displayMaxWidth * 0.75;
-          $divisor = $imageHeight / $resizedHeight;
-          $resizedWidth = $imageWidth / $divisor;
-        }
+        $divisor = $imageHeight / $displayMaxHeight;
+        $resizedWidth = $imageWidth / $divisor;
+        $resizedHeight = $imageHeight / $divisor;
       }
-
+      
+      // Resize horizontally if needed
+      if ($resizedWidth > $displayMaxWidth)
+      {
+        $divisor = $resizedWidth / $displayMaxWidth;
+        $resizedWidth = $resizedWidth / $divisor;
+        $resizedHeight = $resizedHeight / $divisor;
+      }
+/*
+      echo $aspectRatio.'<br /><br />';
+      echo $displayMaxWidth.'<br />';
+      echo $displayMaxHeight.'<br /><br />';
+      echo $imageWidth.'<br />';
+      echo $imageHeight.'<br /><br />';
+      echo $resizedWidth.'<br />';
+      echo $resizedHeight.'<br />';
+  */   
       $resizedImageHandle = imagecreatetruecolor($resizedWidth,floor($resizedHeight));
       imageAntiAlias($resizedImageHandle, true);
       imagecopyresampled($resizedImageHandle,$imageHandle,
-                         0,0,0,0,
+      0,0,0,0,
                          $resizedWidth,$resizedHeight,
                          $imageWidth, $imageHeight);
 

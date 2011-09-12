@@ -67,6 +67,7 @@
     global $MOA_PATCH;
     global $BULKUPLOAD_PATH;
     global $IMAGES_PER_PAGE;
+    global $SLIDESHOW_DELAY;
 
     $CFG["DEBUG_MODE"] = $DEBUG_MODE;
     $CFG["DISPLAY_PLAIN_SUBGALLERIES"] = $DISPLAY_PLAIN_SUBGALLERIES;
@@ -87,6 +88,7 @@
     $CFG["MOA_PATCH"] = $MOA_PATCH;
     $CFG["BULKUPLOAD_PATH"] = $BULKUPLOAD_PATH;
     $CFG["IMAGES_PER_PAGE"] = $IMAGES_PER_PAGE;
+    $CFG["SLIDESHOW_DELAY"] = $SLIDESHOW_DELAY;
   }
 
   
@@ -117,6 +119,7 @@
     global $BULKUPLOAD_PATH;
     global $errorString;
     global $IMAGES_PER_PAGE;
+    global $SLIDESHOW_DELAY;
 
     // Set some default settings
     $CFG['DEBUG_MODE'] = false;
@@ -131,6 +134,7 @@
     $CFG['IMAGES_PER_PAGE'] = 12;
     $CFG['SITE_NAME'] = '<your gallery name>';
     $CFG['SITE_BYLINE'] = '<your byline>';
+    $CFG['SLIDESHOW_DELAY'] = 8000;
 
     if ($INSTALLING)
     {
@@ -250,4 +254,27 @@
                           $CFG["MOA_REVISION"].
                           $CFG["MOA_PATCH"];
   }
-?>
+
+  function ApplyChosenTemplate()
+  {
+    global $CFG;
+    
+    // Only proceed if a user is logged in
+    if (UserIsLoggedIn())
+    {
+      if (isset($_POST['template_folder']))
+      {
+        $tpl = $_POST['template_folder'];
+        
+        if (is_dir($CFG['MOA_PATH'].'templates/'.$tpl))
+        {
+          $query = "UPDATE ".$CFG["tab_prefix"]."settings SET Value = _utf8'".mysql_real_escape_string($tpl)."' WHERE Name = 'TEMPLATE';";
+          $result = mysql_query($query) or DBMakeErrorString(__FILE__,__LINE__);
+    
+          $CFG['TEMPLATE'] = $tpl;
+        }
+      }
+    }
+  }
+  
+  ?>

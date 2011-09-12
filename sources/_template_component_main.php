@@ -7,12 +7,23 @@
     die();
   }
 
+  function TagParseMainSubmitLink($p_tag_options)
+  {
+    return "onclick='main.SubmitEdit();'";
+  }
+    
+  function TagParseMainCancelLink($p_tag_options)
+  {
+    return "onclick='main.CancelEdit();'";
+  }
+  
   function TagParseMainDescription($p_tag_options)
   {
     global $gallery_id;
     global $CFG;
 
-    $desc = _MainGetDescription();
+    $main = new Main();
+    $desc = $main->description;
 
     if (0 == strlen($desc))
     {

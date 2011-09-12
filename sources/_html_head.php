@@ -46,6 +46,11 @@
 <script type='text/javascript' src='sources/OverLib/overlib.js'></script>
 <script type='text/javascript' src='sources/OverLib/overlib_adaptive_width.js'></script>
 
+<!-- JQuery include -->
+<script type='text/javascript' src='sources/jquery/jquery.js'></script>
+
+<script type='text/javascript' src='sources/common.js'></script>
+
 <?php
   $filename = "templates/".$template_name."/style/style.css";
   if (!file_exists($filename))

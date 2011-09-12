@@ -17,8 +17,6 @@
   $bodycontent .= "</div><br/><br/>\n";
   $bodycontent .= "  <input type=\"button\" value=\"Complete upgrade\" id=\"upgradebutton\"/><br/><br/>\n";
 
-  $bodycontent .= "<script type=\"text/javascript\" src='sources/common.js'></script>\n";
-  $bodycontent .= "<script type=\"text/javascript\" src='sources/_request.js'></script>\n";
   $bodycontent .= "<script type=\"text/javascript\" src='sources/mod_upgrade.js'></script>\n";
   $bodycontent .= "<script type=\"text/javascript\">\n";
   $bodycontent .= "  moa_path = \"".$CFG["MOA_PATH"]."\";";

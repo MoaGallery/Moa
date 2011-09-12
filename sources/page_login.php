@@ -12,15 +12,9 @@
   $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
   $bodycontent .= LoadTemplateRoot("page_login.php");
 
-  $bodycontent .= "<script type=\"text/javascript\" src=\"sources/jquery/jquery.js\"></script>\n";
-  $bodycontent .= "<script type=\"text/javascript\" src=\"sources/common.js\"></script>\n";
   $bodycontent .= "<script type=\"text/javascript\" src=\"sources/mod_login.js\"></script>\n";
   $bodycontent .= "<script type=\"text/javascript\" src=\"sources/formcheck.js\"></script>\n";
   $bodycontent .= "<script type=\"text/javascript\">\n";
-  $bodycontent .= "  addEvent(document.getElementById('loginname'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
-  $bodycontent .= "  addEvent(document.getElementById('loginpass'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
-  $bodycontent .= "  addEvent(document.getElementById('loginduration'), \"keypress\", function (e) {checkKey(e, \"loginsubmit\", null);});\n";
-  $bodycontent .= "  document.getElementById(\"loginname\").focus();\n";
   $bodycontent .= "  var login = new Login();\n";
   $bodycontent .= "  FormCheckSetup('login', false);\n";
   $bodycontent .= "</script>\n";

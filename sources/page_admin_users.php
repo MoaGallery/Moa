@@ -27,14 +27,12 @@
   {
   	include_once($CFG["MOA_PATH"]."sources/mod_user_view.php");
 
-  	$bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/mod_userlist.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
-
     $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     $bodycontent .= LoadTemplateRoot("page_admin_users.php");
+    
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_userlist.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_ui.js'></script>\n";
     $bodycontent .= "<script type='text/javascript'>\n";
     $bodycontent .= "  //<![CDATA[\n";
     $bodycontent .= "  userform = ";
@@ -59,7 +57,7 @@
     $bodycontent .= "  tag_delimiter = '".$CFG["STR_DELIMITER"]."';\n";
     $bodycontent .= "  user_list = new UserList(tag_delimiter, user_container_template, user_row_template);\n";
     $bodycontent .= "  user_list.PreLoad(all_users);\n";
-    $bodycontent .= "  document.getElementById('user_lines').innerHTML=user_list.ViewAll();\n";
+    $bodycontent .= "  $('#user_lines').html(user_list.ViewAll());\n";
     $bodycontent .= " //]]>\n";
     $bodycontent .= "</script>\n";
 

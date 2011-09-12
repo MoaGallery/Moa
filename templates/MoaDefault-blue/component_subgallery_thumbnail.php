@@ -1,4 +1,4 @@
-<div class='gallery_thumb padding-10' onclick='nd();' <moavar GalleryThumbPopup>>
+<div class='gallery_thumb padding-10' <moavar GalleryThumbPopup>>
   <div class="gal_thumbsize">
     <a href="index.php?action=gallery_view&amp;gallery_id=<moavar GalleryThumbID>">
       <img src='<moavar GalleryThumb>' alt='<moavar GalleryThumbTitle> subgallery' title='' width="<moavar GalleryThumbWidth>" height="<moavar GalleryThumbHeight>"/>

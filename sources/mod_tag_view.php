@@ -16,12 +16,11 @@
   	global $CFG;
     global $bodycontent;
 
-    $Tag = new Tag();
-  	$tags = $Tag->getTags();
+  	$tags = Tag::GetTags();
 
     foreach ($tags as $tag)
     {
-      $bodycontent .= $tag->m_id."=".js_var_display_safe($tag->m_name.$CFG["STR_DELIMITER"]);
+      $bodycontent .= $tag->id."=".js_var_display_safe($tag->name.$CFG["STR_DELIMITER"]);
     }
   }
 
@@ -30,8 +29,7 @@
   	global $CFG;
     global $bodycontent;
 
-    $Gallery = new Gallery();
-    $tags = $Gallery->getTagObjectArray($p_id);
+    $tags = Tag::GetTagIDsforGallery($p_id);
 
     foreach ($tags as $tag)
     {
@@ -44,9 +42,7 @@
     global $CFG;
     global $bodycontent;
 
-    $Image = new Image();
-    $Image->loadId($p_id);
-    $tags = $Image->getTagObjectArray();
+    $tags = Tag::GetTagIdsForImage($p_id);
 
     foreach ($tags as $tag)
     {

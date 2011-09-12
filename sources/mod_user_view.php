@@ -14,11 +14,11 @@
   	global $CFG;
     global $bodycontent;
 
-  	$users = _UserGetUsers();
+  	$users = User::GetUsers();
 
     foreach ($users as $user)
     {
-      $bodycontent .= $user->m_id."=".$user->m_admin."=".str_display_safe($user->m_name.$CFG["STR_DELIMITER"]);
+      $bodycontent .= $user->id."=".$user->admin."=".str_display_safe($user->name.$CFG["STR_DELIMITER"]);
     }
   }
 ?>

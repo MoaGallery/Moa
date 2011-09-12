@@ -6,11 +6,24 @@ Key -
  + = New feature
  b = Bugfix
 
-1.2.5 - Stuff - ? March 2011
+1.2.6 - Refactor and slideshow - 12th September 2011
+ +  Slideshow for current gallery.
+ +  Visual template chooser in admin.
+ *  Code refactor.
+ *  Now uses mostly JQuery. Added some animation to notifications.
+ *  Packaging script now minifies JS and CSS files.
+ *  Upgrade can now delete outdated directories as well as files.
+ b  Fixed bug where very long image/gallery descriptions wouldn't get added.
+ b  Gallery thumbnails now show the correct thumbnail of the first, deepest sub-gallery.
+ b  Description popups shouldn't now sometimes appear in the top-left corner when loading a new page.
+ b  Orphan image next/previous links now correctly link to the correct orphan image.
+
+1.2.5 - Stuff - 16th July 2011
  +  Added a site name and byline field that can show up in the template header.
  +  Image view now shows the tags this image has (if any).
  +  Image view now shows the galleries this image is in.
  +  Made upgrade process less spammy.
+ *  Added the MoaDefault Firefox CSS3 eye candy (shadows, round corners, etc) to Opera, Chrome and Safari. IE9 supports some bits but not all.
  b  Next/Prev on image view page didn't use the new index. Was still tag based.
  b  New gallery link in aperture didn't have a visited/hover style.
  b  Popup text for images couldn't have < or > in it. OverLib was confused.
@@ -18,9 +31,7 @@ Key -
  b  Large gallery/image comments didn't get added on edit on the Suhosin version of PHP due to long URLs.
  b  Tags and gallery names weren't always escaping HTML codes properly within them.
  b  Orphan image view Prev/Next links went to an invalid image. Now points to itself pending a new screen for orphans.
- *  Added the MoaDefault Firefox CSS3 eye candy (shadows, round corners, etc) to Opera, Chrome and Safari. IE9 supports some bits but not all.  
-
-
+ *  Added the MoaDefault Firefox CSS3 eye candy (shadows, round corners, etc) to Opera, Chrome and Safari. IE9 supports some bits but not all.
 
 1.2.4a - Bugfix - 9th March 2011
  b  Pagination was showing up on gallery with sub-galleries but no visible images.

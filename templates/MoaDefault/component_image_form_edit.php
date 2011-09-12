@@ -20,8 +20,8 @@
       </li>
   
       <li class="formButtonsNewLine">
-        <input type='button' value='Submit' id='imageformsubmit' onclick='image.SubmitEdit();'/>
-        <input type='button' value='Cancel' id='imageformcancel' onclick='image.CancelEdit();'/>
+        <input type='button' value='Submit' id='imageformsubmit'/>
+        <input type='button' value='Cancel' id='imageformcancel'/>
       </li>
   
       <li id='imageformtagscomment' class='invalidfieldcomment invalidfieldstyle'>You must supply at least one tag</li>

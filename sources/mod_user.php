@@ -18,217 +18,186 @@
 
   function UserCheckExists()
   {
+    $returnInfo = DefaultAjaxResult( 'UserExists');
+    
     // Get the ID
     $user_id = GetParam("user_id");
     if (false === $user_id)
     {
-      RaiseFatalError("No user id supplied.");
+      $returnInfo['Result'] = 'No user id supplied.';
+      echo json_encode($returnInfo);
       return false;
     }
 
     // Check that it is a real user
-    if (false === _userExists($user_id))
+    if (false === User::Exists($user_id))
     {
-      RaiseFatalError($user_id." User does not exist.");
+      $returnInfo['Result'] = 'User does not exist.';
+      echo json_encode($returnInfo);
       return false;
     }
 
     return $user_id;
   }
 
-  function UserChangeValue($p_id, $p_field, $p_varname)
-  {
-    // Only proceed if a user is logged in
-    if (!UserIsLoggedIn())
-    {
-      RaiseFatalError("Not logged in.");
-      return false;
-    }
-
-    // Check they have admin rights and is not themself
-    if ((!UserIsAdmin()))
-    {
-      if (UserID() != $p_id)
-      {
-        RaiseFatalError("You do not have user admin rights to edit other users.");
-        return false;
-      } else
-      {
-        if ((0 == strcmp("Admin", $p_field)) || (0 == strcmp("admin", $p_field)))
-        {
-          RaiseFatalError("You do not have user admin rights to promote yourself.");
-          return false;
-        }
-      }
-    }
-
-    // Get the value
-    $newvalue = GetParam($p_varname);
-    if (false === $newvalue)
-    {
-      RaiseFatalError("No ".$p_varname." supplied.");
-      return false;
-    }
-
-    // Try to change the value
-    if (false === _UserChangeValue($p_id, $p_field, $newvalue))
-    {
-      RaiseFatalError("Could not set new ".$p_varname, false);
-      return false;
-    }
-
-    OutputPrefix("OK");
-    return true;
-  }
-
-  function UserGetValue($p_id, $p_field, $p_short = false)
-  {
-    $value = _UserGetValue($p_id, $p_field);
-
-    if (false === $value)
-    {
-      RaiseFatalError("Could not get value for field '".$p_field."'", false);
-      return false;
-    }
-
-    OutputPrefix("OK");
-    if (($p_short) && (20 < mb_strlen($value)))
-    {
-      echo mb_substr($value, 0, 17)."...";
-    } else
-    {
-      echo $value;
-    }
-    return true;
-  }
-
   function UserDelete($p_id)
   {
+    $returnInfo = DefaultAjaxResult( 'UserDelete');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Check they have admin rights
     if (!UserIsAdmin())
     {
-      RaiseFatalError("You do not have user admin rights to delete users.");
-      return false;
+      $returnInfo['Result'] = 'You do not have user admin rights to delete users.';
+      return $returnInfo;
     }
 
     // Try to delete the image
-    if (false === _UserDelete($p_id))
+    if (false === User::Delete($p_id))
     {
-      RaiseFatalError("Could not delete user.", false);
-      return false;
+      $returnInfo['Result'] = 'Could not delete user.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    echo $p_id;
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+
+    return $returnInfo;
   }
 
   function UserAdd()
   {
+    $returnInfo = DefaultAjaxResult( 'UserAdd');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Check they have admin rights
     if (!UserIsAdmin())
     {
-      RaiseFatalError("You do not have user admin rights to add new users.");
-      return false;
+      $returnInfo['Result'] = 'You do not have user admin rights to add new users.';
+      return $returnInfo;
     }
 
     // Get the name
     $newname = GetParam("name");
     if (false === $newname)
     {
-      RaiseFatalError("No name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No name supplied.';
+      return $returnInfo;
     }
 
     // Check if tag name already exists
-    $luid = _UserLookUp($newname);
+    $luid = User::LookUp($newname);
     if (false !== $luid)
     {
-      RaiseFatalError("This username already exists.");
-      return false;
+      $returnInfo['Result'] = 'This username already exists.';
+      return $returnInfo;
     }
 
-    // Get the admin flag
-    $newadmin = GetParam("admin");
-    if (false === $newadmin)
+    // Get the fake id
+    $fake_id = GetParam("fake_id");
+    if (false === $fake_id)
     {
-      RaiseFatalError("No admin flag supplied.");
-      return false;
+      $returnInfo['Result'] = 'No fake id supplied.';
+      return $returnInfo;
+    }
+    
+  // Get the admin flag
+    $admin = GetParam("admin");
+    if (false === $admin)
+    {
+      $returnInfo['Result'] = 'No admin flag supplied.';
+      return $returnInfo;
+    }
+    $newadmin = false;
+    if (0 == strcmp($admin, 'true'))
+    {
+      $newadmin = true;
     }
 
     // Get the password
     $newpass = GetParam("pass");
     if (false === $newpass)
     {
-      RaiseFatalError("No password supplied.");
-      return false;
+      $returnInfo['Result'] = 'No password supplied.';
+      return $returnInfo;
     }
 
     // Check the password isn't blank
     if (0 == strcmp($newpass, ""))
     {
-      RaiseFatalError("Password is blank.");
-      return false;
+      $returnInfo['Result'] = 'Password is blank.';
+      return $returnInfo;
     }
 
     // Try to add the user
-    $id = _UserAdd($newname, $newadmin, $newpass);
+    $user = new User();
+    $user->name = $newname;
+    $user->admin = $newadmin;
+    $id = $user->Commit($newpass);
     if (false === $id)
     {
-      RaiseFatalError("Could not add user.", false);
-      return false;
+      $returnInfo['Result'] = 'Could not add user.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    echo $id;
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    $returnInfo['UserID'] = (int)$id;
+    $returnInfo['fake_id'] = $fake_id;
+    unset($returnInfo['Result']);
+
+    return $returnInfo;
   }
 
   function UserEdit($p_id)
   {
+    $returnInfo = DefaultAjaxResult( 'UserEdit');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the name
     $newname = GetParam("name");
     if (false === $newname)
     {
-      RaiseFatalError("No name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No name supplied.';
+      return $returnInfo;
     }
 
     // Check if user name already exists and isn't the user being editted
-    $luid = _UserLookUp($newname);
+    $luid = User::LookUp($newname);
     if ((false !== $luid) && ($luid != $p_id))
     {
-      RaiseFatalError("This username already exists.");
-      return false;
+      $returnInfo['Result'] = 'This username already exists.';
+      return $returnInfo;
     }
 
     // Get the admin flag
-    $newadmin = GetParam("admin");
-    if (false === $newadmin)
+    $admin = GetParam("admin");
+    if (false === $admin)
     {
-      RaiseFatalError("No admin flag supplied.");
-      return false;
+      $returnInfo['Result'] = 'No admin flag supplied.';
+      return $returnInfo;
+    }
+    $newadmin = false;
+    if (0 == strcmp($admin, 'true'))
+    {
+      $newadmin = true;
     }
 
     // Check they have admin rights and is not themself
@@ -236,14 +205,14 @@
     {
       if (UserID() != $p_id)
       {
-        RaiseFatalError("You do not have user admin rights to edit other users.");
-        return false;
+        $returnInfo['Result'] = 'You do not have user admin rights to edit other users.';
+        return $returnInfo;
       } else
       {
         if (0 == strcmp("true", $newadmin))
         {
-          RaiseFatalError("You do not have user admin rights to promote yourself.");
-          return false;
+          $returnInfo['Result'] = 'You do not have user admin rights to promote yourself.';
+          return $returnInfo;
         }
       }
     }
@@ -252,20 +221,24 @@
     $newpass = GetParam("pass");
     if (false === $newpass)
     {
-      RaiseFatalError("No password supplied.");
-      return false;
+      $returnInfo['Result'] = 'No password supplied.';
+      return $returnInfo;
     }
 
     // Try to edit the user
-    if (false === _UserEdit($p_id, $newname, $newadmin, $newpass))
+    $user = new User($p_id);
+    $user->name = $newname;
+    $user->admin = $newadmin;
+    if (false === $user->Commit($newpass))
     {
-      RaiseFatalError("Could not edit user.", false);
-      return false;
+      $returnInfo['Result'] = 'Could not edit user.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    echo $p_id;
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+
+    return $returnInfo;
   }
 
   function UserAjaxMain()
@@ -274,7 +247,9 @@
     $action = GetParam("action");
     if (false === $action)
     {
-      RaiseFatalError("No action supplied.");
+      $returnInfo = DefaultAjaxResult( 'ActionCheck');
+	    $returnInfo['Result'] = 'No action supplied.';
+	    echo json_encode($returnInfo);
     }
 
     DBConnect();
@@ -283,16 +258,7 @@
     {
       case "add" :
       {
-        UserAdd();
-        break;
-      }
-      case "changedesc" :
-      {
-      	$user_id = UserCheckExists();
-        if (false !== $user_id)
-        {
-	        UserChangeValue($user_id, "Description", "desc");
-        }
+        echo json_encode(UserAdd());
         break;
       }
       case "delete" :
@@ -300,7 +266,7 @@
       	$user_id = UserCheckExists();
         if (false !== $user_id)
         {
-          UserDelete($user_id);
+          echo json_encode(UserDelete($user_id));
         }
         break;
       }
@@ -309,22 +275,15 @@
         $user_id = UserCheckExists();
         if (false !== $user_id)
         {
-          UserEdit($user_id);
-        }
-        break;
-      }
-      case "getdesc" :
-      {
-      	$user_id = UserCheckExists();
-        if (false !== $user_id)
-        {
-          UserGetValue($user_id, "Description");
+          echo json_encode(UserEdit($user_id));
         }
         break;
       }
       default :
       {
-        RaiseFatalError("Unknown action.");
+        $returnInfo = DefaultAjaxResult( 'Unknown');
+        $returnInfo['Result'] = 'Unknown action.';
+        echo  json_encode($returnInfo);
         break;
       }
     }

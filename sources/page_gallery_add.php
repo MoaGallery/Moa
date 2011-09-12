@@ -28,11 +28,12 @@
     $parent_id = "0000000000";
   }
 
-  $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
-  $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-  $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
+  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+  $bodycontent .= LoadTemplateRoot("page_gallery_add.php");
+  
   $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
   $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
+  $bodycontent .= "<script type='text/javascript' src='sources/mod_ui.js'></script>\n";
   $bodycontent .= "<script type='text/javascript'>\n";
   $bodycontent .= "  all_tags = '"; ViewAllTagList();
   $bodycontent .= "';\n";
@@ -43,9 +44,9 @@
   $bodycontent .= "<script type='text/javascript'>\n";
   $bodycontent .= "  //<![CDATA[\n";
 
-  $bodycontent .= "  var editform = ";
-  $bodycontent .= LoadTemplateRootForJavaScript("component_gallery_form_add.php");
-  $bodycontent .= ";\n";
+  //$bodycontent .= "  var editform = ";
+  //$bodycontent .= LoadTemplateRootForJavaScript("component_gallery_form_add.php");
+  //$bodycontent .= ";\n";
 
   $bodycontent .= "  var feedback_box = ";
   $bodycontent .= moa_feedback_js();
@@ -53,28 +54,15 @@
   $bodycontent .= "  var template_path = 'templates/".$template_name."/';\n";
 
   $bodycontent .= "  //]]>\n";
-  $bodycontent .= "  var gallery = new Gallery('".$CFG["STR_DELIMITER"]."');\n";
-  $bodycontent .= "  gallery.PreLoad('', '', '', '".$parent_id."');\n";
-  $bodycontent .= "  FormCheckSetup('gallery_add', false);\n";
-  $bodycontent .= "</script>\n";
-
-  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
-  $bodycontent .= LoadTemplateRoot("page_gallery_add.php");
-
-  $bodycontent .= "<script type='text/javascript'>\n";
-  $bodycontent .= "// Add event handlers for the form\n";
-  $bodycontent .= "document.getElementById(\"galleryaddform\").innerHTML = editform;\n";
-  $bodycontent .= "addEvent(document.getElementById(\"galleryformname\"), \"keypress\", function (e) {return checkKey(e, \"galleryformsubmit\", null);});\n";
-  $bodycontent .= "addEvent(document.getElementById(\"galleryformtags\"), \"keypress\", function (e) {return checkKey(e, \"galleryformsubmit\", null);});\n";
-  $bodycontent .= "addEvent(document.getElementById(\"galleryformparent_id\"), \"keypress\", function (e) {return checkKey(e, \"galleryformsubmit\", null);});\n";
-  $bodycontent .= "addEvent(document.getElementById(\"galleryformtags\"), \"keyup\", function (e) {gallery.Feedback(); gallery.TagHintList(this);});\n";
-  $bodycontent .= "addEvent(document.getElementById(\"galleryformexpandlink\"), \"click\", function (e) {gallery.ExpandClick();});\n";
-  $bodycontent .= "addEvent(document.getElementById(\"galleryformtagged\"), \"click\", function (e) {gallery.ChangeTaggedStatus();});\n";
-  $bodycontent .= "\n";
-  $bodycontent .= "gallery.Feedback();\n";
   $bodycontent .= "</script>\n";
 
   $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
+  $bodycontent .= "<script type='text/javascript'>\n";
+  $bodycontent .= "  var gallery = new Gallery('".$CFG["STR_DELIMITER"]."');\n";
+  $bodycontent .= "  gallery.PreLoad('', '', '', '".$parent_id."');\n";
+  $bodycontent .= "  FormCheckSetup('gallery_add', false);\n";
+  $bodycontent .= "</script>\n";
+  
   $bodytitle .= "Add gallery - ".html_display_safe($CFG['SITE_NAME']);
 ?>

@@ -41,12 +41,14 @@
 
   // Don't show header/footer when viewing the full image
   $show_headers = true;
-  if (0 == strcmp($action, "image_view_full"))
+  if ((0 == strcmp($action, "image_view_full")) || 
+      (0 == strcmp($action, "slideshow")))
   {
     $show_headers = false;
   }
 
   include_once($CFG["MOA_PATH"]."sources/id.php");
+  ApplyChosenTemplate();
   include_once($CFG["MOA_PATH"]."sources/common.php");
   include_once($CFG["MOA_PATH"]."sources/mod_upgrade_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/_template_parser.php");
@@ -74,7 +76,6 @@
     $_REQUEST["gallery_id"] = $parent_id;
     $gallery_id = $parent_id;
   }
-  $current_gallery = $gallery_id;
 
 
   // Process submitted data
@@ -123,6 +124,11 @@
     case "admin_ftp" :
     {
       include_once("sources/page_admin_ftp.php");
+      break;
+    }
+    case "admin_template" :
+    {
+      include_once("sources/page_admin_template.php");
       break;
     }
     case "admin_settings" :
@@ -195,6 +201,11 @@
     case "sitemap" :
     {
       include_once("sources/page_sitemap.php");
+      break;
+    }
+    case "slideshow" :
+    {
+      include_once("sources/page_slideshow.php");
       break;
     }
     case "upgrade" :

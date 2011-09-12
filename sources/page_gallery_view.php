@@ -7,9 +7,7 @@
     die();
   }
 
-  include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
-  
-  $Gallery = new Gallery();
+  require_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
   
   // Get gallery id
   $no_gallery_id = false;
@@ -19,7 +17,8 @@
   } else
   {
     $gallery_id = $_REQUEST["gallery_id"];
-    $parent_id = $Gallery->getValue($gallery_id, "IDParent");
+    $Gallery = new Gallery($gallery_id);
+    $parent_id = $Gallery->parent_id;
     $preCache = true;
     $pre_gallery_id = $gallery_id;
   }
@@ -33,9 +32,9 @@
   }
   
   // Complain if invalid id is supplied
-  if ((!$Gallery->exists($gallery_id)) && ("0000000000" != $gallery_id))
+  if ((!Gallery::Exists($gallery_id)) && ("0000000000" != $gallery_id))
   {
-    $bodycontent .= $Gallery->exists($gallery_id);
+    $bodycontent .= Gallery::Exists($gallery_id);
     moa_warning("Invalid gallery ID supplied.");
     $proceed = false;
   }
@@ -72,19 +71,28 @@
       }
     }
 
-    
-
     $preCache = true;
+    
 	  include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
+	  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+
+	  $bodycontent .= "<div id = 'pagegalleryview'>\n";
+	  $bodycontent .= LoadTemplateRoot("page_gallery_view.php");
+	  $bodycontent .= "</div>\n";
+		$bodycontent .= "<script type=\"text/javascript\">\n";
+		$bodycontent .= "  if ('".$gallery_id."' == '0000000000')\n";
+		$bodycontent .= "  {\n";
+		$bodycontent .= "    document.location = 'index.php';\n";
+		$bodycontent .= "  }\n";
+    $bodycontent .= "   </script>\n";
+	  
     // Only include Javascript if a user is logged in
     if (UserIsLoggedIn())
 	  {
-	    $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
-	    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-	  	$bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
 	    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
 	    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
+	    $bodycontent .= "<script type='text/javascript' src='sources/mod_ui.js'></script>\n";
 	  	$bodycontent .= "<script type='text/javascript'>\n";
 	    $bodycontent .= "  //<![CDATA[\n";
       $bodycontent .= "  all_tags = '"; ViewAllTagList();
@@ -92,6 +100,7 @@
 	    $bodycontent .= "  cur_tags = '"; ViewGalleryCurrentTagList($gallery_id);
       $bodycontent .= "';\n";
       $bodycontent .= "  title_max_length = ".$CFG["TITLE_DESC_LENGTH"].";\n";
+      $bodycontent .= "  page = ".$page.";\n";
       $bodycontent .= " //]]>\n";
 	    $bodycontent .= "</script>\n";
 	    $bodycontent .= "<script type='text/javascript' src='sources/mod_gallery.js'></script>\n";
@@ -111,32 +120,19 @@
 
 	    $bodycontent .= "  var gallery = new Gallery('".js_var_display_safe($CFG["STR_DELIMITER"])."');\n";
 	    
-	    $useTags = $Gallery->getValue($gallery_id, "UseTags");
-	    $tagged = "false"; 
-	    if (0 == $useTags)
-	    {
-	      $tagged = "true";
-	    }
-	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Name"))."', '".js_var_display_safe($Gallery->getValue($gallery_id, "Description"))."', '".$parent_id."', '".$from."', ".$tagged.");\n";
+	    $tagged = ($Gallery->useTags) ? 'true' : 'false';
+
+	    $bodycontent .= "  gallery.PreLoad('".$gallery_id."', '".js_var_display_safe($Gallery->name)."', '".js_var_display_safe($Gallery->description)."', '".$parent_id."', '".$from."', ".$tagged.");\n";
 	    $bodycontent .= "  FormCheckSetup('gallery_view', ".$tagged.");\n";
       $bodycontent .= " //]]>\n";
 	    $bodycontent .= "</script>\n";
 	  }
+	  
+	  $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
 
-	  $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
+	  
 
-	  $bodycontent .= "<div id = 'pagegalleryview'>\n";
-	  $bodycontent .= LoadTemplateRoot("page_gallery_view.php");
-	  $bodycontent .= "</div>\n";
-		$bodycontent .= "<script type=\"text/javascript\">\n";
-		$bodycontent .= "  if ('".$gallery_id."' == '0000000000')\n";
-		$bodycontent .= "  {\n";
-		$bodycontent .= "    document.location = 'index.php';\n";
-		$bodycontent .= "  }\n";
-    $bodycontent .= "   </script>\n";
-    $bodycontent .= "\n\n\n".LoadTemplateRoot("tail_block.php")."\n\n";
-
-    $gal_shortname = $Gallery->getValue($gallery_id, "Name");
+    $gal_shortname = $Gallery->name;
     if ($CFG["TITLE_DESC_LENGTH"] < strlen($gal_shortname))
     {
       $gal_shortname = substr($gal_shortname, 0, ($CFG["TITLE_DESC_LENGTH"]-3))."...";

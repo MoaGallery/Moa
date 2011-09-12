@@ -33,9 +33,7 @@
 
   function TagParseFtpGalleryComboList($p_tag_options)
 	{	 
-	  $Gallery = new Gallery();
-	  
-	  $optionHtml = $Gallery->makeHtmlOptionsFromGalleryNames();
+	  $optionHtml = Gallery::MakeHtmlOptionsList();
 	
 	  if (0 == strlen($optionHtml))
 	  {

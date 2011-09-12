@@ -1,4 +1,5 @@
-function Main(p_delim) {
+function Main(p_delim)
+{
 	var that = this;
 
 	var m_desc;
@@ -9,96 +10,114 @@ function Main(p_delim) {
 	var m_descexpand = false;
 	var m_delimiter = p_delim;
 
-	this.PreLoad = function(p_desc) {
+	this.PreLoad = function(p_desc)
+	{
 		nd();
 		m_desc = p_desc;
 		m_short_desc = ShortName(m_desc);
 		m_old_desc = "";
 	};
 
-	this.Edit = function() {
+	this.Edit = function()
+	{
 		if (!m_edit_toggle) {
-			m_titles = document.getElementById("mainblocktitles").innerHTML;
-		    document.getElementById("mainblocktitles").innerHTML = editblock;
+			m_titles = $('#mainblocktitles').html();
+			$('#mainblocktitles').html( editblock);
 			
-			document.getElementById("mainformdesc").value = str_replace(m_desc, "<br/>", "\n");
-			addEvent(document.getElementById("mainformdesc"), "keypress",
-					function(e) {
-						return checkKey(e, null, "mainformcancel");
-					});
-			addEvent(document.getElementById("mainformexpandlink"), "click",
-					function(e) {
-						main.ExpandClick();
-					});
-			document.getElementById("mainformdesc").focus();
+			$('#mainformdesc').val( str_replace(m_desc, "<br/>", "\n"));
+			$('#mainformdesc').keypress( function(e) {return checkKey(e, null, "mainformcancel");});
+			$('#mainformexpandlink').click( function(e) {main.ExpandClick();});
+			$('#mainformdesc').focus();
 			m_edit_toggle = true;
 		}
 	};
 
-	this.SubmitEdit = function() {
+	this.SubmitEdit = function()
+	{
 		var url = "";
 
 		m_old_desc = m_desc;
 
-		m_desc = document.getElementById("mainformdesc").value;
+		m_desc = $('#mainformdesc').val();
 
 		m_short_desc = ShortName(m_desc);
 
 		that.CancelEdit();
-		document.getElementById("mainblockdesc").innerHTML = StripHTMLTags(m_desc);
+		$('#mainblockdesc').html(EscapeNewLine(EscapeHTMLChars(m_desc)));
 
-		url = "action=edit";
-		url += "&desc=" + encodeURIComponent(m_desc);
-		var request = new httpRequest("sources/mod_main.php",
-				that.SubmitCallback);
-		request.update(url, "POST");
+    params = "action=edit";    
+    params += "&desc=" + encodeURIComponent(m_desc);
 
+    $.ajax({ url: 'sources/mod_main.php',
+             data: params,
+             type: 'POST',
+             success: that.AjaxCallback,
+             error: that.AjaxCallbackFail,
+             cache: false});
+    	
 		m_edit_toggle = false;
 	};
 
-	this.CancelEdit = function() {
-	    document.getElementById("mainblocktitles").innerHTML = m_titles;
+	this.CancelEdit = function()
+	{
+	  $('#mainblocktitles').html( m_titles);
 		m_edit_toggle = false;
 		nd();
 	};
 
-	this.SubmitRollback = function() {
-		m_desc = m_old_desc;
-		that.CancelEdit();
-		document.getElementById("mainblockdesc").innerHTML = StripHTMLTags(m_desc);
+  this.AjaxCallbackFail = function(p_request, p_status, p_errorThrown)
+  {    
+    m_desc = m_old_desc;
+    that.CancelEdit();
+    $('#mainblockdesc').html(StripHTMLTags(m_desc));
 
-		m_old_desc = "";
-		m_short_desc = ShortName(m_desc);
+    m_old_desc = "";
+    m_short_desc = ShortName(m_desc);
+        
+    MoaUI.DisplayFeedback( 'Server returned "' + p_request.status + ' ' + p_request.statusText + '".', Feedback.error);
+  };
+  	
+	this.AjaxCallback = function(p_result)
+	{
+    try
+    {
+      var result = $.parseJSON(p_result);
+    }
+    catch(e)
+    {
+      var error = {status: '', statusText: 'Unknown response from server.'};
+      that.AjaxCallbackFail(error);
+      return;
+    }
+    
+    if (result.Status == 'SUCCESS')
+    {   
+      switch (result.Operation)
+      {
+        case 'MainAdd':
+        {          
+	        m_old_desc = "";
+        }       
+      }
+    }
+    else
+    {
+      var error = {status: '', statusText: result.Result};
+      that.AjaxCallbackFail(error);
+    }
 	};
 
-	this.SubmitCallback = function(p_text, p_status, p_xml, p_note) {
-		if (p_status != 200) {
-			document.getElementById("mainblockfeedback").innerHTML = FeedbackBox(
-					"Server returned code " + p_status + ".", false);
-			that.SubmitRollback();
-			return;
-		}
-
-		if ("OK" != p_text.substr(0, 2)) {
-			document.getElementById("mainblockfeedback").innerHTML = FeedbackBox(
-					p_text, false);
-			that.SubmitRollback();
-			return;
-		} 
-				
-		m_old_desc = "";		
-	};
-
-	this.ExpandClick = function() {
+	this.ExpandClick = function()
+	{
 		if (m_descexpand) {
-			document.getElementById("mainformdesc").rows = 4;
-			document.getElementById("mainformdesc").cols = 50;
-			document.getElementById("mainformexpandlink").innerHTML = "[Expand]";
+		  $('#mainformdesc').attr('rows', 4);
+		  $('#mainformdesc').attr('cols', 50);
+		  $('#mainformexpandlink').html("[Expand]");
 			m_descexpand = false;
 		} else {
-			document.getElementById("mainformdesc").rows = 15;
-			document.getElementById("mainformdesc").cols = 80;
-			document.getElementById("mainformexpandlink").innerHTML = "[Shrink]";
+		  $('#mainformdesc').attr('rows', 15);
+		  $('#mainformdesc').attr('cols', 80);
+		  $('#mainformexpandlink').html("[Shrink]");
 			m_descexpand = true;
 		}
 	};

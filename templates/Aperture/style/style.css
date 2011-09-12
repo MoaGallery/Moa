@@ -32,14 +32,14 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 
 /* 3.  Feedback selectors */
 
-.Error_box { border: 2px solid; padding: 10px; border-style: solid; display: table; border-color: #ff0000; background-color: #ffffff;
+.Error_box { border: 2px solid; padding: 10px; border-style: solid; display: block; border-color: #ff0000; background-color: #ffffff;
              font-size: 16px; font-weight: bold; color: #ff0000; line-height: 20px; }
-.Warning_box { border: 2px solid; padding: 10px; border-style: dashed; display: table; border-color: #ff0000;
+.Warning_box { border: 2px solid; padding: 10px; border-style: dashed; display: block; border-color: #ff0000;
                background-color: #ffffff; font-size: 100%; font-weight: bold; color: #ff0000; line-height: 40px; }
 .FatalError_box { border: 5px solid; padding: 10px; border-style: solid; border-color: #ff0000; background-color: #ffffff;
                   font-size: 100%; font-weight: bold; color: #ff0000; line-height: 40px; vertical-align: middle; }
-.Success_box { display: table; border: 2px solid; padding: 10px; border-style: solid; border-color: #bfb;
-               border-width: 1px; background-color: #325C5E; font-size: 0.7em; color: #bfb; line-height: 40px; }
+.Success_box { display: block; border: 2px solid; padding: 10px; border-style: solid; border-color: #bfb;
+               border-width: 1px; background-color: #325C5E; font-size: 0.7em; color: #bfb; line-height: 40px; margin: 11px; }
 .Success_box a:link, .Success_box a:hover, .Success_box a:visited { text-decoration: underline; color: #DDD; }
 
 
@@ -89,7 +89,7 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
 
 /* 6.  Admin selectors */
 
-.admin_link_list { margin: 0px; padding: 10px; }
+.admin_link_list { margin: 0px; padding: 10px; overflow: auto; }
 .admin_link_list li { display: block; float: left; margin-right: 5px; }
 .login_block { width: 330px; margin-left:auto; margin-right:auto; }
 .login_box { color: white;  margin: 30px 0; overflow: auto; }
@@ -133,6 +133,50 @@ h3 { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0
                 display: block; clear: left; float: left; }
 .install_list_fail { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 80%; color: red; }
 .install_list_success { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 80%; color: green; }
+
+.template_list {
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+        color: #C0C0C0;
+}
+
+.template_list li {
+        display: block;
+        width: 590px;
+        height: 150px;
+        float: left;
+        margin: 10px;
+        padding: 5px;
+        border: 1px solid #C0C0C0;
+        background-color: #325C5E;
+}
+
+.template_list p {
+        margin: 2px 0 2px 5px;
+}
+
+.template_image img {
+        display: block;
+}
+
+.template_image {
+        float: left;
+        width: 200px;
+}
+
+.template_info {
+        float: right;
+        width: 385px;
+}
+
+.template_name {
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        color: white;
+}
+
 
 
 
@@ -222,7 +266,8 @@ a.pagination:hover { text-decoration: underline; color: #BBBBBB; }
 /* 9.  Tag selectors */
 
 .tag_lines { padding: 0; margin: 0; font-size: 0.9em; }
-.tag_lines li { display: block; padding: 3px; margin: 1px; float: left; border: solid 1px #325C5E; width: 300px; height: 24px; }
+.tag_lines li { display: block; padding: 3px; margin: 1px; float: left; border: solid 1px #325C5E;
+                width: 300px; height: 24px; overflow: auto}
 .tag_name { float: left; width: 210px; margin: 0; color: white; }
 .tag_link { float: right; }
 .tag_edit_box { float: left; width: 150px; font-weight: bold; display: none; }
@@ -255,7 +300,7 @@ a.pagination:hover { text-decoration: underline; color: #BBBBBB; }
 .main_edit_name { width:379px; background-color: #587F7E; border-color: #587F7E; color: white; }
 .main_name_desc { background-color: #587F7E; border-color: #587F7E; border: 2px inset #587F7E; color: white; }
 .main_desc { font-size: 0.8em; font-weight: normal; color: #bbb; margin: 5px; padding: 0px; }
-#mainblockfeedback { margin: 0 0 0 10px; clear: left; }
+#mainblockfeedback { clear: left; }
 
 /* 12. Form selectors  */
 
@@ -292,3 +337,133 @@ a.pagination:hover { text-decoration: underline; color: #BBBBBB; }
 .invalidfield           { background-color: #ff8080; }
 .staticFormValue        { color: #E0E0E0; };
 
+.galleryControls {
+        margin-top: 20px;
+        position: relative;
+        height: 40px;
+}
+
+.slideshowLink {
+        padding: 10px 0 20px 15px;
+}
+
+.slideshowLink a, .slideshowLink a:visited {
+        font-weight: bold;
+        color: white;
+}
+
+.slideshowLink a:hover {
+        font-weight: bold;
+        color: grey;
+        text-decoration: underline;
+}
+
+.slideshowFullscreen {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+}
+
+.slideshowImage {
+        position: absolute;
+        display: hidden;
+}
+
+.slideshowDetails {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        text-align: center;
+        color: white;
+}
+
+.slideshowName {
+        display: block;
+        color: white;
+        font-size: 40px;
+        padding: 0 0 10px;
+}
+
+.slideshowDesc {
+        width: 50%;
+        margin: 0 auto;
+        display: block;
+        color: #c0c0c0;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 5px 5px 65px 5px;
+}
+
+.slideshowControls {
+        color: white;
+        position: absolute;
+        left: 50%;
+        bottom: 4px;
+}
+
+.slideshowControlsInner {
+        position: absolute;
+        width: 420px;
+        left: -180px;
+        bottom: 0;
+}
+
+.slideshowPrevious {
+        float: left;
+}
+
+.slideshowPause {
+        float: left;
+}
+
+.slideshowNext {
+        float: left;
+}
+
+.slideshowProgressBar {
+        float: left;
+        width: 300px;
+        border: 1px solid #c0c0c0;
+}
+
+.slideshowProgressBar div {
+        background-color: #c0c0c0;
+        border: 1px solid #000000;
+        width: 0;
+}
+
+.slideshowLoading {
+        color: #c0c0c0;
+        float: left;
+        padding-left: 29px;
+        background: url(../../../media/loading.gif) no-repeat;
+        margin-left: 5px;
+        display: none;
+        left: 180px;
+        bottom: 4px;
+        height: 24px;
+        position: absolute;
+}
+
+.slideshowOptions {
+        color: #c0c0c0;
+        position: absolute;
+        left: 5px;
+        bottom: 0px;
+        border: #202020 solid 1px;
+        border-bottom: 0;
+        width: 200px;
+        height: 20px;
+        border-radius: 10px 10px 0 0;
+        padding: 5px 10px;
+        background-color: #000000;
+}
+
+#slideshowOptionDelay {
+        width: 50px;
+}
+
+#slideshowOptionsForm hr {
+        background-color: #ff0000;
+}

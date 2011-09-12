@@ -1,3 +1,17 @@
+var LastAction = 
+{ 
+  none: 0,   
+  addImage: 1,  
+  editImage: 2,
+  deleteImage: 3
+};
+
+function resStruct()
+{
+  var Status = '';
+  var Result = '';
+}
+
 function Image( p_delim)
 {
   var that = this;
@@ -28,13 +42,11 @@ function Image( p_delim)
 
   var m_fileList = [];
   var m_count = 0;
-
   var m_oneFile = 0.0;
   var m_curWidth = 0;
-
   var m_resend = false;
-
   var m_submitWording = '';
+  var m_lastAction = LastAction.none;
 
   this.PreLoad = function(p_image_id, p_desc, p_width, p_height, p_parent_id)
   {
@@ -50,11 +62,11 @@ function Image( p_delim)
 
     m_taglist.PreLoad(all_tags, cur_tags);
     m_tags = m_taglist.StringList();
-
+    
     if ('' == m_image_id)
     {
       m_add_mode = true;
-      m_formobject = new httpForm( 'imageform', 'imageformupload', that.AddCallback, 'image.loaded');
+      m_formobject = new httpForm( 'imageform', 'imageformupload', image.AjaxCallback, image.loaded);
     }
   };
 
@@ -66,7 +78,7 @@ function Image( p_delim)
     text += "<div id='progressbar-text' style='position: absolute; top: 0; left: 0; '></div>";
     text += "<div id='progressbar-inner' style='width: 0px;'>&nbsp;</div></div>";
 
-    $('#imageblockfeedback').html(text);
+    $('#imageprogressbar').html(text);
 
     divWidth = $('#progressbar-outer').width();
     m_oneFile = divWidth / m_fileList.length;
@@ -98,35 +110,27 @@ function Image( p_delim)
   {
     $('#imageblockfeedback').html('');
   };
-
-  this.UpdateImageCount = function()
-  {
-    // Only update the header if they are displaying the count
-    var hdr_imagecount = document.getElementById('hdr_imagecount');
-    if (null != hdr_imagecount)
-    {
-      var img_count = hdr_imagecount.innerHTML;
-      img_count++;
-      hdr_imagecount.innerHTML = img_count;
-    }
-  };
-
+   
   this.Edit = function()
   {
     if (!m_edit_toggle)
     {
-      m_titles = document.getElementById("imageblockinfo").innerHTML;
-    	document.getElementById("imageblockinfo").innerHTML = editblock;
-    	document.getElementById("imageformdesc").value = str_replace(m_desc, "<br />", "\n");
-    	document.getElementById("imageformtags").value = m_taglist.StringList();
-    	addEvent(document.getElementById("imageformdesc"), "keypress", function (e) {return checkKey(e, null, "imageformcancel");});
-        addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", "imageformcancel");});
-        addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); if (m_enabletaglist) {image.TagHintList(this);};});
-        addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
-    	document.getElementById("imageformdesc").focus();
-    	m_taglist.Feedback("image");
-    	m_edit_toggle = true;
-    	m_add_mode = false;
+      m_titles = $('#imageblockinfo').html();
+      $('#imageblockinfo').html( editblock);
+      $('#imageformdesc').val( str_replace(m_desc, "<br />", "\n"));
+      $('#imageformtags').val( m_taglist.StringList());
+           
+      $('#imageformdesc').keypress( function (e) {return checkKey(e, null, "imageformcancel");});
+      $('#imageformtags').keypress( function (e) {return checkKey(e, "imageformsubmit", "imageformcancel");});
+      $('#imageformtags').keyup( function (e) {image.Feedback(); if (m_enabletaglist) {image.TagHintList(this);};});
+      $('#imageformexpandlink').click( function (e) {image.ExpandClick();});
+      $('#imageformsubmit').click( function (e) {image.SubmitEdit();});
+      $('#imageformcancel').click( function (e) {image.CancelEdit();});
+      $('#imageformdesc').focus();
+      
+      m_taglist.Feedback("image");
+      m_edit_toggle = true;
+      m_add_mode = false;
     }
   };
 
@@ -145,44 +149,63 @@ function Image( p_delim)
     {
       return false;
     }
-    
+
     m_old_desc = m_desc;
     m_old_tags = m_tags;
 
-    m_desc = document.getElementById("imageformdesc").value;
-    m_tags = document.getElementById("imageformtags").value;
-
-  	if (!m_add_mode)
+    m_desc = $('#imageformdesc').val();
+    m_tags = $('#imageformtags').val();
+    if (!m_add_mode)
     {
   	  m_short_desc = ShortName(m_desc);
-  	  that.PageTitle();
+  	  MoaUI.PageTitle('Image', m_short_desc);
 
   	  that.CancelEdit();
-    	document.getElementById("imageblockdesc").innerHTML = EscapeNewLine(EscapeHTMLChars(m_desc));
+  	  $('#imageblockdesc').html( EscapeNewLine(EscapeHTMLChars(m_desc)));
 
-    	var url =  "action=edit";
-    	    url += "&desc="+encodeURIComponent(m_desc);
-    	    url += "&tags="+encodeURIComponent(m_tags);
-    	    url += "&image_id="+m_image_id;
-    	var request = new httpRequest("sources/mod_image.php", that.SubmitCallback, m_image_id);
-    	request.update(url, "POST");
+    	var params =  "action=edit";
+    	params += "&desc="+encodeURIComponent(m_desc);
+    	params += "&tags="+encodeURIComponent(m_tags);
+    	params += "&image_id="+m_image_id;
+    	
+    	m_lastAction = LastAction.editImage;      
+      $.ajax({ url: 'sources/mod_image.php',
+               data: params,
+               type: 'POST',
+               success: that.AjaxCallback,
+               error: that.AjaxCallbackFail,
+               cache: false});
 
     	m_edit_toggle = false;
     } else
     {
+      console.log("ff");
       if (m_count > 0)
       {
+        console.log("ff");
         $('#imageformsubmit').attr("disabled", true);
         $('#imageformcancel').attr("disabled", true);
 
         m_resend = true;
-        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&parentid="+encodeURIComponent(m_parent_id)+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
-
+        
+        var params = "action=addstep";
+        params += "&filename="+m_fileList[m_count];
+        params += "&parentid="+encodeURIComponent(m_parent_id);
+        params += "&imageformtags="+encodeURIComponent(m_tags);
+        params += "&imageformdesc="+encodeURIComponent(m_desc);
+        
+        m_last_action = LastAction.addGallery;
+        $.ajax({ url: 'sources/mod_image.php',
+                 data: params,
+                 type: 'POST',
+                 success: that.AjaxCallback,
+                 error: that.AjaxCallbackFail,
+                 cache: false});
         return;
       }
 
-      m_formobject.submit("Uploading '"+document.getElementById("imageformfilename").value+"'...");
-      document.getElementById("imageform").submit();
+      m_formobject.submit("Uploading '"+$('#imageformfilename').val()+"'...");
+      $('#imageform').submit();
       m_formobject.reset();
     }
 
@@ -195,7 +218,7 @@ function Image( p_delim)
   {
     if (!m_add_mode)
     {
-      document.getElementById("imageblockinfo").innerHTML = m_titles;
+      $('#imageblockinfo').html( m_titles);
       m_edit_toggle = false;
     } else
     {
@@ -204,19 +227,178 @@ function Image( p_delim)
     nd();
   };
 
-  this.PageTitle = function()
-  {
-    title = 'Image';
-    if (m_short_desc.length > 0)
+  this.AjaxCallback = function(p_result)
+  { 
+    if (null === p_result)
     {
-      title += " - '";
-      title += m_short_desc;
-      title += "' - Moa";
+      return;
+    }
+    
+    try
+    {
+      var result = $.parseJSON(p_result);
+    }
+    catch(e)
+    {
+      var error = {status: '', statusText: 'Unknown response from server.'};
+      that.AjaxCallbackFail(error);
+      return;
     }
 
-    document.title = title;
-  };
+    if (result.Status == 'SUCCESS')
+    {       
+      switch (result.Operation)
+      {
+        case 'ImageAdd':
+        {
+          m_fileList = result.FileList;
+          m_count = 1;
 
+          that.UpdateRecentUploads(m_fileList[0]);
+          MoaUI.HeaderImageCountAdd(1);
+
+          if (m_fileList.length == 1)
+          {
+            feedback = $("#imageblockfeedback").html();
+            
+            MoaUI.DisplayFeedback("Added - "+m_fileList[0], Feedback.success);
+
+            m_fileList = [];
+            m_count = 0;
+          } else
+          {
+            that.CreateProgressBar();
+  
+            var buttonSubmit = $('#imageformsubmit');
+            buttonSubmitText = buttonSubmit.text();
+            buttonSubmit.attr('text', '');
+            m_submitWording = buttonSubmit.attr('value');
+            buttonSubmit.attr('text', buttonSubmitText);
+            buttonSubmit.attr('value', 'Continue');
+            
+            $('#imageformsubmit').attr("disabled", "true");
+            $('#imageformcancel').attr("disabled", "true");
+            
+            var params = "action=addstep";
+            params +=    "&filename="+m_fileList[m_count];
+            params +=    "&imagegalleryid="+encodeURIComponent(m_parent_id);
+            params +=    "&imageformtags="+encodeURIComponent(m_tags);
+            params +=    "&imageformdesc="+encodeURIComponent(m_desc);
+            
+            $.ajax({
+                    success: that.AjaxCallback, 
+            				error: that.AjaxCallbackFail, 
+            				cache:false,
+            				url:"sources/mod_image.php",
+            				data: params,
+            				type: 'POST'
+            			 });
+          }
+          break;
+        }
+        case 'ImageEdit':
+        {
+          var tagsChanged = false;
+          if (m_old_tags != m_tags)
+          {
+            tagsChanged = true;
+          }
+          
+          m_old_desc = '';
+          m_old_tags = '';
+          
+          if (tagsChanged)
+          {
+            $.ajax({url:"sources/mod_image.php?action=getinfotags&image_id="+encodeURIComponent(m_image_id), success: that.AjaxCallback, error: that.AjaxCallbackFail, cache:false});
+            $.ajax({url:"sources/mod_image.php?action=getinfogalleries&image_id="+encodeURIComponent(m_image_id), success: that.AjaxCallback, error: that.AjaxCallbackFail, cache:false});
+          }
+          break;
+        }
+        case 'ImageDelete':
+        {
+          if (m_parent_id == "orphan")
+          {
+            document.location = "index.php?action=admin_orphans&deleted=image";
+          }
+          else
+          {
+            document.location = "index.php?action=gallery_view&gallery_id=" + m_parent_id + "&deleted=image";
+          }
+          break;
+        }
+        case 'GetTags':
+        {
+          var tags = result.Tags;    
+          $('#image_tag_list').html(tags);
+          break;
+        }
+        case 'GetGalleries':
+        {
+          var galleries = result.Galleries;    
+          $('#image_gallery_list').html(galleries);
+          break;
+        }
+        case 'ImageAddStep':
+        {
+          that.UpdateRecentUploads(m_fileList[m_count]);
+          MoaUI.HeaderImageCountAdd(1);
+
+          m_curWidth = m_curWidth + m_oneFile;
+          m_count++;
+
+          that.UpdateProgressBar();
+
+          if (m_count == m_fileList.length)
+          {
+            m_fileList = [];
+            m_count = 0;
+
+            $('#imageformsubmit').attr('value', m_submitWording);
+
+            $('#imageformsubmit').removeAttr("disabled");
+            $('#imageformcancel').removeAttr("disabled");
+          }
+          else
+          {
+            var params = "action=addstep&";
+            params += "filename="+m_fileList[m_count]+"&";
+            params += "imagegalleryid="+encodeURIComponent(m_parent_id)+"&";
+            params += "imageformtags="+encodeURIComponent(m_tags)+"&";
+            params += "imageformdesc="+encodeURIComponent(m_desc);
+            $.ajax({
+                    success: that.AjaxCallback, 
+                    error: that.AjaxCallbackFail, 
+                    cache:false,
+                    url:"sources/mod_image.php?",
+                    data: params,
+                    type: 'POST'
+                   });
+          }
+          break;
+        }
+        default:
+        {
+          that.AjaxCallbackFail('Unknown error -', result.Status, '');
+        }
+      }
+    }
+    else
+    {
+      that.AjaxCallbackFail({status: '', statusText: result.Result});
+    }
+  };
+  
+  this.AjaxCallbackFail = function(p_request, p_status, p_errorThrown)
+  {
+    if (m_lastAction == LastAction.editImage) 
+    {
+      that.SubmitRollback();
+    }
+    MoaUI.DisplayFeedback( 'Server returned "' + p_request.status + ' ' + p_request.statusText + '".', Feedback.error);
+    $('#imageformsubmit').removeAttr("disabled");
+    $('#imageformcancel').removeAttr("disabled");
+  };
+  
   this.SubmitRollback = function()
   {
     m_desc = m_old_desc;
@@ -229,49 +411,9 @@ function Image( p_delim)
 
     m_short_desc = ShortName(m_desc);
 
-    that.PageTitle();
+    MoaUI.PageTitle('Image', m_short_desc);
   };
 
-  this.SubmitCallback = function(p_text, p_status, p_xml, p_note)
-  {
-    if (p_status != 200)
-    {
-      $('#imageblockfeedback').html(FeedbackBox('Server returned code ' + p_status + '.', false));
-      that.SubmitRollback();
-      return;
-    }
-    if ('OK' != p_text.substr(0, 2))
-    {
-      $('#imageblockfeedback').html(FeedbackBox(p_text, false));
-      that.SubmitRollback();
-      return;
-    }
-    m_old_desc = '';
-    m_old_tags = '';
-    $.ajax({url:"sources/mod_image.php?action=getinfotags&image_id="+encodeURIComponent(m_image_id), success: that.InfoTagsCallback, cache:false});
-    $.ajax({url:"sources/mod_image.php?action=getinfogalleries&image_id="+encodeURIComponent(m_image_id), success: that.InfoGalleriesCallback, cache:false});
-  };
-
-  this.InfoTagsCallback = function(p_text, p_status, p_xml, p_note)
-  {
-    if ('OK' == p_text.substr(0, 2))
-    {
-      tags = p_text.substr(3, 1000000);
-      $('#image_tag_list').html(tags);
-      return;
-    }
-  };
-  
-  this.InfoGalleriesCallback = function(p_text, p_status, p_xml, p_note)
-  {
-    if ('OK' == p_text.substr(0, 2))
-    {
-      galleries = p_text.substr(3, 1000000);
-      $('#image_gallery_list').html(galleries);
-      return;
-    }
-  };
-  
   this.UpdateRecentUploads = function(p_filename)
   {
     var fname = p_filename;
@@ -291,148 +433,11 @@ function Image( p_delim)
       m_newlist[4] = fname;
     }
 
-    document.getElementById("imageformnewlist").innerHTML = "Recently added -<br/>\n";
+    $('#imageformnewlist').html("Recently added -<br/>\n");
 
     for (var i = 0; i < m_newlistcount; i++)
     {
-      document.getElementById("imageformnewlist").innerHTML += m_newlist[i];
-    }
-  };
-
-  this.StepCallBack = function(p_result)
-  {
-    var crPos = p_result.indexOf("\n") + 1;
-    var action = p_result.substring(crPos, crPos + 5);
-    var status = p_result.substring(0, crPos - 1);
-
-    if ('OK' != status)
-	  {
-      feedback = $('#imageblockfeedback').html();
-      errorMessage = 'Unknown response from server';
-      supressError = false;
-
-      if ((status == 'ERROR') || (status == 'IERROR'))
-      {
-        if (m_resend)
-        {
-          if (p_result.indexOf('is not an image') == -1) {
-            errorMessage = p_result.substring(crPos);
-          }
-          else
-          {
-            supressError = true;
-          }
-          m_resend = false;
-        }
-      }
-      else
-      {
-        status = 'ERROR';
-      }
-
-      if (!supressError)
-      {
-        $('#imageblockfeedback').html(feedback+FeedbackBox(status + "\n" + errorMessage), false);
-      }
-	  } else
-	  {
-      that.UpdateRecentUploads(m_fileList[m_count]);
-      that.UpdateImageCount();
-	  }
-
-    m_curWidth = m_curWidth + m_oneFile;
-    m_count++;
-
-    that.UpdateProgressBar();
-
-    if (m_count == m_fileList.length)
-    {
-      m_fileList = [];
-      m_count = 0;
-
-      $('#imageformsubmit').attr('value', m_submitWording);
-
-      $('#imageformsubmit').removeAttr("disabled");
-      $('#imageformcancel').removeAttr("disabled");
-    }
-    else
-    {
-      
-      $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imagegalleryid="+encodeURIComponent(m_parent_id)+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
-    }
-  };
-
-  this.AddCallbackFail = function(p_request, p_status, p_errorThrown)
-  {
-    $('#imageformsubmit').removeAttr("disabled");
-    $('#imageformcancel').removeAttr("disabled");
-  };
-
-  this.AddCallback = function(p_result)
-  {
-    /* Silly hack to keep IE happy with pre formatted text taken from an IFRAME */
-    p_result = str_replace(p_result , "<PRE>", "");
-    p_result = str_replace(p_result , "</PRE>", "");
-    p_result = str_replace(p_result , "<pre>", "");
-    p_result = str_replace(p_result , "</pre>", "");
-
-    p_result = str_replace(p_result , "\r", "");
-
-    var crPos = p_result.indexOf("\n") + 1;
-    var action = p_result.substring(crPos, crPos + 5);
-    var status = p_result.substring(0, crPos - 1);
-
-    if (status != 'OK')
-    {
-      var feedback = $("#imageblockfeedback").html();
-      var errorMessage = 'Unknown response from server';
-
-      if ((status == 'ERROR') || (status == 'IERROR'))
-      {
-        errorMessage = p_result.substring(crPos);
-      }
-      else
-      {
-        status = 'ERROR';
-      }
-
-      $('#imageblockfeedback').html(FeedbackBox(status + '\n' + errorMessage), false);
-    }
-    else
-    {
-      if (status == "OK")
-      {
-        m_fileList = json_parse( p_result.substr(3));
-        m_count = 1;
-
-        that.UpdateRecentUploads(m_fileList[0]);
-        that.UpdateImageCount();
-
-        if (m_fileList.length == 1) {
-          feedback = $("#imageblockfeedback").html();
-
-          $('#imageblockfeedback').html(FeedbackBox('Added - ' + m_fileList[0]), true);
-
-          m_fileList = [];
-          m_count = 0;
-
-          return;
-        }
-
-        that.CreateProgressBar();
-
-        var buttonSubmit = $('#imageformsubmit');
-        buttonSubmitText = buttonSubmit.text();
-        buttonSubmit.attr('text', '');
-        m_submitWording = buttonSubmit.attr('value');
-        buttonSubmit.attr('text', buttonSubmitText);
-        buttonSubmit.attr('value', 'Continue');
-
-        $('#imageformsubmit').attr("disabled", "true");
-        $('#imageformcancel').attr("disabled", "true");
-
-        $.ajax({url:"sources/mod_image.php?action=addstep&filename="+m_fileList[m_count]+"&imagegalleryid="+encodeURIComponent(m_parent_id)+"&imageformtags="+encodeURIComponent(m_tags)+"&imageformdesc="+encodeURIComponent(m_desc), success: that.StepCallBack, error: that.AddCallbackFail, cache:false});
-      }
+      $('#imageformnewlist').html( $('#imageformnewlist').html() + m_newlist[i]);
     }
   };
 
@@ -440,32 +445,14 @@ function Image( p_delim)
   {
     if (confirm("Are you sure you want to delete this image?"))
     {
-      var url = "action=delete&image_id="+m_image_id;
-      var request = new httpRequest("sources/mod_image.php", that.DeleteCallback, m_image_id);
-      request.update(url, "GET");
-    }
-  };
-
-  this.DeleteCallback = function(p_text, p_status, p_xml, p_note)
-  {
-    if (p_status != 200)
-    {
-      document.getElementById("imageblockfeedback").innerHTML = FeedbackBox("Server returned code " + p_status, false);
-      return;
-    }
-    if ("OK" != p_text.substr(0, 2))
-    {
-      document.getElementById("imageblockfeedback").innerHTML = FeedbackBox(p_text, false);
-      return;
-    }
-
-    if (m_parent_id == "orphan")
-    {
-      document.location = "index.php?action=admin_orphans&deleted=image";
-    }
-    else
-    {
-      document.location = "index.php?action=gallery_view&gallery_id=" + m_parent_id + "&deleted=image";
+      var params =  "?action=delete";
+      params += "&image_id="+m_image_id;
+      
+      m_lastAction = LastAction.editImage;      
+      $.ajax({ url: 'sources/mod_image.php' + params,
+               success: that.AjaxCallback,
+               error: that.AjaxCallbackFail,
+               cache: false});
     }
   };
 
@@ -481,11 +468,12 @@ function Image( p_delim)
   };
 
   this.RegisterEvents = function()
-  {
-    addEvent(document.getElementById("imageformtags"), "keypress", function (e) {return checkKey(e, "imageformsubmit", null);});
-    addEvent(document.getElementById("imageformtags"), "keyup", function (e) {image.Feedback(); image.TagHintList(this);});
-    addEvent(document.getElementById("imageformexpandlink"), "click", function (e) {image.ExpandClick();});
-    addEvent(document.getElementById("imageformsubmit"), "click", function (e) {image.SubmitEdit();});
+  {    
+    $('#imageformtags').keypress( function (e) {return checkKey(e, "imageformsubmit", null);});
+    $('#imageformtags').keyup( function (e) {image.Feedback(); image.TagHintList(this);});
+    $('#imageformexpandlink').click( function (e) {image.ExpandClick();});
+    $('#imageformsubmit').click( function (e) {image.SubmitEdit();});
+    $('#imageformcancel').click( function (e) {image.CancelEdit();});
   };
 
   this.PopulateForm = function()
@@ -506,7 +494,10 @@ function Image( p_delim)
 
   this.loaded = function(p_message)
   {
-    m_formobject.loaded(p_message);
+    if ('undefined' != typeof(m_formobject))
+    {
+      m_formobject.loaded(p_message);
+    }
   };
 
   this.EnableTagHintList = function(p_element)

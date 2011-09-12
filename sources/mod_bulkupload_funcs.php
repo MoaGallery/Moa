@@ -15,13 +15,15 @@
   include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
   include_once($CFG["MOA_PATH"]."sources/mod_gallery_funcs.php");
 
-  class _IncomingFile {
+  class _IncomingFile
+  {
     var $name;
     var $readable;
     var $deleteable;
   }
 
-  class _FilePerms {
+  class _FilePerms
+  {
     var $path;
     var $readable;
     var $writeable;
@@ -32,12 +34,11 @@
     global $errorString;
   	global $CFG;
 
-    $tag = new Tag();
     $tagString = '';
 
     if (0 != strcmp($parentID, 'blank'))
     {
-      $tagString .= $tag->getTagStringForGallery($parentID);
+      $tagString .= Tag::GetTagStringForGallery($parentID);
 
       if (strlen($tags) > 0)
       {
@@ -47,7 +48,7 @@
 
     $tagString .= $tags;
 
-    if (AddImageFromIncoming( $desc, $tagString, $fileName, $parentID))
+    if (Image::ProcessNextImageFromIncoming( $desc, $tagString, $fileName, $parentID))
     {
       return $fileName;
     }
@@ -127,7 +128,7 @@
     return $fileList;
   }
 
-  function _BulkUpload_JSONFileList()
+  function _BulkUpload_FileList()
   {
     $ftpList = _BulkUpload_ScanDir();
 
@@ -137,7 +138,7 @@
       $fileList[] = $file->name;
     }
 
-    return json_encode($fileList);
+    return $fileList;
   }
 
   function _FlattenDirectoryStructure( $p_path, $p_root_path)

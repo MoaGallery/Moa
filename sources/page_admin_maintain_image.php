@@ -124,10 +124,12 @@
 	          $height = imagesy($src_img);
 	          imagedestroy($src_img);
 
-	          ImageSetValue($image_id, "Width", $width);
-	          ImageSetValue($image_id, "Height", $height);
-            ImageSetValue($image_id, "Format", $src_type);
-
+	          $image = new Image($image_id);
+	          $image->width = $width;
+	          $image->height = $height;
+	          $image->format = $src_type;
+	          $image->CommitEdit();
+	          
 	          createImageThumbnail( $new_fileid, $src_type);
 
             global $g_message_type;
@@ -152,12 +154,10 @@
 
 	    if ($show_form)
 	    {
-	      $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
-	      $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-	      $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
 	    	$bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
   	    $bodycontent .= LoadTemplateRoot("page_admin_maintain_image.php");
 
+  	    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
   	    $bodycontent .= "<script type='text/javascript'>\n";
         $bodycontent .= "  FormCheckSetup('admin_maintain_image', false);\n";
         $bodycontent .= "  \n";

@@ -31,7 +31,7 @@
           
           <li>
             <label for="setting_ShowEmptyDescPopups" class="formLabelSettings">
-              Display a popup for items with no description.
+              Display a popup for items with no description?
             </label>
             <img src="templates/MoaDefault-blue/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_show_popups">" alt="popup help" />
             <input type="checkbox" name="setting_ShowEmptyDescPopups" id="setting_ShowEmptyDescPopups" <moatag type="SettingsValue_ShowEmptyDescPopups">/>
@@ -75,16 +75,6 @@
       </label>
       <fieldset id="settings_visual" class="formSettingsFieldset settings_block">
         <ul class="formListSettings">
-          <li>
-            <label for="setting_Template" class="formLabelSettings">
-              Template.
-            </label>
-            <img src="templates/MoaDefault-blue/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_template">" alt="popup help" />
-            <select name="setting_Template" id="setting_Template">
-              <moatag type="SettingsValue_Template" style="select">
-            </select>
-          </li>
-
           <li>
             <label for="setting_ThumbWidth" class="formLabelSettings">
               Width of thumbnails in pixels.

@@ -51,18 +51,18 @@
 
         $node .= $line;
 
-        if ($gallery["description"] == NULL)
+        if (mb_strlen($gallery["description"]) <= 0)
         {
-          if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == true)
+			    if ($CFG["SHOW_EMPTY_DESC_POPUPS"] == false)
           {
             $popup = "";
           } else
           {
-            $popup = "onmouseover='return overlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+            $popup = "onmouseover='return showOverlib(\"".popup_display_safe($CFG["EMPTY_DESC_POPUP_TEXT"])."\");' onmouseout='return hideOverlib();'";
           }
         } else
         {
-          $popup = "onmouseover='return overlib(\"".popup_display_safe($gallery["description"])."\", ADAPTIVE_WIDTH, 100);' onmouseout='return nd();'";
+          $popup = "onmouseover='return showOverlib(\"".popup_display_safe($gallery["description"])."\");' onmouseout='return hideOverlib();'";
         }
 
         $node = ParseVar( $node, "SiteMapNodePopUp"      , $popup);

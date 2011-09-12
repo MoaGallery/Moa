@@ -36,7 +36,7 @@
     return $output;
   }
 
-    function TagParseSettingsValue_SiteByline($p_tag_options)
+  function TagParseSettingsValue_SiteByline($p_tag_options)
   {
     global $CFG;
 

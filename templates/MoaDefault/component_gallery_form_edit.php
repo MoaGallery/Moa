@@ -42,8 +42,8 @@
     </li>
   
     <li class="formButtons">
-      <input type='button' value='Submit' id='galleryformsubmit' onclick='gallery.SubmitEdit();'/>
-      <input type='button' value='Cancel' id='galleryformcancel' onclick='gallery.CancelEdit();'/>
+      <input type='button' value='Submit' id='galleryformsubmit' <moatag type="GallerySubmitLink">/>
+      <input type='button' value='Cancel' id='galleryformcancel' <moatag type="GalleryCancelLink">/>
     </li>
     
     <li id='galleryformnamecomment' class='invalidfieldcomment invalidfieldstyle'>The gallery must have a name.</li>

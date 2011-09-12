@@ -44,7 +44,7 @@
   	echo LoadTemplateRoot("page_message.php");
   } else
   {
-  	include_once($CFG["MOA_PATH"]."sources/common.php");
+    include_once($CFG["MOA_PATH"]."sources/common.php");
   	include_once($CFG["MOA_PATH"]."sources/mod_bulkupload_funcs.php");
   	include_once($CFG["MOA_PATH"]."sources/_template_variables.php");
   	include_once($CFG["MOA_PATH"]."sources/mod_tag_funcs.php");
@@ -84,12 +84,11 @@
 	            // Do not count any file/dir starting with a dot (hidden in *nix and special folders such as '..')
 	            if (('.' != substr($fileName, 0, 1)) && (is_image($uploadPath.$fileName)))
 	            {
-                $tag = new Tag();
 	            	$tagString = '';
 
                 if (0 != strcmp($parentID, 'blank'))
 	            	{
-                  $tagString .= $tag->getTagStringForGallery($parentID);
+                  $tagString .= Tag::GetTagStringForGallery($parentID);
 
 	            	  if (strlen($imageTags) > 0)
                   {
@@ -101,7 +100,7 @@
 
 	            	set_time_limit(20);
 
-	          	  if (AddImageFromIncoming( $imageDescription, $tagString, $fileName))
+	          	  if (Image::ProcessNextImageFromIncoming( $imageDescription, $tagString, $fileName, $parentID))
 	          	  {
 	           		  $fileAddedCount++;
 	         	    } else
@@ -130,15 +129,15 @@
                                     moa_feedback_ret('Check folder permissions.', 'Error'));
     }
 
-    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/jquery/jquery.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/JSON/json_parse.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/mod_bulkupload.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
-
     $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     $bodycontent .= LoadTemplateRoot('page_admin_ftp.php');
+    
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_bulkupload.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/formcheck.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_ui.js'></script>\n";
+
+    
 
     $bodycontent .= "<script type='text/javascript'>\n";
     $bodycontent .= "  //<![CDATA[\n";
@@ -147,7 +146,7 @@
     $bodycontent .= "  cur_tags = '"; ViewGalleryCurrentTagList(0);
     $bodycontent .= "';\n";
     $bodycontent .= "  delimiter = '".$CFG["STR_DELIMITER"]."';\n";
-    $bodycontent .= "  fileList = '"._BulkUpload_JSONFileList()."';\n";
+    $bodycontent .= "  fileList = '".json_encode(_BulkUpload_FileList())."';\n";
     $bodycontent .= "  var feedback_box = ";
     $bodycontent .= moa_feedback_js();
     $bodycontent .= ";\n";

@@ -2,7 +2,7 @@
   <div class="left_column left_column_shadow">
     <moatag type="AdminLinks" location="admin">
     <br/>
-    <div id='tagblockfeedback'></div>
+    <div id='feedback_area'></div>
   </div>
   <div class="right_column right_column_shadow">
     <div class="content_wrapper">

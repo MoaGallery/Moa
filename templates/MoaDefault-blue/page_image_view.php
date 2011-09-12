@@ -1,8 +1,8 @@
-<div id='imageblockfeedback'></div>
+<div id='feedback_area'></div>
 
 <div class="image_nav_icon">
   <div>
-    <a href="index.php?action=image_view&amp;image_id=<moatag type="ImagePreviousID">&amp;parent_id=<moatag type="ParentID">">
+    <a href="index.php?action=image_view&amp;image_id=<moatag type="ImagePreviousID">&amp;parent_id=<moatag type="ParentID"><moatag type="ImageReferer">">
       <img src="<moatag type="TemplatePath">media/left-arrow.png" alt="Previous image" class="imagetoolicon"/>
       Previous
     </a>
@@ -14,7 +14,7 @@
     </a>
   </div>
   <div>
-    <a href="index.php?action=image_view&amp;image_id=<moatag type="ImageNextID">&amp;parent_id=<moatag type="ParentID">">
+    <a href="index.php?action=image_view&amp;image_id=<moatag type="ImageNextID">&amp;parent_id=<moatag type="ParentID"><moatag type="ImageReferer">">
       <img src="<moatag type="TemplatePath">media/right-arrow.png" alt="Next image" class="imagetoolicon"/>
       Next
     </a>

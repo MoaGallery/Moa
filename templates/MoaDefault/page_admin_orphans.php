@@ -10,7 +10,7 @@
     </p>
     <div class="mainblockcontent">
       <div class="gallery_desc">
-        <p>Images that are in no gallery</p>
+        <p>Images that are in no gallery</p>        
         <p>
           <moatag type="AdminOrphanNoGallery" success="All ok">
         </p>

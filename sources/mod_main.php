@@ -16,81 +16,66 @@
   include_once($CFG["MOA_PATH"]."sources/id.php");
   include_once($CFG["MOA_PATH"]."sources/common.php");
 
-  function MainGetDescription( $p_short = false)
-  {
-    $value = _MainGetDescription();
-
-    if (false === $value)
-    {
-      RaiseFatalError("Could not get value for description.", false);
-      return false;
-    }
-
-    OutputPrefix("OK");
-    if (($p_short) && ($CFG["TITLE_DESC_LENGTH"] < mb_strlen($value)))
-    {
-      echo mb_substr($value, 0, ($CFG["TITLE_DESC_LENGTH"] - 3))."...";
-    } else
-    {
-      echo $value;
-    }
-    return true;
-  }
-
   function MainEdit()
   {
     // Only proceed if a Main is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;      
     }
 
+    $returnInfo = DefaultAjaxResult( 'MainEdit');
+    
     // Get the description
     $newdesc = GetParam("desc");
     if (false === $newdesc)
     {
-      RaiseFatalError("No description supplied.");
-      return false;
+      $returnInfo['Result'] = 'No description supplied.';
+      return $returnInfo;      
     }
 
     // Try to edit the Main Gallery
-    if (false === _MainEdit($newdesc))
+    $main = new Main();
+    $main->description = $newdesc;
+    if (false === $main->Commit())
     {
-      RaiseFatalError("Could not edit front page message.", false);
-      return false;
+      $returnInfo['Result'] = "Could not edit front page message.";
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function MainAjaxMain()
-  {
+  {    
     // Get the action
     $action = GetParam("action");
     if (false === $action)
     {
-      RaiseFatalError("No action supplied.");
+      $returnInfo = DefaultAjaxResult( 'ActionCheck');
+	  $returnInfo['Result'] = 'No action supplied.';
+	  echo json_encode($returnInfo);
+	  return;
     }
-
+    
     DBConnect();
 
     switch ($action)
     {
       case "edit" :
       {
-        MainEdit();
+        echo json_encode(MainEdit());
         break;
-      }
-      case "getdesc" :
-      {
-        MainGetDescription();
-        break;
-      }
+      }      
       default :
-      {
-        RaiseFatalError("Unknown action.");
+      {        
+        $returnInfo = DefaultAjaxResult( 'ActionCheck');
+        $returnInfo['Result'] = 'No action supplied.';
+	      echo json_encode($returnInfo);
         break;
       }
     }

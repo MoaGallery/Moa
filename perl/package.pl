@@ -3,7 +3,7 @@
 use File::Copy;
 use File::Path;
 
-my $ver = '1.2.5';
+my $ver = '1.2.6';
 my $path = 'Moa-'.$ver;
 
 sub MakeRepo
@@ -19,8 +19,11 @@ sub MakeRepo
   rmtree $path.'/templates/media/source';
   rmtree $path.'/templates/Aperture/media/source';
   rmtree $path.'/templates/MoaDefault/media/source';
-  rmtree $path.'/templates/MoaDefault-blue';
   rmtree $path.'/templates/minimal';
+
+  # Minify JS and CSS files
+  print 'Minifying JavaScript and CSS files';
+  system 'bash moa/perl/minify '.$path;
 
   # Make .zip archive
   system 'zip -r -v -9 '.$path.'.zip '.$path.'/*';

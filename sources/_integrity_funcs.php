@@ -210,7 +210,7 @@
   {
   	global $CFG;
     $orphans = array();
-
+    
     $query = 'SELECT * FROM `'.$CFG['tab_prefix'].'image` AS im WHERE NOT EXISTS (SELECT 1 FROM `'.$CFG['tab_prefix'].'galleryindex` AS ind WHERE ind.IDImage = im.IDImage)';
 
     $result = mysql_query($query) or moa_db_error(mysql_error(), basename(__FILE__), __LINE__);
@@ -222,8 +222,7 @@
 
     while ($row = mysql_fetch_array($result))
     {
-      $image = new Image();
-      $image->loadId($row['IDImage']);
+      $image = new Image($row['IDImage']);
       $image->m_id          = $image->id;
       $image->m_description = $image->description;
       $orphans[] = $image;

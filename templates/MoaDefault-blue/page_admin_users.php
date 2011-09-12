@@ -1,5 +1,5 @@
 <moatag type="AdminLinks" location="admin">
-<div id='userblockfeedback'>
+<div id='feedback_area'>
   &nbsp;
 </div>
 <div class="mainblock">

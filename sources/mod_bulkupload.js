@@ -1,3 +1,10 @@
+var LastAction = 
+{ 
+  none: 0,   
+  addImage: 1,  
+  getImageList: 2
+};
+
 function BulkUpload(p_delimiter, p_fileList)
 {
   var that = this;
@@ -6,7 +13,7 @@ function BulkUpload(p_delimiter, p_fileList)
   var m_descexpand = false;
   var m_enabletaglist = false;
   var m_taglist = new TagList( m_delimiter);
-  var m_fileList = json_parse( p_fileList);
+  var m_fileList = $.parseJSON( p_fileList);
   var m_count = 0;
   var m_oneFile = 0.0;
   var m_curWidth = 0;
@@ -17,27 +24,33 @@ function BulkUpload(p_delimiter, p_fileList)
   var m_parentID = 0;
 
   m_taglist.PreLoad(all_tags, cur_tags);
-  m_taglist.Feedback("ftp");
+  m_taglist.Feedback('ftp');
 
   this.RegisterEvents = function()
   {
-    addEvent(document.getElementById("ftpformtags"), "keypress", function (e) {return checkKey(e, "ftpformsubmit", null);});
-    addEvent(document.getElementById("ftpformtags"), "keyup", function (e) {bulkUpload.TagHintList(this);});
-    addEvent(document.getElementById("ftpformexpandlink"), "click", function (e) {bulkUpload.ExpandClick();});
-    addEvent(document.getElementById("ftpformtags"), "keyup", function (e) {bulkUpload.Feedback(); bulkUpload.TagHintList(this);});
-
-    $("#ftpform").submit(function(){return that.StartAddingFiles();});
-    $("#ftprefresh").submit(function(){return that.Refresh();});
+    $('#ftpformtags').keypress( function (e) {return checkKey(e, 'ftpformsubmit', null);});
+    $('#ftpformtags').keyup( function (e) {bulkUpload.TagHintList(this);});
+    $('#ftpformexpandlink').click( function (e) {bulkUpload.ExpandClick();});
+    $('#ftpformtags').keyup( function (e) {bulkUpload.Feedback(); bulkUpload.TagHintList(this);});
+    $('#ftpform').submit(function(){return that.StartAddingFiles();});
+    $('#ftprefresh').submit(function(){return that.Refresh();});
   };
 
   this.Feedback = function()
   {
-    m_taglist.Feedback("ftp");
+    m_taglist.Feedback('ftp');
   };
 
   this.Refresh = function()
   {
-    $.ajax({url:"sources/mod_bulkupload.php?action=list", success: that.ListCallback, error: that.ListCallbackFail, cache:false});
+    params =  '?action=list';
+    
+    m_last_action = LastAction.addImage;      
+    $.ajax({ url: 'sources/mod_bulkupload.php' + params,
+             success: that.AjaxCallback,
+             error: that.AjaxCallbackFail,
+             cache: false});
+    
     return false;
   };
 
@@ -45,16 +58,16 @@ function BulkUpload(p_delimiter, p_fileList)
   {
     if (m_descexpand)
     {
-      document.getElementById("ftpformdesc").rows = 4;
-      document.getElementById("ftpformdesc").cols = 37;
-      document.getElementById("ftpformexpandlink").innerHTML = "[Expand]";
+      $('#ftpformdesc').attr('rows', 4);
+      $('#ftpformdesc').attr('cols', 37);
+      $('#ftpformexpandlink').html('[Expand]');
       m_descexpand = false;
     } else
     {
-      document.getElementById("ftpformdesc").rows = 14;
-      document.getElementById("ftpformdesc").cols = 60;
+      $('#ftpformdesc').attr('rows', 14);
+      $('#ftpformdesc').attr('cols', 60);
+      $('#ftpformexpandlink').html('[Shrink]');
       m_descexpand = true;
-      document.getElementById("ftpformexpandlink").innerHTML = "[Shrink]";
     }
   };
 
@@ -78,33 +91,6 @@ function BulkUpload(p_delimiter, p_fileList)
     nd();
   };
 
-  this.ListCallback = function(p_result)
-  {
-    var s = p_result.split('\n');
-
-    if (s[0] == 'OK')
-    {
-      m_fileList = json_parse( s[1]);
-      m_count = 0;
-
-      that.RemoveProgressBar();
-      $('#ftpcount').html(m_fileList.length);
-      $('#ftpformsubmit').removeAttr("disabled");
-      m_refreshed = true;
-    }
-    else
-    {
-      $("#ftpfeedback").html(FeedbackBox("ERROR\nCannot refresh", false));
-      m_refreshed = false;
-    }
-  };
-
-  this.ListCallbackFail = function(p_request, p_status, p_errorThrown)
-  {
-    $("#ftpfeedback").html(FeedbackBox("ERROR\nRefresh failed with status '" + p_status + "'", false));
-    m_refreshed = false;
-  };
-
   this.CreateProgressBar = function()
   {
     var divWidth = 0;
@@ -113,9 +99,9 @@ function BulkUpload(p_delimiter, p_fileList)
     text += '<div id="progressbar-text" style="position: absolute; top: 0; left: 0; "></div>';
     text += '<div id="progressbar-inner" style="width: 0px;">&nbsp;</div></div>';
 
-    $("#ftpfeedback").html(text);
+    $('#ftpprogressbar').html(text);
 
-    divWidth = $("#progressbar-outer").width();
+    divWidth = $('#progressbar-outer').width();
     m_oneFile = divWidth / m_fileList.length;
     m_curWidth = m_oneFile * m_count;
   };
@@ -124,24 +110,26 @@ function BulkUpload(p_delimiter, p_fileList)
   {
     if (m_count == m_fileList.length)
     {
-      $("#progressbar-text").html("Done");
-      $("#progressbar-inner").width(m_fileList.length * m_oneFile);
+      $('#progressbar-text').html('Done');
+      $('#progressbar-inner').width(m_fileList.length * m_oneFile);
+      $('#ftpprogressbar').delay(10000)
+                          .hide(500);
     }
     else
     {
-      $("#progressbar-inner").width(m_curWidth);
-      $("#progressbar-text").html('Adding file '+m_count+' of '+m_fileList.length);
+      $('#progressbar-inner').width(m_curWidth);
+      $('#progressbar-text').html('Adding file '+m_count+' of '+m_fileList.length);
 
-      var divWidth = $("#progressbar-outer").width();
-      var textWidth = $("#progressbar-text").width();
+      var divWidth = $('#progressbar-outer').width();
+      var textWidth = $('#progressbar-text').width();
 
-      $("#progressbar-text").css('left', (((divWidth/2)-(textWidth/2)))+'px');
+      $('#progressbar-text').css('left', (((divWidth/2)-(textWidth/2)))+'px');
     }
   };
 
   this.RemoveProgressBar = function()
   {
-    $("#ftpfeedback").html('');
+    $('#ftpprogressbar').html('');
   };
 
   this.StartAddingFiles = function()
@@ -153,7 +141,7 @@ function BulkUpload(p_delimiter, p_fileList)
     
     if (m_fileList.length == 0)
     {
-      $("#ftpfeedback").html(FeedbackBox("ERROR\nThere are no files to load", false));
+      MoaUI.DisplayFeedback('There are no files to load', Feedback.error);
       return false;
     }
 
@@ -161,93 +149,120 @@ function BulkUpload(p_delimiter, p_fileList)
     m_desc = $('#ftpformdesc').val();
     m_parentID = $('#ftpformparent_id').val();
 
-    that.AddOneImage("OK\nStart");
+    m_refreshed = false;
+    
+    that.CreateProgressBar();
+
+    $('#ftpformsubmit').attr("disabled", true);
+
+    params =  '?action=step';
+    params += '&filename='+m_fileList[m_count];
+    params += '&parentid='+encodeURIComponent(m_parentID);
+    params += '&tags='+encodeURIComponent(m_tags);
+    params += '&desc='+encodeURIComponent(m_desc);
+    
+    m_last_action = LastAction.addImage;      
+    $.ajax({ url: 'sources/mod_bulkupload.php' + params,
+             success: that.AjaxCallback,
+             error: that.AjaxCallbackFail,
+             cache: false});
+    
     return false;
   };
-
-  this.AddImageFail = function(p_request, p_status, p_errorThrown)
+  
+  this.AjaxCallbackFail = function(p_request, p_status, p_errorThrown)
   {
-    $('#ftpformsubmit').removeAttr("disabled");
-
-    m_refreshed = false;
-    $("#ftpfeedback").html(FeedbackBox("ERROR\nAdd image failed with status '" + p_status + "'", false));
-  };
-
-  //TODO: Restructure this function as it has duplicate code in it
-  this.AddOneImage = function(p_result)
-  {
-    var crPos = p_result.indexOf('\n') + 1;
-    var action = p_result.substring(crPos, crPos + 5);
-    var status = p_result.substring(0, crPos - 1);
-
-    if (status != 'OK')
+    switch (m_last_action)
     {
-      var feedback = $("#ftpfeedback").html();
-      var errorMessage = 'Unknown response from server';
-
-      if ((status == 'ERROR') || (status == 'IERROR'))
+      case LastAction.addImage:
       {
-        errorMessage = p_result.substring(crPos);
+        $('#ftpformsubmit').removeAttr("disabled");
+        m_refreshed = false;
+        break;
       }
-      else
+      case LastAction.getImageList:
       {
-        status = 'ERROR';
+        m_refreshed = false;
+        break;
       }
-
-      $('#ftpformsubmit').removeAttr("disabled");
-      $('#ftpfeedback').html(feedback+FeedbackBox(status + "\n" + errorMessage), false);
     }
-    else
+    
+    MoaUI.DisplayFeedback( 'Server returned "' + p_request.status + ' ' + p_request.statusText + '".', Feedback.error);
+  };
+  
+  this.AjaxCallback = function(p_result)
+  { 
+    try
     {
-      switch (action)
+      var result = $.parseJSON(p_result);
+    }
+    catch(e)
+    {
+      var error = {status: '', statusText: 'Unknown response from server.'};
+      that.AjaxCallbackFail(error);
+      return;
+    }
+    
+    if (result.Status == 'SUCCESS')
+    {   
+      switch (result.Operation)
       {
-        case "Start":
+        case 'ftpGetFileList':
         {
-          m_refreshed = false;
-          that.CreateProgressBar();
+          m_fileList = result.FileList;
+          m_count = 0;
 
-          $('#ftpformsubmit').attr("disabled", true);
-
-          $.ajax({url:"sources/mod_bulkupload.php?action=step&filename="+m_fileList[m_count]+"&parentid="+encodeURIComponent(m_parentID)+"&tags="+encodeURIComponent(m_tags)+"&desc="+encodeURIComponent(m_desc), success: that.AddOneImage, error: that.AddImageFail, cache:false});
+          that.RemoveProgressBar();
+          $('#ftpcount').html(m_fileList.length);
+          $('#ftpformsubmit').removeAttr("disabled");
+          m_refreshed = true;
           break;
         }
-        case "Added":
+        case 'ftpAddOneFile':
         {
           if (m_refreshed == false)
           {
             m_curWidth = m_curWidth + m_oneFile;
             m_count++;
+            that.UpdateProgressBar();
 
             $('#ftpcount').html(m_fileList.length - m_count);
 
-            that.UpdateProgressBar();
             if (m_count == m_fileList.length)
             {
               m_fileList = [];
               m_count = 0;
 
               $('#ftpformsubmit').removeAttr("disabled");
-
-              break;
+            } else
+            {
+              params =  '?action=step';
+              params += '&filename='+m_fileList[m_count];
+              params += '&parentid='+encodeURIComponent(m_parentID);
+              params += '&tags='+encodeURIComponent(m_tags);
+              params += '&desc='+encodeURIComponent(m_desc);
+              
+              m_last_action = LastAction.addImage;      
+              $.ajax({ url: 'sources/mod_bulkupload.php' + params,
+                       success: that.AjaxCallback,
+                       error: that.AjaxCallbackFail,
+                       cache: false});
             }
-
-            $.ajax({url:"sources/mod_bulkupload.php?action=step&filename="+m_fileList[m_count]+"&parentid="+encodeURIComponent(m_parentID)+"&tags="+encodeURIComponent(m_tags)+"&desc="+encodeURIComponent(m_desc), success: that.AddOneImage, error: that.AddImageFail, cache:false});
-            break;
           }
-          else {
+          else
+          {
             m_refreshed = false;
-            break;
           }
-        }
-        default:
-        {
-          var feedback = $("#ftpfeedback").html();
-          $("#ftpfeedback").html(feedback+FeedbackBox("ERROR\nUnknown response from server", false));
+          
           break;
         }
       }
     }
-
-    return false;
+    else
+    {
+      var error = {status: '', statusText: result.Result};
+      that.AjaxCallbackFail(error);
+    }
   };
+  
 }

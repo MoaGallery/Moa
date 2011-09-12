@@ -28,8 +28,8 @@
 	  <li class="formButtons">
       <input name='id' type='hidden' value=''></input>
       <input name='mode' type='hidden' value=''></input>
-      <input type='button' id='formsubmit' value='Submit' onclick='user_list.FormSubmit();'>
-      <input type='button' id='formcancel' value='Cancel' onclick='user_list.FormCancel();'>
+      <input type='button' id='formsubmit' value='Submit' <moatag type="AdminUserFormSubmitLink">>
+      <input type='button' id='formcancel' value='Cancel' <moatag type="AdminUserFormCancelLink">>
     </li>
     
     <li id='usernamecomment' class='invalidfieldcomment invalidfieldstyle'>No name supplied.</li>

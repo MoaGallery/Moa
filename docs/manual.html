@@ -26,7 +26,7 @@
 	  <ul>
 	    <li>A database and user set up in MySQL.  The user needs basic privileges such as SELECT, INSERT, UPDATE, DELETE, etc.  For the install the user also needs CREATE TABLE and ALTER privs.</li>
 	  </ul>
-	  
+
 	  <h3>Installation -<a name="Install" title="Install"></a></h3>
 	  <p>&nbsp;</p>
 	  <p>
@@ -38,13 +38,13 @@
 	    <li>Moa should now work by opening the index.php file in a browser.</li>
 	    <li>Feel free to send feedback if you think we need to include more or less info here (or about Moa in general).</li>
 	  </ol>
-	  
+
 	  <h3>Workarounds / Problems -<a name="Problems" title="Problems"></a></h3>
 	  <p>&nbsp;</p>
 	  <ol>
 	    <li>Thumbnails are not created.  The gd2 PHP extension can come in several versions.  The one we have confirmed works has 'bundled (2.0.34 compatible)' in it's description using phpinfo().  The 2.0.34 version as supplied by some Linux distributions doesn't usually work and they refuse to add the additional features.</li>
 	  </ol><br />
-	  
+
 	  <h3>Upgrading<a name="upgrade" title="upgrade"></a></h3><br />
 	  <ol>
 	    <li>Upload the new Moa files over the top of the old ones. It is OK to overwrite the old versions. There is no need to upload/copy install.php as it is not required and will only need to be deleted again to stop the reminders.</li>
@@ -52,35 +52,39 @@
 	    <li>Click the button to test any changes. You may need to set permissions to do some tasks but it will tell what it can or can't do.</li>
 	    <li>Hit the 'Complete upgrade' button to finish the process. Depending on the version this stage will add new configuration variables, delete outdated Moa files and/or make database changes.</li>
 	  </ol><br /><br />
-	  
+
 	  <h3>How To Use Moa - <a name="Howto" title="Howto"></a></h3>
 	  <p>&nbsp;</p>
 	  <p>
 	    The simplest way to get started is to add one or more galleries then add images from inside them. You can add keywords to either the galleries or images if you want but they are not essential in normal mode. The main front page can't show images. If you try to add one you will need to choose a gallery for it to appear in on the "add image" screen.
-          </p>
+    </p>
 
-          <p>
+    <p>
 	    There is another way to arrange things. In the gallery add or edit form there is a checkbox named 'Tagged gallery'. If you check this box then that gallery will only show images that match tags with it. In this case at least some images should have tags attached to identify what it is an image of. This lets you show one image in multiple galleries. For example a tagged gallery with tags of 'holiday' and 'Hawaii' will contain any image that has at least those two tags as well, even if they have others as well.  An image in that example gallery could have tags of 'holiday', 'Hawaii', '2005', 'beach', 'dad' and 'family'.
-          </p>
+    </p>
 
-          <p>
+    <p>
 	    Holding the mouse over the edit tag box will show you all available and used tags. By default, comma (",") is used to separate the tags, this can be changed in the admin settings screen. A suggested alternative is semi-colon (";") as it is unlikely to be used in normal phrases.
-          </p>
+    </p>
 
-          <p>
+    <p>
 	    Galleries can have sub-galleries inside them as well. By default any gallery with sub-galleries will not show any images inside, just the list of sub-galleries. This can be changed in the admin setting "Hide image thumbnails if a sub-gallery is present" which will allow both sub-galleries and images to be shown.
-          </p>
+    </p>
 
-          <p>
+    <p>
 	    Bulk uploading images can be done by using an archive program to create a .zip file. This can be added to a gallery just like an image and will add any images it finds inside using the description, tags and parent gallery you have set. Another way to bulk upload is to use an FTP client to upload images into the <moa>/incoming/ directory and choosing 'FTP images' on the admin screen.
-          </p>
+    </p>
 
-          <p>
+    <p>
 	    To add, edit or delete galleries and images use the links just below the header. You need to be logged in to do this. Galleries and images can be added from the front page or inside another gallery. Edit and delete can be done on any gallery or image. Deleting a gallery with sub-galleries will move those sub-galleries to where the parent was.
-          </p>
+    </p>
 
-          <p>
-	    The admin button will let you do several things once you log in. You can create extra users or change your name/password. Extra users will all have access to the same galleries as you. The 'admin' tickbox against a user is whether to let them add/edit other users. You can add, edit and delete tags on the tag admin page. There is a page for changing moa settings. The last two pages are for finding any problems or lost images (not tagged).
+    <p>
+	    The admin button will let you do several things once you log in. You can create extra users or change your name/password. Extra users will all have access to the same galleries as you. The 'admin' tickbox against a user is whether to let them add/edit other users. You can add, edit and delete tags on the tag admin page. There is a page for changing moa settings and one for choosing a template. The last two pages are for finding any problems or lost images (not tagged).
 	  </p>
+
+    <p>
+      When viewing a gallery you can click 'View slideshow' to see all images in a gallery automatically. An options box on the botom left will let you hide descriptions and change the delay between images for that viewing. The default delay between images is 8 seconds and can be changed in the admin settings. You can also pause and skip back/forward with the controls underneath the images.
+    </p>
   </body>
 </html>

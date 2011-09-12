@@ -5,60 +5,48 @@ This can (and is likely to) change.
 
     Floating (parallel to main releases) -
         Redo install to be interactive.
-        Redo upgrade to be better.
         Tests (unit, ajax and javascript).
 
-    1.2.5 -
-     *  Site title (for titlebar).
-     *  Show list of tags on image/gallery pages.
-     *  Show which galleries an image is in on image page.
-        
     1.2.6 -
-        Search (with option to make new gallery from results).
-        Split options page up.
+        Refactor.
+        Unit tests.
         Theme chooser.
         Add xml file to each template to give standard info (Creator, version, etc).
-        On template change need to be able to regenerate thumbnails.
-        Path checks in settings should AJAX check to see if they are real.
+        Slide Show.
 
     1.2.7 -
         Provide friendly URL rewriting. (Via HTAccess)
         Image Filenames should be what they are originally uploaded as for SEO.
+        Split options page up.
+        On template change need to be able to regenerate thumbnails.
+        Path checks in settings should AJAX check to see if they are real.
 
     1.2.8 -
-        Add username so login is not shown.
         Cache scaled image.
-        
-    1.2.9 -
+        Search (with option to make new gallery from results).
         Filmstrip.
-
-    1.2.10 - Bug check.
+        Mobile template
+        Final 1.2.x bug check.
 
     1.3.0 -
         Image/gallery manager on admin pages.
         Re-Arrange images on a gallery via the admin manager.
         User-defined thumbnails on galleries.
-    
-	      Update javascript to use JQuery.
-        Simple UI animation (feedback vanishes, deleted items scroll up, etc).
         Drop down menu from breadcrumbs showing sub-galleries for direct navigation.
         Move user/tag admin to image/gallery manager system.
-        
+
 
     1.3 series (Expanding content) -
+        Automated update from moagallery.net.
         Display movie clips.
         Grab and save EXIF info.
         Simple edit ability. (crop, resize, rotate, etc)
         IPTC support
 	      Add a custom error handling page.
-        Mobile template
-
-    1.4 series (API + Drag&Drop) -
         GeoTagging support. (Google maps, Live maps, etc embeddable)
         Expand web API to be useful outside of the Moa frontend - to allow the client app.
         Mass Image Tagging.
         Bulk Delete.
-        Slide Show.
         Gallery Merge.
         Move Sub Gallery. (Base on version of navigation bar as an admin page)
 
@@ -70,11 +58,12 @@ This can (and is likely to) change.
 
    Patch (Can be added at any point, sooner rather than later if poss) -
        Move all strings into a language array.
+       Recently added images.
        Try different sized images to test for the jpeg decoder overhead.
        Add more corruption detection in the admin section (Look for images that can't exist in any gallery)
        Image Integrity->no image/thumb needs to have a delete option.
        Add sub-gallery, changing parent doesn't update tags (confirm box - do you want to set tags to be the same?).
-       Implement a image storage quota system for Moa.  (Useful for reselling gallery space)
+       Implement a image storage quota system for Moa.
        Images with no main image should show thumbnail on the 'fix' screen.
        Boolean Tag Operators for galleries.
        Copy tags from other gallery.

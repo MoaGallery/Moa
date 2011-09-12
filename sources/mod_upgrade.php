@@ -12,21 +12,23 @@
   include_once("_settings.php");
   LoadSettings();
 
-	include_once($CFG["MOA_PATH"]."sources/common.php");
-	include_once($CFG["MOA_PATH"]."sources/id.php");
-
-	include_once($CFG["MOA_PATH"]."sources/mod_upgrade_funcs.php");
-
-	// Adds a new config variable to config.php or (from 1.2.1 onwards) the database
-	function UpgradeAddConfigVar()
+  include_once($CFG["MOA_PATH"]."sources/common.php");
+  include_once($CFG["MOA_PATH"]."sources/id.php");
+  
+  include_once($CFG["MOA_PATH"]."sources/mod_upgrade_funcs.php");
+  
+  // Adds a new config variable to config.php or (from 1.2.1 onwards) the database
+  function UpgradeAddConfigVar()
   {
     global $errorString;
 
+    $returnInfo = DefaultAjaxResult( 'UpgradeAddConfigVar');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the test status
@@ -44,16 +46,16 @@
     $newname = GetParam("name");
     if (false === $newname)
     {
-      RaiseFatalError("No config var name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No config var name supplied.';
+      return $returnInfo;
     }
 
     // Get the value
     $newvalue = GetParam("value");
     if (false === $newvalue)
     {
-      RaiseFatalError("No config var value supplied.");
-      return false;
+      $returnInfo['Result'] = 'No config var value supplied.';
+      return $returnInfo;
     }
 
     if (10201 > _UpgradeGetCurrentVersionID())
@@ -64,30 +66,34 @@
       }
       if (!_AddFileConfigVar('$'.$newname, $newvalue, $testflag))
       {
-      	RaiseFatalError("Could not add new var.");
-      	return false;
+        $returnInfo['Result'] = 'Could not add new var.';
+        return $returnInfo;
       }
     } else
     {
       if (!_AddDBConfigVar($newname, $newvalue, $testflag))
       {
-      	RaiseFatalError("Could not add new var.");
-      	return false;
+        $returnInfo['Result'] = 'Could not add new var.';
+        return $returnInfo;
       }
     }
 
-    OutputPrefix("OK");
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   // Delete an outdated file
   function UpgradeDelFile()
   {
+    $returnInfo = DefaultAjaxResult( 'UpgradeDelFile');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the test status
@@ -105,34 +111,38 @@
     $filename = GetParam('filename');
     if (false === $filename)
     {
-      RaiseFatalError("No filename supplied.");
-      return false;
+      $returnInfo['Result'] = 'No filename supplied.';
+      return $returnInfo;
     }
 
     // Check they aren't trying to leave the Moa installation
     if (mb_strpos($filename, ".."))
     {
-    	RaiseFatalError("Only Moa files can be deleted.");
-      return false;
+      $returnInfo['Result'] = 'Only Moa files can be deleted.';
+      return $returnInfo;
     }
 
     if (!_UpgradeDelFile($filename, $testflag))
     {
-      RaiseFatalError("");
-    	return false;
+      $returnInfo['Result'] = 'Could not delete file.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function ModifyDB()
   {
+    $returnInfo = DefaultAjaxResult( 'UpgradeModifyDB');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the test status
@@ -150,39 +160,42 @@
     $filename = GetParam('filename');
     if (false === $filename)
     {
-      RaiseFatalError("No filename supplied.");
-      return false;
+      $returnInfo['Result'] = 'No filename supplied.';
+      return $returnInfo;
     }
 
     // Check they aren't trying to run external files.
     // Dissallowing a slash should ensure this
     if ((mb_strpos($filename, "\\")) || (mb_strpos($filename, "/")))
     {
-      RaiseFatalError("Only files inside the Moa SQL/upgrade/ directory can be run as part of the upgrade.");
-      return false;
+      $returnInfo['Result'] = 'Only files inside the Moa SQL/upgrade/ directory can be run as part of the upgrade.';
+      return $returnInfo;
     }
 
     $result = _ModifyDB($filename, $testflag);
     if (false === $result)
     {
-      RaiseFatalError("Error running SQL.");
-      return false;
+      $returnInfo['Result'] = 'Error running SQL.';
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    echo $result;
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function RunFunc()
   {
     global $errorString;
 
+    $returnInfo = DefaultAjaxResult( 'UpgradeRunFunc');
+    
     // Only proceed if a user is logged in
     if (!UserIsLoggedIn())
     {
-      RaiseFatalError("Not logged in.");
-      return false;
+      $returnInfo['Result'] = 'Not logged in.';
+      return $returnInfo;
     }
 
     // Get the test status
@@ -200,8 +213,8 @@
     $funcname = GetParam("func");
     if (false === $funcname)
     {
-      RaiseFatalError("No function name supplied.");
-      return false;
+      $returnInfo['Result'] = 'No function name supplied.';
+      return $returnInfo;
     }
 
     $result = "";
@@ -234,19 +247,21 @@
       }
       default :
       {
-        RaiseFatalError("Unknown function.");
-        break;
+        $returnInfo['Result'] = 'Unknown function.';
+        return $returnInfo;
       }
     }
 
     if (false === $result)
     {
-      RaiseFatalError($errorString);
-      return false;
+      $returnInfo['Result'] = $errorString;
+      return $returnInfo;
     }
 
-    OutputPrefix("OK");
-    return true;
+    $returnInfo['Status'] = 'SUCCESS';
+    unset($returnInfo['Result']);
+    
+    return $returnInfo;
   }
 
   function UpgradeAjaxMain()
@@ -255,7 +270,10 @@
     $action = GetParam("action");
     if (false === $action)
     {
-      RaiseFatalError("No action supplied.");
+      $returnInfo = DefaultAjaxResult( 'ActionCheck');
+      $returnInfo['Result'] = 'No action supplied.';
+      echo json_encode($returnInfo);
+      return;
     }
 
     DBConnect();
@@ -264,27 +282,29 @@
     {
       case "add_var" :
       {
-        UpgradeAddConfigVar();
+        echo json_encode(UpgradeAddConfigVar());
         break;
       }
       case "delete_file" :
       {
-        UpgradeDelFile();
+        echo json_encode(UpgradeDelFile());
         break;
       }
       case "modify_db" :
       {
-        ModifyDB();
+        echo json_encode(ModifyDB());
         break;
       }
       case "run_func" :
       {
-        RunFunc();
+        echo json_encode(RunFunc());
         break;
       }
       default :
       {
-        RaiseFatalError("Unknown action.");
+        $returnInfo = DefaultAjaxResult( 'ActionCheck');
+        $returnInfo['Result'] = 'Unknown action.';
+        echo json_encode($returnInfo);
         break;
       }
     }

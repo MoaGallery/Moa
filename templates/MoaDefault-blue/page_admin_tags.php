@@ -1,7 +1,5 @@
 <moatag type="AdminLinks" location="admin">
-<div id='tagblockfeedback'>
-  &nbsp;
-</div>
+<div id='feedback_area'></div>
 
 <div class="mainblock tag_admin_box">
   <p class="mainblockheader">

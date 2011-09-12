@@ -27,13 +27,12 @@
   {
     include_once($CFG["MOA_PATH"]."sources/mod_tag_view.php");
 
-    $bodycontent .= "<script type='text/javascript' src='sources/common.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/_request.js'></script>\n";
-    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
-
     $bodycontent .= "\n\n\n".LoadTemplateRoot("head_block.php")."\n\n";
     $bodycontent .= LoadTemplateRoot("page_admin_tags.php");
 
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_taglist.js'></script>\n";
+    $bodycontent .= "<script type='text/javascript' src='sources/mod_ui.js'></script>\n";
+    
     $bodycontent .= "<script type='text/javascript'>\n";
     $bodycontent .= "  //<![CDATA[\n";
     $bodycontent .= "  all_tags = '"; ViewAllTagList();
@@ -58,7 +57,7 @@
     $bodycontent .= "  tag_delimiter = '".$CFG["STR_DELIMITER"]."';\n";
     $bodycontent .= "  var tag_list = new TagList( tag_delimiter, tag_row_template);\n";
     $bodycontent .= "  tag_list.PreLoad(all_tags, '', add_form);\n";
-    $bodycontent .= "  document.getElementById('tag_lines').innerHTML = tag_list.ViewAll();\n";
+    $bodycontent .= "  $('#tag_lines').html(tag_list.ViewAll());\n";
     $bodycontent .= " //]]>\n";
     $bodycontent .= "</script>\n";
 

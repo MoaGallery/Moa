@@ -245,7 +245,6 @@
       UpdateDBVar("SiteByline", "SITE_BYLINE", "text");
       UpdateDBVar("ShowEmptyDescPopups", "SHOW_EMPTY_DESC_POPUPS", "boolean");
       UpdateDBVar("DisplayPlainSubgalleries", "DISPLAY_PLAIN_SUBGALLERIES", "boolean");
-      UpdateDBVar("Template", "TEMPLATE", "text");
       UpdateDBVar("EmptyDescPopupText", "EMPTY_DESC_POPUP_TEXT", "text");
       UpdateDBVar("StrDelimiter", "STR_DELIMITER", "text");
       UpdateDBVar("ConfigDisplayMaxWidth", "CONFIG_DISPLAY_MAX_WIDTH", "integer");

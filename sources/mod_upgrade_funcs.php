@@ -227,7 +227,13 @@
     // Delete it
     if (!$p_test)
     {
-      return unlink($CFG["MOA_PATH"].$p_filename);
+      if (is_dir($CFG["MOA_PATH"].$p_filename))
+      {
+        return rmdir($CFG["MOA_PATH"].$p_filename);
+      } else
+      {
+        return unlink($CFG["MOA_PATH"].$p_filename);
+      }
     }
   }
 

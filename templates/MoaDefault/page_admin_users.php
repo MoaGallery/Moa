@@ -1,7 +1,5 @@
 <moatag type="AdminLinks" location="admin">
-<div id='userblockfeedback'>
-  &nbsp;
-</div>
+<div id='feedback_area'></div>
 <div class="mainblock">
   <p class="mainblockheader">
     User management

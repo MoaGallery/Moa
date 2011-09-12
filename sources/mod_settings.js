@@ -7,14 +7,9 @@ function submit_check ()
 
   if (!FormCheck())
   {
-//    alert("yy");
     return false;
   }
   
-//  alert("xx");
-  
-  document.getElementById("settings_form").submit();
+  $('#settings_form').submit();
   return true;
 }
-
-
