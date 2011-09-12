@@ -161,6 +161,20 @@
 
     return $output;
   }
+  
+  function TagParseSettingsValue_SlideshowDelay($p_tag_options)
+  {
+    global $CFG;
+
+    $output = " ";
+
+    if (0 < strlen($CFG["SLIDESHOW_DELAY"]))
+    {
+      $output = $CFG["SLIDESHOW_DELAY"];
+    }
+
+    return $output;
+  }
 
   function TagParseSettingsValue_MoaPath($p_tag_options)
   {

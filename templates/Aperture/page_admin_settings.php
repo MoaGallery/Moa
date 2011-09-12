@@ -103,12 +103,20 @@
             </li>
             
             <li>
-            <label for="setting_ImagesPerPage" class="formLabelSettings">
-              Number of images to show per gallery page.
-            </label>
-            <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_images_per_page">" alt="popup help" />
-            <input type="text" name="setting_ImagesPerPage" id="setting_ImagesPerPage" value="<moatag type="SettingsValue_ImagesPerPage">"/>
-          </li>
+              <label for="setting_ImagesPerPage" class="formLabelSettings">
+                Number of images to show per gallery page.
+              </label>
+              <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_images_per_page">" alt="popup help" />
+              <input type="text" name="setting_ImagesPerPage" id="setting_ImagesPerPage" value="<moatag type="SettingsValue_ImagesPerPage">"/>
+            </li>
+          
+            <li>
+              <label for="setting_SlideshowDelay" class="formLabelSettings">
+                Delay between images in the slideshow.
+              </label>
+              <img src="templates/MoaDefault/media/help.png" class="popupImage" title="<moatag type="FormPopupHelp" field="setting_slideshow_delay">" alt="popup help" />
+              <input type="text" name="setting_SlideshowDelay" id="setting_SlideshowDelay" value="<moatag type="SettingsValue_SlideshowDelay">"/>
+            </li>
           </ul>
         </fieldset>
         

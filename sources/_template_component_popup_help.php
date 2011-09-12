@@ -46,6 +46,7 @@
                              'popupHelp_setting_dbuser'               => "Database username on the MySQL server",
                              'popupHelp_setting_dbpass'               => "Database password on the MySQL server",
                              'popupHelp_setting_tabprefix'            => "Table prefix on the MySQL server. Should be set if more than one thing is using the same database",
+                             'popupHelp_setting_slideshow_delay'      => "In milliseconds (1/1000th of a second)",
                              'popupHelp_admin_user_id'                => "Name of the user",
                              'popupHelp_admin_user_admin'             => "Should this user have rights to add more people?",
                              'popupHelp_admin_user_password1'         => "Users password",

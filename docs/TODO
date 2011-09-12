@@ -32,9 +32,9 @@ Buggette -
 *  Upgrade live site(s) as a final test.
 *  Update source Documentation and release files.
 *  Update perl script.
-  Update changelog for release date.
-  Copy new code to sourceforge SVN.
-  Package.
+*  Update changelog for release date.
+*  Copy new code to sourceforge SVN.
+*  Package.
   Update demo.
   Update site documentation from source one.
   Update wishlist if needed. 

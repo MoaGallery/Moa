@@ -251,6 +251,7 @@
       UpdateDBVar("ImagesPerPage", "IMAGES_PER_PAGE", "integer");
       UpdateDBVar("ThumbWidth", "THUMB_WIDTH", "integer");
       UpdateDBVar("TitleDescLength", "TITLE_DESC_LENGTH", "integer");
+      UpdateDBVar("SlideshowDelay", "SLIDESHOW_DELAY", "integer");
   
       if ($Userinfo->m_admin)
       {
