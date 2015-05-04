@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="/lib/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.css" type="text/css" media="all" />
+    <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body style="width: 1170px; margin-left: auto; margin-right: auto;">
+    <a href="/">Back</a>
+
+    <div class="row">
+        <ul>
+            {% for gallery in galleries %}
+                <li class="thumbnail col-md-3" style="min-height: 150px;">
+                    <a href="/gallery/{{gallery.id}}">
+                        <img src="http://placehold.it/300x200">
+                        <h4>{{gallery.name}}</h4>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
