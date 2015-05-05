@@ -7,42 +7,46 @@ use Moa\Gallery;
 
 class GalleryView
 {
-	/** @var \Twig_Environment $twig */
-	protected $twig;
+	protected $args;
 
-	public function __construct(\Twig_Environment $twig)
+	public function __construct(&$args)
 	{
-		$this->twig = $twig;
+		$this->args = &$args;
 	}
 
 	public function ShowGalleryList($galleries)
 	{
-		$args = array();
-		$args['galleries'] = array();
+		$this->args['galleries'] = array();
 
 		foreach ($galleries as $id => $name)
 		{
-			$args['galleries'][] = array
+			$this->args['subgalleries'][] = array
 			(
 				'name' => $name,
 				'id' => $id
 			);
 		};
-
-		$output = $this->twig->render('gallerylist.html', $args);
-
-		return $output;
 	}
 
 	public function ShowGallery(Gallery $gallery)
 	{
-		$args = array();
+		$this->args['gallery_name'] = $gallery->GetProperty('name');
+		$this->args['gallery_description'] = $gallery->GetProperty('description');
+	}
 
-		$args['name'] = $gallery->GetProperty('name');
-		$args['description'] = $gallery->GetProperty('description');
+	public function ShowBreadcrumb($parent_galleries)
+	{
+		$output = array();
+		/** @var Gallery $gallery */
+		foreach ($parent_galleries as $gallery)
+		{
+			$output[] = array
+			(
+				'name' => $gallery->GetProperty('name'),
+				'id' => $gallery->GetProperty('IDGallery')
+			);
+		}
 
-		$output = $this->twig->render('gallery.html', $args);
-
-		return $output;
+		$this->args['breadcrumb'] = $output;
 	}
 }
