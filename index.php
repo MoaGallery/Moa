@@ -11,5 +11,6 @@ $app['debug'] = true;
 
 $app->get('/', 'Moa\Controller\GalleryController::ShowList');
 $app->get('/gallery/{id}', 'Moa\Controller\GalleryController::ShowGallery')->assert('id', '\d+');
+$app->post('/gallery/{id}', 'Moa\Controller\GalleryController::ShowGallery')->assert('id', '\d+');
 
 $app->run();

@@ -30,8 +30,14 @@ class GalleryView
 
 	public function ShowGallery(Gallery $gallery)
 	{
-		$this->args['gallery_name'] = $gallery->GetProperty('name');
-		$this->args['gallery_description'] = $gallery->GetProperty('description');
+		$this->args['gallery_id'] = $gallery->GetProperty('IDGallery');
+		$this->args['gallery_name'] = $gallery->GetProperty('name', true);
+		$this->args['gallery_description'] = $gallery->GetProperty('description', true);
+
+		$this->args['gallery_name_edit'] = $gallery->GetProperty('name');
+		$this->args['gallery_description_edit'] = $gallery->GetProperty('description');
+
+		$this->args['gallery_edit_error'] = $gallery->GetValidationMessage();
 	}
 
 	public function ShowBreadcrumb($parent_galleries)

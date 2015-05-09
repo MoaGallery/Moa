@@ -20,9 +20,20 @@ class GalleryController
 	    /** @var GalleryDataProvider $gdp */
 	    $this->gdp = $app['moa.gallery_db_provider'];
 
-	    $gallery = $this->gdp->LoadGallery($id);
+	    /** @var Gallery $gallery */
+	    $gallery = new Gallery($this->gdp);
+	    $gallery->Load($id);
 	    $parents = $this->GetParents($gallery);
 	    $sub_galleries = $this->gdp->GetGalleries($id);
+
+		if ($request->getMethod() == 'POST')
+		{
+			$gallery->SetProperty('name', $request->request->get('inputGalleryName'));
+			$gallery->SetProperty('description', $request->request->get('inputGalleryDescription'));
+
+			if ($gallery->Validate())
+				$gallery->Save();
+		}
 
 	    $args = array();
 		$view = new GalleryView($args);

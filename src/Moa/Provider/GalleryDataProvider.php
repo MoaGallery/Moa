@@ -17,7 +17,7 @@ class GalleryDataProvider
 		$this->db = $db;
 	}
 
-	public function LoadGallery($id)
+	public function LoadGalleryInfo($id)
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
@@ -30,9 +30,17 @@ class GalleryDataProvider
 		if ($result->rowCount() == 0)
 			return null;
 
-		$arr = $result->fetch();
-		$gallery = new Gallery();
-		$gallery->SetInfo($arr);
+		$info = $result->fetch();
+
+		return $info;
+	}
+
+	public function LoadGallery($id)
+	{
+		$info = $this->LoadGalleryInfo($id);
+
+		$gallery = new Gallery($this);
+		$gallery->SetInfo($info);
 
 		return $gallery;
 	}
@@ -70,9 +78,41 @@ class GalleryDataProvider
 			return null;
 
 		$arr = $result->fetch();
-		$gallery = new Gallery();
+		$gallery = new Gallery($this);
 		$gallery->SetInfo($arr);
 
 		return $gallery;
+	}
+
+	public function SaveGallery(Gallery $gallery)
+	{
+		$info = $gallery->GetInfo();
+
+		if ($info['IDGallery'] == 0)
+		{
+			$qb = new QueryBuilder($this->db->Connection());
+			$qb->insert('moa_gallery')
+				->setValue('name', '?')
+				->setValue('description', '?')
+
+				->setParameter(0, $info['name'])
+				->setParameter(1, $info['description']);
+			$qb->execute();
+			$gallery->SetProperty('IDGallery', $this->db->Connection()->lastInsertId());
+		} else
+		{
+			$qb = new QueryBuilder($this->db->Connection());
+			$qb->update('moa_gallery')
+				->set('name', '?')
+				->set('description', '?')
+				->where('IDGallery = ?')
+
+				->setParameter(0, $info['name'])
+				->setParameter(1, $info['description'])
+				->setParameter(2, $info['IDGallery']);
+			$qb->execute();
+		}
+
+		$gallery->SetClean();
 	}
 }
