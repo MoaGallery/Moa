@@ -4,6 +4,7 @@ namespace Moa\Controller;
 
 use Moa\Gallery;
 use Moa\Provider\GalleryDataProvider;
+use Moa\Provider\TagDataProvider;
 use Moa\View\GalleryView;
 use Silex\Application;
 use Silex\Route;
@@ -14,30 +15,55 @@ class GalleryController
 {
 	/** @var GalleryDataProvider $gdp */
 	protected $gdp;
+	/** @var TagDataProvider $tdp */
+	protected $tdp;
 
     function ShowGallery(Request $request, Application $app, $id)
     {
 	    /** @var GalleryDataProvider $gdp */
 	    $this->gdp = $app['moa.gallery_db_provider'];
 
+	    /** @var TagDataProvider $gdp */
+	    $this->tdp = $app['moa.tag_db_provider'];
+
 	    /** @var Gallery $gallery */
-	    $gallery = new Gallery($this->gdp);
+	    $gallery = new Gallery($this->gdp, $this->tdp);
 	    $gallery->Load($id);
 	    $parents = $this->GetParents($gallery);
 	    $sub_galleries = $this->gdp->GetGalleries($id);
+		$gallery_list = $this->gdp->GetAllGalleries();
 
 		if ($request->getMethod() == 'POST')
 		{
-			$gallery->SetProperty('name', $request->request->get('inputGalleryName'));
-			$gallery->SetProperty('description', $request->request->get('inputGalleryDescription'));
+			$gallery->SetProperty('name', $request->request->get('inputGalleryName', ''));
+			$gallery->SetProperty('description', $request->request->get('inputGalleryDescription', ''));
+			$gallery->SetProperty('parent_id', $request->request->get('inputGalleryParent', 0));
+			$gallery->SetProperty('combined_view', $request->request->get('inputGalleryCombinedView', '') == 'on' ? 1 : 0);
+			$gallery->SetProperty('use_tags', $request->request->get('inputGalleryUseTags', '') == 'on' ? 1 : 0);
 
-			if ($gallery->Validate())
+			// Process tags
+			$tags = ($request->request->get('inputGalleryTags'));
+			$tag_list = array();
+			foreach ($tags as $tag_id)
+			{
+				if (strpos($tag_id, 'tag-id-') === 0)
+					$tag_id = substr($tag_id, 7);
+
+				if (!is_numeric($tag_id))
+					$tag_id = $this->tdp->AddTag($tag_id);
+
+				$tag_list[] = $tag_id;
+			}
+
+			$gallery->SetTags($tag_list);
+
+			if ($gallery->Validate($gallery_list))
 				$gallery->Save();
 		}
 
 	    $args = array();
 		$view = new GalleryView($args);
-	    $view->ShowGallery($gallery);
+	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
 	    $view->ShowBreadcrumb($parents);
 

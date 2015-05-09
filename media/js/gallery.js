@@ -5,6 +5,12 @@ $(document).ready(function()
         $('#edit-modal').modal();
     });
 
+    var newTags = [];
+    $("#inputGalleryTags").select2({
+        tags: true,
+        width: '100%'
+    });
+
     if (editError !== '')
     {
         $('#edit-modal').modal();

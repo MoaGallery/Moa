@@ -4,18 +4,25 @@ namespace Moa;
 
 
 use Moa\Provider\GalleryDataProvider;
+use Moa\Provider\TagDataProvider;
 
 class Gallery
 {
 	/** @var GalleryDataProvider $gdp */
 	protected $gdp;
+	/** @var TagDataProvider $gdp */
+	protected $tdp;
 	protected $persistent_info;
 	protected $info;
+
+	protected $tags = array();
+
 	protected $validation_message = '';
 
-	public function __construct(GalleryDataProvider $gdp)
+	public function __construct(GalleryDataProvider $gdp, TagDataProvider $tdp)
 	{
 		$this->gdp = $gdp;
+		$this->tdp = $tdp;
 		$this->info['IDGallery'] = 0;
 	}
 
@@ -27,6 +34,9 @@ class Gallery
 	public function Save()
 	{
 		$this->gdp->SaveGallery($this);
+
+		$this->tdp->SaveTagsForGallery($this->tags, $this->info['IDGallery']);
+
 		$this->SetClean();
 	}
 
@@ -61,7 +71,7 @@ class Gallery
 		$this->info[$name] = $value;
 	}
 
-	public function Validate()
+	public function Validate($gallery_list)
 	{
 		$status = true;
 		$messages = array();
@@ -69,6 +79,18 @@ class Gallery
 		if ($this->info['name'] == '')
 		{
 			$messages[] = 'Name must not be blank';
+			$status = false;
+		}
+
+		if (!array_key_exists($this->info['parent_id'], $gallery_list))
+		{
+			$messages[] = 'Invalid parent gallery';
+			$status = false;
+		}
+
+		if ($this->info['parent_id'] == $this->info['IDGallery'])
+		{
+			$messages[] = 'Invalid parent gallery';
 			$status = false;
 		}
 
@@ -80,5 +102,10 @@ class Gallery
 	public function GetValidationMessage()
 	{
 		return $this->validation_message;
+	}
+
+	public function SetTags($tag_list)
+	{
+		$this->tags = $tag_list;
 	}
 }

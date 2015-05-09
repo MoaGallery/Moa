@@ -28,16 +28,47 @@ class GalleryView
 		};
 	}
 
-	public function ShowGallery(Gallery $gallery)
+	public function ShowGallery(Gallery $gallery, $gallery_list, $tags, $gallery_tags)
 	{
-		$this->args['gallery_id'] = $gallery->GetProperty('IDGallery');
-		$this->args['gallery_name'] = $gallery->GetProperty('name', true);
-		$this->args['gallery_description'] = $gallery->GetProperty('description', true);
+		$gallery_args = array();
+		$gallery_args['id'] = $gallery->GetProperty('IDGallery');
+		$gallery_args['name'] = $gallery->GetProperty('name', true);
+		$gallery_args['description'] = $gallery->GetProperty('description', true);
+		$gallery_args['combined_view'] = $gallery->GetProperty('combined_view');
+		$gallery_args['use_tags'] = $gallery->GetProperty('use_tags');
 
-		$this->args['gallery_name_edit'] = $gallery->GetProperty('name');
-		$this->args['gallery_description_edit'] = $gallery->GetProperty('description');
+		// Parent gallery list
+		$parents = array();
+		foreach ($gallery_list as $id => $name)
+		{
+			if ($id != $gallery->GetProperty('IDGallery'))
+				$entry = array('id' => $id, 'name' => $name);
 
-		$this->args['gallery_edit_error'] = $gallery->GetValidationMessage();
+			if ($gallery->GetProperty('parent_id') == $id)
+				$entry['selected'] = true;
+
+			$parents[] = $entry;
+		}
+		$gallery_args['gallery_list'] = $parents;
+
+		// Tags
+		$tag_list = array();
+		foreach ($tags as $id => $name)
+		{
+			$entry = array('id' => 'tag-id-' . $id, 'name' => $name);
+
+			if (in_array($id, $gallery_tags))
+				$entry['selected'] = true;
+
+			$tag_list[] = $entry;
+		}
+		$gallery_args['tag_list'] = $tag_list;
+
+		$gallery_args['name_edit'] = $gallery->GetProperty('name');
+		$gallery_args['description_edit'] = $gallery->GetProperty('description');
+		$gallery_args['edit_error'] = $gallery->GetValidationMessage();
+
+		$this->args['gallery'] = $gallery_args;
 	}
 
 	public function ShowBreadcrumb($parent_galleries)
