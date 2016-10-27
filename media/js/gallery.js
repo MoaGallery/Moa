@@ -5,10 +5,14 @@ $(document).ready(function()
         $('#edit-modal').modal();
     });
 
-    var newTags = [];
+
     $("#inputGalleryTags").select2({
         tags: true,
         width: '100%'
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
     });
 
     if (editError !== '')

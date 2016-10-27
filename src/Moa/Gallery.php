@@ -82,7 +82,8 @@ class Gallery
 			$status = false;
 		}
 
-		if (!array_key_exists($this->info['parent_id'], $gallery_list))
+		if (($this->info['parent_id'] != 0) &&
+			(!array_key_exists($this->info['parent_id'], $gallery_list)))
 		{
 			$messages[] = 'Invalid parent gallery';
 			$status = false;

@@ -42,7 +42,7 @@ class GalleryController
 			$gallery->SetProperty('use_tags', $request->request->get('inputGalleryUseTags', '') == 'on' ? 1 : 0);
 
 			// Process tags
-			$tags = ($request->request->get('inputGalleryTags'));
+			$tags = $request->request->get('inputGalleryTags', array());
 			$tag_list = array();
 			foreach ($tags as $tag_id)
 			{

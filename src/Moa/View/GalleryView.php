@@ -38,16 +38,18 @@ class GalleryView
 		$gallery_args['use_tags'] = $gallery->GetProperty('use_tags');
 
 		// Parent gallery list
-		$parents = array();
+		$parents = array(array('name' => 'None', 'id' => 0));
 		foreach ($gallery_list as $id => $name)
 		{
+			$entry = null;
 			if ($id != $gallery->GetProperty('IDGallery'))
 				$entry = array('id' => $id, 'name' => $name);
 
 			if ($gallery->GetProperty('parent_id') == $id)
 				$entry['selected'] = true;
 
-			$parents[] = $entry;
+			if ($entry !== null)
+				$parents[] = $entry;
 		}
 		$gallery_args['gallery_list'] = $parents;
 
