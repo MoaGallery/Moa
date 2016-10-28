@@ -2,7 +2,7 @@
 
 namespace Moa\Controller;
 
-use Moa\Gallery;
+use Moa\Model\Gallery;
 use Moa\Provider\GalleryDataProvider;
 use Moa\Provider\TagDataProvider;
 use Moa\View\GalleryView;
@@ -65,7 +65,7 @@ class GalleryController
 		$view = new GalleryView($args);
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
-	    $view->ShowBreadcrumb($parents);
+	    $view->ShowBreadcrumb($gallery, $parents);
 
 	    $args['page_title'] = 'Gallery "' . $gallery->GetProperty('name') . '"';
 	    $output = $app['twig']->render('gallery.html', $args);

@@ -1,15 +1,15 @@
 <?php
 
-namespace Moa;
+namespace Moa\Model;
 
 
-use Moa\Provider\GalleryDataProvider;
+use Moa\Provider\ImageDataProvider;
 use Moa\Provider\TagDataProvider;
 
-class Gallery
+class Image
 {
-	/** @var GalleryDataProvider $gdp */
-	protected $gdp;
+	/** @var ImageDataProvider $idp */
+	protected $idp;
 	/** @var TagDataProvider $gdp */
 	protected $tdp;
 	protected $persistent_info;
@@ -19,24 +19,22 @@ class Gallery
 
 	protected $validation_message = '';
 
-	public function __construct(GalleryDataProvider $gdp, TagDataProvider $tdp)
+	public function __construct(ImageDataProvider $idp, TagDataProvider $tdp)
 	{
-		$this->gdp = $gdp;
+		$this->idp = $idp;
 		$this->tdp = $tdp;
-		$this->info['IDGallery'] = 0;
+		$this->info['IDImage'] = 0;
 	}
 
 	public function Load($id)
 	{
-		$this->SetInfo($this->gdp->LoadGalleryInfo($id));
+		$this->SetInfo($this->idp->LoadImageInfo($id));
 	}
 
 	public function Save()
 	{
-		$this->gdp->SaveGallery($this);
-
-		$this->tdp->SaveTagsForGallery($this->tags, $this->info['IDGallery']);
-
+		//$this->idp->SaveImage($this);
+		//$this->idp->SaveTagsForImage($this->tags, $this->info['IDImage']);
 		$this->SetClean();
 	}
 
@@ -71,31 +69,12 @@ class Gallery
 		$this->info[$name] = $value;
 	}
 
-	public function Validate($gallery_list)
+	public function Validate()
 	{
 		$status = true;
 		$messages = array();
 
-		if ($this->info['name'] == '')
-		{
-			$messages[] = 'Name must not be blank';
-			$status = false;
-		}
-
-		if (($this->info['parent_id'] != 0) &&
-			(!array_key_exists($this->info['parent_id'], $gallery_list)))
-		{
-			$messages[] = 'Invalid parent gallery';
-			$status = false;
-		}
-
-		if ($this->info['parent_id'] == $this->info['IDGallery'])
-		{
-			$messages[] = 'Invalid parent gallery';
-			$status = false;
-		}
-
-		$this->validation_message = implode('<br>', $messages);
+//		$this->validation_message = implode('<br>', $messages);
 
 		return $status;
 	}

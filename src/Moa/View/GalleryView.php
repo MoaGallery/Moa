@@ -3,7 +3,7 @@
 namespace Moa\View;
 
 
-use Moa\Gallery;
+use Moa\Model\Gallery;
 
 class GalleryView
 {
@@ -73,19 +73,20 @@ class GalleryView
 		$this->args['gallery'] = $gallery_args;
 	}
 
-	public function ShowBreadcrumb($parent_galleries)
+	public function ShowBreadcrumb(Gallery $gallery, $parent_galleries)
 	{
 		$output = array();
-		/** @var Gallery $gallery */
-		foreach ($parent_galleries as $gallery)
+		/** @var Gallery $p_gallery */
+		foreach ($parent_galleries as $p_gallery)
 		{
 			$output[] = array
 			(
-				'name' => $gallery->GetProperty('name'),
-				'id' => $gallery->GetProperty('IDGallery')
+				'name' => $p_gallery->GetProperty('name'),
+				'id' => $p_gallery->GetProperty('IDGallery')
 			);
 		}
 
 		$this->args['breadcrumb'] = $output;
+		$this->args['breadcrumb_end'] = $gallery->GetProperty('name');
 	}
 }

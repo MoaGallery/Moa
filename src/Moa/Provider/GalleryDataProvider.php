@@ -5,7 +5,7 @@ namespace Moa\Provider;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Db;
-use Moa\Gallery;
+use Moa\Model\Gallery;
 
 class GalleryDataProvider
 {
