@@ -1,13 +1,13 @@
 <?php
 
-namespace Moa\Provider;
+namespace Moa\Tag;
 
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Db;
 use Moa\Gallery;
 
-class TagDataProvider
+class DataProvider
 {
 	/** @var  Db */
 	protected $db;

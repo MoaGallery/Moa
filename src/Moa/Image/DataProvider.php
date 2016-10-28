@@ -1,21 +1,21 @@
 <?php
 
-namespace Moa\Provider;
+namespace Moa\Image;
 
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Db;
-use Moa\Image;
+use Moa\Tag;
 
-class ImageDataProvider
+class DataProvider
 {
 	/** @var Db Db */
 	protected $db;
 
-	/** @var TagDataProvider $tdp */
+	/** @var Tag\DataProvider $tdp */
 	protected $tdp;
 
-	public function __construct($db, TagDataProvider $tdp)
+	public function __construct($db, Tag\DataProvider $tdp)
 	{
 		$this->db = $db;
 		$this->tdp = $tdp;
@@ -43,7 +43,7 @@ class ImageDataProvider
 	{
 		$info = $this->LoadImageInfo($id);
 
-		$gallery = new Image($this, $this->tdp);
+		$gallery = new Model($this, $this->tdp);
 		$gallery->SetInfo($info);
 
 		return $gallery;

@@ -1,21 +1,22 @@
 <?php
 
-namespace Moa\Provider;
+namespace Moa\Gallery;
 
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Db;
-use Moa\Model\Gallery;
+use Moa\Gallery\Model;
+use Moa\Tag;
 
-class GalleryDataProvider
+class DataProvider
 {
 	/** @var Db Db */
 	protected $db;
 
-	/** @var TagDataProvider $tdp */
+	/** @var Tag\DataProvider $tdp */
 	protected $tdp;
 
-	public function __construct($db, TagDataProvider $tdp)
+	public function __construct($db, Tag\DataProvider $tdp)
 	{
 		$this->db = $db;
 		$this->tdp = $tdp;
@@ -43,7 +44,7 @@ class GalleryDataProvider
 	{
 		$info = $this->LoadGalleryInfo($id);
 
-		$gallery = new Gallery($this, $this->tdp);
+		$gallery = new Model($this, $this->tdp);
 		$gallery->SetInfo($info);
 
 		return $gallery;
@@ -99,13 +100,13 @@ class GalleryDataProvider
 			return null;
 
 		$arr = $result->fetch();
-		$gallery = new Gallery($this, $this->tdp);
+		$gallery = new Model($this, $this->tdp);
 		$gallery->SetInfo($arr);
 
 		return $gallery;
 	}
 
-	public function SaveGallery(Gallery $gallery)
+	public function SaveGallery(Model $gallery)
 	{
 		$info = $gallery->GetInfo();
 

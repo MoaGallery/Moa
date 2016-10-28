@@ -1,33 +1,28 @@
 <?php
 
-namespace Moa\Controller;
+namespace Moa\Gallery;
 
-use Moa\Model\Gallery;
-use Moa\Provider\GalleryDataProvider;
-use Moa\Provider\TagDataProvider;
-use Moa\View\GalleryView;
+use Moa\Tag;
 use Silex\Application;
-use Silex\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class GalleryController
+class Controller
 {
-	/** @var GalleryDataProvider $gdp */
+	/** @var DataProvider $gdp */
 	protected $gdp;
-	/** @var TagDataProvider $tdp */
+	/** @var Tag\DataProvider $tdp */
 	protected $tdp;
 
     function ShowGallery(Request $request, Application $app, $id)
     {
-	    /** @var GalleryDataProvider $gdp */
+	    /** @var DataProvider $gdp */
 	    $this->gdp = $app['moa.gallery_db_provider'];
 
-	    /** @var TagDataProvider $gdp */
+	    /** @var Tag\DataProvider $gdp */
 	    $this->tdp = $app['moa.tag_db_provider'];
 
-	    /** @var Gallery $gallery */
-	    $gallery = new Gallery($this->gdp, $this->tdp);
+	    $gallery = new Model($this->gdp, $this->tdp);
 	    $gallery->Load($id);
 	    $parents = $this->GetParents($gallery);
 	    $sub_galleries = $this->gdp->GetGalleries($id);
@@ -62,7 +57,7 @@ class GalleryController
 		}
 
 	    $args = array();
-		$view = new GalleryView($args);
+		$view = new View($args);
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
 	    $view->ShowBreadcrumb($gallery, $parents);
@@ -77,7 +72,7 @@ class GalleryController
 		$galleries = $app['moa.gallery_db_provider']->GetGalleries(0);
 
 		$args = array();
-		$view = new GalleryView($args);
+		$view = new View($args);
 		$view->ShowGalleryList($galleries);
 
 		$args['page_title'] = 'Gallery';
@@ -85,7 +80,7 @@ class GalleryController
 		return new Response($output);
 	}
 
-	protected function GetParents(Gallery $gallery)
+	protected function GetParents(Model $gallery)
 	{
 		$parents = array();
 		$parent_id = $gallery->GetProperty('parent_id');

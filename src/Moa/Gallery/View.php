@@ -1,11 +1,8 @@
 <?php
 
-namespace Moa\View;
+namespace Moa\Gallery;
 
-
-use Moa\Model\Gallery;
-
-class GalleryView
+class View
 {
 	protected $args;
 
@@ -28,7 +25,7 @@ class GalleryView
 		};
 	}
 
-	public function ShowGallery(Gallery $gallery, $gallery_list, $tags, $gallery_tags)
+	public function ShowGallery(Model $gallery, $gallery_list, $tags, $gallery_tags)
 	{
 		$gallery_args = array();
 		$gallery_args['id'] = $gallery->GetProperty('IDGallery');
@@ -73,10 +70,10 @@ class GalleryView
 		$this->args['gallery'] = $gallery_args;
 	}
 
-	public function ShowBreadcrumb(Gallery $gallery, $parent_galleries)
+	public function ShowBreadcrumb(Model $gallery, $parent_galleries)
 	{
 		$output = array();
-		/** @var Gallery $p_gallery */
+		/** @var Model $p_gallery */
 		foreach ($parent_galleries as $p_gallery)
 		{
 			$output[] = array
