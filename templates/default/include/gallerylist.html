@@ -2,9 +2,9 @@
     <ul class="list-unstyled">
         {% for gallery in subgalleries %}
             <li class="thumbnail col-md-3" style="min-height: 150px;">
-                <a href="/gallery/{{gallery.id}}">
+                <a href="/gallery/{[gallery.id]}">
                     <img src="http://placehold.it/300x200">
-                    <h4>{{gallery.name}}</h4>
+                    <h4>{[gallery.name]}</h4>
                 </a>
             </li>
         {% endfor %}

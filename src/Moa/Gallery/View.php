@@ -83,7 +83,7 @@ class View
 			);
 		}
 
-		$this->args['breadcrumb'] = $output;
+		$this->args['breadcrumb'] = json_encode($output);
 		$this->args['breadcrumb_end'] = $gallery->GetProperty('name');
 	}
 }
