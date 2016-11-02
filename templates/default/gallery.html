@@ -1,6 +1,8 @@
 {% include 'include/html_header.html' %}
 
 	<div ng-app="moa.gallery">
+		<span ng-controller="preloadController as preload" ng-init="preload.init({[preload_data]})"></span>
+
 		<div class="modal fade" id="edit-modal">
 			<div class="modal-dialog">
 				<div class="modal-content">

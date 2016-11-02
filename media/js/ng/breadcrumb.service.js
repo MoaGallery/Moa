@@ -12,6 +12,9 @@
 
 		service.getData = function()
 		{
+			if (typeof service.data === 'undefined')
+				return [];
+
 			return service.data;
 		};
 

@@ -70,7 +70,7 @@ class View
 		$this->args['gallery'] = $gallery_args;
 	}
 
-	public function ShowBreadcrumb(Model $gallery, $parent_galleries)
+	public function getBreadcrumb(Model $gallery, $parent_galleries)
 	{
 		$output = array();
 		/** @var Model $p_gallery */
@@ -82,8 +82,12 @@ class View
 				'id' => $p_gallery->GetProperty('IDGallery')
 			);
 		}
+		$output[] = array
+		(
+			'name' => $gallery->GetProperty('name'),
+			'id' => $gallery->GetProperty('IDGallery')
+		);
 
-		$this->args['breadcrumb'] = json_encode($output);
-		$this->args['breadcrumb_end'] = $gallery->GetProperty('name');
+		return $output;
 	}
 }

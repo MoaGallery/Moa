@@ -60,7 +60,10 @@ class Controller
 		$view = new View($args);
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
-	    $view->ShowBreadcrumb($gallery, $parents);
+	    
+	    $preload = array();
+	    $preload['breadcrumb'] = $view->getBreadcrumb($gallery, $parents);
+	    $args['preload_data'] = json_encode($preload);
 
 	    $args['page_title'] = 'Gallery "' . $gallery->GetProperty('name') . '"';
 	    $output = $app['twig']->render('gallery.html', $args);
