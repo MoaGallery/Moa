@@ -2,6 +2,7 @@
 
 namespace Moa\Gallery;
 
+use Moa\Image;
 use Moa\Tag;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,15 +10,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Controller
 {
-	/** @var DataProvider $gdp */
+	/** @var Tag\DataProvider $gdp */
 	protected $gdp;
 	/** @var Tag\DataProvider $tdp */
 	protected $tdp;
+	/** @var Image\DataProvider $tdp */
+	protected $idp;
 
     function ShowGallery(Request $request, Application $app, $id)
     {
 	    /** @var DataProvider $gdp */
 	    $this->gdp = $app['moa.gallery_db_provider'];
+	
+	    /** @var Image\DataProvider $idp */
+	    $this->idp = $app['moa.image_db_provider'];
 
 	    /** @var Tag\DataProvider $gdp */
 	    $this->tdp = $app['moa.tag_db_provider'];
@@ -60,6 +66,10 @@ class Controller
 		$view = new View($args);
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
+	    
+	    $images = $this->idp->LoadImagesByGalleryTags($id);
+	    $image_view = new Image\View($args);
+	    //$image_view->ShowImageThumbnails($images);
 	    
 	    $preload = array();
 	    $preload['breadcrumb'] = $view->getBreadcrumb($gallery, $parents);

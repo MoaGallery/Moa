@@ -2,9 +2,6 @@
 
 namespace Moa;
 
-use Moa\Db;
-use Moa\Gallery;
-use Moa\Tag;
 use Silex\Application;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -24,6 +21,11 @@ class Bootstrap
 		$app['moa.gallery_db_provider'] = function($app)
 		{
 			return new Gallery\DataProvider($app['db'], $app['moa.tag_db_provider']);
+		};
+		
+		$app['moa.image_db_provider'] = function($app)
+		{
+			return new Image\DataProvider($app['db'], $app['moa.tag_db_provider']);
 		};
 
 		$loader = new Twig_Loader_Filesystem('templates/default');
