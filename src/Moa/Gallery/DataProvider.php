@@ -56,7 +56,7 @@ class DataProvider
 
 		$qb->select('IDGallery', 'name')
 			->from('moa_gallery')
-			->where('parent_id = ?');
+			->where('IDParent = ?');
 		$qb->setParameter(0, $parent_id);
 		$result = $qb->execute();
 
@@ -122,7 +122,7 @@ class DataProvider
 
 				->setParameter(0, $info['name'])
 				->setParameter(1, $info['description'])
-				->setParameter(2, $info['parent_id'])
+				->setParameter(2, $info['IDParent'])
 				->setParameter(3, $info['combined_view'])
 				->setParameter(4, $info['use_tags']);
 			$qb->execute();
@@ -133,14 +133,14 @@ class DataProvider
 			$qb->update('moa_gallery')
 				->set('name', '?')
 				->set('description', '?')
-				->set('parent_id', '?')
+				->set('IDParent', '?')
 				->set('combined_view', '?')
 				->set('use_tags', '?')
 				->where('IDGallery = ?')
 
 				->setParameter(0, $info['name'])
 				->setParameter(1, $info['description'])
-				->setParameter(2, $info['parent_id'])
+				->setParameter(2, $info['IDParent'])
 				->setParameter(3, $info['combined_view'])
 				->setParameter(4, $info['use_tags'])
 				->setParameter(5, $info['IDGallery']);
