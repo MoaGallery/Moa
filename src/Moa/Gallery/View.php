@@ -13,14 +13,12 @@ class View
 
 	public function ShowGalleryList($galleries)
 	{
-		$this->args['galleries'] = array();
-
 		foreach ($galleries as $id => $name)
 		{
 			$this->args['subgalleries'][] = array
 			(
 				'name' => $name,
-				'id' => $id
+				'id' => (int)$id
 			);
 		};
 	}

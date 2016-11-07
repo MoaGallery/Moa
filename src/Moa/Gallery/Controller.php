@@ -32,44 +32,44 @@ class Controller
 	    $gallery->Load($id);
 	    $parents = $this->GetParents($gallery);
 	    $sub_galleries = $this->gdp->GetGalleries($id);
-		$gallery_list = $this->gdp->GetAllGalleries();
+			$gallery_list = $this->gdp->GetAllGalleries();
 
-		if ($request->getMethod() == 'POST')
-		{
-			$gallery->SetProperty('name', $request->request->get('inputGalleryName', ''));
-			$gallery->SetProperty('description', $request->request->get('inputGalleryDescription', ''));
-			$gallery->SetProperty('parent_id', $request->request->get('inputGalleryParent', 0));
-			$gallery->SetProperty('combined_view', $request->request->get('inputGalleryCombinedView', '') == 'on' ? 1 : 0);
-			$gallery->SetProperty('use_tags', $request->request->get('inputGalleryUseTags', '') == 'on' ? 1 : 0);
-
-			// Process tags
-			$tags = $request->request->get('inputGalleryTags', array());
-			$tag_list = array();
-			foreach ($tags as $tag_id)
+			if ($request->getMethod() == 'POST')
 			{
-				if (strpos($tag_id, 'tag-id-') === 0)
-					$tag_id = substr($tag_id, 7);
-
-				if (!is_numeric($tag_id))
-					$tag_id = $this->tdp->AddTag($tag_id);
-
-				$tag_list[] = $tag_id;
+				$gallery->SetProperty('name', $request->request->get('inputGalleryName', ''));
+				$gallery->SetProperty('description', $request->request->get('inputGalleryDescription', ''));
+				$gallery->SetProperty('parent_id', $request->request->get('inputGalleryParent', 0));
+				$gallery->SetProperty('combined_view', $request->request->get('inputGalleryCombinedView', '') == 'on' ? 1 : 0);
+				$gallery->SetProperty('use_tags', $request->request->get('inputGalleryUseTags', '') == 'on' ? 1 : 0);
+	
+				// Process tags
+				$tags = $request->request->get('inputGalleryTags', array());
+				$tag_list = array();
+				foreach ($tags as $tag_id)
+				{
+					if (strpos($tag_id, 'tag-id-') === 0)
+						$tag_id = substr($tag_id, 7);
+	
+					if (!is_numeric($tag_id))
+						$tag_id = $this->tdp->AddTag($tag_id);
+	
+					$tag_list[] = $tag_id;
+				}
+	
+				$gallery->SetTags($tag_list);
+	
+				if ($gallery->Validate($gallery_list))
+					$gallery->Save();
 			}
 
-			$gallery->SetTags($tag_list);
-
-			if ($gallery->Validate($gallery_list))
-				$gallery->Save();
-		}
-
 	    $args = array();
-		$view = new View($args);
+			$view = new View($args);
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
 	    
 	    $images = $this->idp->LoadImagesByGalleryTags($id);
 	    $image_view = new Image\View($args);
-	    //$image_view->ShowImageThumbnails($images);
+	    $image_view->ShowImageList($images);
 	    
 	    $preload = array();
 	    $preload['breadcrumb'] = $view->getBreadcrumb($gallery, $parents);

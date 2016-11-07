@@ -74,7 +74,7 @@ class DataProvider
 		}
 		
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->select('*')
+		$qb->select('IDImage, Description')
 			->from('moa_image')
 			->where($qb->expr()->in('IDImage', $image_ids));
 		$result = $qb->execute();
@@ -82,9 +82,7 @@ class DataProvider
 		$images = array();
 		while ($arr = $result->fetch())
 		{
-			$image = new Model($this, $this->tdp);
-			$image->SetInfo($arr);
-			$images[] = $image;
+			$images[(int)$arr['IDImage']] = $arr['Description'];
 		}
 		
 		return $images;

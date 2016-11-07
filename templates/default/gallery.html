@@ -86,11 +86,13 @@
 
 		{% include 'include/breadcrumb.html' %}
 
-		<div class="pull-right">
-			<div class="btn-group" role="group" aria-label="...">
-				<button type="button" class="btn btn-default" id="galleryAdd" title="Add gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-plus"></span></button>
-				<button type="button" class="btn btn-default" id="galleryEdit" title="Edit gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></button>
-				<button type="button" class="btn btn-default" id="galleryDelete" title="Delete gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></button>
+		<div class="row">
+			<div class="pull-right">
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default" id="galleryAdd" title="Add gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-plus"></span></button>
+					<button type="button" class="btn btn-default" id="galleryEdit" title="Edit gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></button>
+					<button type="button" class="btn btn-default" id="galleryDelete" title="Delete gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></button>
+				</div>
 			</div>
 		</div>
 
@@ -99,7 +101,8 @@
 			{[gallery.description]}
 		</p>
 
-		{% include 'include/gallerylist.html' %}
+		{% include 'include/gallerylist.html' %}		
+		{% include 'include/imagelist.html' %}
 
 	</div>
 
