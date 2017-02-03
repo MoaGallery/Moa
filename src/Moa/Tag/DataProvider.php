@@ -21,7 +21,7 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('IDTag', 'name')
+		$qb->select('id', 'name')
 			->from('moa_tag')
 			->orderBy('name');
 		$result = $qb->execute();
@@ -29,7 +29,7 @@ class DataProvider
 		$tags = array();
 		while ($arr = $result->fetch())
 		{
-			$tags[$arr['IDTag']] = $arr['name'];
+			$tags[$arr['id']] = $arr['name'];
 		}
 
 		return $tags;
@@ -39,17 +39,17 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('t.IDTag', 'tl.IDGallery')
+		$qb->select('t.id', 'tl.gallery_id')
 			->from('moa_tag', 't')
-			->join('t', 'moa_gallerytaglink', 'tl', 't.IDTag = tl.IDTag')
-			->where('tl.IDGallery = ?')
+			->join('t', 'moa_gallerytaglink', 'tl', 't.id = tl.tag_id')
+			->where('tl.gallery_id = ?')
 			->setParameter(0, $gallery_id);
 		$result = $qb->execute();
 
 		$tags = array();
 		while ($arr = $result->fetch())
 		{
-			$tags[] = $arr['IDTag'];
+			$tags[] = $arr['id'];
 		}
 
 		return $tags;
@@ -72,15 +72,15 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->delete('moa_gallerytaglink')
-			->where('IDGallery = ?')
+			->where('gallery_id = ?')
 			->setParameter(0, $gallery_id);
 		$qb->execute();
 
 		foreach ($tags as $tag)
 		{
 			$qb->insert('moa_gallerytaglink')
-				->setValue('IDGallery', '?')
-				->setValue('IDTag', '?')
+				->setValue('gallery_id', '?')
+				->setValue('tag_id', '?')
 				->setParameter(0, $gallery_id)
 				->setParameter(1, $tag);
 			$qb->execute();

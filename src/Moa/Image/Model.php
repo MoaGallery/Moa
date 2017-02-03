@@ -21,7 +21,7 @@ class Model
 	{
 		$this->idp = $idp;
 		$this->tdp = $tdp;
-		$this->info['IDImage'] = 0;
+		$this->info['id'] = 0;
 	}
 
 	public function Load($id)
@@ -32,7 +32,7 @@ class Model
 	public function Save()
 	{
 		//$this->idp->SaveImage($this);
-		//$this->idp->SaveTagsForImage($this->tags, $this->info['IDImage']);
+		//$this->idp->SaveTagsForImage($this->tags, $this->info['id']);
 		$this->SetClean();
 	}
 

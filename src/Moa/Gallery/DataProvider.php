@@ -28,7 +28,7 @@ class DataProvider
 
 		$qb->select('*')
 			->from('moa_gallery')
-			->where('IDGallery = ?')
+			->where('id = ?')
 			->setParameter(0, $id);
 		$result = $qb->execute();
 
@@ -54,16 +54,16 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('IDGallery', 'name')
+		$qb->select('id', 'name')
 			->from('moa_gallery')
-			->where('IDParent = ?');
+			->where('parent_id = ?');
 		$qb->setParameter(0, $parent_id);
 		$result = $qb->execute();
 
 		$galleries = array();
 		while ($arr = $result->fetch())
 		{
-			$galleries[$arr['IDGallery']] = $arr['name'];
+			$galleries[$arr['id']] = $arr['name'];
 		}
 
 		return $galleries;
@@ -73,14 +73,14 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('IDGallery', 'name')
+		$qb->select('id', 'name')
 			->from('moa_gallery');
 		$result = $qb->execute();
 
 		$galleries = array();
 		while ($arr = $result->fetch())
 		{
-			$galleries[$arr['IDGallery']] = $arr['name'];
+			$galleries[$arr['id']] = $arr['name'];
 		}
 
 		return $galleries;
@@ -92,7 +92,7 @@ class DataProvider
 
 		$qb->select('*')
 			->from('moa_gallery')
-			->where('IDGallery = ?');
+			->where('id = ?');
 		$qb->setParameter(0, $id);
 		$result = $qb->execute();
 
@@ -110,7 +110,7 @@ class DataProvider
 	{
 		$info = $gallery->GetInfo();
 
-		if ($info['IDGallery'] == 0)
+		if ($info['id'] == 0)
 		{
 			$qb = new QueryBuilder($this->db->Connection());
 			$qb->insert('moa_gallery')
@@ -122,28 +122,28 @@ class DataProvider
 
 				->setParameter(0, $info['name'])
 				->setParameter(1, $info['description'])
-				->setParameter(2, $info['IDParent'])
+				->setParameter(2, $info['parent_id'])
 				->setParameter(3, $info['combined_view'])
 				->setParameter(4, $info['use_tags']);
 			$qb->execute();
-			$gallery->SetProperty('IDGallery', $this->db->Connection()->lastInsertId());
+			$gallery->SetProperty('id', $this->db->Connection()->lastInsertId());
 		} else
 		{
 			$qb = new QueryBuilder($this->db->Connection());
 			$qb->update('moa_gallery')
 				->set('name', '?')
 				->set('description', '?')
-				->set('IDParent', '?')
+				->set('parent_id', '?')
 				->set('combined_view', '?')
 				->set('use_tags', '?')
-				->where('IDGallery = ?')
+				->where('id = ?')
 
 				->setParameter(0, $info['name'])
 				->setParameter(1, $info['description'])
-				->setParameter(2, $info['IDParent'])
+				->setParameter(2, $info['parent_id'])
 				->setParameter(3, $info['combined_view'])
 				->setParameter(4, $info['use_tags'])
-				->setParameter(5, $info['IDGallery']);
+				->setParameter(5, $info['id']);
 			$qb->execute();
 		}
 

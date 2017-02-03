@@ -13,12 +13,15 @@ class View
 
 	public function ShowImageList($images)
 	{
-		foreach ($images as $id => $description)
-		{			
+		$this->args['images'] = array();
+
+		foreach ($images as $id => $image)
+		{
+			/** @var Model $image */
 			$this->args['images'][] = array
 			(
-				'id' => $id,
-				'description' => $description					
+				'filename' => $image->GetProperty('filename'),
+				'id' => $image->GetProperty('id')
 			);
 		};			
 	}
@@ -26,7 +29,7 @@ class View
 	public function ShowImage(Model $gallery, $gallery_list, $tags, $gallery_tags)
 	{
 		$gallery_args = array();
-		$gallery_args['id'] = $gallery->GetProperty('IDGallery');
+		$gallery_args['id'] = $gallery->GetProperty('id');
 		$gallery_args['name'] = $gallery->GetProperty('name', true);
 		$gallery_args['description'] = $gallery->GetProperty('description', true);
 		$gallery_args['combined_view'] = $gallery->GetProperty('combined_view');
@@ -37,7 +40,7 @@ class View
 		foreach ($gallery_list as $id => $name)
 		{
 			$entry = null;
-			if ($id != $gallery->GetProperty('IDGallery'))
+			if ($id != $gallery->GetProperty('id'))
 				$entry = array('id' => $id, 'name' => $name);
 
 			if ($gallery->GetProperty('parent_id') == $id)
@@ -77,13 +80,13 @@ class View
 			$output[] = array
 			(
 				'name' => $p_gallery->GetProperty('name'),
-				'id' => $p_gallery->GetProperty('IDGallery')
+				'id' => $p_gallery->GetProperty('id')
 			);
 		}
 		$output[] = array
 		(
 			'name' => $gallery->GetProperty('name'),
-			'id' => $gallery->GetProperty('IDGallery')
+			'id' => $gallery->GetProperty('id')
 		);
 
 		return $output;

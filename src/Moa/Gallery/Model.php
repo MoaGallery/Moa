@@ -21,7 +21,7 @@ class Model
 	{
 		$this->gdp = $gdp;
 		$this->tdp = $tdp;
-		$this->info['IDGallery'] = 0;
+		$this->info['id'] = 0;
 	}
 
 	public function Load($id)
@@ -33,7 +33,7 @@ class Model
 	{
 		$this->gdp->SaveGallery($this);
 
-		$this->tdp->SaveTagsForGallery($this->tags, $this->info['IDGallery']);
+		$this->tdp->SaveTagsForGallery($this->tags, $this->info['id']);
 
 		$this->SetClean();
 	}
@@ -87,7 +87,7 @@ class Model
 			$status = false;
 		}
 
-		if ($this->info['parent_id'] == $this->info['IDGallery'])
+		if ($this->info['parent_id'] == $this->info['id'])
 		{
 			$messages[] = 'Invalid parent gallery';
 			$status = false;
