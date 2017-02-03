@@ -3,7 +3,7 @@
         {% for image in images %}
             <li class="thumbnail col-md-3" style="min-height: 150px;">
                 <a href="/image/{[image.id]}">
-                    <img src="http://placehold.it/300x200">
+                    <img src="/data/images/thumbs/{[image.id]}.jpg" class="thumbnail-img">
                     <h4>{[image.filename]}</h4>
                 </a>
             </li>
