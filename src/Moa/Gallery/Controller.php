@@ -67,9 +67,12 @@ class Controller
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
 	    
-	    $images = $this->idp->LoadImagesByGalleryTags($id);
-	    $image_view = new Image\View($args);
-	    $image_view->ShowImageList($images);
+	    if ($gallery->GetProperty('combined_view') == 1)
+	    {
+		    $images = $this->idp->LoadImagesByGalleryTags($id);
+		    $image_view = new Image\View($args);
+		    $image_view->ShowImageList($images);
+	    }
 	    
 	    $preload = array();
 	    $preload['breadcrumb'] = $view->getBreadcrumb($gallery, $parents);
