@@ -103,4 +103,39 @@ class DataProvider
 
 		return $gallery;
 	}
+	public function SaveImage(Model $image)
+	{
+		$info = $image->GetInfo();
+		
+		if ($info['id'] == 0)
+		{
+			$qb = new QueryBuilder($this->db->Connection());
+			$qb->insert('moa_image')
+				->setValue('filename', '?')
+				->setValue('description', '?')
+				->setValue('width', '?')
+				->setValue('height', '?')
+				->setValue('format', '?')
+				
+				->setParameter(0, $info['filename'])
+				->setParameter(1, $info['description'])
+				->setParameter(2, $info['width'])
+				->setParameter(3, $info['height'])
+				->setParameter(4, $info['format']);
+			$qb->execute();
+			$image->SetProperty('id', $this->db->Connection()->lastInsertId());
+		} else
+		{
+			$qb = new QueryBuilder($this->db->Connection());
+			$qb->update('moa_image')
+				->set('description', '?')
+				->where('id = ?')
+				
+				->setParameter(0, $info['description'])
+				->setParameter(1, $info['id']);
+			$qb->execute();
+		}
+		
+		$image->SetClean();
+	}
 }

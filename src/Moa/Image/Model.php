@@ -31,8 +31,8 @@ class Model
 
 	public function Save()
 	{
-		//$this->idp->SaveImage($this);
-		//$this->idp->SaveTagsForImage($this->tags, $this->info['id']);
+		$this->idp->SaveImage($this);
+		$this->tdp->SaveTagsForImage($this->tags, $this->info['id']);
 		$this->SetClean();
 	}
 

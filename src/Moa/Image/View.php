@@ -26,30 +26,15 @@ class View
 		};			
 	}
 
-	public function ShowImage(Model $gallery, $gallery_list, $tags, $gallery_tags)
+	public function ShowImage(Model $image, $tags, $gallery_tags)
 	{
-		$gallery_args = array();
-		$gallery_args['id'] = $gallery->GetProperty('id');
-		$gallery_args['name'] = $gallery->GetProperty('name', true);
-		$gallery_args['description'] = $gallery->GetProperty('description', true);
-		$gallery_args['combined_view'] = $gallery->GetProperty('combined_view');
-		$gallery_args['use_tags'] = $gallery->GetProperty('use_tags');
-
-		// Parent gallery list
-		$parents = array(array('name' => 'None', 'id' => 0));
-		foreach ($gallery_list as $id => $name)
-		{
-			$entry = null;
-			if ($id != $gallery->GetProperty('id'))
-				$entry = array('id' => $id, 'name' => $name);
-
-			if ($gallery->GetProperty('parent_id') == $id)
-				$entry['selected'] = true;
-
-			if ($entry !== null)
-				$parents[] = $entry;
-		}
-		$gallery_args['gallery_list'] = $parents;
+		$image_args = array();
+		$image_args['id'] = $image->GetProperty('id');
+		$image_args['filename'] = $image->GetProperty('filename', true);
+		$image_args['description'] = $image->GetProperty('description', true);
+		$image_args['width'] = $image->GetProperty('width');
+		$image_args['height'] = $image->GetProperty('height');
+		$image_args['format'] = $image->GetProperty('format');
 
 		// Tags
 		$tag_list = array();
@@ -62,32 +47,25 @@ class View
 
 			$tag_list[] = $entry;
 		}
-		$gallery_args['tag_list'] = $tag_list;
+		$image_args['tag_list'] = $tag_list;
 
-		$gallery_args['name_edit'] = $gallery->GetProperty('name');
-		$gallery_args['description_edit'] = $gallery->GetProperty('description');
-		$gallery_args['edit_error'] = $gallery->GetValidationMessage();
-
-		$this->args['gallery'] = $gallery_args;
+		$image_args['description_edit'] = $image->GetProperty('description');
+		$image_args['edit_error'] = $image->GetValidationMessage();
+		
+		$image_args['image_src'] = '/data/images/' . $image->GetProperty('id') . '.' . $image->GetProperty('format');
+		
+		$this->args['image'] = $image_args;
 	}
 
-	public function getBreadcrumb(Model $gallery, $parent_galleries)
+	public function getBreadcrumb(Model $image)
 	{
-		$output = array();
 		/** @var Model $p_gallery */
-		foreach ($parent_galleries as $p_gallery)
-		{
-			$output[] = array
-			(
-				'name' => $p_gallery->GetProperty('name'),
-				'id' => $p_gallery->GetProperty('id')
-			);
-		}
-		$output[] = array
-		(
-			'name' => $gallery->GetProperty('name'),
-			'id' => $gallery->GetProperty('id')
-		);
+		$output =
+		[[
+			'type' => 'image',
+			'name' => $image->GetProperty('filename'),
+			'id' => $image->GetProperty('id')
+		]];
 
 		return $output;
 	}

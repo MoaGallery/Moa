@@ -1,0 +1,83 @@
+{% include 'include/html_header.html' %}
+
+<script src="/media/js/ng/image.app.js"></script>
+<script src="/media/js/ng/breadcrumb.service.js"></script>
+<script src="/media/js/ng/preload.controller.js"></script>
+<script src="/media/js/ng/breadcrumb.controller.js"></script>
+
+	<div ng-app="moa.image">
+		<span ng-controller="preloadController as preload" ng-init="preload.init({[preload_data]})"></span>
+
+		<div class="modal fade" id="edit-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Edit image</h4>
+					</div>
+					<form action="/image/{[image.id]}" method="post" class="form-horizontal">
+						<div class="modal-body">
+
+							<div class="form-group">
+								<label for="inputImageDescription" class="col-sm-2 control-label">Description</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" name="inputImageDescription" id="inputImageDescription" placeholder="Edit...">{[image.description_edit]}</textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="inputImageTags" class="col-sm-2 control-label">Tags</label>
+								<div class="col-sm-10">
+									<select class="form-control" name="inputImageTags[]" id="inputImageTags" multiple>
+										{% for tag in image.tag_list %}
+											<option value="{[tag.id]}" {% if tag.selected == 1 %} selected="selected" {% endif %}>{[tag.name]}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-2"></div>
+								<div class="col-sm-10 error" id="editErrorContainer"></div>
+							</div>
+						</div>
+						<input type="hidden" name="inputImageId" value="{[image.id]}">
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<input type="submit" class="btn btn-primary" value="Save changes">
+						</div>
+					</form>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		{% include 'include/breadcrumb.html' %}
+
+		<div class="row">
+			<div class="pull-right">
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default" id="imageEdit" title="Edit image" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></button>
+					<button type="button" class="btn btn-default" id="imageDelete" title="Delete image" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></button>
+				</div>
+			</div>
+		</div>
+
+		<div class="moa-page">
+			<div>
+				<img src="{[image.image_src]}" width="1140">
+			</div>
+
+			<p>
+				{[image.description]}
+			</p>
+		</div>
+
+	</div>
+
+    <script>
+        var editError = "{[image.edit_error | raw]}";
+    </script>
+
+    <script src="/media/js/image.js"></script>
+
+{% include 'include/html_footer.html' %}

@@ -76,12 +76,14 @@ class View
 		{
 			$output[] = array
 			(
+				'type' => 'gallery',
 				'name' => $p_gallery->GetProperty('name'),
 				'id' => $p_gallery->GetProperty('id')
 			);
 		}
 		$output[] = array
 		(
+			'type' => 'gallery',
 			'name' => $gallery->GetProperty('name'),
 			'id' => $gallery->GetProperty('id')
 		);

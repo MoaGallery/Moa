@@ -1,7 +1,8 @@
 <ol ng-controller="breadcrumbController as ctrl" class="breadcrumb">
 	<li><a href="/">Home</a></li>
+
 	<li ng-repeat="crumb in ctrl.data" ng-cloak>
-		<a ng-if="!$last" href="/gallery/{{crumb.id}}">{{crumb.name}}</a>
+		<a ng-if="!$last" href="/{{crumb.type}}/{{crumb.id}}">{{crumb.name}}</a>
 		<span ng-if="$last">{{crumb.name}}</span>
 	</li>
 </ol>
