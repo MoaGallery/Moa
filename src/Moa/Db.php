@@ -19,7 +19,7 @@ class Db
 			'dbname' => 'moa',
 			'user' => 'moa',
 			'password' => 'moa',
-			'host' => 'localhost',
+			'host' => 'mariadb',
 			'driver' => 'pdo_mysql',
 		);
 		$this->conn = DriverManager::getConnection($connectionParams, $config);

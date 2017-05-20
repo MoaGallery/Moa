@@ -6,6 +6,12 @@
     width: 100%;
 }
 
+.thumbnail-image-container {
+    max-height: 188px;
+    display: block;
+    overflow: hidden;
+}
+
 .moa-page {
     width: 1140px;
 }
