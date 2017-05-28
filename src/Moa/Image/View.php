@@ -11,19 +11,21 @@ class View
 		$this->args = &$args;
 	}
 
-	public function ShowImageList($images)
+	public function GetImageListData($images)
 	{
-		$this->args['images'] = array();
+		$data = [];
 
 		foreach ($images as $id => $image)
 		{
 			/** @var Model $image */
-			$this->args['images'][] = array
+			$data[] = array
 			(
 				'filename' => $image->GetProperty('filename'),
 				'id' => $image->GetProperty('id')
 			);
-		};			
+		};
+		
+		return $data;
 	}
 
 	public function ShowImage(Model $image, $tags, $gallery_tags)

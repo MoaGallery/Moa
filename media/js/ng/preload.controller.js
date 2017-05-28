@@ -1,9 +1,9 @@
 (function()
 {
 	angular.module(angular_module_name)
-		.controller('preloadController', ['breadcrumbService', preloadController]);
+		.controller('preloadController', ['breadcrumbService', 'imageListService', preloadController]);
 
-	function preloadController(breadcrumbService)
+	function preloadController(breadcrumbService, imageListService)
 	{
 		var ctrl = this;
 
@@ -15,6 +15,8 @@
 
 			if (typeof ctrl.data['breadcrumb'] !== 'undefined')
 				breadcrumbService.setData(ctrl.data['breadcrumb']);
+			if (typeof ctrl.data['imageList'] !== 'undefined')
+				imageListService.setData(ctrl.data['imageList']);
 		};
 	}
 }());
