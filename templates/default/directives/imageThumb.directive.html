@@ -1,6 +1,7 @@
 <a href="/image/{{thumb.image.id}}">
 	<span class="thumbnail-image-container">
-		<img ng-src="/data/images/thumbs/{{thumb.image.id}}.jpg" class="thumbnail-img">
+		<img ng-if="!thumb.image.isGenerating" ng-src="/data/images/thumbs/{{thumb.image.id}}.jpg" class="thumbnail-img">
+		<img ng-if="thumb.image.isGenerating" ng-src="/media/spinner.svg" class="thumbnail-generating">
 	</span>
 	<h4>{{thumb.image.filename}}</h4>
 </a>

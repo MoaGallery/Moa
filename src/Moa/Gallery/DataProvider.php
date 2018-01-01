@@ -2,10 +2,8 @@
 
 namespace Moa\Gallery;
 
-
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Db;
-use Moa\Gallery\Model;
 use Moa\Tag;
 
 class DataProvider

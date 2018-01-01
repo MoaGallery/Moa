@@ -2,13 +2,17 @@
 
 namespace Moa\Image;
 
+use Moa\Service\ThumbnailProvider;
+
 class View
 {
 	protected $args;
+	protected $thumb_service;
 
-	public function __construct(&$args)
+	public function __construct(&$args, ThumbnailProvider $thumb_service)
 	{
 		$this->args = &$args;
+		$this->thumb_service = $thumb_service;
 	}
 
 	public function GetImageListData($images)
@@ -18,10 +22,17 @@ class View
 		foreach ($images as $id => $image)
 		{
 			/** @var Model $image */
+			$image_id = $image->GetProperty('id');
+			
+			$is_generating = !$this->thumb_service->DoesThumbnailExist($image_id);
+			if ($is_generating)
+				$this->thumb_service->QueueThumbnail($image_id);
+			
 			$data[] = array
 			(
 				'filename' => $image->GetProperty('filename'),
-				'id' => $image->GetProperty('id')
+				'id' => $image_id,
+				'isGenerating' => $is_generating
 			);
 		};
 		

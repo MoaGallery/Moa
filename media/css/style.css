@@ -2,8 +2,14 @@
     height: 300px;
 }
 
-.thumbnail img {
+.thumbnail-img {
     width: 100%;
+}
+
+.thumbnail-generating {
+    width: 64px;
+    height: 64px;
+    margin: 62px 109px;
 }
 
 .thumbnail-image-container {

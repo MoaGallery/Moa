@@ -27,6 +27,11 @@ class Bootstrap
 		{
 			return new Image\DataProvider($app['db'], $app['moa.tag_db_provider']);
 		};
+		
+		$app['moa.thumbnail_db_provider'] = function($app)
+		{
+			return new Service\ThumbnailProvider($app['db']);
+		};
 
 		$loader = new Twig_Loader_Filesystem('templates/default');
 		$twig = new Twig_Environment($loader, array(

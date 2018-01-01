@@ -66,7 +66,7 @@ class Controller
 		}
 
 	    $args = array();
-			$view = new View($args);
+		$view = new View($args);
 	    $view->ShowGallery($gallery, $gallery_list, $this->tdp->GetAllTags(), $this->tdp->GetTagsForGallery($id));
 	    $view->ShowGalleryList($sub_galleries);
 	    
@@ -75,7 +75,7 @@ class Controller
 	    if ($gallery->GetProperty('combined_view') == 1)
 	    {
 		    $images = $this->idp->LoadImagesByGalleryTags($id);
-		    $image_view = new Image\View($args);
+		    $image_view = new Image\View($args, $app['moa.thumbnail_db_provider']);
 		    $preload['imageList'] = $image_view->GetImageListData($images);
 	    }
 	    $args['preload_data'] = json_encode($preload);
