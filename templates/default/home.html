@@ -1,5 +1,9 @@
 {% include 'include/html_header.html' %}
-    {% include 'include/breadcrumb.html' %}
+	<moa [preload]="{[galleries | json_encode()]}"></moa>
 
-    {% include 'include/gallerylist.html' %}
+	<script type="text/javascript" src="/src/frontend/dist/inline.bundle.js"></script>
+	<script type="text/javascript" src="/src/frontend/dist/polyfills.bundle.js"></script>
+	<script type="text/javascript" src="/src/frontend/dist/styles.bundle.js"></script>
+	<script type="text/javascript" src="/src/frontend/dist/vendor.bundle.js"></script>
+	<script type="text/javascript" src="/src/frontend/dist/main.bundle.js"></script>
 {% include 'include/html_footer.html' %}

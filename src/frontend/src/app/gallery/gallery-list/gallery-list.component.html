@@ -1,0 +1,7 @@
+<div class="row">
+	<ul class="list-unstyled">
+		<li *ngFor="let gallery of galleries" class="thumbnail col-md-3" style="min-height: 150px;">
+			<gallery-tile [gallery]="gallery"></gallery-tile>
+		</li>
+	</ul>
+</div>

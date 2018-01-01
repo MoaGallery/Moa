@@ -93,6 +93,10 @@ class Controller
 		$view = new View($args);
 		$view->ShowGalleryList($galleries);
 
+		$args['galleries'] = [
+			'galleries' => $args['subgalleries'],
+			'breadcrumbs' => []
+		];
 		$args['page_title'] = 'Gallery';
 		$output = $app['twig']->render('home.html', $args);
 		return new Response($output);

@@ -1,0 +1,8 @@
+<ol class="breadcrumb">
+	<li><a href="/">Home</a></li>
+
+	<li *ngFor="let crumb of crumbs; let last = last">
+	  <a *ngIf="!last" href="/{{crumb.type}}/{{crumb.id}}">{{crumb.name}}</a>
+	  <span *ngIf="last">{{crumb.name}}</span>
+	</li>
+</ol>
