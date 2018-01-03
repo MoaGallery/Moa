@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Gallery} from "../../models/gallery.model";
-import {PageService} from "../../services/page.service";
+import {DataService} from "../../services/data.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'gallery-list',
@@ -10,8 +11,18 @@ import {PageService} from "../../services/page.service";
 export class GalleryListComponent {
 
     galleries: Gallery[];
+    observer: Subscription;
 
-    constructor(private service: PageService) {
-        this.galleries = service.pageData['galleries'];
+    constructor(private service: DataService) {
+        this.observer = service.getGalleriesObserver().subscribe(
+            data => {
+                if (data !== undefined)
+                    this.galleries = data;
+            }
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.observer.unsubscribe();
     }
 }

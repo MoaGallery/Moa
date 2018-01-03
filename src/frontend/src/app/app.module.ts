@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { GalleryListComponent } from './gallery/gallery-list/gallery-list.component';
 import { GalleryTileComponent } from './gallery/gallery-tile/gallery-tile.component';
-import {PageService} from "./services/page.service";
+import {DataService} from "./services/data.service";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -17,9 +18,10 @@ import {PageService} from "./services/page.service";
     GalleryTileComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [PageService],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,17 +1,27 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Breadcrumb} from "../models/breadcrumb.model";
-import {PageService} from "../services/page.service";
+import {DataService} from "../services/data.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'breadcrumb',
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.css']
 })
-export class BreadcrumbComponent {
-
+export class BreadcrumbComponent implements OnDestroy {
     crumbs: Breadcrumb[];
+    observer: Subscription;
 
-    constructor(private service: PageService){
-        this.crumbs = service.pageData['breadcrumbs'];
+    constructor(private service: DataService){
+        this.observer = service.getBreadcrumbObserver().subscribe(
+            data => {
+                if (data !== undefined)
+                    this.crumbs = data;
+            }
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.observer.unsubscribe();
     }
 }

@@ -95,7 +95,18 @@ class Controller
 
 		$args['galleries'] = [
 			'galleries' => $args['subgalleries'],
-			'breadcrumbs' => []
+			'breadcrumbs' => [
+				[
+					'type' => 'gallery',
+					'id' => 4,
+					'name' => 'Ddsff'
+				],
+				[
+					'type' => 'image',
+					'id' => 4,
+					'name' => 'Ddsff'
+				]
+			]
 		];
 		$args['page_title'] = 'Gallery';
 		$output = $app['twig']->render('home.html', $args);
