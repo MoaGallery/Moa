@@ -1,5 +1,5 @@
 {% include 'include/html_header.html' %}
-	<app-root [preload]="{[galleries | json_encode()]}"></app-root>
+	<app-root [preload]="{[preload | json_encode()]}"></app-root>
 
 	<script type="text/javascript" src="/src/frontend/dist/inline.bundle.js"></script>
 	<script type="text/javascript" src="/src/frontend/dist/polyfills.bundle.js"></script>

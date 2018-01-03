@@ -32,4 +32,12 @@ export class DataService {
             })
             .filter(data => data !== undefined);
     }
+	getPageTitleObserver(): Observable<any> {
+		return this.data
+			.map(data => {
+				return data.page_title;
+			})
+			.filter(data => data !== undefined);
+	}
+
 }

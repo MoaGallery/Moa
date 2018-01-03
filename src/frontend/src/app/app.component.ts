@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {DataService} from "./services/data.service";
 import {Router} from "@angular/router";
+import {PageTitleService} from "./services/page_title.service";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,10 @@ export class AppComponent implements OnInit {
     preload = {};
     data = [];
 
-    constructor(private router: Router, private service: DataService, private elementRef:ElementRef) {
+    constructor(private router: Router,
+                private service: DataService,
+                private pageTitleService: PageTitleService,
+                private elementRef:ElementRef) {
         this.preload = JSON.parse(this.elementRef.nativeElement.getAttribute('[preload]'));
     }
 

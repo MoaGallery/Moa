@@ -7,6 +7,8 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { GalleryListComponent } from './gallery/gallery-list/gallery-list.component';
 import { GalleryTileComponent } from './gallery/gallery-tile/gallery-tile.component';
 import {DataService} from "./services/data.service";
+import {PageTitleService} from "./services/page_title.service";
+import {PageDataService} from "./services/page_data.service";
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule, Routes} from "@angular/router";
 import { GalleryListPageComponent } from './pages/gallery-list-page/gallery-list-page.component';
@@ -31,7 +33,13 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [DataService],
-  bootstrap: [AppComponent]
+  providers: [
+  	DataService,
+	PageTitleService,
+	PageDataService
+  ],
+  bootstrap: [
+  	AppComponent
+  ]
 })
 export class AppModule { }

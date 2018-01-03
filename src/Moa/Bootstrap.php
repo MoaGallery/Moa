@@ -2,6 +2,8 @@
 
 namespace Moa;
 
+use Moa\Actions;
+use Moa\Actions\PageData;
 use Silex\Application;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -31,6 +33,17 @@ class Bootstrap
 		$app['moa.thumbnail_db_provider'] = function($app)
 		{
 			return new Service\ThumbnailProvider($app['db']);
+		};
+		
+		$app['moa.action.page_data.home_page'] = function($app) {
+			return new PageData\HomePage($app['moa.gallery_db_provider']);
+		};
+		
+		$app['moa.action.page_data.gallery_page'] = function($app) {
+			return new PageData\GalleryPage($app['moa.gallery_db_provider'],
+											$app['moa.image_db_provider'],
+											$app['moa.tag_db_provider'],
+											$app['moa.thumbnail_db_provider']);
 		};
 
 		$loader = new Twig_Loader_Filesystem('templates/default');

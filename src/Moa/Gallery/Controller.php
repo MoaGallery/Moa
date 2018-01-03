@@ -2,6 +2,7 @@
 
 namespace Moa\Gallery;
 
+use Moa\Actions\PageData;
 use Moa\Image;
 use Moa\Tag;
 use Silex\Application;
@@ -17,8 +18,19 @@ class Controller
 	protected $tdp;
 	/** @var Image\DataProvider $tdp */
 	protected $idp;
-
-    function ShowGallery(Request $request, Application $app, $id)
+	
+	function ShowGallery(Request $request, Application $app, $id)
+	{
+		/** @var PageData\GalleryPage $page_data */
+		$page_data = $app['moa.action.page_data.gallery_page'];
+		
+		$args['preload'] = $page_data->GetGalleryPageData($id);
+		
+		$output = $app['twig']->render('home.html', $args);
+		return new Response($output);
+	}
+	
+    function ShowGallery2(Request $request, Application $app, $id)
     {
 	    /** @var DataProvider $gdp */
 	    $this->gdp = $app['moa.gallery_db_provider'];
@@ -87,28 +99,10 @@ class Controller
 
 	public function ShowList(Request $request, Application $app)
 	{
-		$galleries = $app['moa.gallery_db_provider']->GetGalleries(0);
-
-		$args = array();
-		$view = new View($args);
-		$view->ShowGalleryList($galleries);
-
-		$args['galleries'] = [
-			'galleries' => $args['subgalleries'],
-			'breadcrumbs' => [
-				[
-					'type' => 'gallery',
-					'id' => 4,
-					'name' => 'Ddsff'
-				],
-				[
-					'type' => 'image',
-					'id' => 4,
-					'name' => 'Ddsff'
-				]
-			]
-		];
-		$args['page_title'] = 'Gallery';
+		/** @var PageData\HomePage $page_data */
+		$page_data = $app['moa.action.page_data.home_page'];
+		$args['preload'] = $page_data->GetHomePageData();
+		
 		$output = $app['twig']->render('home.html', $args);
 		return new Response($output);
 	}

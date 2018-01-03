@@ -3,6 +3,7 @@
 namespace Moa\Rest;
 
 
+use Moa\Actions\PageData;
 use Moa\Service\ThumbnailProvider;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,4 +28,21 @@ class Controller
 
 		return new JsonResponse($queued);
 	}
+	
+	function PageDataGallery(Request $request, Application $app, $id)
+	{
+		/** @var PageData\GalleryPage $page_data */
+		$page_data = $app['moa.action.page_data.gallery_page'];
+		
+		return new JsonResponse($page_data->GetGalleryPageData($id));
+	}
+	
+	public function PageDataHome(Request $request, Application $app)
+	{
+		/** @var PageData\HomePage $page_data */
+		$page_data = $app['moa.action.page_data.home_page'];
+		
+		return new JsonResponse($page_data->GetHomePageData());
+	}
+	
 }
