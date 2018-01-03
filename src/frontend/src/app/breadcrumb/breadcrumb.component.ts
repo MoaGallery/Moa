@@ -15,8 +15,7 @@ export class BreadcrumbComponent implements OnDestroy {
     constructor(private service: DataService){
         this.observer = service.getBreadcrumbObserver().subscribe(
             data => {
-                if (data !== undefined)
-                    this.crumbs = data;
+                this.crumbs = data;
             }
         );
     }

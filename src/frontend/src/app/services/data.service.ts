@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
 
 @Injectable()
 export class DataService {
@@ -17,14 +18,18 @@ export class DataService {
     }
 
     getBreadcrumbObserver(): Observable<any> {
-        return this.data.map(data => {
-            return data.breadcrumbs;
-        });
+        return this.data
+            .map(data => {
+                return data.breadcrumbs;
+            })
+            .filter(data => data !== undefined);
     }
 
     getGalleriesObserver(): Observable<any> {
-        return this.data.map(data => {
-            return data.galleries;
-        });
+        return this.data
+            .map(data => {
+                return data.galleries;
+            })
+            .filter(data => data !== undefined);
     }
 }

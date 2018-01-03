@@ -17,23 +17,4 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.service.setPageData(this.preload);
     }
-
-    onClick() {
-        this.service.setPageData(
-        {
-            breadcrumbs:
-            [
-                {
-                    name: 'Gallery 2',
-                    id: 12,
-                    type: 'gallery'
-                },
-                {
-                    name: 'Image B',
-                    id: 123,
-                    type: 'image'
-                }
-            ]
-        });
-    }
 }

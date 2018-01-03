@@ -16,8 +16,7 @@ export class GalleryListComponent {
     constructor(private service: DataService) {
         this.observer = service.getGalleriesObserver().subscribe(
             data => {
-                if (data !== undefined)
-                    this.galleries = data;
+                this.galleries = data;
             }
         );
     }
