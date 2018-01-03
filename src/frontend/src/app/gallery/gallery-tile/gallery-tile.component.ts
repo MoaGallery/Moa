@@ -11,4 +11,8 @@ export class GalleryTileComponent {
     @Input() gallery: Gallery;
 
     constructor() { }
+    getLink(id) {
+        return '/gallery/' + this.gallery.id;
+    }
+
 }
