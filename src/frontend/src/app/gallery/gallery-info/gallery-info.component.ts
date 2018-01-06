@@ -9,7 +9,10 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class GalleryInfoComponent implements OnDestroy {
 
-	gallery: Array<any>;
+	gallery = {
+		name: '',
+		description: ''
+	};
 	observer: Subscription;
 
 	constructor(private service: DataService) {
