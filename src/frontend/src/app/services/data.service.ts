@@ -42,6 +42,14 @@ export class DataService {
 			.filter(data => data !== undefined);
 	}
 
+	getImagesObserver(): Observable<any> {
+		return this.data
+			.map(data => {
+				return data.images;
+			})
+			.filter(data => data !== undefined);
+	}
+
 	getPageTitleObserver(): Observable<any> {
 		return this.data
 			.map(data => {

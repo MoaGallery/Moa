@@ -14,6 +14,8 @@ import {RouterModule, Routes} from "@angular/router";
 import { GalleryListPageComponent } from './pages/gallery-list-page/gallery-list-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { GalleryInfoComponent } from './gallery/gallery-info/gallery-info.component';
+import { ImageListComponent } from './image/image-list/image-list.component';
+import { ImageThumbComponent } from './image/image-thumb/image-thumb.component';
 
 const routes: Routes = [
     { path: '', component: HomePageComponent },
@@ -27,6 +29,8 @@ const routes: Routes = [
 		GalleryListComponent,
 		GalleryTileComponent,
 		GalleryInfoComponent,
+		ImageListComponent,
+		ImageThumbComponent,
 
 		GalleryListPageComponent,
 		HomePageComponent

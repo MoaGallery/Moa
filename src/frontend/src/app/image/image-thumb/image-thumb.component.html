@@ -1,0 +1,7 @@
+<a href="/image/{{image.id}}">
+	<span class="thumbnail-image-container">
+		<img *ngIf="!image.isGenerating" src="/data/images/thumbs/{{image.id}}.jpg" class="thumbnail-img">
+		<img *ngIf="image.isGenerating" src="/media/spinner.svg" class="thumbnail-generating">
+	</span>
+	<h4>{{image.filename}}</h4>
+</a>
