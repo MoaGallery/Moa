@@ -32,6 +32,16 @@ export class DataService {
             })
             .filter(data => data !== undefined);
     }
+
+	getGalleryObserver(): Observable<any> {
+		return this.data
+			.map(data => {
+				// TODO: Convert to Gallery model?
+				return data.gallery;
+			})
+			.filter(data => data !== undefined);
+	}
+
 	getPageTitleObserver(): Observable<any> {
 		return this.data
 			.map(data => {

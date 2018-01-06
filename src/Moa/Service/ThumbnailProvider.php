@@ -89,11 +89,17 @@ class ThumbnailProvider
 	
 	protected function GenerateThumbnail($image_id)
 	{
-		$input = 'data/images/' . $image_id . '.jpg';
+		$ext = '.jpg';
+		$input = 'data/images/' . $image_id;
+		if (!file_exists($input . $ext))
+			$ext = '.png';
+		if (!file_exists($input . $ext))
+			return false;
+		
 		$output = 'data/images/thumbs/' . $image_id . '.jpg';
 		try
 		{
-			$info = @getimagesize('data/images/' . $image_id . '.jpg');
+			$info = @getimagesize('data/images/' . $image_id . $ext);
 		} catch (\Exception $e)
 		{
 			return false;
@@ -104,7 +110,7 @@ class ThumbnailProvider
 		$dim_x = 282;
 		$dim_y = 188;
 		
-		$command = 'convert ' . $input . ' -resize ' . $dim_x . 'x' . $dim_y . ' ' . $output;
+		$command = 'convert ' . $input . $ext . ' -resize ' . $dim_x . 'x' . $dim_y . ' ' . $output;
 		$output = [];
 		$x = exec($command, $output, $return);
 	}

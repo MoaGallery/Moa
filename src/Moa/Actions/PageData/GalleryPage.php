@@ -47,8 +47,8 @@ class GalleryPage
 		
 		$args = [];
 		$view = new Gallery\View($args);
-		$view->ShowGallery($gallery, $gallery_list, $this->tag_db_provider->GetAllTags(), $this->tag_db_provider->GetTagsForGallery($id));
-		$view->ShowGalleryList($sub_galleries);
+		$gallery_data = $view->ShowGallery($gallery, $gallery_list, $this->tag_db_provider->GetAllTags(), $this->tag_db_provider->GetTagsForGallery($id));
+		$subgalleries = $view->ShowGalleryList($sub_galleries);
 		
 		$image_list = [];
 		if ($gallery->GetProperty('combined_view') == 1)
@@ -59,7 +59,8 @@ class GalleryPage
 		}
 		
 		return [
-			'galleries' => $args['subgalleries'],
+			'gallery' => $gallery_data,
+			'galleries' => $subgalleries,
 			'breadcrumbs' => $view->getBreadcrumb($gallery, $parents),
 			'page_title' => 'Gallery "' . $gallery->GetProperty('name') . '"',
 			'images' => $image_list

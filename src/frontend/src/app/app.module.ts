@@ -13,6 +13,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {RouterModule, Routes} from "@angular/router";
 import { GalleryListPageComponent } from './pages/gallery-list-page/gallery-list-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { GalleryInfoComponent } from './gallery/gallery-info/gallery-info.component';
 
 const routes: Routes = [
     { path: '', component: HomePageComponent },
@@ -20,26 +21,28 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BreadcrumbComponent,
-    GalleryListComponent,
-    GalleryTileComponent,
-    GalleryListPageComponent,
-    HomePageComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    RouterModule.forRoot(routes)
-  ],
-  providers: [
-  	DataService,
-	PageTitleService,
-	PageDataService
-  ],
-  bootstrap: [
-  	AppComponent
-  ]
+	declarations: [
+		AppComponent,
+		BreadcrumbComponent,
+		GalleryListComponent,
+		GalleryTileComponent,
+		GalleryInfoComponent,
+
+		GalleryListPageComponent,
+		HomePageComponent
+	],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		RouterModule.forRoot(routes)
+	],
+	providers: [
+		DataService,
+		PageTitleService,
+		PageDataService
+	],
+	bootstrap: [
+		AppComponent
+	]
 })
 export class AppModule { }

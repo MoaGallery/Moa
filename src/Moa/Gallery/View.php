@@ -13,14 +13,18 @@ class View
 
 	public function ShowGalleryList($galleries)
 	{
+		$data = [];
 		foreach ($galleries as $id => $name)
 		{
-			$this->args['subgalleries'][] = array
+			$data[] = array
 			(
 				'name' => $name,
 				'id' => (int)$id
 			);
 		};
+		$this->args['subgalleries'] = $data;
+		
+		return $data;
 	}
 
 	public function ShowGallery(Model $gallery, $gallery_list, $tags, $gallery_tags)
@@ -66,6 +70,8 @@ class View
 		$gallery_args['edit_error'] = $gallery->GetValidationMessage();
 
 		$this->args['gallery'] = $gallery_args;
+		
+		return $gallery_args;
 	}
 
 	public function getBreadcrumb(Model $gallery, $parent_galleries)
