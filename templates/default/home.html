@@ -1,4 +1,7 @@
 {% include 'include/html_header.html' %}
+	<div class="error pull-right" style="position: fixed; top: 0; right: 0" id="editErrorContainer"></div>
+	<div class="success pull-right" style="position: fixed; top: 0; right: 0" id="editSuccessContainer"></div>
+
 	<app-root [preload]="{[preload | json_encode()]}"></app-root>
 
 	<script type="text/javascript" src="/src/frontend/dist/inline.bundle.js"></script>

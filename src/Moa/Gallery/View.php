@@ -65,10 +65,6 @@ class View
 		}
 		$gallery_args['tag_list'] = $tag_list;
 
-		$gallery_args['name_edit'] = $gallery->GetProperty('name');
-		$gallery_args['description_edit'] = $gallery->GetProperty('description');
-		$gallery_args['edit_error'] = $gallery->GetValidationMessage();
-
 		$this->args['gallery'] = $gallery_args;
 		
 		return $gallery_args;

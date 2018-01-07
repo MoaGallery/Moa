@@ -9,10 +9,7 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class GalleryInfoComponent implements OnDestroy {
 
-	gallery = {
-		name: '',
-		description: ''
-	};
+	gallery = {};
 	observer: Subscription;
 
 	constructor(private service: DataService) {
@@ -26,5 +23,4 @@ export class GalleryInfoComponent implements OnDestroy {
 	ngOnDestroy(): void {
 		this.observer.unsubscribe();
 	}
-
 }

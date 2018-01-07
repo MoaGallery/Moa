@@ -16,6 +16,11 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { GalleryInfoComponent } from './gallery/gallery-info/gallery-info.component';
 import { ImageListComponent } from './image/image-list/image-list.component';
 import { ImageThumbComponent } from './image/image-thumb/image-thumb.component';
+import { GalleryToolbarComponent } from './gallery/gallery-toolbar/gallery-toolbar.component';
+import { GalleryEditComponent } from './gallery/gallery-edit/gallery-edit.component';
+import {ButtonClickService} from "./services/button-click.service";
+import {FormsModule} from "@angular/forms";
+import {GalleryService} from "./services/gallery_service";
 
 const routes: Routes = [
     { path: '', component: HomePageComponent },
@@ -31,19 +36,25 @@ const routes: Routes = [
 		GalleryInfoComponent,
 		ImageListComponent,
 		ImageThumbComponent,
+		GalleryToolbarComponent,
+		GalleryEditComponent,
 
+		// Route pages
 		GalleryListPageComponent,
 		HomePageComponent
 	],
 	imports: [
 		BrowserModule,
 		HttpClientModule,
-		RouterModule.forRoot(routes)
+		RouterModule.forRoot(routes),
+		FormsModule
 	],
 	providers: [
 		DataService,
 		PageTitleService,
-		PageDataService
+		PageDataService,
+		ButtonClickService,
+		GalleryService
 	],
 	bootstrap: [
 		AppComponent

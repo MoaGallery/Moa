@@ -21,3 +21,13 @@
 .moa-page {
     width: 1140px;
 }
+
+
+#editSuccessContainer .meow .inner {
+    background-color: green;
+}
+
+#editSuccessContainer .meow.hover .inner .close {
+    right: 4px;
+    left: auto;
+}

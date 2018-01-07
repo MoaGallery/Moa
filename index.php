@@ -21,6 +21,7 @@ $app->post('/image/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('imag
 $app->get('/api/thumbnail_status', 'Moa\Rest\Controller::CheckThumbnailStatus');
 $app->get('/api/page_data/home_page', 'Moa\Rest\Controller::PageDataHome');
 $app->get('/api/page_data/gallery_page/{id}', 'Moa\Rest\Controller::PageDataGallery')->assert('id', '\d+');
+$app->put('/api/gallery/{id}', 'Moa\Rest\Controller::GalleryPut')->assert('id', '\d+');
 
 /** @var ThumbnailProvider $thumb_provider */
 $thumb_provider = $app['moa.thumbnail_db_provider'];
