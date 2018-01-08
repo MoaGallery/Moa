@@ -11,7 +11,7 @@ import {PageTitleService} from "./services/page_title.service";
 import {PageDataService} from "./services/page_data.service";
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule, Routes} from "@angular/router";
-import { GalleryListPageComponent } from './pages/gallery-list-page/gallery-list-page.component';
+import { GalleryPageComponent } from './pages/gallery-page/gallery-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { GalleryInfoComponent } from './gallery/gallery-info/gallery-info.component';
 import { ImageListComponent } from './image/image-list/image-list.component';
@@ -24,7 +24,7 @@ import {GalleryService} from "./services/gallery_service";
 
 const routes: Routes = [
     { path: '', component: HomePageComponent },
-    { path: 'gallery/:id', component: GalleryListPageComponent },
+    { path: 'gallery/:id', component: GalleryPageComponent },
 ];
 
 @NgModule({
@@ -40,7 +40,7 @@ const routes: Routes = [
 		GalleryEditComponent,
 
 		// Route pages
-		GalleryListPageComponent,
+		GalleryPageComponent,
 		HomePageComponent
 	],
 	imports: [

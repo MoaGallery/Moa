@@ -27,6 +27,8 @@ class GalleryPut
 		$gallery->SetProperty('combined_view', $data->showImages ? 1 : 0);
 		$gallery->SetProperty('parent_id', $data->parent);
 		
+		$id = $this->gallery_provider->SaveGallery($gallery);
+		
 		$tags = [];
 		foreach ($data->tags as $tag)
 		{
@@ -35,8 +37,7 @@ class GalleryPut
 		}
 		
 		$this->tag_provider->SaveTagsForGallery($tags, $id);
-		$this->gallery_provider->SaveGallery($gallery);
 		
-		return $gallery;
+		return $id;
 	}
 }

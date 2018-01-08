@@ -28,6 +28,10 @@ export class GalleryToolbarComponent implements OnDestroy {
 		this.buttonClickService.trigger('galleryEditClick');
 	}
 
+	onAddClick() {
+		this.buttonClickService.trigger('galleryAddClick');
+	}
+
 	ngOnDestroy() {
 		this.observer.unsubscribe();
 	}

@@ -107,6 +107,8 @@ class DataProvider
 	public function SaveGallery(Model $gallery)
 	{
 		$info = $gallery->GetInfo();
+		
+		$id = $info['id'];
 
 		if ($info['id'] == 0)
 		{
@@ -124,7 +126,8 @@ class DataProvider
 				->setParameter(3, $info['combined_view'])
 				->setParameter(4, $info['use_tags']);
 			$qb->execute();
-			$gallery->SetProperty('id', $this->db->Connection()->lastInsertId());
+			$id = $this->db->Connection()->lastInsertId();
+			$gallery->SetProperty('id', $id);
 		} else
 		{
 			$qb = new QueryBuilder($this->db->Connection());
@@ -146,5 +149,7 @@ class DataProvider
 		}
 
 		$gallery->SetClean();
+		
+		return $id;
 	}
 }

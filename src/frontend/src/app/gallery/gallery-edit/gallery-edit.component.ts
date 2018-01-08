@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy} from '@angular/core';
 import {ButtonClickService} from "../../services/button-click.service";
 import {Subscription} from "rxjs/Subscription";
 import {GalleryService} from "../../services/gallery_service";
+import {Router} from "@angular/router";
 
 declare var $: any;
 
@@ -15,6 +16,7 @@ export class GalleryEditComponent implements OnDestroy {
 	private subscription: Subscription;
 
 	@Input() gallery;
+	addMode: boolean = false;
 
 	tagList = [];
 	galleryList = [];
@@ -26,9 +28,19 @@ export class GalleryEditComponent implements OnDestroy {
 	useTags: boolean = false;
 	showImages: boolean = false;
 
-	constructor(private buttonClickService: ButtonClickService, private galleryService: GalleryService) {
+	constructor(private buttonClickService: ButtonClickService,
+	            private galleryService: GalleryService,
+	            private router: Router) {
 		this.subscription = this.buttonClickService.notifyObservable$.subscribe(
 			data => {
+				if ((data.name !== 'galleryEditClick') &&
+					(data.name !== 'galleryAddClick'))
+				{
+					return;
+				}
+
+				this.addMode = data.name === 'galleryAddClick'
+
 				this.reset();
 				$('#edit-modal').modal('show');
 				setTimeout(function() {
@@ -40,29 +52,54 @@ export class GalleryEditComponent implements OnDestroy {
 	}
 
 	reset() {
-		this.name = this.gallery.name;
-		this.description = this.gallery.description;
-		this.useTags = this.gallery.use_tags == 1;
-		this.showImages = this.gallery.combined_view == 1;
+		this.parent = ''+this.gallery.id;
+
+		if (!this.addMode) {
+			this.name = this.gallery.name;
+			this.description = this.gallery.description;
+			this.useTags = this.gallery.use_tags == 1;
+			this.showImages = this.gallery.combined_view == 1;
+		} else
+		{
+			this.name = '';
+			this.description = '';
+			this.useTags = true;
+			this.showImages = false;
+		}
 		this.tagList = [];
 		this.galleryList = [];
 
-		this.tags = [];
+		this.tags.splice(0, this.tags.length);
 		for (let tag of this.gallery.tag_list) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
-			if (tag.selected !== undefined)
-				this.tags.push(''+tag.id);
+			if ((!this.addMode) &&
+				(tag.selected !== undefined))
+			{
+				this.tags.push('' + tag.id);
+			}
 		}
 
 		for (let gallery of this.gallery.gallery_list) {
 			this.galleryList.push(gallery);
-			if (gallery.selected !== undefined)
+			if ((!this.addMode) &&
+				(gallery.selected !== undefined))
+			{
 				this.parent = '' + gallery.id;
+			}
+
+			if (this.addMode) {
+				this.galleryList.push({
+					id: this.gallery.id,
+					name: this.gallery.name
+				});
+			}
 		}
+
+		$('#inputGalleryParent').val(this.parent);
+		$('#inputGalleryTags').val(this.tags);
 	}
 
 	onSubmit() {
-
 		// Select2 isn't synchronising so we have to get the selections manually
 		let tagData = $('#inputGalleryTags').select2('data');
 		let tags = [];
@@ -83,8 +120,12 @@ export class GalleryEditComponent implements OnDestroy {
 		let galleryData = $('#inputGalleryParent').select2('data');
 		this.parent = galleryData[0].id;
 
+		let id = 0;
+		if (!this.addMode)
+			id = this.gallery.id;
+
 		this.galleryService.EditGallery({
-			id: this.gallery.id,
+			id: id,
 			name: this.name,
 			description: this.description,
 			parent: this.parent,
@@ -92,7 +133,6 @@ export class GalleryEditComponent implements OnDestroy {
 			useTags: this.useTags,
 			showImages: this.showImages
 		}).subscribe(data => {
-			console.log(data);
 			let options =
 			{
 				message: 'Gallery saved',
@@ -101,6 +141,10 @@ export class GalleryEditComponent implements OnDestroy {
 			};
 			$.meow(options);
 			$('#edit-modal').modal('hide');
+
+			if (this.addMode) {
+				this.router.navigate(['/gallery/' + data.message])
+			}
 		});
 	}
 

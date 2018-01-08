@@ -3,11 +3,11 @@ import {ActivatedRoute} from "@angular/router";
 import {PageDataService} from "../../services/page_data.service";
 
 @Component({
-	selector: 'gallery-list-page',
-	templateUrl: './gallery-list-page.component.html',
-	styleUrls: ['./gallery-list-page.component.css']
+	selector: 'gallery-page',
+	templateUrl: './gallery-page.component.html',
+	styleUrls: ['./gallery-page.component.css']
 })
-export class GalleryListPageComponent implements OnInit {
+export class GalleryPageComponent implements OnInit {
 	constructor(private route: ActivatedRoute, private page_data_service: PageDataService) {
 	}
 

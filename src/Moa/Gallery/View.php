@@ -4,13 +4,6 @@ namespace Moa\Gallery;
 
 class View
 {
-	protected $args;
-
-	public function __construct(&$args)
-	{
-		$this->args = &$args;
-	}
-
 	public function ShowGalleryList($galleries)
 	{
 		$data = [];
@@ -22,7 +15,6 @@ class View
 				'id' => (int)$id
 			);
 		};
-		$this->args['subgalleries'] = $data;
 		
 		return $data;
 	}
@@ -65,8 +57,6 @@ class View
 		}
 		$gallery_args['tag_list'] = $tag_list;
 
-		$this->args['gallery'] = $gallery_args;
-		
 		return $gallery_args;
 	}
 

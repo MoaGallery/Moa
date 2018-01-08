@@ -45,11 +45,11 @@ class GalleryPage
 		$sub_galleries = $this->gallery_db_provider->GetGalleries($id);
 		$gallery_list = $this->gallery_db_provider->GetAllGalleries();
 		
-		$args = [];
-		$view = new Gallery\View($args);
+		$view = new Gallery\View();
 		$gallery_data = $view->ShowGallery($gallery, $gallery_list, $this->tag_db_provider->GetAllTags(), $this->tag_db_provider->GetTagsForGallery($id));
 		$subgalleries = $view->ShowGalleryList($sub_galleries);
 		
+		$args = [];
 		$image_list = [];
 		if ($gallery->GetProperty('combined_view') == 1)
 		{

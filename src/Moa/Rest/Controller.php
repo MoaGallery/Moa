@@ -54,22 +54,18 @@ class Controller
 		
 		/** @var GalleryPut $gallery_put */
 		$gallery_put = $app['moa.action.gallery_put'];
-		$gallery = $gallery_put->SaveGallery($id, $data);
-		
-		/** @var Gallery\DataProvider $gallery_db_provider */
-		$gallery_db_provider = $app['moa.gallery_db_provider'];
-		
-		/** @var Tag\DataProvider $tag_db_provider */
-		$tag_db_provider = $app['moa.tag_db_provider'];
-		
-		$gallery_list = $gallery_list = $gallery_db_provider->GetAllGalleries();
-		
-		$view = new Gallery\View($args);
-		$gallery_data = $view->ShowGallery($gallery, $gallery_list, $tag_db_provider->GetAllTags(), $tag_db_provider->GetTagsForGallery($id));
+		$gallery_id = $gallery_put->SaveGallery($id, $data);
 		
 		/** @var PageData\GalleryPage $page_data */
 		$page_data = $app['moa.action.page_data.gallery_page'];
 		
-		return new JsonResponse($page_data->GetGalleryPageData($id));
+		$data = [];
+		if ($id > 0)
+			$data = $page_data->GetGalleryPageData($id);
+		
+		$data['success'] = true;
+		$data['message'] = ($id === '0' ? $gallery_id : '');
+		
+		return new JsonResponse($data);
 	}
 }

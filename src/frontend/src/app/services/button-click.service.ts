@@ -9,9 +9,12 @@ export class ButtonClickService {
 
 	constructor() {}
 
-	public trigger(data: any) {
-		if (data) {
-			this.notify.next(data);
+	public trigger(name: string, data: any = null) {
+		if (name) {
+			this.notify.next({
+				name: name,
+				data: data
+			});
 		}
 	}
 }

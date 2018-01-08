@@ -24,12 +24,11 @@ class HomePage
 	{
 		$galleries = $this->gallery_db_provider->GetGalleries(0);
 		
-		$args = array();
-		$view = new Gallery\View($args);
-		$view->ShowGalleryList($galleries);
+		$view = new Gallery\View();
+		$galleries = $view->ShowGalleryList($galleries);
 		
 		return [
-			'galleries' => $args['subgalleries'],
+			'galleries' => $galleries,
 			'breadcrumbs' => [],
 			'page_title' => 'Gallery'
 		];
