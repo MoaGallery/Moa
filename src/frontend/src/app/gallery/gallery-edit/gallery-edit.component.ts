@@ -24,7 +24,7 @@ export class GalleryEditComponent implements OnDestroy {
 	name: String = '';
 	description: String = '';
 	tags: Array<String> = [];
-	parent: String = '';
+	parent_id: String = '';
 	useTags: boolean = false;
 	showImages: boolean = false;
 
@@ -39,7 +39,7 @@ export class GalleryEditComponent implements OnDestroy {
 					return;
 				}
 
-				this.addMode = data.name === 'galleryAddClick'
+				this.addMode = data.name === 'galleryAddClick';
 
 				this.reset();
 				$('#edit-modal').modal('show');
@@ -52,7 +52,9 @@ export class GalleryEditComponent implements OnDestroy {
 	}
 
 	reset() {
-		this.parent = ''+this.gallery.id;
+		this.parent_id = this.gallery.parent_id;
+		if (this.addMode)
+			this.parent_id = ''+this.gallery.id;
 
 		if (!this.addMode) {
 			this.name = this.gallery.name;
@@ -81,11 +83,6 @@ export class GalleryEditComponent implements OnDestroy {
 
 		for (let gallery of this.gallery.gallery_list) {
 			this.galleryList.push(gallery);
-			if ((!this.addMode) &&
-				(gallery.selected !== undefined))
-			{
-				this.parent = '' + gallery.id;
-			}
 
 			if (this.addMode) {
 				this.galleryList.push({
@@ -95,7 +92,7 @@ export class GalleryEditComponent implements OnDestroy {
 			}
 		}
 
-		$('#inputGalleryParent').val(this.parent);
+		$('#inputGalleryParent').val(this.parent_id);
 		$('#inputGalleryTags').val(this.tags);
 	}
 
@@ -118,17 +115,17 @@ export class GalleryEditComponent implements OnDestroy {
 		}
 
 		let galleryData = $('#inputGalleryParent').select2('data');
-		this.parent = galleryData[0].id;
+		this.parent_id = galleryData[0].id;
 
 		let id = 0;
 		if (!this.addMode)
 			id = this.gallery.id;
 
-		this.galleryService.EditGallery({
+		this.galleryService.SubmitGallery({
 			id: id,
 			name: this.name,
 			description: this.description,
-			parent: this.parent,
+			parent: this.parent_id,
 			tags: tags,
 			useTags: this.useTags,
 			showImages: this.showImages

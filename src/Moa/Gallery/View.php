@@ -27,6 +27,7 @@ class View
 		$gallery_args['description'] = $gallery->GetProperty('description', true);
 		$gallery_args['combined_view'] = $gallery->GetProperty('combined_view');
 		$gallery_args['use_tags'] = $gallery->GetProperty('use_tags');
+		$gallery_args['parent_id'] = $gallery->GetProperty('parent_id');
 
 		// Parent gallery list
 		$parents = array(array('name' => 'None', 'id' => 0));

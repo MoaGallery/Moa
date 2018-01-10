@@ -2,6 +2,10 @@ import {Component, OnDestroy} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs/Subscription";
 import {ButtonClickService} from "../../services/button-click.service";
+import {GalleryService} from "../../services/gallery_service";
+import {Router} from "@angular/router";
+
+declare var $: any;
 
 @Component({
   selector: 'gallery-toolbar',
@@ -11,12 +15,17 @@ import {ButtonClickService} from "../../services/button-click.service";
 export class GalleryToolbarComponent implements OnDestroy {
 
 	gallery = {
+		id: 0,
+		parent_id: 0,
 		name: '',
 		description: ''
 	};
 
 	observer: Subscription;
-	constructor(private dataService: DataService, private buttonClickService: ButtonClickService) {
+	constructor(private dataService: DataService,
+	            private buttonClickService: ButtonClickService,
+	            private galleryService: GalleryService,
+	            private router: Router) {
 		this.observer = dataService.getGalleryObserver().subscribe(
 			data => {
 				this.gallery = data;
@@ -30,6 +39,26 @@ export class GalleryToolbarComponent implements OnDestroy {
 
 	onAddClick() {
 		this.buttonClickService.trigger('galleryAddClick');
+	}
+
+	onDeleteClick() {
+		if (confirm('Delete this gallery?')) {
+			this.galleryService.DeleteGallery(this.gallery.id, this.gallery.parent_id).subscribe(next => {
+				let options =
+					{
+						message: 'Gallery deleted',
+						container: '#editSuccessContainer',
+						duration: 5000
+					};
+				$.meow(options);
+
+				if (this.gallery.parent_id > 0)
+					this.router.navigate(['/gallery/' + this.gallery.parent_id]);
+				else
+					this.router.navigate(['/']);
+
+			});
+		}
 	}
 
 	ngOnDestroy() {

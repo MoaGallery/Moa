@@ -152,4 +152,19 @@ class DataProvider
 		
 		return $id;
 	}
+	
+	public function DeleteGallery($id)
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->delete('moa_gallerytaglink')
+			->where('gallery_id = ?')
+			->setParameter(0, $id);
+		$qb->execute();
+		
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->delete('moa_gallery')
+			->where('id = ?')
+			->setParameter(0, $id);
+		$qb->execute();
+	}
 }

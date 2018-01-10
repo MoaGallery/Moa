@@ -25,7 +25,7 @@
 					<div class="form-group">
 						<label for="inputGalleryParent" class="col-sm-2 control-label">Parent</label>
 						<div class="col-sm-10">
-							<select class="form-control" name="inputGalleryParent" id="inputGalleryParent" style="width: 100%" [(ngModel)]="parent">
+							<select class="form-control" name="inputGalleryParent" id="inputGalleryParent" style="width: 100%" [(ngModel)]="parent_id">
 								<option *ngFor="let parentGallery of galleryList" value="{{parentGallery.id}}">{{parentGallery.name}}</option>
 							</select>
 						</div>

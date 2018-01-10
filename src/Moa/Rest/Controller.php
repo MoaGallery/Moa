@@ -68,4 +68,17 @@ class Controller
 		
 		return new JsonResponse($data);
 	}
+	
+	public function GalleryDelete(Request $request, Application $app, $id)
+	{
+		/** @var Gallery\DataProvider $provider */
+		$provider = $app['moa.gallery_db_provider'];
+		
+		$provider->DeleteGallery($id);
+		
+		$data['success'] = true;
+		$data['message'] = '';
+		
+		return new JsonResponse($data);
+	}
 }
