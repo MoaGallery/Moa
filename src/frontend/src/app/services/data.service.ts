@@ -42,6 +42,15 @@ export class DataService {
 			.filter(data => data !== undefined);
 	}
 
+	getImageObserver(): Observable<any> {
+		return this.data
+			.map(data => {
+				// TODO: Convert to Image model?
+				return data.image;
+			})
+			.filter(data => data !== undefined);
+	}
+
 	getImagesObserver(): Observable<any> {
 		return this.data
 			.map(data => {

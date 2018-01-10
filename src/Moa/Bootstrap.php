@@ -35,6 +35,8 @@ class Bootstrap
 			return new Service\ThumbnailProvider($app['db']);
 		};
 		
+		// Pages
+		
 		$app['moa.action.page_data.home_page'] = function($app) {
 			return new PageData\HomePage($app['moa.gallery_db_provider']);
 		};
@@ -45,6 +47,14 @@ class Bootstrap
 											$app['moa.tag_db_provider'],
 											$app['moa.thumbnail_db_provider']);
 		};
+		
+		$app['moa.action.page_data.image_page'] = function($app) {
+			return new PageData\ImagePage($app['moa.image_db_provider'],
+											$app['moa.tag_db_provider'],
+											$app['moa.thumbnail_db_provider']);
+		};
+		
+		// Actions
 		
 		$app['moa.action.gallery_put'] = function($app) {
 			return new GalleryPut($app['moa.gallery_db_provider'], $app['moa.tag_db_provider']);

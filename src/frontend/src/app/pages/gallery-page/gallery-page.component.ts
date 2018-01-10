@@ -8,7 +8,8 @@ import {PageDataService} from "../../services/page_data.service";
 	styleUrls: ['./gallery-page.component.css']
 })
 export class GalleryPageComponent implements OnInit {
-	constructor(private route: ActivatedRoute, private page_data_service: PageDataService) {
+	constructor(private route: ActivatedRoute,
+	            private page_data_service: PageDataService) {
 	}
 
 	ngOnInit(): void {

@@ -48,6 +48,14 @@ class Controller
 		return new JsonResponse($page_data->GetHomePageData());
 	}
 	
+	function PageDataImage(Request $request, Application $app, $id)
+	{
+		/** @var PageData\ImagePage $page_data */
+		$page_data = $app['moa.action.page_data.image_page'];
+		
+		return new JsonResponse($page_data->GetImagePageData($id));
+	}
+	
 	public function GalleryPut(Request $request, Application $app, $id)
 	{
 		$data = json_decode($request->getContent());

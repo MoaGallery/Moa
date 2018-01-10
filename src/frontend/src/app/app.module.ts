@@ -21,27 +21,34 @@ import { GalleryEditComponent } from './gallery/gallery-edit/gallery-edit.compon
 import {ButtonClickService} from "./services/button-click.service";
 import {FormsModule} from "@angular/forms";
 import {GalleryService} from "./services/gallery_service";
+import { ImagePageComponent } from './pages/image-page/image-page.component';
+import { ImageInfoComponent } from './image/image-info/image-info.component';
 
 const routes: Routes = [
-    { path: '', component: HomePageComponent },
-    { path: 'gallery/:id', component: GalleryPageComponent },
+	{ path: '', component: HomePageComponent },
+	{ path: 'gallery/:id', component: GalleryPageComponent },
+	{ path: 'image/:id', component: ImagePageComponent }
 ];
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		BreadcrumbComponent,
+
 		GalleryListComponent,
 		GalleryTileComponent,
 		GalleryInfoComponent,
-		ImageListComponent,
-		ImageThumbComponent,
 		GalleryToolbarComponent,
 		GalleryEditComponent,
 
+		ImageListComponent,
+		ImageThumbComponent,
+		ImageInfoComponent,
+
 		// Route pages
+		HomePageComponent,
 		GalleryPageComponent,
-		HomePageComponent
+		ImagePageComponent
 	],
 	imports: [
 		BrowserModule,

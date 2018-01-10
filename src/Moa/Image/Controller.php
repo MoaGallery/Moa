@@ -2,6 +2,7 @@
 
 namespace Moa\Image;
 
+use Moa\Actions\PageData;
 use Moa\Image;
 use Moa\Tag;
 use Silex\Application;
@@ -17,6 +18,17 @@ class Controller
 	protected $idp;
 	
 	function ShowImage(Request $request, Application $app, $image_id)
+	{
+		/** @var PageData\ImagePage $page_data */
+		$page_data = $app['moa.action.page_data.image_page'];
+		
+		$args['preload'] = $page_data->GetImagePageData($image_id);
+		
+		$output = $app['twig']->render('home.html', $args);
+		return new Response($output);
+	}
+	
+	function ShowImage2(Request $request, Application $app, $image_id)
 	{
 		/** @var Image\DataProvider $idp */
 		$this->idp = $app['moa.image_db_provider'];

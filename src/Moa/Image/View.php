@@ -39,7 +39,7 @@ class View
 		return $data;
 	}
 
-	public function ShowImage(Model $image, $tags, $gallery_tags)
+	public function ShowImage(Model $image, $tags, $image_tags)
 	{
 		$image_args = array();
 		$image_args['id'] = $image->GetProperty('id');
@@ -55,7 +55,7 @@ class View
 		{
 			$entry = array('id' => 'tag-id-' . $id, 'name' => $name);
 
-			if (in_array($id, $gallery_tags))
+			if (in_array($id, $image_tags))
 				$entry['selected'] = true;
 
 			$tag_list[] = $entry;
@@ -68,6 +68,8 @@ class View
 		$image_args['image_src'] = '/data/images/' . $image->GetProperty('id') . '.' . $image->GetProperty('format');
 		
 		$this->args['image'] = $image_args;
+		
+		return $image_args;
 	}
 
 	public function getBreadcrumb(Model $image)
