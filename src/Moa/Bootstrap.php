@@ -50,6 +50,7 @@ class Bootstrap
 		
 		$app['moa.action.page_data.image_page'] = function($app) {
 			return new PageData\ImagePage($app['moa.image_db_provider'],
+											$app['moa.gallery_db_provider'],
 											$app['moa.tag_db_provider'],
 											$app['moa.thumbnail_db_provider']);
 		};

@@ -12,13 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Controller
 {
-	/** @var Tag\DataProvider $gdp */
-	protected $gdp;
-	/** @var Tag\DataProvider $tdp */
-	protected $tdp;
-	/** @var Image\DataProvider $tdp */
-	protected $idp;
-	
 	function ShowGallery(Request $request, Application $app, $id)
 	{
 		/** @var PageData\GalleryPage $page_data */
@@ -38,20 +31,5 @@ class Controller
 		
 		$output = $app['twig']->render('home.html', $args);
 		return new Response($output);
-	}
-
-	protected function GetParents(Model $gallery)
-	{
-		$parents = array();
-		$parent_id = $gallery->GetProperty('parent_id');
-
-		while ($parent_id != 0)
-		{
-			$parent_gallery = $this->gdp->GetParentGallery($parent_id);
-			array_unshift($parents, $parent_gallery);
-			$parent_id = $parent_gallery->GetProperty('parent_id');
-		}
-
-		return $parents;
 	}
 }

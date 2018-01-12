@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {Subscription} from "rxjs/Subscription";
 import {DataService} from "../../services/data.service";
 
@@ -10,17 +10,26 @@ import {DataService} from "../../services/data.service";
 export class ImageListComponent implements OnDestroy {
 
 	images: Array<any>;
-	observer: Subscription;
+	gallery: Array<any>;
+	imagesObserver: Subscription;
+	galleryObserver: Subscription;
 
 	constructor(private service: DataService) {
-		this.observer = service.getImagesObserver().subscribe(
+		this.imagesObserver = service.getImagesObserver().subscribe(
 			data => {
 				this.images = data;
+			}
+		);
+
+		this.galleryObserver = service.getGalleryObserver().subscribe(
+			data => {
+				this.gallery = data;
 			}
 		);
 	}
 
 	ngOnDestroy() {
-		this.observer.unsubscribe();
+		this.imagesObserver.unsubscribe();
+		this.galleryObserver.unsubscribe();
 	}
 }

@@ -15,14 +15,14 @@ $app->get('/', 'Moa\Gallery\Controller::ShowList')->assert('id', '\d+');
 $app->get('/gallery/{id}', 'Moa\Gallery\Controller::ShowGallery')->assert('id', '\d+');
 $app->get('/gallery2/{id}', 'Moa\Gallery\Controller::ShowGallery2')->assert('id', '\d+');
 $app->post('/gallery2/{id}', 'Moa\Gallery\Controller::ShowGallery2')->assert('id', '\d+');
-$app->get('/image/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('image_id', '\d+');
-$app->get('/image2/{image_id}', 'Moa\Image\Controller::ShowImage2')->assert('image_id', '\d+');
-$app->post('/image/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('image_id', '\d+');
+$app->get('/image/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
+$app->get('/image2/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage2')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
+$app->post('/image/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 
 $app->get('/api/thumbnail_status', 'Moa\Rest\Controller::CheckThumbnailStatus');
 $app->get('/api/page_data/home_page', 'Moa\Rest\Controller::PageDataHome');
 $app->get('/api/page_data/gallery_page/{id}', 'Moa\Rest\Controller::PageDataGallery')->assert('id', '\d+');
-$app->get('/api/page_data/image_page/{id}', 'Moa\Rest\Controller::PageDataImage')->assert('id', '\d+');
+$app->get('/api/page_data/image_page/{gallery_id}/{image_id}', 'Moa\Rest\Controller::PageDataImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 $app->match('/api/gallery/{id}', 'Moa\Rest\Controller::GalleryPut')->assert('id', '\d+')->method('PUT|POST');
 $app->delete('/api/gallery/{id}', 'Moa\Rest\Controller::GalleryDelete')->assert('id', '\d+');
 

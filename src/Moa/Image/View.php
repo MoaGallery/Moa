@@ -3,6 +3,7 @@
 namespace Moa\Image;
 
 use Moa\Service\ThumbnailProvider;
+use Moa\Gallery;
 
 class View
 {
@@ -39,7 +40,7 @@ class View
 		return $data;
 	}
 
-	public function ShowImage(Model $image, $tags, $image_tags)
+	public function ShowImage(Model $image, $gallery_id, $tags, $image_tags)
 	{
 		$image_args = array();
 		$image_args['id'] = $image->GetProperty('id');
@@ -48,6 +49,7 @@ class View
 		$image_args['width'] = $image->GetProperty('width');
 		$image_args['height'] = $image->GetProperty('height');
 		$image_args['format'] = $image->GetProperty('format');
+		$image_args['gallery_id'] = $gallery_id;
 
 		// Tags
 		$tag_list = array();
@@ -72,15 +74,27 @@ class View
 		return $image_args;
 	}
 
-	public function getBreadcrumb(Model $image)
+	public function getBreadcrumb(Model $image, $parent_galleries)
 	{
+		$output = [];
+
 		/** @var Model $p_gallery */
-		$output =
-		[[
+		foreach ($parent_galleries as $p_gallery)
+		{
+			$output[] = array
+			(
+				'type' => 'gallery',
+				'name' => $p_gallery->GetProperty('name'),
+				'id' => $p_gallery->GetProperty('id')
+			);
+		}
+		
+		$output[] =
+		[
 			'type' => 'image',
 			'name' => $image->GetProperty('filename'),
 			'id' => $image->GetProperty('id')
-		]];
+		];
 
 		return $output;
 	}

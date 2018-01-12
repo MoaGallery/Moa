@@ -14,7 +14,7 @@ export class ImagePageComponent implements OnInit {
 
   ngOnInit() {
 	  this.route.params.subscribe(params => {
-		  this.page_data_service.GetImagePageData(params['id']);
+		  this.page_data_service.GetImagePageData(params['image_id'], params['gallery_id']);
 	  });
   }
 

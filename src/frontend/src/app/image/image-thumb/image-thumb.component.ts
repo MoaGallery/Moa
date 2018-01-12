@@ -8,6 +8,7 @@ import {Component, Input} from '@angular/core';
 export class ImageThumbComponent {
 
 	@Input() image: any;
-	constructor() { }
+	@Input() gallery_id: any;
 
+	constructor() { }
 }

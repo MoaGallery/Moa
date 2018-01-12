@@ -27,7 +27,7 @@ import { ImageInfoComponent } from './image/image-info/image-info.component';
 const routes: Routes = [
 	{ path: '', component: HomePageComponent },
 	{ path: 'gallery/:id', component: GalleryPageComponent },
-	{ path: 'image/:id', component: ImagePageComponent }
+	{ path: 'image/:gallery_id/:image_id', component: ImagePageComponent }
 ];
 
 @NgModule({

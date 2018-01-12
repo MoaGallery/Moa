@@ -25,8 +25,8 @@ export class PageDataService {
 		this.GetPageData(url);
 	}
 
-	GetImagePageData(id: number) {
-		let url = this.api_url + 'image_page/' + id;
+	GetImagePageData(image_id: number, gallery_id: number) {
+		let url = this.api_url + 'image_page/' + gallery_id + '/' + image_id;
 		this.GetPageData(url);
 	}
 }
