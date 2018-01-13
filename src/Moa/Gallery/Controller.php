@@ -3,10 +3,7 @@
 namespace Moa\Gallery;
 
 use Moa\Actions\PageData;
-use Moa\Image;
-use Moa\Tag;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

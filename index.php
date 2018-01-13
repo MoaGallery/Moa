@@ -16,7 +16,6 @@ $app->get('/gallery/{id}', 'Moa\Gallery\Controller::ShowGallery')->assert('id', 
 $app->get('/gallery2/{id}', 'Moa\Gallery\Controller::ShowGallery2')->assert('id', '\d+');
 $app->post('/gallery2/{id}', 'Moa\Gallery\Controller::ShowGallery2')->assert('id', '\d+');
 $app->get('/image/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
-$app->get('/image2/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage2')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 $app->post('/image/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 
 $app->get('/api/thumbnail_status', 'Moa\Rest\Controller::CheckThumbnailStatus');
