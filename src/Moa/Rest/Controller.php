@@ -92,18 +92,18 @@ class Controller
 	
 	public function ImagePut(Request $request, Application $app, $id)
 	{
-		$data = json_decode($request->getContent());
+		$input_data = json_decode($request->getContent());
 		
 		/** @var ImagePut $image_put */
 		$image_put = $app['moa.action.image_put'];
-		$image_put->SaveImage($id, $data);
+		$image_put->SaveImage($id, $input_data);
 		
 		/** @var PageData\ImagePage $page_data */
 		$page_data = $app['moa.action.page_data.image_page'];
 		
 		$data = [];
 		if ($id > 0)
-			$data = $page_data->GetImagePageData($data['gallery_id'], $id);
+			$data = $page_data->GetImagePageData($input_data->gallery_id, $id);
 		
 		$data['success'] = true;
 		$data['message'] = ($id === '0' ? $id : '');

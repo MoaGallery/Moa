@@ -16,7 +16,6 @@ export class ImageEditComponent implements OnInit {
 	private subscription: Subscription;
 
 	@Input() image;
-	@Input() gallery_id;
 	addMode: boolean = false;
 
 	id: String = '0';
@@ -94,7 +93,7 @@ export class ImageEditComponent implements OnInit {
 
 		this.imageService.SubmitImage({
 			id: id,
-			gallery_id: this.gallery_id,
+			gallery_id: this.image.gallery_id,
 			description: this.description,
 			tags: tags,
 		}).subscribe(data => {
@@ -108,7 +107,7 @@ export class ImageEditComponent implements OnInit {
 			$('#edit-modal').modal('hide');
 
 			if (this.addMode) {
-				this.router.navigate(['/image/' + this.gallery_id + '/' + data.message]);
+				this.router.navigate(['/image/' + this.image.gallery_id + '/' + data.message]);
 			}
 		});
 	}

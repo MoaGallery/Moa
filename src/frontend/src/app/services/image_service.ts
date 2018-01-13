@@ -19,7 +19,7 @@ export class ImageService {
 
 		let body = {
 			id: data.id,
-			gallery_id: data.id,
+			gallery_id: data.gallery_id,
 			description: data.description,
 			tags: data.tags,
 		};
