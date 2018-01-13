@@ -25,6 +25,8 @@ $app->get('/api/page_data/gallery_page/{id}', 'Moa\Rest\Controller::PageDataGall
 $app->get('/api/page_data/image_page/{gallery_id}/{image_id}', 'Moa\Rest\Controller::PageDataImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 $app->match('/api/gallery/{id}', 'Moa\Rest\Controller::GalleryPut')->assert('id', '\d+')->method('PUT|POST');
 $app->delete('/api/gallery/{id}', 'Moa\Rest\Controller::GalleryDelete')->assert('id', '\d+');
+$app->match('/api/image/{id}', 'Moa\Rest\Controller::ImagePut')->assert('id', '\d+')->method('PUT|POST');
+$app->delete('/api/image/{id}', 'Moa\Rest\Controller::ImageDelete')->assert('id', '\d+');
 
 /** @var ThumbnailProvider $thumb_provider */
 $thumb_provider = $app['moa.thumbnail_db_provider'];

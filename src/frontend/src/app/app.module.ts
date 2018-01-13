@@ -21,8 +21,11 @@ import { GalleryEditComponent } from './gallery/gallery-edit/gallery-edit.compon
 import {ButtonClickService} from "./services/button-click.service";
 import {FormsModule} from "@angular/forms";
 import {GalleryService} from "./services/gallery_service";
+import {ImageService} from "./services/image_service";
 import { ImagePageComponent } from './pages/image-page/image-page.component';
 import { ImageInfoComponent } from './image/image-info/image-info.component';
+import { ImageToolbarComponent } from './image/image-toolbar/image-toolbar.component';
+import { ImageEditComponent } from './image/image-edit/image-edit.component';
 
 const routes: Routes = [
 	{ path: '', component: HomePageComponent },
@@ -48,7 +51,9 @@ const routes: Routes = [
 		// Route pages
 		HomePageComponent,
 		GalleryPageComponent,
-		ImagePageComponent
+		ImagePageComponent,
+		ImageToolbarComponent,
+		ImageEditComponent
 	],
 	imports: [
 		BrowserModule,
@@ -61,7 +66,8 @@ const routes: Routes = [
 		PageTitleService,
 		PageDataService,
 		ButtonClickService,
-		GalleryService
+		GalleryService,
+		ImageService
 	],
 	bootstrap: [
 		AppComponent

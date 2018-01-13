@@ -1,0 +1,10 @@
+<image-edit [image]="image" (onStartEdit)="onClick()"></image-edit>
+
+<div class="row">
+	<div class="pull-right">
+		<div class="btn-group" role="group" aria-label="...">
+			<button type="button" (click)="onEditClick()" class="btn btn-default" id="imageEdit" title="Edit image" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></button>
+			<button type="button" (click)="onDeleteClick()" class="btn btn-default" id="imageDelete" title="Delete image" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></button>
+		</div>
+	</div>
+</div>

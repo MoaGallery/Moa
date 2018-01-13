@@ -3,6 +3,7 @@
 namespace Moa;
 
 use Moa\Actions\GalleryPut;
+use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
 use Silex\Application;
 use Twig_Environment;
@@ -60,7 +61,13 @@ class Bootstrap
 		$app['moa.action.gallery_put'] = function($app) {
 			return new GalleryPut($app['moa.gallery_db_provider'], $app['moa.tag_db_provider']);
 		};
+		
+		$app['moa.action.image_put'] = function($app) {
+			return new ImagePut($app['moa.image_db_provider'], $app['moa.tag_db_provider']);
+		};
 
+		// Templater
+		
 		$loader = new Twig_Loader_Filesystem('templates/default');
 		$twig = new Twig_Environment($loader, array(
 			//'cache' => 'template_cache',

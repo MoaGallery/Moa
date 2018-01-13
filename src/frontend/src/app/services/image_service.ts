@@ -5,25 +5,23 @@ import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
-export class GalleryService {
+export class ImageService {
 
-	protected api_url: string = '/api/gallery/';
+	protected api_url: string = '/api/image/';
 
 	constructor(private dataService: DataService,
 	            private http: HttpClient) {
 	}
 
-	SubmitGallery(data): Observable<any> {
+	SubmitImage(data): Observable<any> {
 		let url = this.api_url + data.id;
 		let subject = new Subject();
 
 		let body = {
-			name: data.name,
+			id: data.id,
+			gallery_id: data.id,
 			description: data.description,
-			parent: data.parent,
 			tags: data.tags,
-			useTags: data.useTags,
-			showImages: data.showImages
 		};
 
 		if (data.id > 0) {
@@ -41,7 +39,7 @@ export class GalleryService {
 		return subject.asObservable();
 	}
 
-	DeleteGallery(id, parent_id): Observable<any> {
+	DeleteImage(id): Observable<any> {
 		let url = this.api_url + id;
 		let subject = new Subject();
 

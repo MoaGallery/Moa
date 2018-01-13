@@ -20,8 +20,8 @@ export class GalleryToolbarComponent implements OnDestroy {
 		name: '',
 		description: ''
 	};
-
 	observer: Subscription;
+
 	constructor(private dataService: DataService,
 	            private buttonClickService: ButtonClickService,
 	            private galleryService: GalleryService,

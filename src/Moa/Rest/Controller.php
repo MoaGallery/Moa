@@ -4,6 +4,7 @@ namespace Moa\Rest;
 
 
 use Moa\Actions\GalleryPut;
+use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
 use Moa\Gallery;
 use Moa\Tag;
@@ -84,6 +85,35 @@ class Controller
 		
 		$provider->DeleteGallery($id);
 		
+		$data['success'] = true;
+		$data['message'] = '';
+		
+		return new JsonResponse($data);
+	}
+	
+	public function ImagePut(Request $request, Application $app, $id)
+	{
+		$data = json_decode($request->getContent());
+		
+		/** @var ImagePut $image_put */
+		$image_put = $app['moa.action.image_put'];
+		$image_put->SaveImage($id, $data);
+		
+		/** @var PageData\ImagePage $page_data */
+		$page_data = $app['moa.action.page_data.image_page'];
+		
+		$data = [];
+		if ($id > 0)
+			$data = $page_data->GetImagePageData($data['gallery_id'], $id);
+		
+		$data['success'] = true;
+		$data['message'] = ($id === '0' ? $id : '');
+		
+		return new JsonResponse($data);
+	}
+	
+	public function ImageDelete(Request $request, Application $app, $id)
+	{
 		$data['success'] = true;
 		$data['message'] = '';
 		
