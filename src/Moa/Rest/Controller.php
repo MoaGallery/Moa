@@ -7,7 +7,6 @@ use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
 use Moa\Gallery;
-use Moa\Tag;
 use Moa\Service\ThumbnailProvider;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +28,7 @@ class Controller
 			if ($thumb_provider->IsThumbnailQueued($image_id))
 				$queued[] = $image_id;
 		}
-
+		
 		return new JsonResponse($queued);
 	}
 	

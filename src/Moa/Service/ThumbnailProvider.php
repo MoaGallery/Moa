@@ -60,8 +60,8 @@ class ThumbnailProvider
 		
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('image_id')
-			->from('moa_thumb_regen')
-			->orderBy('id', 'desc');
+			->from('moa_thumb_regen');
+			//->orderBy('id', 'desc');
 		$result = $qb->execute();
 		
 		$start = microtime(true);
@@ -70,9 +70,10 @@ class ThumbnailProvider
 			$arr = $result->fetch();
 			$image_id = (int)$arr['image_id'];
 	
-			$this->GenerateThumbnail($image_id);
+			$generated = $this->GenerateThumbnail($image_id);
 			
-			if ($this->DoesThumbnailExist($image_id))
+			if ((!$generated) ||
+				($this->DoesThumbnailExist($image_id)))
 			{
 				$qb2 = new QueryBuilder($this->db->Connection());
 				$qb2->delete('moa_thumb_regen')
@@ -112,6 +113,7 @@ class ThumbnailProvider
 		
 		$command = 'convert ' . $input . $ext . ' -resize ' . $dim_x . 'x' . $dim_y . ' ' . $output;
 		$output = [];
-		$x = exec($command, $output, $return);
+		exec($command, $output, $return);
+		return ($return === '0');
 	}
 }

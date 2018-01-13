@@ -26,6 +26,7 @@ import { ImagePageComponent } from './pages/image-page/image-page.component';
 import { ImageInfoComponent } from './image/image-info/image-info.component';
 import { ImageToolbarComponent } from './image/image-toolbar/image-toolbar.component';
 import { ImageEditComponent } from './image/image-edit/image-edit.component';
+import {ThumbnailService} from "./services/thumbnail.service";
 
 const routes: Routes = [
 	{ path: '', component: HomePageComponent },
@@ -67,7 +68,8 @@ const routes: Routes = [
 		PageDataService,
 		ButtonClickService,
 		GalleryService,
-		ImageService
+		ImageService,
+		ThumbnailService
 	],
 	bootstrap: [
 		AppComponent
