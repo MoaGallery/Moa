@@ -37,8 +37,12 @@ export class GalleryToolbarComponent implements OnDestroy {
 		this.buttonClickService.trigger('galleryEditClick');
 	}
 
-	onAddClick() {
+	onAddGalleryClick() {
 		this.buttonClickService.trigger('galleryAddClick');
+	}
+
+	onAddImageClick() {
+		this.buttonClickService.trigger('imageAddClick');
 	}
 
 	onDeleteClick() {

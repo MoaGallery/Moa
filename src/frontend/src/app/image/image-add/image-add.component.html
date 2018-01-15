@@ -1,0 +1,54 @@
+<div class="modal fade" id="add-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Add image</h4>
+			</div>
+			<form action="" method="post" class="form-horizontal">
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="inputImageDescription" class="col-sm-2 control-label">Description</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" name="inputImageDescription" id="inputImageDescription" placeholder="Edit..." [(ngModel)]="description"></textarea>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="inputImageTags" class="col-sm-2 control-label">Tags</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="inputImageTags[]" id="inputImageTags" style="width: 100%" multiple [(ngModel)]="tags">
+								<option *ngFor="let tag of tagList" value="{{tag.id}}">{{tag.name}}</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="inputImageTags" class="col-sm-2 control-label">Image</label>
+						<div class="col-sm-10">
+							<p-fileUpload url="/api/upload" name="myfile[]" accept="image/*" auto="auto" (onUpload)="onUpload($event)">
+								<ng-template pTemplate="content">
+									<ul *ngIf="uploadedFiles.length" class="list-unstyled uploaded-image-list">
+										<li *ngFor="let file of uploadedFiles">
+											<img width="50" src="/image/uploaded/{{file.hash}}">
+											{{file.name}} - {{file.size}} bytes
+											<a href="#" (click)="fileDelete($event, file)">
+												<span class="glyphicon glyphicon-trash"></span>
+											</a>
+										</li>
+									</ul>
+								</ng-template>
+							</p-fileUpload>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<input (click)="onSubmit()" type="submit" class="btn btn-primary" value="Save changes">
+				</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

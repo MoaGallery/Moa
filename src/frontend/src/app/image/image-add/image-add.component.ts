@@ -7,31 +7,34 @@ import {ImageService} from "../../services/image_service";
 declare var $: any;
 
 @Component({
-  selector: 'image-edit',
-  templateUrl: './image-edit.component.html',
-  styleUrls: ['./image-edit.component.css']
+  selector: 'image-add',
+  templateUrl: './image-add.component.html',
+  styleUrls: ['./image-add.component.css']
 })
-export class ImageEditComponent implements OnInit {
+export class ImageAddComponent implements OnInit {
 
 	private subscription: Subscription;
 
-	@Input() image;
+	@Input() gallery;
 
-	id: String = '0';
-	tagList = [];
+	file;
+	filename: String = '';
 	description: String = '';
+	tagList = [];
 	tags: Array<String> = [];
+
+	uploadedFiles: any[] = [];
 
 	constructor(private buttonClickService: ButtonClickService,
 	            private imageService: ImageService,
 	            private router: Router) {
 		this.subscription = this.buttonClickService.notifyObservable$.subscribe(
 			data => {
-				if (data.name !== 'imageEditClick')
+				if (data.name !== 'imageAddClick')
 					return;
 
 				this.reset();
-				$('#edit-modal').modal('show');
+				$('#add-modal').modal('show');
 				setTimeout(function() {
 					$('#inputImageTags').select2();
 				}, 0);
@@ -40,12 +43,11 @@ export class ImageEditComponent implements OnInit {
 	}
 
 	reset() {
-		this.id = ''+this.image.id;
-		this.description = this.image.description;
+		this.description = '';
 		this.tagList = [];
 
 		this.tags.splice(0, this.tags.length);
-		for (let tag of this.image.tag_list) {
+		for (let tag of this.gallery.tag_list) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
 			if (tag.selected !== undefined)
 				this.tags.push('' + tag.id);
@@ -72,11 +74,16 @@ export class ImageEditComponent implements OnInit {
 			}
 		}
 
+		let files = this.uploadedFiles.map((file) => {
+			return file.hash
+		});
+
 		this.imageService.SubmitImage({
-			id: this.image.id,
-			gallery_id: this.image.gallery_id,
+			id: 0,
+			gallery_id: this.gallery.id,
 			description: this.description,
 			tags: tags,
+			fileHashes: files
 		}).subscribe(data => {
 			let options =
 				{
@@ -85,11 +92,42 @@ export class ImageEditComponent implements OnInit {
 					duration: 5000
 				};
 			$.meow(options);
-			$('#edit-modal').modal('hide');
+			$('#add-modal').modal('hide');
+
+			this.router.navigate(['/image/' + this.gallery.id + '/' + data.message]);
 		});
 	}
 
 	ngOnInit() {
 	}
 
+	onUpload(event) {
+		let response = JSON.parse(event.xhr.response);
+
+		for (let file of event.files) {
+			let hash = '';
+
+			for (let r of response) {
+				if (r.filename === file.name)
+					hash = r.hash;
+			}
+
+			file.hash = hash;
+			this.uploadedFiles.push(file);
+		}
+	}
+
+	fileDelete($event, file) {
+		$event.preventDefault();
+		console.log(file);
+		let fileIndex = -1;
+		for (let {item, index} of this.uploadedFiles.map((item, index) => ({ item, index })))
+		{
+			if (item.hash === file.hash)
+				fileIndex = index;
+		}
+
+		if (fileIndex > -1)
+			this.uploadedFiles.splice(fileIndex, 1);
+	}
 }

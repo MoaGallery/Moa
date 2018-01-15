@@ -1,0 +1,7 @@
+.uploaded-image-list li {
+    padding: 5px 10px;
+}
+
+.uploaded-image-list li img {
+    padding-right: 10px;
+}

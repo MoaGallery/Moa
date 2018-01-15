@@ -22,6 +22,7 @@ export class ImageService {
 			gallery_id: data.gallery_id,
 			description: data.description,
 			tags: data.tags,
+			fileHashes: data.fileHashes
 		};
 
 		if (data.id > 0) {

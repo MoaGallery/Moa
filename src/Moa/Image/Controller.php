@@ -4,9 +4,12 @@ namespace Moa\Image;
 
 use Moa\Actions\PageData;
 use Moa\Gallery;
+use Moa\Service\IncomingFileService;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Tests\BinaryFileResponseTest;
 
 class Controller
 {
@@ -33,5 +36,14 @@ class Controller
 		}
 		
 		return $parents;
+	}
+	
+	function ShowUploadedImage(Request $request, Application $app, string $hash)
+	{
+		/** @var IncomingFileService $service */
+		$service = $app['moa.incoming_file_service'];
+		$body = $service->GetFileBody($hash);
+		
+		return BinaryFileResponse::create($body);
 	}
 }

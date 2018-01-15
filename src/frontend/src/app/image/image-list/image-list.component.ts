@@ -50,7 +50,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
 				}
 			}
 
-			this.getThumbs(toGenerate);
+			if (toGenerate.length > 0)
+				this.getThumbs(toGenerate);
 		}
 	}
 

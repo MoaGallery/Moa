@@ -31,9 +31,21 @@ class Bootstrap
 			return new Image\DataProvider($app['db'], $app['moa.tag_db_provider']);
 		};
 		
+		// Services
+		
 		$app['moa.thumbnail_db_provider'] = function($app)
 		{
 			return new Service\ThumbnailProvider($app['db']);
+		};
+		
+		$app['moa.incoming_file_provider'] = function($app)
+		{
+			return new Service\IncomingFileDataProvider($app['db']);
+		};
+		
+		$app['moa.incoming_file_service'] = function($app)
+		{
+			return new Service\IncomingFileService($app['moa.incoming_file_provider']);
 		};
 		
 		// Pages
@@ -63,7 +75,7 @@ class Bootstrap
 		};
 		
 		$app['moa.action.image_put'] = function($app) {
-			return new ImagePut($app['moa.image_db_provider'], $app['moa.tag_db_provider']);
+			return new ImagePut($app['moa.image_db_provider'], $app['moa.tag_db_provider'], $app['moa.incoming_file_service']);
 		};
 
 		// Templater

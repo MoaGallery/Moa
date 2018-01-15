@@ -103,7 +103,7 @@ class DataProvider
 
 		return $gallery;
 	}
-	public function SaveImage(Model $image)
+	public function SaveImage(Model &$image)
 	{
 		$info = $image->GetInfo();
 		

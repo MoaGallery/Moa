@@ -1,9 +1,11 @@
-<gallery-edit [gallery]="gallery" (onStartEdit)="onClick()"></gallery-edit>
+<gallery-edit [gallery]="gallery"></gallery-edit>
+<image-add [gallery]="gallery"></image-add>
 
 <div class="row">
 	<div class="pull-right">
 		<div class="btn-group" role="group" aria-label="...">
-			<button type="button" (click)="onAddClick()" class="btn btn-default" id="galleryAdd" title="Add gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-plus"></span></button>
+			<button type="button" (click)="onAddGalleryClick()" class="btn btn-default" id="galleryAdd" title="Add gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-th"></span></button>
+			<button type="button" (click)="onAddImageClick()" class="btn btn-default" id="imageAdd" title="Add gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-picture"></span></button>
 			<button type="button" (click)="onEditClick()" class="btn btn-default" id="galleryEdit" title="Edit gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></button>
 			<button type="button" (click)="onDeleteClick()" class="btn btn-default" id="galleryDelete" title="Delete gallery" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></button>
 		</div>

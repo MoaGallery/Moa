@@ -7,8 +7,10 @@ use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
 use Moa\Gallery;
+use Moa\Service\IncomingFileService;
 use Moa\Service\ThumbnailProvider;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -96,7 +98,7 @@ class Controller
 		
 		/** @var ImagePut $image_put */
 		$image_put = $app['moa.action.image_put'];
-		$image_put->SaveImage($id, $input_data);
+		$id = $image_put->SaveImage($id, $input_data);
 		
 		/** @var PageData\ImagePage $page_data */
 		$page_data = $app['moa.action.page_data.image_page'];
@@ -106,7 +108,7 @@ class Controller
 			$data = $page_data->GetImagePageData($input_data->gallery_id, $id);
 		
 		$data['success'] = true;
-		$data['message'] = ($id === '0' ? $id : '');
+		$data['message'] = $id;
 		
 		return new JsonResponse($data);
 	}
@@ -117,5 +119,27 @@ class Controller
 		$data['message'] = '';
 		
 		return new JsonResponse($data);
+	}
+	
+	public function FileUpload(Request $request, Application $app)
+	{
+		/** @var IncomingFileService $incoming */
+		$incoming = $app['moa.incoming_file_service'];
+		
+		$hashes = [];
+		foreach ($request->files as $files)
+		{
+			foreach ($files as $file)
+			{
+				/** @var UploadedFile $file */
+				$filename = $file->getClientOriginalName();
+				$hashes[] = [
+					'filename' => $filename,
+					'hash' => $incoming->AddFile($file->getFilename(), $filename, $file->getPath())
+				];
+			}
+		}
+		
+		return new JsonResponse($hashes);
 	}
 }

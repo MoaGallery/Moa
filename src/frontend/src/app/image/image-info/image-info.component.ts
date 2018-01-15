@@ -9,7 +9,10 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class ImageInfoComponent implements OnDestroy {
 
-	image = {};
+	image = {
+		image_src: '',
+		description: ''
+	};
 	observer: Subscription;
 
 	constructor(private service: DataService) {
