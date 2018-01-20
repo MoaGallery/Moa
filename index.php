@@ -28,15 +28,19 @@ $app->delete('/api/gallery/{id}', 'Moa\Rest\Controller::GalleryDelete')->assert(
 $app->match('/api/image/{id}', 'Moa\Rest\Controller::ImagePut')->assert('id', '\d+')->method('PUT|POST');
 $app->delete('/api/image/{id}', 'Moa\Rest\Controller::ImageDelete')->assert('id', '\d+');
 
+$app->get('/api/tag_lookup', 'Moa\Rest\Controller::TagLookup');
+$app->get('/api/gallery_lookup', 'Moa\Rest\Controller::GalleryLookup');
+
 $app->post('/api/upload', 'Moa\Rest\Controller::FileUpload');
 
 /** @var ThumbnailProvider $thumb_provider */
 $thumb_provider = $app['moa.thumbnail_db_provider'];
 
-$app->finish(function (Request $request, Response $response)
+$app->finish(function (Request $request, Response $response, \Silex\Application $app)
 {
 	global $thumb_provider;
 	
+	// TODO: Daemonise this bit
 	$thumb_provider->DoRegen(200);
 });
 

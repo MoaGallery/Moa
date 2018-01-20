@@ -167,4 +167,44 @@ class DataProvider
 			->setParameter(0, $id);
 		$qb->execute();
 	}
+	
+	public function SearchGalleries(string $term, int $start, int $limit): array
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$qb->select('id', 'name')
+			->from('moa_gallery')
+			->orderBy('name')
+			->where("name LIKE ?")
+			->setParameter(0, '%' . addcslashes($term, '%_') . '%')
+			->setFirstResult($start)
+			->setMaxResults($limit);
+		$result = $qb->execute();
+		
+		$tags = array();
+		while ($arr = $result->fetch())
+		{
+			$tags[] = [
+				'id' => (string)$arr['id'],
+				'text' => $arr['name']
+			];
+		}
+		
+		return $tags;
+	}
+	
+	public function SearchGalleryCount(string $term): int
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$qb->select('COUNT(1) AS count')
+			->from('moa_gallery')
+			->orderBy('name')
+			->where("name LIKE ?")
+			->setParameter(0, '%' . addcslashes($term, '%_') . '%');
+		$result = $qb->execute();
+		
+		$arr = $result->fetch();
+		return (int)$arr['count'];
+	}
 }

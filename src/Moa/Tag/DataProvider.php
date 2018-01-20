@@ -34,12 +34,52 @@ class DataProvider
 
 		return $tags;
 	}
+	
+	public function SearchTags(string $term, int $start, int $limit): array
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$qb->select('id', 'name')
+			->from('moa_tag')
+			->orderBy('name')
+			->where("name LIKE ?")
+			->setParameter(0, '%' . addcslashes($term, '%_') . '%')
+			->setFirstResult($start)
+			->setMaxResults($limit);
+		$result = $qb->execute();
+		
+		$tags = array();
+		while ($arr = $result->fetch())
+		{
+			$tags[] = [
+				'id' => (string)$arr['id'],
+				'text' => $arr['name']
+			];
+		}
+		
+		return $tags;
+	}
+	
+	public function SearchTagCount(string $term): int
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$qb->select('COUNT(1) AS count')
+			->from('moa_tag')
+			->orderBy('name')
+			->where("name LIKE ?")
+			->setParameter(0, '%' . addcslashes($term, '%_') . '%');
+		$result = $qb->execute();
+		
+		$arr = $result->fetch();
+		return (int)$arr['count'];
+	}
 
 	public function GetTagsForGallery($gallery_id)
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('t.id', 'tl.gallery_id')
+		$qb->select('t.id', 't.name', 'tl.gallery_id')
 			->from('moa_tag', 't')
 			->join('t', 'moa_gallerytaglink', 'tl', 't.id = tl.tag_id')
 			->where('tl.gallery_id = ?')
@@ -49,7 +89,7 @@ class DataProvider
 		$tags = array();
 		while ($arr = $result->fetch())
 		{
-			$tags[] = $arr['id'];
+			$tags[(int)$arr['id']] = $arr['name'];
 		}
 
 		return $tags;
@@ -59,7 +99,7 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		
-		$qb->select('t.id', 'tl.image_id')
+		$qb->select('t.id', 't.name', 'tl.image_id')
 			->from('moa_tag', 't')
 			->join('t', 'moa_imagetaglink', 'tl', 't.id = tl.tag_id')
 			->where('tl.image_id = ?')
@@ -69,7 +109,7 @@ class DataProvider
 		$tags = array();
 		while ($arr = $result->fetch())
 		{
-			$tags[] = $arr['id'];
+			$tags[(int)$arr['id']] = $arr['name'];
 		}
 		
 		return $tags;

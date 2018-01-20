@@ -63,8 +63,7 @@ class ImagePut
 		$tags = [];
 		foreach ($data->tags as $tag)
 		{
-			preg_match('/tag-id-(\d+)/', $tag, $matches);
-			$tags[] = (int)$matches[1];
+			$tags[] = $tag;
 		}
 		
 		$this->tag_provider->SaveTagsForImage($tags, $image_id);

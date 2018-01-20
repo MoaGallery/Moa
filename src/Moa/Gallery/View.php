@@ -19,7 +19,7 @@ class View
 		return $data;
 	}
 
-	public function ShowGallery(Model $gallery, $gallery_list, $tags, $gallery_tags)
+	public function ShowGallery(Model $gallery, $parent_gallery, $gallery_tags)
 	{
 		$gallery_args = array();
 		$gallery_args['id'] = $gallery->GetProperty('id');
@@ -30,33 +30,31 @@ class View
 		$gallery_args['parent_id'] = $gallery->GetProperty('parent_id');
 
 		// Parent gallery list
-		$parents = array(array('name' => 'None', 'id' => 0));
-		foreach ($gallery_list as $id => $name)
+		$parents = [
+			'id' => 0,
+			'name' => 'None'
+		];
+		if ($parent_gallery instanceof Model)
 		{
-			$entry = null;
-			if ($id != $gallery->GetProperty('id'))
-				$entry = array('id' => $id, 'name' => $name);
-
-			if ($gallery->GetProperty('parent_id') == $id)
-				$entry['selected'] = true;
-
-			if ($entry !== null)
-				$parents[] = $entry;
+			$parents = [
+				'id' => $parent_gallery->GetProperty('id'),
+				'name' => $parent_gallery->GetProperty('name')
+			];
 		}
-		$gallery_args['gallery_list'] = $parents;
+		
+		$gallery_args['parent_gallery'] = $parents;
 
+		$tags = [];
+		foreach ($gallery_tags as $tag_id => $tag_name)
+		{
+			$tags[] = [
+				'id' => $tag_id,
+				'name' => $tag_name
+			];
+		}
+		
 		// Tags
-		$tag_list = array();
-		foreach ($tags as $id => $name)
-		{
-			$entry = array('id' => 'tag-id-' . $id, 'name' => $name);
-
-			if (in_array($id, $gallery_tags))
-				$entry['selected'] = true;
-
-			$tag_list[] = $entry;
-		}
-		$gallery_args['tag_list'] = $tag_list;
+		$gallery_args['tag_list'] = $tags;
 
 		return $gallery_args;
 	}

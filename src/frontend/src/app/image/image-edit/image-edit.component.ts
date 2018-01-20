@@ -20,7 +20,6 @@ export class ImageEditComponent implements OnInit {
 	id: String = '0';
 	tagList = [];
 	description: String = '';
-	tags: Array<String> = [];
 
 	constructor(private buttonClickService: ButtonClickService,
 	            private imageService: ImageService,
@@ -33,7 +32,18 @@ export class ImageEditComponent implements OnInit {
 				this.reset();
 				$('#edit-modal').modal('show');
 				setTimeout(function() {
-					$('#inputImageTags').select2();
+					$('#inputImageTags').select2({
+						ajax: {
+							url: '/api/tag_lookup',
+							dataType: 'json',
+							data: function (params) {
+								return  {
+									q: params.term,
+									page: params.page || 1
+								};
+							}
+						}
+					});
 				}, 0);
 			}
 		)
@@ -44,14 +54,12 @@ export class ImageEditComponent implements OnInit {
 		this.description = this.image.description;
 		this.tagList = [];
 
-		this.tags.splice(0, this.tags.length);
+		let tags = [];
 		for (let tag of this.image.tag_list) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
-			if (tag.selected !== undefined)
-				this.tags.push('' + tag.id);
+			tags.push(''+tag.id);
 		}
-
-		$('#inputGalleryTags').val(this.tags);
+		$('#inputImageTags').val(tags);
 	}
 
 	onSubmit() {
@@ -60,16 +68,7 @@ export class ImageEditComponent implements OnInit {
 		let tags = [];
 		for (let tag of tagData)
 		{
-			const regex = /'(tag-id-\w+)'/g;
-			let m;
-
-			if ((m = regex.exec(tag.id)) !== null) {
-				// The result can be accessed through the `m`-variable.
-				m.forEach((match, groupIndex) => {
-					if (groupIndex === 1)
-						tags.push(match);
-				});
-			}
+			tags.push(tag.id);
 		}
 
 		this.imageService.SubmitImage({
@@ -85,6 +84,7 @@ export class ImageEditComponent implements OnInit {
 					duration: 5000
 				};
 			$.meow(options);
+			$('#inputImageTags').children().remove();
 			$('#edit-modal').modal('hide');
 		});
 	}

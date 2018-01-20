@@ -40,9 +40,9 @@ class View
 		return $data;
 	}
 
-	public function ShowImage(Model $image, $gallery_id, $tags, $image_tags)
+	public function ShowImage(Model $image, $gallery_id, $image_tags)
 	{
-		$image_args = array();
+		$image_args = [];
 		$image_args['id'] = $image->GetProperty('id');
 		$image_args['filename'] = $image->GetProperty('filename', true);
 		$image_args['description'] = $image->GetProperty('description', true);
@@ -52,15 +52,13 @@ class View
 		$image_args['gallery_id'] = $gallery_id;
 
 		// Tags
-		$tag_list = array();
-		foreach ($tags as $id => $name)
+		$tag_list = [];
+		foreach ($image_tags as $id => $name)
 		{
-			$entry = array('id' => 'tag-id-' . $id, 'name' => $name);
-
-			if (in_array($id, $image_tags))
-				$entry['selected'] = true;
-
-			$tag_list[] = $entry;
+			$tag_list[] = [
+				'id' => $id,
+				'name' => $name
+			];
 		}
 		$image_args['tag_list'] = $tag_list;
 

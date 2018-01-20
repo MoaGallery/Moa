@@ -2,9 +2,11 @@
 
 namespace Moa;
 
+use Moa\Actions\GalleryLookup;
 use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
+use Moa\Actions\TagLookup;
 use Silex\Application;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -76,6 +78,14 @@ class Bootstrap
 		
 		$app['moa.action.image_put'] = function($app) {
 			return new ImagePut($app['moa.image_db_provider'], $app['moa.tag_db_provider'], $app['moa.incoming_file_service']);
+		};
+		
+		$app['moa.action.tag_lookup'] = function($app) {
+			return new TagLookup($app['moa.tag_db_provider']);
+		};
+		
+		$app['moa.action.gallery_lookup'] = function($app) {
+			return new GalleryLookup($app['moa.gallery_db_provider']);
 		};
 
 		// Templater

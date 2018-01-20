@@ -46,7 +46,7 @@ class ImagePage
 		
 		$args = [];
 		$view = new Image\View($args, $this->thumbnail_provider);
-		$image_data = $view->ShowImage($image, $gallery_id, $this->tag_db_provider->GetAllTags(), $this->tag_db_provider->GetTagsForImage($image_id));
+		$image_data = $view->ShowImage($image, $gallery_id, $this->tag_db_provider->GetTagsForImage($image_id));
 		
 		return [
 			'image' => $image_data,

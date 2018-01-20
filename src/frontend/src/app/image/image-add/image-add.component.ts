@@ -21,7 +21,6 @@ export class ImageAddComponent implements OnInit {
 	filename: String = '';
 	description: String = '';
 	tagList = [];
-	tags: Array<String> = [];
 
 	uploadedFiles: any[] = [];
 
@@ -36,7 +35,18 @@ export class ImageAddComponent implements OnInit {
 				this.reset();
 				$('#add-modal').modal('show');
 				setTimeout(function() {
-					$('#inputImageTags').select2();
+					$('#inputImageTags').select2({
+						ajax: {
+							url: '/api/tag_lookup',
+							dataType: 'json',
+							data: function (params) {
+								return  {
+									q: params.term,
+									page: params.page || 1
+								};
+							}
+						}
+					});
 				}, 0);
 			}
 		)
@@ -46,14 +56,9 @@ export class ImageAddComponent implements OnInit {
 		this.description = '';
 		this.tagList = [];
 
-		this.tags.splice(0, this.tags.length);
 		for (let tag of this.gallery.tag_list) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
-			if (tag.selected !== undefined)
-				this.tags.push('' + tag.id);
 		}
-
-		$('#inputGalleryTags').val(this.tags);
 	}
 
 	onSubmit() {
@@ -62,16 +67,7 @@ export class ImageAddComponent implements OnInit {
 		let tags = [];
 		for (let tag of tagData)
 		{
-			const regex = /'(tag-id-\w+)'/g;
-			let m;
-
-			if ((m = regex.exec(tag.id)) !== null) {
-				// The result can be accessed through the `m`-variable.
-				m.forEach((match, groupIndex) => {
-					if (groupIndex === 1)
-						tags.push(match);
-				});
-			}
+			tags.push(tag.id);
 		}
 
 		let files = this.uploadedFiles.map((file) => {
@@ -92,6 +88,7 @@ export class ImageAddComponent implements OnInit {
 					duration: 5000
 				};
 			$.meow(options);
+			$('#inputImageTags').children().remove();
 			$('#add-modal').modal('hide');
 
 			this.router.navigate(['/image/' + this.gallery.id + '/' + data.message]);

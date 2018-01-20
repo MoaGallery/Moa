@@ -6,6 +6,7 @@ namespace Moa\Rest;
 use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
+use Moa\Actions\TagLookup;
 use Moa\Gallery;
 use Moa\Service\IncomingFileService;
 use Moa\Service\ThumbnailProvider;
@@ -141,5 +142,33 @@ class Controller
 		}
 		
 		return new JsonResponse($hashes);
+	}
+	
+	public function TagLookup(Request $request, Application $app)
+	{
+		$term = $request->get('q', '');
+		$type = $request->get('_type', 'query');
+		$page = $request->get('page', 1);
+	
+		/** @var TagLookup $action */
+		$action = $app['moa.action.tag_lookup'];
+		
+		$results = $action->DoLookup($term, $type, $page - 1);
+		
+		return new JsonResponse($results);
+	}
+	
+	public function GalleryLookup(Request $request, Application $app)
+	{
+		$term = $request->get('q', '');
+		$type = $request->get('_type', 'query');
+		$page = $request->get('page', 1);
+		
+		/** @var TagLookup $action */
+		$action = $app['moa.action.gallery_lookup'];
+		
+		$results = $action->DoLookup($term, $type, $page - 1);
+		
+		return new JsonResponse($results);
 	}
 }

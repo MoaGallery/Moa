@@ -19,12 +19,13 @@ export class GalleryEditComponent implements OnDestroy {
 	addMode: boolean = false;
 
 	tagList = [];
-	galleryList = [];
+	parent_gallery = {
+		id: 0,
+		name: ''
+	};
 
 	name: String = '';
 	description: String = '';
-	tags: Array<String> = [];
-	parent_id: String = '';
 	useTags: boolean = false;
 	showImages: boolean = false;
 
@@ -44,18 +45,36 @@ export class GalleryEditComponent implements OnDestroy {
 				this.reset();
 				$('#edit-modal').modal('show');
 				setTimeout(function() {
-					$('#inputGalleryParent').select2();
-					$('#inputGalleryTags').select2();
+					$('#inputGalleryParent').select2({
+						ajax: {
+							url: '/api/gallery_lookup',
+							dataType: 'json',
+							data: function (params) {
+								return  {
+									q: params.term,
+									page: params.page || 1
+								};
+							}
+						}
+					});
+					$('#inputGalleryTags').select2({
+						ajax: {
+							url: '/api/tag_lookup',
+							dataType: 'json',
+							data: function (params) {
+								return  {
+									q: params.term,
+									page: params.page || 1
+								};
+							}
+						}
+					});
 				}, 0);
 			}
 		)
 	}
 
 	reset() {
-		this.parent_id = this.gallery.parent_id;
-		if (this.addMode)
-			this.parent_id = ''+this.gallery.id;
-
 		if (!this.addMode) {
 			this.name = this.gallery.name;
 			this.description = this.gallery.description;
@@ -69,31 +88,13 @@ export class GalleryEditComponent implements OnDestroy {
 			this.showImages = false;
 		}
 		this.tagList = [];
-		this.galleryList = [];
 
-		this.tags.splice(0, this.tags.length);
 		for (let tag of this.gallery.tag_list) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
-			if ((!this.addMode) &&
-				(tag.selected !== undefined))
-			{
-				this.tags.push('' + tag.id);
-			}
 		}
 
-		for (let gallery of this.gallery.gallery_list) {
-			this.galleryList.push(gallery);
-
-			if (this.addMode) {
-				this.galleryList.push({
-					id: this.gallery.id,
-					name: this.gallery.name
-				});
-			}
-		}
-
-		$('#inputGalleryParent').val(this.parent_id);
-		$('#inputGalleryTags').val(this.tags);
+		this.parent_gallery.id = this.gallery.parent_gallery.id;
+		this.parent_gallery.name = this.gallery.parent_gallery.name;
 	}
 
 	onSubmit() {
@@ -102,20 +103,11 @@ export class GalleryEditComponent implements OnDestroy {
 		let tags = [];
 		for (let tag of tagData)
 		{
-			const regex = /'(tag-id-\w+)'/g;
-			let m;
-
-			if ((m = regex.exec(tag.id)) !== null) {
-				// The result can be accessed through the `m`-variable.
-				m.forEach((match, groupIndex) => {
-					if (groupIndex === 1)
-						tags.push(match);
-				});
-			}
+			tags.push(tag.id);
 		}
 
 		let galleryData = $('#inputGalleryParent').select2('data');
-		this.parent_id = galleryData[0].id;
+		this.parent_gallery.id = galleryData[0].id;
 
 		let id = 0;
 		if (!this.addMode)
@@ -125,7 +117,7 @@ export class GalleryEditComponent implements OnDestroy {
 			id: id,
 			name: this.name,
 			description: this.description,
-			parent: this.parent_id,
+			parent: this.parent_gallery.id,
 			tags: tags,
 			useTags: this.useTags,
 			showImages: this.showImages
@@ -137,6 +129,7 @@ export class GalleryEditComponent implements OnDestroy {
 				duration: 5000
 			};
 			$.meow(options);
+			$('#inputGalleryTags').children().remove();
 			$('#edit-modal').modal('hide');
 
 			if (this.addMode) {

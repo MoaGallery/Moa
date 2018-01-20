@@ -43,10 +43,13 @@ class GalleryPage
 		$gallery->Load($id);
 		$parents = $this->GetParents($gallery);
 		$sub_galleries = $this->gallery_db_provider->GetGalleries($id);
-		$gallery_list = $this->gallery_db_provider->GetAllGalleries();
+		
+		$parent_gallery = null;
+		if (count($parents) > 0)
+			$parent_gallery = $parents[count($parents) - 1];
 		
 		$view = new Gallery\View();
-		$gallery_data = $view->ShowGallery($gallery, $gallery_list, $this->tag_db_provider->GetAllTags(), $this->tag_db_provider->GetTagsForGallery($id));
+		$gallery_data = $view->ShowGallery($gallery, $parent_gallery, $this->tag_db_provider->GetTagsForGallery($id));
 		$subgalleries = $view->ShowGalleryList($sub_galleries);
 		
 		$args = [];
@@ -69,7 +72,7 @@ class GalleryPage
 	
 	protected function GetParents(Gallery\Model $gallery)
 	{
-		$parents = array();
+		$parents = [];
 		$parent_id = $gallery->GetProperty('parent_id');
 		
 		while ($parent_id != 0)

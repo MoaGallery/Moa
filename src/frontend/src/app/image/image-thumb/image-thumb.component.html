@@ -1,4 +1,4 @@
-<a href="/image/{{gallery_id}}/{{image.id}}">
+<a [routerLink]="[getLink()]">
 	<span class="thumbnail-image-container">
 		<img *ngIf="!image.isGenerating" src="/data/images/thumbs/{{image.id}}.jpg" class="thumbnail-img">
 		<img *ngIf="image.isGenerating" src="/media/spinner.svg" class="thumbnail-generating">

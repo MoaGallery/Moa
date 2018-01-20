@@ -11,4 +11,8 @@ export class ImageThumbComponent {
 	@Input() gallery_id: any;
 
 	constructor() { }
+	getLink() {
+		return '/image/' + this.gallery_id + '/' + this.image.id;
+	}
+
 }
