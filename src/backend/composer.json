@@ -5,9 +5,9 @@
     "twig/twig": "~1.0"
   },
   "require-dev": {
-    "symfony/var-dumper": "dev-master"
+    "symfony/var-dumper": "^3.4.3"
   },
   "autoload": {
-    "psr-4": {"Moa\\": "src/Moa/"}
+    "psr-4": {"Moa\\": "./"}
   }
 }

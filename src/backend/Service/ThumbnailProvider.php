@@ -16,7 +16,7 @@ class ThumbnailProvider
 	
 	public function DoesThumbnailExist($image_id)
 	{
-		return file_exists('data/images/thumbs/' . $image_id . '.jpg');
+		return file_exists('../data/images/thumbs/' . $image_id . '.jpg');
 	}
 	
 	public function QueueThumbnail($image_id)
@@ -91,16 +91,16 @@ class ThumbnailProvider
 	protected function GenerateThumbnail($image_id)
 	{
 		$ext = '.jpg';
-		$input = 'data/images/' . $image_id;
+		$input = '../data/images/' . $image_id;
 		if (!file_exists($input . $ext))
 			$ext = '.png';
 		if (!file_exists($input . $ext))
 			return false;
 		
-		$output = 'data/images/thumbs/' . $image_id . '.jpg';
+		$output = '../data/images/thumbs/' . $image_id . '.jpg';
 		try
 		{
-			$info = @getimagesize('data/images/' . $image_id . $ext);
+			$info = @getimagesize('../data/images/' . $image_id . $ext);
 		} catch (\Exception $e)
 		{
 			return false;

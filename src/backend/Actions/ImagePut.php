@@ -37,7 +37,7 @@ class ImagePut
 				$image->SetProperty('filename', $incoming_file['filename']);
 				$image->SetProperty('format', $incoming_file['extension']);
 				
-				$temp_file = 'data/incoming/' . $incoming_file['id'];
+				$temp_file = '../data/incoming/' . $incoming_file['id'];
 				
 				$info = getimagesize($temp_file);
 				$image->SetProperty('width', $info[0]);
@@ -57,7 +57,7 @@ class ImagePut
 		
 		if (is_array($new_file))
 		{
-			rename($new_file['file'], 'data/images/' . $image_id . '.' . $new_file['extension']);
+			rename($new_file['file'], '../data/images/' . $image_id . '.' . $new_file['extension']);
 		}
 		
 		$tags = [];

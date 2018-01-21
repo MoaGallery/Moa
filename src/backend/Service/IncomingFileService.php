@@ -24,7 +24,7 @@ class IncomingFileService
 		
 		$this->data_provider->AddHash($new_id, $hash);
 		
-		move_uploaded_file($path . '/' . $temp_filename, 'data/incoming/' . $new_id);
+		move_uploaded_file($path . '/' . $temp_filename, '../data/incoming/' . $new_id);
 		
 		return $hash;
 	}
@@ -32,7 +32,7 @@ class IncomingFileService
 	public function GetFileBody($hash)
 	{
 		$file = $this->data_provider->GetFileId($hash);
-		return 'data/incoming/' . $file;
+		return '../data/incoming/' . $file;
 	}
 	
 	public function GetFileInfo($hash)

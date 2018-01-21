@@ -7,6 +7,7 @@ use Moa\Gallery;
 use Moa\Service\IncomingFileService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Tests\BinaryFileResponseTest;
@@ -45,5 +46,29 @@ class Controller
 		$body = $service->GetFileBody($hash);
 		
 		return BinaryFileResponse::create($body);
+	}
+	
+	function GetImageFile(Request $request, Application $app, string $filename)
+	{
+		preg_match('/(\d+)\.(\w+)/', $filename, $matches);
+		
+		$file = '../data/images/' . $matches[1] . '.' . $matches[2];
+		
+		if (!file_exists($file))
+			$app->abort(404);
+		
+		return BinaryFileResponse::create($file);
+	}
+	
+	function GetThumbFile(Request $request, Application $app, string $filename)
+	{
+		preg_match('/(\d+)\.(\w+)/', $filename, $matches);
+		
+		$file = '../data/images/thumbs/' . $matches[1] . '.' . $matches[2];
+		
+		if (!file_exists($file))
+			$app->abort(404);
+			
+		return BinaryFileResponse::create($file);
 	}
 }
