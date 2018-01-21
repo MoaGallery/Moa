@@ -8,6 +8,7 @@ use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
 use Moa\Actions\TagLookup;
 use Moa\Gallery;
+use Moa\Image;
 use Moa\Service\IncomingFileService;
 use Moa\Service\ThumbnailProvider;
 use Silex\Application;
@@ -116,6 +117,10 @@ class Controller
 	
 	public function ImageDelete(Request $request, Application $app, $id)
 	{
+		/** @var Image\DataProvider $provider */
+		$provider = $app['moa.image_db_provider'];
+		
+		$provider->DeleteImage($id);
 		$data['success'] = true;
 		$data['message'] = '';
 		

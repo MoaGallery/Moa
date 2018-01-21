@@ -138,4 +138,31 @@ class DataProvider
 		
 		$image->SetClean();
 	}
+	
+	public function DeleteImage($id)
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->delete('moa_imagetaglink')
+			->where('image_id = ?')
+			->setParameter(0, $id);
+		$qb->execute();
+		
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->select('format')
+			->from('moa_image')
+			->where('id = ?')
+			->setParameter(0, $id);
+		$res = $qb->execute();
+		$arr = $res->fetch();
+		$format = $arr['format'];
+		
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->delete('moa_image')
+			->where('id = ?')
+			->setParameter(0, $id);
+		$qb->execute();
+		
+		unlink('../data/images/thumbs/' . $id . '.jpg');
+		unlink('../data/images/' . $id . '.' . $format);
+	}
 }

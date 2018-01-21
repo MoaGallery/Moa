@@ -1406,6 +1406,8 @@ module.exports = "<image-edit [image]=\"image\"></image-edit>\n\n<div class=\"ro
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_button_click_service__ = __webpack_require__("../../../../../src/app/services/button-click.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_image_service__ = __webpack_require__("../../../../../src/app/services/image_service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1418,15 +1420,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var ImageToolbarComponent = (function () {
-    function ImageToolbarComponent(dataService, buttonClickService) {
+    function ImageToolbarComponent(dataService, buttonClickService, imageService, router) {
         var _this = this;
         this.dataService = dataService;
         this.buttonClickService = buttonClickService;
+        this.imageService = imageService;
+        this.router = router;
         this.image = {
             id: 0,
             name: '',
-            description: ''
+            description: '',
+            gallery_id: 0
         };
         this.observer = dataService.getImageObserver().subscribe(function (data) {
             _this.image = data;
@@ -1436,7 +1443,18 @@ var ImageToolbarComponent = (function () {
         this.buttonClickService.trigger('imageEditClick');
     };
     ImageToolbarComponent.prototype.onDeleteClick = function () {
-        this.buttonClickService.trigger('imageDeleteClick');
+        var _this = this;
+        if (confirm('Delete this image?')) {
+            this.imageService.DeleteImage(this.image.id).subscribe(function (next) {
+                var options = {
+                    message: 'Image deleted',
+                    container: '#editSuccessContainer',
+                    duration: 5000
+                };
+                $.meow(options);
+                _this.router.navigate(['/gallery/' + _this.image.gallery_id]);
+            });
+        }
     };
     ImageToolbarComponent.prototype.ngOnDestroy = function () {
         this.observer.unsubscribe();
@@ -1448,7 +1466,9 @@ var ImageToolbarComponent = (function () {
             styles: [__webpack_require__("../../../../../src/app/image/image-toolbar/image-toolbar.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_data_service__["a" /* DataService */],
-            __WEBPACK_IMPORTED_MODULE_1__services_button_click_service__["a" /* ButtonClickService */]])
+            __WEBPACK_IMPORTED_MODULE_1__services_button_click_service__["a" /* ButtonClickService */],
+            __WEBPACK_IMPORTED_MODULE_4__services_image_service__["a" /* ImageService */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]])
     ], ImageToolbarComponent);
     return ImageToolbarComponent;
 }());
