@@ -190,6 +190,15 @@ class DataProvider
 			];
 		}
 		
+		if (($term !== '') &&
+			(strpos('homepage', $term) !== false))
+		{
+			array_unshift($tags, [
+				'id' => 0,
+				'text' => 'Homepage'
+			]);
+		}
+		
 		return $tags;
 	}
 	
