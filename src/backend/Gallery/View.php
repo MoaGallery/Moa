@@ -32,7 +32,7 @@ class View
 		// Parent gallery list
 		$parents = [
 			'id' => 0,
-			'name' => 'None'
+			'name' => 'Homepage'
 		];
 		if ($parent_gallery instanceof Model)
 		{

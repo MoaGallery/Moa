@@ -130,12 +130,14 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__image_image_add_image_add_component__ = __webpack_require__("../../../../../src/app/image/image-add/image-add.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_fileupload_fileupload__ = __webpack_require__("../../../../primeng/components/fileupload/fileupload.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_fileupload_fileupload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_primeng_components_fileupload_fileupload__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__home_home_toolbar_home_toolbar_component__ = __webpack_require__("../../../../../src/app/home/home-toolbar/home-toolbar.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -186,6 +188,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_14__image_image_list_image_list_component__["a" /* ImageListComponent */],
                 __WEBPACK_IMPORTED_MODULE_15__image_image_thumb_image_thumb_component__["a" /* ImageThumbComponent */],
                 __WEBPACK_IMPORTED_MODULE_23__image_image_info_image_info_component__["a" /* ImageInfoComponent */],
+                __WEBPACK_IMPORTED_MODULE_29__home_home_toolbar_home_toolbar_component__["a" /* HomeToolbarComponent */],
                 // Route pages
                 __WEBPACK_IMPORTED_MODULE_12__pages_home_page_home_page_component__["a" /* HomePageComponent */],
                 __WEBPACK_IMPORTED_MODULE_11__pages_gallery_page_gallery_page_component__["a" /* GalleryPageComponent */],
@@ -796,6 +799,101 @@ var GalleryToolbarComponent = (function () {
             __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], GalleryToolbarComponent);
     return GalleryToolbarComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/home/home-toolbar/home-toolbar.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/home/home-toolbar/home-toolbar.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t</div>\n\t</div>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/home/home-toolbar/home-toolbar.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeToolbarComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_button_click_service__ = __webpack_require__("../../../../../src/app/services/button-click.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_gallery_service__ = __webpack_require__("../../../../../src/app/services/gallery_service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var HomeToolbarComponent = (function () {
+    function HomeToolbarComponent(dataService, buttonClickService, galleryService, router) {
+        var _this = this;
+        this.dataService = dataService;
+        this.buttonClickService = buttonClickService;
+        this.galleryService = galleryService;
+        this.router = router;
+        this.gallery = {
+            id: 0,
+            parent_id: 0,
+            name: '',
+            description: '',
+            tag_list: [],
+            parent_gallery: {
+                id: 0,
+                name: 'Homepage'
+            }
+        };
+        this.observer = dataService.getGalleryObserver().subscribe(function (data) {
+            _this.gallery = data;
+        });
+    }
+    HomeToolbarComponent.prototype.onAddGalleryClick = function () {
+        this.buttonClickService.trigger('galleryAddClick');
+    };
+    HomeToolbarComponent.prototype.ngOnDestroy = function () {
+        this.observer.unsubscribe();
+    };
+    HomeToolbarComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'home-toolbar',
+            template: __webpack_require__("../../../../../src/app/home/home-toolbar/home-toolbar.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/home/home-toolbar/home-toolbar.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_data_service__["a" /* DataService */],
+            __WEBPACK_IMPORTED_MODULE_2__services_button_click_service__["a" /* ButtonClickService */],
+            __WEBPACK_IMPORTED_MODULE_3__services_gallery_service__["a" /* GalleryService */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
+    ], HomeToolbarComponent);
+    return HomeToolbarComponent;
 }());
 
 
@@ -1589,7 +1687,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/home-page/home-page.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<gallery-list></gallery-list>"
+module.exports = "<home-toolbar></home-toolbar>\n\n<gallery-list></gallery-list>"
 
 /***/ }),
 

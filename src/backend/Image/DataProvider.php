@@ -162,7 +162,7 @@ class DataProvider
 			->setParameter(0, $id);
 		$qb->execute();
 		
-		unlink('../data/images/thumbs/' . $id . '.jpg');
-		unlink('../data/images/' . $id . '.' . $format);
+		@unlink('../data/images/thumbs/' . $id . '.jpg');
+		@unlink('../data/images/' . $id . '.' . $format);
 	}
 }

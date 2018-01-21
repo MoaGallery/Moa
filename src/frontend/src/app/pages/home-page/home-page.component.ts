@@ -1,5 +1,4 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
-import {DataService} from "../../services/data.service";
+import {Component, OnInit} from '@angular/core';
 import {PageDataService} from "../../services/page_data.service";
 
 @Component({

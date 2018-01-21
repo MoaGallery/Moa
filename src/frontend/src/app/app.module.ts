@@ -29,6 +29,7 @@ import { ImageEditComponent } from './image/image-edit/image-edit.component';
 import {ThumbnailService} from "./services/thumbnail.service";
 import {ImageAddComponent} from "./image/image-add/image-add.component";
 import {FileUploadModule} from 'primeng/components/fileupload/fileupload';
+import {HomeToolbarComponent} from "./home/home-toolbar/home-toolbar.component";
 
 const routes: Routes = [
 	{ path: '', component: HomePageComponent },
@@ -50,6 +51,8 @@ const routes: Routes = [
 		ImageListComponent,
 		ImageThumbComponent,
 		ImageInfoComponent,
+
+		HomeToolbarComponent,
 
 		// Route pages
 		HomePageComponent,
