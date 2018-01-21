@@ -98,19 +98,32 @@ class Controller
 	{
 		$input_data = json_decode($request->getContent());
 		
+		$ids = [];
+		
 		/** @var ImagePut $image_put */
 		$image_put = $app['moa.action.image_put'];
-		$id = $image_put->SaveImage($id, $input_data);
-		
-		/** @var PageData\ImagePage $page_data */
-		$page_data = $app['moa.action.page_data.image_page'];
+		if ($id > 0)
+			$ids[] = $image_put->SaveImage($id, $input_data);
+		else
+			$ids = $image_put->SaveImages($input_data);
 		
 		$data = [];
-		if ($id > 0)
-			$data = $page_data->GetImagePageData($input_data->gallery_id, $id);
+		if (count($ids) === 1)
+		{
+			/** @var PageData\ImagePage $page_data */
+			$page_data = $app['moa.action.page_data.image_page'];
+			
+			$data = $page_data->GetImagePageData($input_data->gallery_id, $ids[0]);
+		} else
+		{
+			/** @var PageData\GalleryPage $page_data */
+			$page_data = $app['moa.action.page_data.gallery_page'];
+			
+			$data = $page_data->GetGalleryPageData($input_data->gallery_id);
+		}
 		
 		$data['success'] = true;
-		$data['message'] = $id;
+		$data['message'] = $ids[0];
 		
 		return new JsonResponse($data);
 	}

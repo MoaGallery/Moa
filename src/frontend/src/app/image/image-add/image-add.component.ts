@@ -74,7 +74,7 @@ export class ImageAddComponent implements OnInit {
 			return file.hash
 		});
 
-		this.imageService.SubmitImage({
+		this.imageService.SubmitImages({
 			id: 0,
 			gallery_id: this.gallery.id,
 			description: this.description,
@@ -91,7 +91,8 @@ export class ImageAddComponent implements OnInit {
 			$('#inputImageTags').children().remove();
 			$('#add-modal').modal('hide');
 
-			this.router.navigate(['/image/' + this.gallery.id + '/' + data.message]);
+			if (files.length === 1)
+				this.router.navigate(['/image/' + this.gallery.id + '/' + data.message]);
 		});
 	}
 

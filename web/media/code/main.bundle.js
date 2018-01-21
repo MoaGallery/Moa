@@ -823,7 +823,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-add/image-add.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal fade\" id=\"add-modal\">\n\t<div class=\"modal-dialog\">\n\t\t<div class=\"modal-content\">\n\t\t\t<div class=\"modal-header\">\n\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t\t\t<h4 class=\"modal-title\">Add image</h4>\n\t\t\t</div>\n\t\t\t<form action=\"\" method=\"post\" class=\"form-horizontal\">\n\t\t\t\t<div class=\"modal-body\">\n\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label for=\"inputImageDescription\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t<textarea class=\"form-control\" name=\"inputImageDescription\" id=\"inputImageDescription\" placeholder=\"Edit...\" [(ngModel)]=\"description\"></textarea>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label for=\"inputImageTags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"inputImageTags[]\" id=\"inputImageTags\" style=\"width: 100%\" multiple>\n\t\t\t\t\t\t\t\t<option *ngFor=\"let tag of tagList\" value=\"{{tag.id}}\" selected=\"selected\">{{tag.name}}</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label for=\"inputImageTags\" class=\"col-sm-2 control-label\">Image</label>\n\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t<p-fileUpload url=\"/api/upload\" name=\"myfile[]\" accept=\"image/*\" auto=\"auto\" (onUpload)=\"onUpload($event)\">\n\t\t\t\t\t\t\t\t<ng-template pTemplate=\"content\">\n\t\t\t\t\t\t\t\t\t<ul *ngIf=\"uploadedFiles.length\" class=\"list-unstyled uploaded-image-list\">\n\t\t\t\t\t\t\t\t\t\t<li *ngFor=\"let file of uploadedFiles\">\n\t\t\t\t\t\t\t\t\t\t\t<img width=\"50\" src=\"/image/uploaded/{{file.hash}}\">\n\t\t\t\t\t\t\t\t\t\t\t{{file.name}} - {{file.size}} bytes\n\t\t\t\t\t\t\t\t\t\t\t<a href=\"#\" (click)=\"fileDelete($event, file)\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-trash\"></span>\n\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t</ng-template>\n\t\t\t\t\t\t\t</p-fileUpload>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"modal-footer\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t<input (click)=\"onSubmit()\" type=\"submit\" class=\"btn btn-primary\" value=\"Save changes\">\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div><!-- /.modal-content -->\n\t</div><!-- /.modal-dialog -->\n</div><!-- /.modal -->\n"
+module.exports = "<div class=\"modal fade\" id=\"add-modal\">\n\t<div class=\"modal-dialog\">\n\t\t<div class=\"modal-content\">\n\t\t\t<div class=\"modal-header\">\n\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t\t\t<h4 class=\"modal-title\">Add image</h4>\n\t\t\t</div>\n\t\t\t<form action=\"\" method=\"post\" class=\"form-horizontal\">\n\t\t\t\t<div class=\"modal-body\">\n\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label for=\"inputImageDescription\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t<textarea class=\"form-control\" name=\"inputImageDescription\" id=\"inputImageDescription\" placeholder=\"Edit...\" [(ngModel)]=\"description\"></textarea>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label for=\"inputImageTags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"inputImageTags[]\" id=\"inputImageTags\" style=\"width: 100%\" multiple>\n\t\t\t\t\t\t\t\t<option *ngFor=\"let tag of tagList\" value=\"{{tag.id}}\" selected=\"selected\">{{tag.name}}</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label for=\"inputImageTags\" class=\"col-sm-2 control-label\">Image</label>\n\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t<p-fileUpload url=\"/api/upload\" name=\"myfile[]\" accept=\"image/*\" auto=\"auto\" (onUpload)=\"onUpload($event)\" multiple=\"multiple\">\n\t\t\t\t\t\t\t\t<ng-template pTemplate=\"content\">\n\t\t\t\t\t\t\t\t\t<ul *ngIf=\"uploadedFiles.length\" class=\"list-unstyled uploaded-image-list\">\n\t\t\t\t\t\t\t\t\t\t<li *ngFor=\"let file of uploadedFiles\">\n\t\t\t\t\t\t\t\t\t\t\t<img width=\"50\" src=\"/image/uploaded/{{file.hash}}\">\n\t\t\t\t\t\t\t\t\t\t\t{{file.name}} - {{file.size}} bytes\n\t\t\t\t\t\t\t\t\t\t\t<a href=\"#\" (click)=\"fileDelete($event, file)\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-trash\"></span>\n\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t</ng-template>\n\t\t\t\t\t\t\t</p-fileUpload>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"modal-footer\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t<input (click)=\"onSubmit()\" type=\"submit\" class=\"btn btn-primary\" value=\"Save changes\">\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</div><!-- /.modal-content -->\n\t</div><!-- /.modal-dialog -->\n</div><!-- /.modal -->\n"
 
 /***/ }),
 
@@ -900,7 +900,7 @@ var ImageAddComponent = (function () {
         var files = this.uploadedFiles.map(function (file) {
             return file.hash;
         });
-        this.imageService.SubmitImage({
+        this.imageService.SubmitImages({
             id: 0,
             gallery_id: this.gallery.id,
             description: this.description,
@@ -915,7 +915,8 @@ var ImageAddComponent = (function () {
             $.meow(options);
             $('#inputImageTags').children().remove();
             $('#add-modal').modal('hide');
-            _this.router.navigate(['/image/' + _this.gallery.id + '/' + data.message]);
+            if (files.length === 1)
+                _this.router.navigate(['/image/' + _this.gallery.id + '/' + data.message]);
         });
     };
     ImageAddComponent.prototype.ngOnInit = function () {
@@ -1064,7 +1065,7 @@ var ImageEditComponent = (function () {
             var tag = tagData_1[_i];
             tags.push(tag.id);
         }
-        this.imageService.SubmitImage({
+        this.imageService.SubmitImages({
             id: this.image.id,
             gallery_id: this.image.gallery_id,
             description: this.description,
@@ -1937,7 +1938,7 @@ var ImageService = (function () {
         this.http = http;
         this.api_url = '/api/image/';
     }
-    ImageService.prototype.SubmitImage = function (data) {
+    ImageService.prototype.SubmitImages = function (data) {
         var _this = this;
         var url = this.api_url + data.id;
         var subject = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();

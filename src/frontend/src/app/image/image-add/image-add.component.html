@@ -27,7 +27,7 @@
 					<div class="form-group">
 						<label for="inputImageTags" class="col-sm-2 control-label">Image</label>
 						<div class="col-sm-10">
-							<p-fileUpload url="/api/upload" name="myfile[]" accept="image/*" auto="auto" (onUpload)="onUpload($event)">
+							<p-fileUpload url="/api/upload" name="myfile[]" accept="image/*" auto="auto" (onUpload)="onUpload($event)" multiple="multiple">
 								<ng-template pTemplate="content">
 									<ul *ngIf="uploadedFiles.length" class="list-unstyled uploaded-image-list">
 										<li *ngFor="let file of uploadedFiles">

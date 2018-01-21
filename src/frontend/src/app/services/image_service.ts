@@ -13,7 +13,7 @@ export class ImageService {
 	            private http: HttpClient) {
 	}
 
-	SubmitImage(data): Observable<any> {
+	SubmitImages(data): Observable<any> {
 		let url = this.api_url + data.id;
 		let subject = new Subject();
 

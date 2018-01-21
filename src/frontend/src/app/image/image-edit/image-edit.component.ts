@@ -71,7 +71,7 @@ export class ImageEditComponent implements OnInit {
 			tags.push(tag.id);
 		}
 
-		this.imageService.SubmitImage({
+		this.imageService.SubmitImages({
 			id: this.image.id,
 			gallery_id: this.image.gallery_id,
 			description: this.description,
