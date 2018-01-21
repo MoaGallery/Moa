@@ -5,6 +5,7 @@ namespace Moa;
 use Moa\Actions\GalleryLookup;
 use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;
+use Moa\Actions\ImageResize;
 use Moa\Actions\PageData;
 use Moa\Actions\TagLookup;
 use Silex\Application;
@@ -44,7 +45,7 @@ class Bootstrap
 		
 		$this->app['moa.thumbnail_db_provider'] = function($app)
 		{
-			return new Service\ThumbnailProvider($app['db']);
+			return new Service\ThumbnailProvider($app['db'], $this->app['moa.action.image_resize']);
 		};
 		
 		$this->app['moa.incoming_file_provider'] = function($app)
@@ -94,6 +95,10 @@ class Bootstrap
 		$this->app['moa.action.gallery_lookup'] = function($app) {
 			return new GalleryLookup($app['moa.gallery_db_provider']);
 		};
+		
+		$this->app['moa.action.image_resize'] = function($app) {
+			return new ImageResize();
+		};
 
 		// Templater
 		
@@ -121,6 +126,7 @@ class Bootstrap
 		$this->app->post('/gallery2/{id}', 'Moa\Gallery\Controller::ShowGallery2')->assert('id', '\d+');
 		$this->app->get('/image/{filename}', 'Moa\Image\Controller::GetImageFile')->assert('filename', '\d+\.\w+');
 		$this->app->get('/image/thumb/{filename}', 'Moa\Image\Controller::GetThumbFile')->assert('filename', '\d+\.\w+');
+		$this->app->get('/image/standard/{filename}', 'Moa\Image\Controller::GetStandardFile')->assert('filename', '\d+\.\w+');
 		$this->app->get('/image/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 		$this->app->post('/image/{gallery_id}/{image_id}', 'Moa\Image\Controller::ShowImage')->assert('gallery_id', '\d+')->assert('image_id', '\d+');
 		$this->app->get('/image/uploaded/{hash}', 'Moa\Image\Controller::ShowUploadedImage')->assert('hash', '\w+');

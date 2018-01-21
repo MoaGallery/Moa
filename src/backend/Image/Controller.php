@@ -2,6 +2,7 @@
 
 namespace Moa\Image;
 
+use Moa\Actions\ImageResize;
 use Moa\Actions\PageData;
 use Moa\Gallery;
 use Moa\Service\IncomingFileService;
@@ -70,5 +71,26 @@ class Controller
 			$app->abort(404);
 			
 		return BinaryFileResponse::create($file);
+	}
+	
+	function GetStandardFile(Request $request, Application $app, string $filename)
+	{
+		preg_match('/(\d+)\.(\w+)/', $filename, $matches);
+
+		$output = '../data/images/standard/' . $matches[1] . '.' . $matches[2];
+
+		if (!file_exists($output))
+		{
+			$input = '../data/images/' . $matches[1] . '.' . $matches[2];
+			/** @var ImageResize $action */
+			$action = $app['moa.action.image_resize'];
+		
+			$action->Resize($input, $output, ImageResize::STANDARD_WIDTH, ImageResize::STANDARD_HEIGHT, ImageResize::RESIZE_FIT);
+		}
+		
+		if (!file_exists($output))
+			$app->abort(404);
+		
+		return BinaryFileResponse::create($output);
 	}
 }

@@ -1,0 +1,13 @@
+.thumbnail-generating {
+    width: 64px;
+    height: 64px;
+    margin: 62px 109px;
+}
+
+.thumbnail-image-container {
+    height: 188px;
+    display: block;
+    overflow: hidden;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.05);
+}

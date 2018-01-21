@@ -3,15 +3,18 @@
 namespace Moa\Service;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Moa\Actions\ImageResize;
 use Moa\Db;
 
 class ThumbnailProvider
 {
 	protected $db;
+	protected $resize_action;
 	
-	public function __construct(Db $db)
+	public function __construct(Db $db, ImageResize $resize_action)
 	{
 		$this->db = $db;
+		$this->resize_action = $resize_action;
 	}
 	
 	public function DoesThumbnailExist($image_id)
@@ -98,22 +101,7 @@ class ThumbnailProvider
 			return false;
 		
 		$output = '../data/images/thumbs/' . $image_id . '.jpg';
-		try
-		{
-			$info = @getimagesize('../data/images/' . $image_id . $ext);
-		} catch (\Exception $e)
-		{
-			return false;
-		}
-		$image_x = $info[0];
-		$image_y = $info[1];
 		
-		$dim_x = 282;
-		$dim_y = 188;
-		
-		$command = 'convert ' . $input . $ext . ' -resize ' . $dim_x . 'x' . $dim_y . ' ' . $output;
-		$output = [];
-		exec($command, $output, $return);
-		return ($return === '0');
+		return $this->resize_action->Resize($input . $ext, $output, ImageResize::THUMB_WIDTH, ImageResize::THUMB_HEIGHT, ImageResize::RESIZE_FIT);
 	}
 }

@@ -65,7 +65,7 @@ class View
 		$image_args['description_edit'] = $image->GetProperty('description');
 		$image_args['edit_error'] = $image->GetValidationMessage();
 		
-		$image_args['image_src'] = '/image/' . $image->GetProperty('id') . '.' . $image->GetProperty('format');
+		$image_args['image_src'] = '/image/standard/' . $image->GetProperty('id') . '.' . $image->GetProperty('format');
 		
 		$this->args['image'] = $image_args;
 		

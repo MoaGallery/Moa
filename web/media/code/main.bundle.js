@@ -1210,7 +1210,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".moa-page {\n    width: 1140px;\n}", ""]);
+exports.push([module.i, ".moa-page {\n    width: 1140px;\n}\n\n.image-container {\n    text-align: center;\n}", ""]);
 
 // exports
 
@@ -1223,7 +1223,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-info/image-info.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"moa-page\">\n\t<div>\n\t\t<img src=\"{{image.image_src}}\" width=\"1140\">\n\t</div>\n\n\t<p>\n\t\t{{image.description}}\n\t</p>\n</div>"
+module.exports = "<div class=\"moa-page\">\n\t<p>\n\t\t{{image.description}}\n\t</p>\n\n\t<div class=\"image-container\">\n\t\t<img src=\"{{image.image_src}}\">\n\t</div>\n</div>"
 
 /***/ }),
 
@@ -1410,7 +1410,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".thumbnail-generating {\n    width: 64px;\n    height: 64px;\n    margin: 62px 109px;\n}\n\n.thumbnail-image-container {\n    height: 188px;\n    display: block;\n    overflow: hidden;\n    text-align: center;\n    background-color: rgba(0, 0, 0, 0.05);\n}", ""]);
 
 // exports
 
@@ -1423,7 +1423,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-thumb/image-thumb.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"[getLink()]\">\n\t<span class=\"thumbnail-image-container\">\n\t\t<img *ngIf=\"!image.isGenerating\" src=\"/image/thumb/{{image.id}}.jpg\" class=\"thumbnail-img\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t</span>\n\t<h4>{{image.filename}}</h4>\n</a>"
+module.exports = "<a [routerLink]=\"[getLink()]\">\n\t<span class=\"thumbnail-image-container\">\n\t\t<img *ngIf=\"!image.isGenerating\" src=\"/image/thumb/{{image.id}}.jpg\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t</span>\n\t<h4>{{image.filename}}</h4>\n</a>"
 
 /***/ }),
 
