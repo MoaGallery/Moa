@@ -16,7 +16,7 @@ class GalleryPut
 		$this->tag_provider = $tag_provider;
 	}
 	
-	function SaveGallery($id, $data)
+	function SaveGallery($id, $data): int
 	{
 		$gallery = new Gallery\Model($this->gallery_provider, $this->tag_provider);
 		

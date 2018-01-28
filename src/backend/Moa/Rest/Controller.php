@@ -3,6 +3,7 @@
 namespace Moa\Rest;
 
 
+use Moa\Actions\GalleryLookup;
 use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
@@ -11,20 +12,17 @@ use Moa\Gallery;
 use Moa\Image;
 use Moa\Service\IncomingFileService;
 use Moa\Service\ThumbnailProvider;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class Controller
+class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
-	function CheckThumbnailStatus(Request $request, Application $app)
+	function CheckThumbnailStatus(Request $request,
+	                              ThumbnailProvider $thumb_provider)
 	{
 		$image_ids = $request->get('images');
 		$image_ids = explode(',', $image_ids);
-		
-		/** @var ThumbnailProvider $thumb_provider */
-		$thumb_provider = $app['moa.thumbnail_db_provider'];
 		
 		$queued = [];
 		foreach ($image_ids as $image_id)
@@ -36,56 +34,45 @@ class Controller
 		return new JsonResponse($queued);
 	}
 	
-	function PageDataGallery(Request $request, Application $app, $id)
+	function PageDataGallery($id, PageData\GalleryPage $page_data)
 	{
-		/** @var PageData\GalleryPage $page_data */
-		$page_data = $app['moa.action.page_data.gallery_page'];
-		
 		return new JsonResponse($page_data->GetGalleryPageData($id));
 	}
 	
-	public function PageDataHome(Request $request, Application $app)
+	public function PageDataHome(PageData\HomePage $page_data)
 	{
-		/** @var PageData\HomePage $page_data */
-		$page_data = $app['moa.action.page_data.home_page'];
-		
 		return new JsonResponse($page_data->GetHomePageData());
 	}
 	
-	function PageDataImage(Request $request, Application $app, $gallery_id, $image_id)
+	function PageDataImage(int $gallery_id,
+	                       int $image_id,
+	                       PageData\ImagePage $page_data)
 	{
-		/** @var PageData\ImagePage $page_data */
-		$page_data = $app['moa.action.page_data.image_page'];
-		
 		return new JsonResponse($page_data->GetImagePageData($gallery_id, $image_id));
 	}
 	
-	public function GalleryPut(Request $request, Application $app, $id)
+	public function GalleryPut(int $id,
+	                           Request $request,
+	                           GalleryPut $gallery_put,
+	                           PageData\GalleryPage $page_data)
 	{
 		$data = json_decode($request->getContent());
 		
-		/** @var GalleryPut $gallery_put */
-		$gallery_put = $app['moa.action.gallery_put'];
 		$gallery_id = $gallery_put->SaveGallery($id, $data);
-		
-		/** @var PageData\GalleryPage $page_data */
-		$page_data = $app['moa.action.page_data.gallery_page'];
 		
 		$data = [];
 		if ($id > 0)
 			$data = $page_data->GetGalleryPageData($id);
 		
 		$data['success'] = true;
-		$data['message'] = ($id === '0' ? $gallery_id : '');
+		$data['message'] = ($id === 0 ? $gallery_id : '');
 		
 		return new JsonResponse($data);
 	}
 	
-	public function GalleryDelete(Request $request, Application $app, $id)
+	public function GalleryDelete(int $id,
+	                              Gallery\DataProvider $provider)
 	{
-		/** @var Gallery\DataProvider $provider */
-		$provider = $app['moa.gallery_db_provider'];
-		
 		$provider->DeleteGallery($id);
 		
 		$data['success'] = true;
@@ -94,33 +81,26 @@ class Controller
 		return new JsonResponse($data);
 	}
 	
-	public function ImagePut(Request $request, Application $app, $id)
+	public function ImagePut(int $id,
+	                         Request $request,
+	                         ImagePut $image_put,
+	                         PageData\ImagePage $image_page,
+	                         PageData\GalleryPage $gallery_page)
 	{
 		$input_data = json_decode($request->getContent());
 		
 		$ids = [];
 		
-		/** @var ImagePut $image_put */
-		$image_put = $app['moa.action.image_put'];
 		if ($id > 0)
 			$ids[] = $image_put->SaveImage($id, $input_data);
 		else
 			$ids = $image_put->SaveImages($input_data);
-		
+
 		$data = [];
 		if (count($ids) === 1)
-		{
-			/** @var PageData\ImagePage $page_data */
-			$page_data = $app['moa.action.page_data.image_page'];
-			
-			$data = $page_data->GetImagePageData($input_data->gallery_id, $ids[0]);
-		} else
-		{
-			/** @var PageData\GalleryPage $page_data */
-			$page_data = $app['moa.action.page_data.gallery_page'];
-			
-			$data = $page_data->GetGalleryPageData($input_data->gallery_id);
-		}
+			$data = $image_page->GetImagePageData($input_data->gallery_id, $ids[0]);
+		else
+			$data = $gallery_page->GetGalleryPageData($input_data->gallery_id);
 		
 		$data['success'] = true;
 		$data['message'] = $ids[0];
@@ -128,11 +108,9 @@ class Controller
 		return new JsonResponse($data);
 	}
 	
-	public function ImageDelete(Request $request, Application $app, $id)
+	public function ImageDelete($id,
+	                            Image\DataProvider $provider)
 	{
-		/** @var Image\DataProvider $provider */
-		$provider = $app['moa.image_db_provider'];
-		
 		$provider->DeleteImage($id);
 		$data['success'] = true;
 		$data['message'] = '';
@@ -140,11 +118,9 @@ class Controller
 		return new JsonResponse($data);
 	}
 	
-	public function FileUpload(Request $request, Application $app)
+	public function FileUpload(Request $request,
+	                           IncomingFileService $incoming)
 	{
-		/** @var IncomingFileService $incoming */
-		$incoming = $app['moa.incoming_file_service'];
-		
 		$hashes = [];
 		foreach ($request->files as $files)
 		{
@@ -162,28 +138,24 @@ class Controller
 		return new JsonResponse($hashes);
 	}
 	
-	public function TagLookup(Request $request, Application $app)
+	public function TagLookup(Request $request,
+	                          TagLookup $action)
 	{
 		$term = $request->get('q', '');
 		$type = $request->get('_type', 'query');
 		$page = $request->get('page', 1);
 	
-		/** @var TagLookup $action */
-		$action = $app['moa.action.tag_lookup'];
-		
 		$results = $action->DoLookup($term, $type, $page - 1);
 		
 		return new JsonResponse($results);
 	}
 	
-	public function GalleryLookup(Request $request, Application $app)
+	public function GalleryLookup(Request $request,
+	                              GalleryLookup $action)
 	{
 		$term = $request->get('q', '');
 		$type = $request->get('_type', 'query');
 		$page = $request->get('page', 1);
-		
-		/** @var TagLookup $action */
-		$action = $app['moa.action.gallery_lookup'];
 		
 		$results = $action->DoLookup($term, $type, $page - 1);
 		

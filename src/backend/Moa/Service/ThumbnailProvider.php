@@ -4,7 +4,6 @@ namespace Moa\Service;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Actions\ImageResize;
-use Moa\Db;
 
 class ThumbnailProvider
 {

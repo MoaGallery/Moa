@@ -5,6 +5,7 @@ use Moa\Gallery;
 use Moa\Image;
 use Moa\Service\ThumbnailProvider;
 use Moa\Tag;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class GalleryPage
 {

@@ -1,0 +1,121 @@
+index:
+    path: /
+    defaults: { _controller: 'Moa\Gallery\Controller::ShowList' }
+
+
+############################################
+#
+#    GALLERY
+#
+############################################
+
+gallery_view:
+    path: /gallery/{id}
+    controller: 'Moa\Gallery\Controller::ShowGallery'
+    requirements:
+        page: '\d+'
+
+############################################
+#
+#    IMAGE
+#
+############################################
+
+image_view:
+    path: /image/{gallery_id}/{image_id}
+    controller: 'Moa\Image\Controller::ShowImage'
+    requirements:
+        gallery_id: '\d+'
+        image_id: '\d+'
+
+image:
+    path: /image/{filename}
+    controller: 'Moa\Image\Controller::GetImageFile'
+    requirements:
+        filename: '\d+\.\w+'
+
+image_thumb:
+    path: /image/thumb/{filename}
+    controller: 'Moa\Image\Controller::GetThumbFile'
+    requirements:
+        filename: '\d+\.\w+'
+
+image_standard:
+    path: /image/standard/{filename}
+    controller: 'Moa\Image\Controller::GetStandardFile'
+    requirements:
+        filename: '\d+\.\w+'
+
+api_get_uploaded:
+    path: /image/uploaded/{hash}
+    controller: 'Moa\Image\Controller::ShowUploadedImage'
+    requirements:
+        hash: '\w+'
+
+############################################
+#
+#    REST API
+#
+############################################
+
+api_home_page:
+    path: /api/page_data/home_page
+    controller: 'Moa\Rest\Controller::PageDataHome'
+
+api_gallery_page:
+    path: /api/page_data/gallery_page/{id}
+    controller: 'Moa\Rest\Controller::PageDataGallery'
+    requirements:
+        id: '\d+'
+
+api_image_page:
+    path: /api/page_data/image_page/{gallery_id}/{image_id}
+    controller: 'Moa\Rest\Controller::PageDataImage'
+    requirements:
+        gallery_id: '\d+'
+        image_id: '\d+'
+
+api_thumb_status:
+    path: /api/thumbnail_status
+    controller: 'Moa\Rest\Controller::CheckThumbnailStatus'
+
+api_tag_lookup:
+    path: /api/tag_lookup
+    controller: 'Moa\Rest\Controller::TagLookup'
+
+api_gallery_lookup:
+    path: /api/gallery_lookup
+    controller: 'Moa\Rest\Controller::GalleryLookup'
+
+api_file_upload:
+    path: /api/upload
+    controller: 'Moa\Rest\Controller::FileUpload'
+    methods: POST
+
+api_image_submit:
+    path: /api/image/{id}
+    controller: 'Moa\Rest\Controller::ImagePut'
+    requirements:
+        id: '\d+'
+    methods: [POST, PUT]
+
+api_api_delete_image:
+    path: /api/image/{id}
+    controller: 'Moa\Rest\Controller::ImageDelete'
+    requirements:
+        id: '\d+'
+    methods: DELETE
+
+api_gallery_submit:
+    path: /api/gallery/{id}
+    controller: 'Moa\Rest\Controller::GalleryPut'
+    requirements:
+        id: '\d+'
+    methods: [POST, PUT]
+
+api_delete_gallery:
+    path: /api/gallery/{id}
+    controller: 'Moa\Rest\Controller::GalleryDelete'
+    requirements:
+        id: '\d+'
+    methods: DELETE

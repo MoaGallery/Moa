@@ -8053,7 +8053,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -12472,6 +12472,7 @@ var DatePipe = /** @class */ (function () {
             value = value.trim();
         }
         var /** @type {?} */ date;
+        var /** @type {?} */ match;
         if (isDate$1(value)) {
             date = value;
         }
@@ -12491,17 +12492,14 @@ var DatePipe = /** @class */ (function () {
             var _a = value.split('-').map(function (val) { return +val; }), y = _a[0], m = _a[1], d = _a[2];
             date = new Date(y, m - 1, d);
         }
+        else if ((typeof value === 'string') && (match = value.match(ISO8601_DATE_REGEX))) {
+            date = isoStringToDate(match);
+        }
         else {
             date = new Date(value);
         }
         if (!isDate$1(date)) {
-            var /** @type {?} */ match = void 0;
-            if ((typeof value === 'string') && (match = value.match(ISO8601_DATE_REGEX))) {
-                date = isoStringToDate(match);
-            }
-            else {
-                throw invalidPipeArgumentError(DatePipe, value);
-            }
+            throw invalidPipeArgumentError(DatePipe, value);
         }
         return formatDate(date, format, locale || this.locale, timezone);
     };
@@ -12523,8 +12521,10 @@ function isoStringToDate(match) {
     var /** @type {?} */ date = new Date(0);
     var /** @type {?} */ tzHour = 0;
     var /** @type {?} */ tzMin = 0;
+    // match[8] means that the string contains "Z" (UTC) or a timezone like "+01:00" or "+0100"
     var /** @type {?} */ dateSetter = match[8] ? date.setUTCFullYear : date.setFullYear;
     var /** @type {?} */ timeSetter = match[8] ? date.setUTCHours : date.setHours;
+    // if there is a timezone defined like "+01:00" or "+0100"
     if (match[9]) {
         tzHour = +(match[9] + match[10]);
         tzMin = +(match[9] + match[11]);
@@ -14574,7 +14574,7 @@ function isPlatformWorkerUi(platformId) {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["Version"]('5.2.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["Version"]('5.2.1');
 
 /**
  * @fileoverview added by tsickle
@@ -14669,7 +14669,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["Version"]('5.2.0'
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -17611,7 +17611,7 @@ var HttpClientJsonpModule = /** @class */ (function () {
 /* unused harmony export removeSummaryDuplicates */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -18245,7 +18245,7 @@ var Version = /** @class */ (function () {
 /**
  * \@stable
  */
-var VERSION = new Version('5.2.0');
+var VERSION = new Version('5.2.1');
 
 /**
  * @fileoverview added by tsickle
@@ -47129,6 +47129,7 @@ var StaticSymbolResolver = /** @class */ (function () {
      * @return {?}
      */
     function (sourceSymbol, topLevelPath, topLevelSymbolNames, metadata) {
+        var _this = this;
         // For classes that don't have Angular summaries / metadata,
         // we only keep their arity, but nothing else
         // (e.g. their constructor parameters).
@@ -47147,7 +47148,8 @@ var StaticSymbolResolver = /** @class */ (function () {
                 // .ts or .d.ts, append `.ts'. Also, if it is in `node_modules`, trim the `node_module`
                 // location as it is not important to finding the file.
                 _originalFileMemo =
-                    topLevelPath.replace(/((\.ts)|(\.d\.ts)|)$/, '.ts').replace(/^.*node_modules[/\\]/, '');
+                    _this.host.getOutputName(topLevelPath.replace(/((\.ts)|(\.d\.ts)|)$/, '.ts')
+                        .replace(/^.*node_modules[/\\]/, ''));
             }
             return _originalFileMemo;
         };
@@ -49126,6 +49128,7 @@ var StaticReflector = /** @class */ (function () {
         this.methodCache = new Map();
         this.staticCache = new Map();
         this.conversionMap = new Map();
+        this.resolvedExternalReferences = new Map();
         this.annotationForParentClassWithSummaryKind = new Map();
         this.initializeConversionMap();
         knownMetadataClasses.forEach(function (kc) {
@@ -49160,11 +49163,21 @@ var StaticReflector = /** @class */ (function () {
      * @return {?}
      */
     function (ref, containingFile) {
+        var /** @type {?} */ key = undefined;
+        if (!containingFile) {
+            key = ref.moduleName + ":" + ref.name;
+            var /** @type {?} */ declarationSymbol_1 = this.resolvedExternalReferences.get(key);
+            if (declarationSymbol_1)
+                return declarationSymbol_1;
+        }
         var /** @type {?} */ refSymbol = this.symbolResolver.getSymbolByModule(/** @type {?} */ ((ref.moduleName)), /** @type {?} */ ((ref.name)), containingFile);
         var /** @type {?} */ declarationSymbol = this.findSymbolDeclaration(refSymbol);
         if (!containingFile) {
             this.symbolResolver.recordModuleNameForFileName(refSymbol.filePath, /** @type {?} */ ((ref.moduleName)));
             this.symbolResolver.recordImportAs(declarationSymbol, refSymbol);
+        }
+        if (key) {
+            this.resolvedExternalReferences.set(key, declarationSymbol);
         }
         return declarationSymbol;
     };
@@ -52961,7 +52974,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "platformCore", function() { return platformCore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵALLOW_MULTIPLE_PLATFORMS", function() { return ALLOW_MULTIPLE_PLATFORMS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵAPP_ID_RANDOM_PROVIDER", function() { return APP_ID_RANDOM_PROVIDER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵValueUnwrapper", function() { return ValueUnwrapper; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵdevModeEqual", function() { return devModeEqual; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵisListLikeIterable", function() { return isListLikeIterable; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ɵChangeDetectorStatus", function() { return ChangeDetectorStatus; });
@@ -53069,7 +53081,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_share__ = __webpack_require__("../../../../rxjs/_esm5/operator/share.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -53786,7 +53798,7 @@ var Version = /** @class */ (function () {
 /**
  * \@stable
  */
-var VERSION = new Version('5.2.0');
+var VERSION = new Version('5.2.1');
 
 /**
  * @fileoverview added by tsickle
@@ -58032,13 +58044,23 @@ var Testability = /** @class */ (function () {
     function () {
         var _this = this;
         if (this.isStable()) {
-            // Schedules the call backs in a new frame so that it is always async.
-            scheduleMicroTask(function () {
-                while (_this._callbacks.length !== 0) {
-                    (/** @type {?} */ ((_this._callbacks.pop())))(_this._didWork);
-                }
-                _this._didWork = false;
-            });
+            if (this._callbacks.length !== 0) {
+                // Schedules the call backs after a macro task run outside of the angular zone to make sure
+                // no new task are added
+                this._ngZone.runOutsideAngular(function () {
+                    setTimeout(function () {
+                        if (_this.isStable()) {
+                            while (_this._callbacks.length !== 0) {
+                                (/** @type {?} */ ((_this._callbacks.pop())))(_this._didWork);
+                            }
+                            _this._didWork = false;
+                        }
+                    });
+                });
+            }
+            else {
+                this._didWork = false;
+            }
         }
         else {
             // Not Ready
@@ -60188,10 +60210,10 @@ function devModeEqual(a, b) {
 }
 /**
  * Indicates that the result of a {\@link Pipe} transformation has changed even though the
- * reference
- * has not changed.
+ * reference has not changed.
  *
- * The wrapped value will be unwrapped by change detection, and the unwrapped value will be stored.
+ * Wrapped values are unwrapped automatically during the change detection, and the unwrapped value
+ * is stored.
  *
  * Example:
  *
@@ -60206,50 +60228,53 @@ function devModeEqual(a, b) {
  * \@stable
  */
 var WrappedValue = /** @class */ (function () {
-    function WrappedValue(wrapped) {
-        this.wrapped = wrapped;
+    function WrappedValue(value) {
+        this.wrapped = value;
     }
+    /** Creates a wrapped value. */
     /**
+     * Creates a wrapped value.
      * @param {?} value
      * @return {?}
      */
     WrappedValue.wrap = /**
+     * Creates a wrapped value.
      * @param {?} value
      * @return {?}
      */
     function (value) { return new WrappedValue(value); };
+    /**
+     * Returns the underlying value of a wrapped value.
+     * Returns the given `value` when it is not wrapped.
+     **/
+    /**
+     * Returns the underlying value of a wrapped value.
+     * Returns the given `value` when it is not wrapped.
+     *
+     * @param {?} value
+     * @return {?}
+     */
+    WrappedValue.unwrap = /**
+     * Returns the underlying value of a wrapped value.
+     * Returns the given `value` when it is not wrapped.
+     *
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) { return WrappedValue.isWrapped(value) ? value.wrapped : value; };
+    /** Returns true if `value` is a wrapped value. */
+    /**
+     * Returns true if `value` is a wrapped value.
+     * @param {?} value
+     * @return {?}
+     */
+    WrappedValue.isWrapped = /**
+     * Returns true if `value` is a wrapped value.
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) { return value instanceof WrappedValue; };
     return WrappedValue;
-}());
-/**
- * Helper class for unwrapping WrappedValue s
- */
-var ValueUnwrapper = /** @class */ (function () {
-    function ValueUnwrapper() {
-        this.hasWrappedValue = false;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    ValueUnwrapper.prototype.unwrap = /**
-     * @param {?} value
-     * @return {?}
-     */
-    function (value) {
-        if (value instanceof WrappedValue) {
-            this.hasWrappedValue = true;
-            return value.wrapped;
-        }
-        return value;
-    };
-    /**
-     * @return {?}
-     */
-    ValueUnwrapper.prototype.reset = /**
-     * @return {?}
-     */
-    function () { this.hasWrappedValue = false; };
-    return ValueUnwrapper;
 }());
 /**
  * Represents a basic change from a previous to a new value.
@@ -62883,13 +62908,10 @@ function tokenKey(token) {
  * @return {?}
  */
 function unwrapValue(view, nodeIdx, bindingIdx, value) {
-    if (value instanceof WrappedValue) {
-        value = value.wrapped;
+    if (WrappedValue.isWrapped(value)) {
+        value = WrappedValue.unwrap(value);
         var /** @type {?} */ globalBindingIdx = view.def.nodes[nodeIdx].bindingIndex + bindingIdx;
-        var /** @type {?} */ oldValue = view.oldValues[globalBindingIdx];
-        if (oldValue instanceof WrappedValue) {
-            oldValue = oldValue.wrapped;
-        }
+        var /** @type {?} */ oldValue = WrappedValue.unwrap(view.oldValues[globalBindingIdx]);
         view.oldValues[globalBindingIdx] = new WrappedValue(oldValue);
     }
     return value;
@@ -62969,7 +62991,8 @@ function checkAndUpdateBinding(view, def, bindingIdx, value) {
 function checkBindingNoChanges(view, def, bindingIdx, value) {
     var /** @type {?} */ oldValue = view.oldValues[def.bindingIndex + bindingIdx];
     if ((view.state & 1 /* BeforeFirstCheck */) || !devModeEqual(oldValue, value)) {
-        throw expressionChangedAfterItHasBeenCheckedError(Services.createDebugContext(view, def.nodeIndex), oldValue, value, (view.state & 1 /* BeforeFirstCheck */) !== 0);
+        var /** @type {?} */ bindingName = def.bindings[def.bindingIndex].name;
+        throw expressionChangedAfterItHasBeenCheckedError(Services.createDebugContext(view, def.nodeIndex), bindingName + ": " + oldValue, bindingName + ": " + value, (view.state & 1 /* BeforeFirstCheck */) !== 0);
     }
 }
 /**
@@ -65671,10 +65694,7 @@ function updateProp(view, providerData, def, bindingIdx, value, changes) {
     providerData.instance[propName] = value;
     if (def.flags & 524288 /* OnChanges */) {
         changes = changes || {};
-        var /** @type {?} */ oldValue = view.oldValues[def.bindingIndex + bindingIdx];
-        if (oldValue instanceof WrappedValue) {
-            oldValue = oldValue.wrapped;
-        }
+        var /** @type {?} */ oldValue = WrappedValue.unwrap(view.oldValues[def.bindingIndex + bindingIdx]);
         var /** @type {?} */ binding_1 = def.bindings[bindingIdx];
         changes[/** @type {?} */ ((binding_1.nonMinifiedName))] =
             new SimpleChange(oldValue, value, (view.state & 2 /* FirstCheck */) !== 0);
@@ -71787,9 +71807,9 @@ function keyframes$1(steps) {
  *     <button (click)="next()">Next</button>
  *     <hr>
  *     <div [\@bannerAnimation]="selectedIndex" class="banner-container">
- *       <div class="banner"> {{ banner }} </div>
+ *       <div class="banner" *ngFor="let banner of banners"> {{ banner }} </div>
  *     </div>
- *   `
+ *   `,
  *   animations: [
  *     trigger('bannerAnimation', [
  *       transition(":increment", group([
@@ -71809,7 +71829,7 @@ function keyframes$1(steps) {
  *         query(':leave', [
  *           animate('0.5s ease-out', style({ left: '100%' }))
  *         ])
- *       ])),
+ *       ]))
  *     ])
  *   ]
  * })
@@ -72431,7 +72451,7 @@ function transition$$1(stateChangeExpr, steps) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/operator/map.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -73090,7 +73110,12 @@ var Validators = /** @class */ (function () {
         var /** @type {?} */ regex;
         var /** @type {?} */ regexStr;
         if (typeof pattern === 'string') {
-            regexStr = "^" + pattern + "$";
+            regexStr = '';
+            if (pattern.charAt(0) !== '^')
+                regexStr += '^';
+            regexStr += pattern;
+            if (pattern.charAt(pattern.length - 1) !== '$')
+                regexStr += '$';
             regex = new RegExp(regexStr);
         }
         else {
@@ -80423,7 +80448,7 @@ var FormBuilder = /** @class */ (function () {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.1');
 
 /**
  * @fileoverview added by tsickle
@@ -80625,7 +80650,7 @@ var ReactiveFormsModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -81277,7 +81302,7 @@ var CachedResourceLoader = /** @class */ (function (_super) {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.1');
 
 /**
  * @fileoverview added by tsickle
@@ -81389,7 +81414,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -86581,7 +86606,7 @@ var By = /** @class */ (function () {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.1');
 
 /**
  * @fileoverview added by tsickle
@@ -86715,7 +86740,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.0'
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_rxjs_operator_filter__ = __webpack_require__("../../../../rxjs/_esm5/operator/filter.js");
 /**
- * @license Angular v5.2.0
+ * @license Angular v5.2.1
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -94120,7 +94145,7 @@ function provideRouterInitializer() {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Version"]('5.2.1');
 
 /**
  * @fileoverview added by tsickle

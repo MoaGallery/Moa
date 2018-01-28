@@ -4,15 +4,14 @@ namespace Moa\Tag;
 
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Moa\Db;
-use Moa\Gallery;
+use Moa\Service\Db;
 
 class DataProvider
 {
 	/** @var  Db */
 	protected $db;
 
-	public function __construct($db)
+	public function __construct(Db $db)
 	{
 		$this->db = $db;
 	}

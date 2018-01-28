@@ -3,7 +3,7 @@
 namespace Moa\Image;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Moa\Db;
+use Moa\Service\Db;
 use Moa\Tag;
 
 class DataProvider
@@ -14,7 +14,7 @@ class DataProvider
 	/** @var Tag\DataProvider $tdp */
 	protected $tdp;
 
-	public function __construct($db, Tag\DataProvider $tdp)
+	public function __construct(Db $db, Tag\DataProvider $tdp)
 	{
 		$this->db = $db;
 		$this->tdp = $tdp;

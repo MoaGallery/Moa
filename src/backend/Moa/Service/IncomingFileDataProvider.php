@@ -3,7 +3,6 @@
 namespace Moa\Service;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Moa\Db;
 
 class IncomingFileDataProvider
 {
