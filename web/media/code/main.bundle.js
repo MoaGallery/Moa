@@ -407,20 +407,22 @@ var GalleryEditComponent = (function () {
             this.description = this.gallery.description;
             this.useTags = this.gallery.use_tags == 1;
             this.showImages = this.gallery.combined_view == 1;
+            this.parent_gallery.id = this.gallery.parent_gallery.id;
+            this.parent_gallery.name = this.gallery.parent_gallery.name;
         }
         else {
             this.name = '';
             this.description = '';
             this.useTags = true;
             this.showImages = false;
+            this.parent_gallery.id = this.gallery.id;
+            this.parent_gallery.name = this.gallery.name;
         }
         this.tagList = [];
         for (var _i = 0, _a = this.gallery.tag_list; _i < _a.length; _i++) {
             var tag = _a[_i];
             this.tagList.push({ name: tag.name, id: '' + tag.id });
         }
-        this.parent_gallery.id = this.gallery.parent_gallery.id;
-        this.parent_gallery.name = this.gallery.parent_gallery.name;
     };
     GalleryEditComponent.prototype.onSubmit = function () {
         var _this = this;

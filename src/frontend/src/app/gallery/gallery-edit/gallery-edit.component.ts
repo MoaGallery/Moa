@@ -80,21 +80,22 @@ export class GalleryEditComponent implements OnDestroy {
 			this.description = this.gallery.description;
 			this.useTags = this.gallery.use_tags == 1;
 			this.showImages = this.gallery.combined_view == 1;
+			this.parent_gallery.id = this.gallery.parent_gallery.id;
+			this.parent_gallery.name = this.gallery.parent_gallery.name;
 		} else
 		{
 			this.name = '';
 			this.description = '';
 			this.useTags = true;
 			this.showImages = false;
+			this.parent_gallery.id = this.gallery.id;
+			this.parent_gallery.name = this.gallery.name;
 		}
 		this.tagList = [];
 
 		for (let tag of this.gallery.tag_list) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
 		}
-
-		this.parent_gallery.id = this.gallery.parent_gallery.id;
-		this.parent_gallery.name = this.gallery.parent_gallery.name;
 	}
 
 	onSubmit() {
