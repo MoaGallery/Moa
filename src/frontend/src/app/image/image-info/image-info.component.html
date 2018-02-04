@@ -2,8 +2,10 @@
 	<p>
 		{{image.description}}
 	</p>
-
 	<div class="image-container">
-		<img src="{{image.image_src}}">
+		<a [href]="getFullImageUrl()" ng-box [title]="image.filename">
+			<img src="{{image.image_src}}">
+		</a>
 	</div>
 </div>
+<ngbox></ngbox>

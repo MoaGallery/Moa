@@ -131,12 +131,18 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_fileupload_fileupload__ = __webpack_require__("../../../../primeng/components/fileupload/fileupload.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_primeng_components_fileupload_fileupload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_primeng_components_fileupload_fileupload__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__home_home_toolbar_home_toolbar_component__ = __webpack_require__("../../../../../src/app/home/home-toolbar/home-toolbar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ngbox_ngbox_service__ = __webpack_require__("../../../../../src/app/ngbox/ngbox.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ngbox_ngbox_component__ = __webpack_require__("../../../../../src/app/ngbox/ngbox.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ngbox_ngbox_directive__ = __webpack_require__("../../../../../src/app/ngbox/ngbox.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
 
 
 
@@ -195,7 +201,9 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_22__pages_image_page_image_page_component__["a" /* ImagePageComponent */],
                 __WEBPACK_IMPORTED_MODULE_24__image_image_toolbar_image_toolbar_component__["a" /* ImageToolbarComponent */],
                 __WEBPACK_IMPORTED_MODULE_25__image_image_edit_image_edit_component__["a" /* ImageEditComponent */],
-                __WEBPACK_IMPORTED_MODULE_27__image_image_add_image_add_component__["a" /* ImageAddComponent */]
+                __WEBPACK_IMPORTED_MODULE_27__image_image_add_image_add_component__["a" /* ImageAddComponent */],
+                __WEBPACK_IMPORTED_MODULE_31__ngbox_ngbox_component__["a" /* NgBoxComponent */],
+                __WEBPACK_IMPORTED_MODULE_32__ngbox_ngbox_directive__["a" /* NgBoxDirective */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -211,7 +219,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_18__services_button_click_service__["a" /* ButtonClickService */],
                 __WEBPACK_IMPORTED_MODULE_20__services_gallery_service__["a" /* GalleryService */],
                 __WEBPACK_IMPORTED_MODULE_21__services_image_service__["a" /* ImageService */],
-                __WEBPACK_IMPORTED_MODULE_26__services_thumbnail_service__["a" /* ThumbnailService */]
+                __WEBPACK_IMPORTED_MODULE_26__services_thumbnail_service__["a" /* ThumbnailService */],
+                __WEBPACK_IMPORTED_MODULE_30__ngbox_ngbox_service__["a" /* NgBoxService */]
             ],
             bootstrap: [
                 __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]
@@ -1225,7 +1234,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-info/image-info.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"moa-page\">\n\t<p>\n\t\t{{image.description}}\n\t</p>\n\n\t<div class=\"image-container\">\n\t\t<img src=\"{{image.image_src}}\">\n\t</div>\n</div>"
+module.exports = "<div class=\"moa-page\">\n\t<p>\n\t\t{{image.description}}\n\t</p>\n\t<div class=\"image-container\">\n\t\t<a [href]=\"getFullImageUrl()\" ng-box [title]=\"image.filename\">\n\t\t\t<img src=\"{{image.image_src}}\">\n\t\t</a>\n\t</div>\n</div>\n<ngbox></ngbox>"
 
 /***/ }),
 
@@ -1252,15 +1261,22 @@ var ImageInfoComponent = (function () {
         var _this = this;
         this.service = service;
         this.image = {
+            id: 0,
             image_src: '',
-            description: ''
+            description: '',
+            format: 'jpg'
         };
+        this.imageFullUrl = this.getFullImageUrl();
         this.observer = service.getImageObserver().subscribe(function (data) {
             _this.image = data;
+            _this.imageFullUrl = _this.getFullImageUrl();
         });
     }
     ImageInfoComponent.prototype.ngOnDestroy = function () {
         this.observer.unsubscribe();
+    };
+    ImageInfoComponent.prototype.getFullImageUrl = function () {
+        return '/image/' + this.image.id + '.' + this.image.format;
     };
     ImageInfoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -1590,6 +1606,399 @@ var Gallery = (function () {
         this.thumbUrl = thumbUrl;
     }
     return Gallery;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/ngbox/ngbox.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgBoxComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngbox_service__ = __webpack_require__("../../../../../src/app/ngbox/ngbox.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NgBoxComponent = (function () {
+    function NgBoxComponent(ngBox) {
+        this.ngBox = ngBox;
+        this.showMore = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    NgBoxComponent.prototype.ngDoCheck = function () {
+        if (this.ngBox.open === true && this.elementView === undefined) {
+            this.checkInterval();
+        }
+    };
+    NgBoxComponent.prototype.closeOutside = function ($event) {
+        if ($event.target.getAttribute('id') === 'ngBoxContent' || $event.target.getAttribute('id') === 'ngBoxWrapper') {
+            this.closeNgBox();
+        }
+    };
+    NgBoxComponent.prototype.checkInterval = function () {
+        var _this = this;
+        var t = setInterval(function () {
+            if (_this.elementView && _this.elementButtons) {
+                _this.resize();
+                // Stop Loading on frames
+                if (_this.ngBox.current.type === 2 || _this.ngBox.current.type === 3 || _this.ngBox.current.type === 4) {
+                    _this.ngBox.loading = false;
+                }
+                clearInterval(t);
+            }
+        }, 10);
+    };
+    NgBoxComponent.prototype.closeNgBox = function () {
+        this.ngBox.open = false;
+    };
+    NgBoxComponent.prototype.elementExist = function () {
+        if (this.elementView !== undefined) {
+            return true;
+        }
+        return false;
+    };
+    NgBoxComponent.prototype.resize = function () {
+        // Resize big images
+        if (this.elementView && this.elementButtons) {
+            var currentWidth = this.calcPercent(this.ngBox.current.width, window.innerWidth);
+            var currentHeight = this.calcPercent(this.ngBox.current.height, window.innerHeight);
+            var realWidth = this.elementView.nativeElement.naturalWidth ?
+                this.elementView.nativeElement.naturalWidth : currentWidth;
+            var realHeight = this.elementView.nativeElement.naturalHeight ?
+                this.elementView.nativeElement.naturalHeight : currentHeight;
+            var maxWidth = Math.min((window.innerWidth - 70), currentWidth ? currentWidth : realWidth);
+            var maxHeight = Math.min((window.innerHeight - 60), currentHeight ? currentHeight : realHeight);
+            var ratio = Math.min(maxWidth / realWidth, maxHeight / realHeight);
+            this.elementView.nativeElement.width = realWidth * ratio;
+            this.elementView.nativeElement.height = realHeight * ratio;
+            this.elementButtons.nativeElement.style.width = this.elementView.nativeElement.offsetWidth + 'px';
+            // Calculate top padding
+            this.offsetHeight = (window.innerHeight - 40 - this.elementView.nativeElement.offsetHeight) / 2;
+            if (this.offsetHeight < 0) {
+                this.offsetHeight = 0;
+            }
+        }
+    };
+    NgBoxComponent.prototype.checkKeyPress = function (event) {
+        if (event.keyCode === 39) {
+            this.nextNgBox();
+        }
+        else if (event.keyCode === 37) {
+            this.previousNgBox();
+        }
+        else if (event.keyCode === 27) {
+            this.closeNgBox();
+        }
+    };
+    NgBoxComponent.prototype.calcPercent = function (value, of) {
+        if (value !== undefined && value.toString().search('%') >= 0) {
+            return of * parseInt(value.toString(), 0) / 100;
+        }
+        return value;
+    };
+    NgBoxComponent.prototype.getHasGroup = function () {
+        return this.ngBox.current.group !== undefined;
+    };
+    NgBoxComponent.prototype.getCount = function () {
+        var _this = this;
+        return this.ngBox.images.filter(function (image) { return image.group === _this.ngBox.current.group; }).length;
+    };
+    NgBoxComponent.prototype.getCurrentIndex = function () {
+        var _this = this;
+        var currentGroup = this.ngBox.images.filter(function (image) { return image.group === _this.ngBox.current.group; });
+        return currentGroup.map(function (e) {
+            return e.id;
+        }).indexOf(this.ngBox.current.id) + 1;
+    };
+    NgBoxComponent.prototype.nextNgBox = function () {
+        var _this = this;
+        if (this.ngBox.current.group === undefined) {
+            return false;
+        }
+        this.ngBox.loading = true;
+        var currentGroup = this.ngBox.images.filter(function (image) { return image.group === _this.ngBox.current.group; });
+        var pos = currentGroup.map(function (e) {
+            return e.id;
+        }).indexOf(this.ngBox.current.id);
+        if (pos >= currentGroup.length - 1) {
+            this.ngBox.current = currentGroup[0];
+        }
+        else {
+            this.ngBox.current = currentGroup[pos + 1];
+        }
+        this.checkInterval();
+    };
+    NgBoxComponent.prototype.previousNgBox = function () {
+        var _this = this;
+        if (this.ngBox.current.group === undefined) {
+            return false;
+        }
+        this.ngBox.loading = true;
+        var currentGroup = this.ngBox.images.filter(function (image) { return image.group === _this.ngBox.current.group; });
+        var pos = currentGroup.map(function (e) {
+            return e.id;
+        }).indexOf(this.ngBox.current.id);
+        if (pos === 0) {
+            pos = currentGroup.length;
+        }
+        this.ngBox.current = currentGroup[pos - 1];
+        this.checkInterval();
+    };
+    NgBoxComponent.prototype.isLoaded = function () {
+        if (this.ngBox.current.type === 1) {
+            this.ngBox.loading = false;
+        }
+        this.checkInterval();
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], NgBoxComponent.prototype, "data", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+        __metadata("design:type", Object)
+    ], NgBoxComponent.prototype, "showMore", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('ngBoxContent'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], NgBoxComponent.prototype, "elementView", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('ngBoxButtons'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], NgBoxComponent.prototype, "elementButtons", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('window:resize', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], NgBoxComponent.prototype, "resize", null);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('window:keydown', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [KeyboardEvent]),
+        __metadata("design:returntype", void 0)
+    ], NgBoxComponent.prototype, "checkKeyPress", null);
+    NgBoxComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'my-ngbox, ngbox',
+            template: "\n        <div id=\"ngBoxLoading\" *ngIf=\"ngBox.loading\"><img src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNv\nZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cD\novL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjAiIHdpZHRo\nPSIxNjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMTI4IDE2IiB4bWw6c3BhY2U9InByZXNlcnZlIj48c2NyaXB0IHR5cGU9InRleHQvZW\nNtYXNjcmlwdCIgeGxpbms6aHJlZj0iLy9wcmVsb2FkZXJzLm5ldC9qc2NyaXB0cy9zbWlsLnVzZXIuanMiLz48cGF0aCBmaWxsPSIjZmZmZmZmIiBm\naWxsLW9wYWNpdHk9IjAuNDE5NjA3ODQzMTM3MjUiIGQ9Ik02LjQsNC44QTMuMiwzLjIsMCwxLDEsMy4yLDgsMy4yLDMuMiwwLDAsMSw2LjQsNC44Wm\n0xMi44LDBBMy4yLDMuMiwwLDEsMSwxNiw4LDMuMiwzLjIsMCwwLDEsMTkuMiw0LjhaTTMyLDQuOEEzLjIsMy4yLDAsMSwxLDI4LjgsOCwzLjIsMy4y\nLDAsMCwxLDMyLDQuOFptMTIuOCwwQTMuMiwzLjIsMCwxLDEsNDEuNiw4LDMuMiwzLjIsMCwwLDEsNDQuOCw0LjhabTEyLjgsMEEzLjIsMy4yLDAsMS\nwxLDU0LjQsOCwzLjIsMy4yLDAsMCwxLDU3LjYsNC44Wm0xMi44LDBBMy4yLDMuMiwwLDEsMSw2Ny4yLDgsMy4yLDMuMiwwLDAsMSw3MC40LDQuOFpt\nMTIuOCwwQTMuMiwzLjIsMCwxLDEsODAsOCwzLjIsMy4yLDAsMCwxLDgzLjIsNC44Wk05Niw0LjhBMy4yLDMuMiwwLDEsMSw5Mi44LDgsMy4yLDMuMi\nwwLDAsMSw5Niw0LjhabTEyLjgsMEEzLjIsMy4yLDAsMSwxLDEwNS42LDgsMy4yLDMuMiwwLDAsMSwxMDguOCw0LjhabTEyLjgsMEEzLjIsMy4yLDAs\nMSwxLDExOC40LDgsMy4yLDMuMiwwLDAsMSwxMjEuNiw0LjhaIi8+PGc+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIxIiBkPSJNLT\nQyLjcsMy44NEE0LjE2LDQuMTYsMCwwLDEtMzguNTQsOGE0LjE2LDQuMTYsMCwwLDEtNC4xNiw0LjE2QTQuMTYsNC4xNiwwLDAsMS00Ni44Niw4LDQu\nMTYsNC4xNiwwLDAsMS00Mi43LDMuODRabTEyLjgtLjY0QTQuOCw0LjgsMCwwLDEtMjUuMSw4YTQuOCw0LjgsMCwwLDEtNC44LDQuOEE0LjgsNC44LD\nAsMCwxLTM0LjcsOCw0LjgsNC44LDAsMCwxLTI5LjksMy4yWm0xMi44LS42NEE1LjQ0LDUuNDQsMCwwLDEtMTEuNjYsOGE1LjQ0LDUuNDQsMCwwLDEt\nNS40NCw1LjQ0QTUuNDQsNS40NCwwLDAsMS0yMi41NCw4LDUuNDQsNS40NCwwLDAsMS0xNy4xLDIuNTZaIi8+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cm\nlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJ0cmFuc2xhdGUiIHZhbHVlcz0iMjMgMDszNiAwOzQ5IDA7NjIgMDs3NC41IDA7ODcuNSAwOzEwMCAw\nOzExMyAwOzEyNS41IDA7MTM4LjUgMDsxNTEuNSAwOzE2NC41IDA7MTc4IDAiIGNhbGNNb2RlPSJkaXNjcmV0ZSIgZHVyPSI3ODBtcyIgcmVwZWF0Q2\n91bnQ9ImluZGVmaW5pdGUiLz48L2c+PC9zdmc+Cg==\"/></div>\n        <div id=\"ngBoxWrapper\" (click)=\"closeOutside($event)\" *ngIf=\"ngBox.open\" [ngStyle]=\"{'padding-top': offsetHeight+'px'}\">\n            <div id=\"ngBoxContent\">\n                <img *ngIf=\"getHasGroup()\" class=\"left\" (click)=\"previousNgBox()\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvb\nj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyB\nWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL\n0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDA\nwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iNzBweCIgaGVpZ2h0PSIxMDBwe\nCIgdmlld0JveD0iMCAwIDcwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNzAgMTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwb2x5Z29uIGZpbGw\n9IiNGRkZGRkYiIHN0cm9rZT0iIzZCNkI2QiIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBwb2ludHM9IjQ1LjYsOTguNTI0IDE0LjU0NCw1MCA0NS42LDEuNDc2IDQ4L\njgwMSwzLjUyNCAxOS4wNTYsNTAgDQoJNDguODAxLDk2LjQ3NiAiLz4NCjwvc3ZnPg0K\">\n                <img *ngIf=\"getHasGroup()\" class=\"right\" (click)=\"nextNgBox()\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0i\nMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZX\nJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dy\nYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3\nN2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iNzBweCIgaGVpZ2h0PSIxMDBweCIg\ndmlld0JveD0iMCAwIDcwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNzAgMTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwb2x5Z29uIGZpbGw9Ii\nNGRkZGRkYiIHN0cm9rZT0iIzZCNkI2QiIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBwb2ludHM9IjE3Ljc0Niw5OC41MjQgNDguODAxLDUwIDE3Ljc0NiwxLjQ3NiAx\nNC41NDUsMy41MjQgDQoJNDQuMjg5LDUwIDE0LjU0NSw5Ni40NzYgIi8+DQo8L3N2Zz4NCg==\">\n                <img *ngIf=\"ngBox.current.type == 1\"\n                     (load)=\"isLoaded()\" \n                     #ngBoxContent \n                     [src]=\"ngBox.current.url\"\n                     [hidden]=\"ngBox.loading\" \n                     (click)=\"nextNgBox()\"\n                     alt=\"\">\n                <iframe *ngIf=\"ngBox.current.type == 2\" \n                        #ngBoxContent\n                        [src]=\"ngBox.current.url\"\n                        width=\"{{ngBox.current.width}}\"\n                        height=\"{{ngBox.current.height}}\"\n                        frameborder=\"0\"\n                        allowfullscreen>\n                </iframe>\n                <iframe *ngIf=\"ngBox.current.type == 3\" \n                        [src]=\"ngBox.current.url\"\n                        #ngBoxContent\n                        width=\"{{ngBox.current.width}}\"\n                        height=\"{{ngBox.current.height}}\"\n                        frameborder=\"0\" \n                        webkitallowfullscreen \n                        mozallowfullscreen \n                        allowfullscreen>\n                </iframe>\n                <iframe *ngIf=\"ngBox.current.type == 4\" \n                        #ngBoxContent\n                        [src]=\"ngBox.current.url\"\n                        frameborder=\"0\"\n                        width=\"{{ngBox.current.width}}\"\n                        height=\"{{ngBox.current.height}}\"\n                        allowfullscreen>\n                </iframe>\n            </div>\n            <div #ngBoxButtons id=\"buttons\" [hidden]=\"ngBox.loading\">\n                <p>\n                    <span class=\"title\" *ngIf=\"ngBox.current.title\">{{ngBox.current.title}}<br/></span>\n                    <span class=\"pages\" *ngIf=\"getHasGroup()\">{{getCurrentIndex()}} of {{getCount()}}</span>\n                </p>\n                <img (click)=\"closeNgBox()\" id=\"closeButton\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZG\nluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAw\nIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy\n8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6\neGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMzBweCIgaGVpZ2h0PSIzMHB4IiB2aWV3Qm94PSIwID\nAgMzAgMzAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMwIDMwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwb2x5Z29uIGZpbGw9IiNGRkZGRkYiIHN0cm9r\nZT0iIzZCNkI2QiIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBwb2ludHM9IjI4LjUsMi44NCAyNS40NjMsMS41IDE1LDEyLjc0OSA0LjUzOSwxLjUgMS41LDIuODQgDQ\noJMTIuODExLDE1IDEuNSwyNy4xNiA0LjUzOSwyOC41IDE1LDE3LjI1MSAyNS40NjMsMjguNSAyOC41LDI3LjE2IDE3LjE4OSwxNSAiLz4NCjwvc3ZnPg0K\" alt=\"\">\n            </div>\n\n\n            \n            \n            \n\n        </div>\n    ",
+            styles: ["\n        #ngBoxLoading{\n            text-align: center;\n            z-index: 10001;\n            width: 100%;\n            height: 100%;\n            color: white;\n            position: fixed;\n            top: 46%;\n            font-size: 20px;\n        }\n        #ngBoxWrapper {\n            background-color: rgba(0, 0, 0, 0.9);\n            position: fixed;\n            top: 0px;\n            left: 0px;\n            text-align: center;\n            z-index: 10000;\n            width: 100%;\n            height: 100%;\n        }\n\n        #ngBoxWrapper #ngBoxContent img {\n            -webkit-border-radius: 4px;\n            -moz-border-radius: 4px;\n            border-radius: 4px;\n        }\n\n        #ngBoxContent {\n            display: block;\n        }\n\n        button {\n            font-size: 12px;\n        }\n\n        iframe {\n            max-width: 100%;\n            max-height: 100%;\n        }\n        #buttons{\n            position: relative;\n            margin: 5px auto;\n            text-align: right;\n        }\n        #buttons p{\n            float: left;\n            color: white;\n            text-align: left;\n            margin: 0 50px 0 0;\n            font-size: 12px;\n            font-family: sans-serif;\n        }\n        #buttons span.title{\n            display: block;\n            height: 18px;\n            overflow: hidden;\n        }\n        #closeButton{\n            position: absolute;\n            top: 0px;\n            right: 0px;\n            cursor: pointer;\n        }\n        .left{\n            position: fixed;\n            left: -5px;\n            margin-top: -42px;\n            cursor: pointer;\n            top: 50%;\n        }\n        .right{\n            position: fixed;\n            right: -10px;\n            margin-top: -42px;\n            cursor: pointer;\n            top: 50%;\n        }\n    "]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__ngbox_service__["a" /* NgBoxService */]])
+    ], NgBoxComponent);
+    return NgBoxComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/ngbox/ngbox.directive.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgBoxDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngbox_service__ = __webpack_require__("../../../../../src/app/ngbox/ngbox.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var NgBoxDirective = (function () {
+    function NgBoxDirective(ngBox, sanitizer) {
+        this.ngBox = ngBox;
+        this.sanitizer = sanitizer;
+    }
+    NgBoxDirective.prototype.ngOnDestroy = function () {
+        this.removeImage();
+    };
+    NgBoxDirective.prototype.ngAfterViewInit = function () {
+        this.ngBox.id = this.id = this.ngBox.id + 1;
+        this.updateImage();
+    };
+    NgBoxDirective.prototype.removeImage = function () {
+        var pos = this.ngBox.images.map(function (e) { return e.id; }).indexOf(this.id);
+        if (pos !== -1)
+            this.ngBox.images.splice(pos, 1);
+    };
+    NgBoxDirective.prototype.updateImage = function () {
+        var src = this.src ? this.src : this.href;
+        this.data = this.getData(src);
+        this.ngBox.images.push(this.data);
+    };
+    NgBoxDirective.prototype.onClick = function ($event) {
+        $event.preventDefault();
+        this.removeImage();
+        this.updateImage();
+        this.ngBox.loading = true;
+        this.ngBox.current = this.data;
+        this.ngBox.open = true;
+    };
+    NgBoxDirective.prototype.getData = function (url) {
+        if (url !== undefined || url !== '') {
+            // Youtube
+            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            if (match && match[2].length === 11) {
+                return {
+                    id: this.id,
+                    url: this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + match[2] + '?autoplay=0'),
+                    type: 2,
+                    title: this.title,
+                    width: this.width ? this.width : 640,
+                    height: this.height ? this.height : 380,
+                    group: this.group
+                };
+            }
+            // Vimeo
+            regExp = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+            match = url.match(regExp);
+            if (match && match[5].length === 8) {
+                return {
+                    id: this.id,
+                    url: this.sanitizer.bypassSecurityTrustResourceUrl('https://player.vimeo.com/video/' + match[5]),
+                    type: 3,
+                    title: this.title,
+                    width: this.width ? this.width : 640,
+                    height: this.height ? this.height : 380,
+                    group: this.group
+                };
+            }
+            if (!url.match(/\.(png|jpg|jpeg|gif|JPG|PNG|JPEG|GIF)$/) && this.image !== true) {
+                return {
+                    id: this.id,
+                    url: this.sanitizer.bypassSecurityTrustResourceUrl(url),
+                    type: 4,
+                    title: this.title,
+                    width: this.width ? this.width : 1000,
+                    height: this.height ? this.height : 480,
+                    group: this.group
+                };
+            }
+            /*            if (url.search('photoshooter') >= 0 || url.search('news247') >= 0) {
+                            return {
+                                id: this.id,
+                                url: this.sanitizer.bypassSecurityTrustResourceUrl(url),
+                                type: 4,
+                                title: this.title,
+                                width: this.width ? this.width : 1000,
+                                height: this.height ? this.height : 480,
+                                group: this.group
+                            };
+                        }*/
+            if (this.cache) {
+                (new Image()).src = url;
+            }
+            return {
+                id: this.id,
+                url: url,
+                type: 1,
+                title: this.title,
+                width: this.width,
+                height: this.height,
+                group: this.group
+            };
+        }
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], NgBoxDirective.prototype, "src", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], NgBoxDirective.prototype, "href", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], NgBoxDirective.prototype, "title", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], NgBoxDirective.prototype, "width", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], NgBoxDirective.prototype, "height", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], NgBoxDirective.prototype, "group", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], NgBoxDirective.prototype, "cache", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], NgBoxDirective.prototype, "image", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('click', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], NgBoxDirective.prototype, "onClick", null);
+    NgBoxDirective = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: '[myNgBox],[ng-box]'
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__ngbox_service__["a" /* NgBoxService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["DomSanitizer"]])
+    ], NgBoxDirective);
+    return NgBoxDirective;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/ngbox/ngbox.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgBoxService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var NgBoxService = (function () {
+    function NgBoxService() {
+        this.id = 0;
+        this.loading = false;
+        this.open = false;
+        this.images = [];
+    }
+    NgBoxService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], NgBoxService);
+    return NgBoxService;
 }());
 
 

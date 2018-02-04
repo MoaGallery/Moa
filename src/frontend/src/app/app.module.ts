@@ -30,6 +30,10 @@ import {ThumbnailService} from "./services/thumbnail.service";
 import {ImageAddComponent} from "./image/image-add/image-add.component";
 import {FileUploadModule} from 'primeng/components/fileupload/fileupload';
 import {HomeToolbarComponent} from "./home/home-toolbar/home-toolbar.component";
+import {CommonModule} from "@angular/common";
+import {NgBoxService} from "./ngbox/ngbox.service";
+import {NgBoxComponent} from "./ngbox/ngbox.component";
+import {NgBoxDirective} from "./ngbox/ngbox.directive";
 
 const routes: Routes = [
 	{ path: '', component: HomePageComponent },
@@ -60,7 +64,10 @@ const routes: Routes = [
 		ImagePageComponent,
 		ImageToolbarComponent,
 		ImageEditComponent,
-		ImageAddComponent
+		ImageAddComponent,
+
+		NgBoxComponent,
+		NgBoxDirective
 	],
 	imports: [
 		BrowserModule,
@@ -76,7 +83,8 @@ const routes: Routes = [
 		ButtonClickService,
 		GalleryService,
 		ImageService,
-		ThumbnailService
+		ThumbnailService,
+		NgBoxService
 	],
 	bootstrap: [
 		AppComponent
