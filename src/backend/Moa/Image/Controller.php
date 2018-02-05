@@ -4,7 +4,6 @@ namespace Moa\Image;
 
 use Moa\Actions\ImageResize;
 use Moa\Actions\PageData;
-use Moa\Gallery;
 use Moa\Service\IncomingFileService;
 use Moa\Service\TemplateService;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -29,11 +28,10 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		return BinaryFileResponse::create($body);
 	}
 	
-	function GetImageFile(string $filename, Request $request)
+	function GetImageFile(int $id, Request $request, DataProvider $provider)
 	{
-		preg_match('/(\d+)\.(\w+)/', $filename, $matches);
-		
-		$file = '../data/images/' . $matches[1] . '.' . $matches[2];
+		$image = $provider->LoadImage($id);
+		$file = '../data/images/' . $id . '.' . $image->GetProperty('format');
 		
 		if (!file_exists($file))
 			throw new FileNotFoundException($request->getUri());

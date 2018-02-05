@@ -29,10 +29,10 @@ image_view:
         image_id: '\d+'
 
 image:
-    path: /image/{filename}
+    path: /image/{id}/{filename}
     controller: 'Moa\Image\Controller::GetImageFile'
     requirements:
-        filename: '\d+\.\w+'
+        id: '\d+'
 
 image_thumb:
     path: /image/thumb/{filename}

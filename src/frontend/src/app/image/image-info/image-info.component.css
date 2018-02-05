@@ -5,3 +5,8 @@
 .image-container {
     text-align: center;
 }
+
+.image-lightbox-link {
+    text-align: center;
+    cursor: pointer;
+}

@@ -724,7 +724,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/gallery/gallery-toolbar/gallery-toolbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n<image-add [gallery]=\"gallery\"></image-add>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onAddImageClick()\" class=\"btn btn-default\" id=\"imageAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-picture\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onEditClick()\" class=\"btn btn-default\" id=\"galleryEdit\" title=\"Edit gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onDeleteClick()\" class=\"btn btn-default\" id=\"galleryDelete\" title=\"Delete gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n\t\t</div>\n\t</div>\n</div>"
+module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n<image-add [gallery]=\"gallery\"></image-add>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onAddImageClick()\" class=\"btn btn-default\" id=\"imageAdd\" title=\"Add image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-picture\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onEditClick()\" class=\"btn btn-default\" id=\"galleryEdit\" title=\"Edit gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onDeleteClick()\" class=\"btn btn-default\" id=\"galleryDelete\" title=\"Delete gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n\t\t</div>\n\t</div>\n</div>"
 
 /***/ }),
 
@@ -1221,7 +1221,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".moa-page {\n    width: 1140px;\n}\n\n.image-container {\n    text-align: center;\n}", ""]);
+exports.push([module.i, ".moa-page {\n    width: 1140px;\n}\n\n.image-container {\n    text-align: center;\n}\n\n.image-lightbox-link {\n    text-align: center;\n    cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -1234,7 +1234,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-info/image-info.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"moa-page\">\n\t<p>\n\t\t{{image.description}}\n\t</p>\n\t<div class=\"image-container\">\n\t\t<a [href]=\"getFullImageUrl()\" ng-box [title]=\"image.filename\">\n\t\t\t<img src=\"{{image.image_src}}\">\n\t\t</a>\n\t</div>\n</div>\n<ngbox></ngbox>"
+module.exports = "<div class=\"moa-page\">\n\t<p>\n\t\t{{image.description}}\n\t</p>\n\t<div class=\"image-container\">\n\t\t<a [href]=\"getFullImageUrl()\" ng-box [title]=\"image.filename\" class=\"image-lightbox-link\">\n\t\t\t<img src=\"{{image.image_src}}\">\n\t\t</a>\n\t</div>\n\t<br>\n\t<div class=\"row\">\n\t\t<a [href]=\"getFullImageUrl()\" target=\"_blank\" class=\"btn btn-info col-md-2 col-md-offset-5\">\n\t\t\t<span class=\"glyphicon glyphicon-new-window pull-left\"></span> Open in new tab\n\t\t</a>\n\t</div>\n</div>\n<ngbox></ngbox>"
 
 /***/ }),
 
@@ -1264,7 +1264,8 @@ var ImageInfoComponent = (function () {
             id: 0,
             image_src: '',
             description: '',
-            format: 'jpg'
+            format: 'jpg',
+            filename: ''
         };
         this.imageFullUrl = this.getFullImageUrl();
         this.observer = service.getImageObserver().subscribe(function (data) {
@@ -1276,7 +1277,7 @@ var ImageInfoComponent = (function () {
         this.observer.unsubscribe();
     };
     ImageInfoComponent.prototype.getFullImageUrl = function () {
-        return '/image/' + this.image.id + '.' + this.image.format;
+        return '/image/' + this.image.id + '/' + this.image.filename;
     };
     ImageInfoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({

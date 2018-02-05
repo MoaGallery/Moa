@@ -3,8 +3,14 @@
 		{{image.description}}
 	</p>
 	<div class="image-container">
-		<a [href]="getFullImageUrl()" ng-box [title]="image.filename">
+		<a [href]="getFullImageUrl()" ng-box [title]="image.filename" class="image-lightbox-link">
 			<img src="{{image.image_src}}">
+		</a>
+	</div>
+	<br>
+	<div class="row">
+		<a [href]="getFullImageUrl()" target="_blank" class="btn btn-info col-md-2 col-md-offset-5">
+			<span class="glyphicon glyphicon-new-window pull-left"></span> Open in new tab
 		</a>
 	</div>
 </div>

@@ -14,7 +14,8 @@ export class ImageInfoComponent implements OnDestroy {
 		id: 0,
 		image_src: '',
 		description: '',
-		format: 'jpg'
+		format: 'jpg',
+		filename: ''
 	};
 	observer: Subscription;
 	imageFullUrl: string;
@@ -34,6 +35,6 @@ export class ImageInfoComponent implements OnDestroy {
 	}
 
 	getFullImageUrl() {
-		return '/image/' + this.image.id + '.' + this.image.format;
+		return '/image/' + this.image.id + '/' + this.image.filename;
 	}
 }
