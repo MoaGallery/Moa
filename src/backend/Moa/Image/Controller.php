@@ -8,6 +8,7 @@ use Moa\Service\IncomingFileService;
 use Moa\Service\TemplateService;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -46,7 +47,7 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		$file = '../data/images/thumbs/' . $matches[1] . '.' . $matches[2];
 		
 		if (!file_exists($file))
-			throw new FileNotFoundException($request->getUri());
+			return new RedirectResponse('/media/thumberror.png');
 			
 		return BinaryFileResponse::create($file);
 	}
