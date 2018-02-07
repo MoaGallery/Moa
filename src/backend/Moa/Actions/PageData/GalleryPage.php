@@ -34,30 +34,30 @@ class GalleryPage
 	}
 	
 	/**
-	 * @param $id
+	 * @param $gallery_id
 	 *
 	 * @return array
 	 */
-	public function GetGalleryPageData($id)
+	public function GetGalleryPageData($gallery_id)
 	{
 		$gallery = new Gallery\Model($this->gallery_db_provider, $this->tag_db_provider);
-		$gallery->Load($id);
+		$gallery->Load($gallery_id);
 		$parents = $this->GetParents($gallery);
-		$sub_galleries = $this->gallery_db_provider->GetGalleries($id);
+		$sub_galleries = $this->gallery_db_provider->GetGalleries($gallery_id);
 		
 		$parent_gallery = null;
 		if (count($parents) > 0)
 			$parent_gallery = $parents[count($parents) - 1];
 		
 		$view = new Gallery\View();
-		$gallery_data = $view->ShowGallery($gallery, $parent_gallery, $this->tag_db_provider->GetTagsForGallery($id));
+		$gallery_data = $view->ShowGallery($gallery, $parent_gallery, $this->tag_db_provider->GetTagsForGallery($gallery_id));
 		$subgalleries = $view->ShowGalleryList($sub_galleries);
 		
 		$args = [];
 		$image_list = [];
 		if ($gallery->GetProperty('combined_view') == 1)
 		{
-			$images = $this->image_db_provider->LoadImagesByGalleryTags($id);
+			$images = $this->image_db_provider->LoadImagesByGalleryTags($gallery_id);
 			$image_view = new Image\View($args, $this->thumbnail_provider);
 			$image_list = $image_view->GetImageListData($images);
 		}

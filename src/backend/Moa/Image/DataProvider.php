@@ -53,7 +53,8 @@ class DataProvider
 			->groupBy('itl.image_id')
 			->having('COUNT(itl.tag_id) = (SELECT COUNT(tag_id) FROM moa_gallerytaglink WHERE gallery_id = ?)')
 			->setParameter(0, $gallery_id)
-			->setParameter(1, $gallery_id);
+			->setParameter(1, $gallery_id)
+			->orderBy('itl.image_id', 'ASC');
 		$result = $qb->execute();
 		
 		/*
@@ -164,5 +165,43 @@ class DataProvider
 		
 		@unlink('../data/images/thumbs/' . $id . '.jpg');
 		@unlink('../data/images/' . $id . '.' . $format);
+	}
+	
+	public function GetFirstImageIdImageByGalleryTags(int $gallery_id)
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$where = $qb->expr()->andX();
+		$where->add('gallery_id = ?');
+		$where->add('itl.tag_id = gtl.tag_id');
+		
+		$qb->select('itl.image_id')
+			->from('moa_imagetaglink', 'itl')
+			->from('moa_gallerytaglink', 'gtl')
+			->where($where)
+			->groupBy('itl.image_id')
+			->having('COUNT(itl.tag_id) = (SELECT COUNT(tag_id) FROM moa_gallerytaglink WHERE gallery_id = ?)')
+			->setParameter(0, $gallery_id)
+			->setParameter(1, $gallery_id)
+			->setMaxResults(1)
+			->orderBy('itl.image_id', 'ASC');
+		$result = $qb->execute();
+		
+		/*
+		SELECT itl.image_id
+		       FROM moa_gallerytaglink gtl, moa_imagetaglink itl
+		       WHERE gallery_id = 79
+		             AND itl.tag_id = gtl.tag_id
+		GROUP BY itl.image_id
+		HAVING COUNT(itl.tag_id) = (SELECT COUNT(tag_id)
+		       FROM moa_gallerytaglink
+		       WHERE gallery_id = 79)
+		 */
+
+		if ($result->rowCount() === 0)
+			return 0;
+		
+		$arr = $result->fetch();
+		return (int)$arr['image_id'];
 	}
 }

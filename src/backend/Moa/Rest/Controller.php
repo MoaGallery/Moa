@@ -2,7 +2,6 @@
 
 namespace Moa\Rest;
 
-
 use Moa\Actions\GalleryLookup;
 use Moa\Actions\GalleryPut;
 use Moa\Actions\ImagePut;

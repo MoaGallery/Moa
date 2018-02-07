@@ -6,17 +6,17 @@ class View
 {
 	public function ShowGalleryList($galleries)
 	{
-		$data = [];
-		foreach ($galleries as $id => $name)
+		$output = [];
+		foreach ($galleries as $id => $data)
 		{
-			$data[] = array
+			$output[] = array
 			(
-				'name' => $name,
-				'id' => (int)$id
+				'name' => $data['name'],
+				'id' => (int)$id,
+				'thumb_id' => $data['thumb_id']
 			);
 		};
-		
-		return $data;
+		return $output;
 	}
 
 	public function ShowGallery(Model $gallery, $parent_gallery, $gallery_tags)

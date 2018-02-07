@@ -52,16 +52,22 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('id', 'name')
+		$qb->select('id', 'name', 'gt.image_id AS thumb_id')
 			->from('moa_gallery')
-			->where('parent_id = ?');
+			->leftJoin('moa_gallery', 'moa_gallerythumb', 'gt', 'moa_gallery.id = gt.gallery_id')
+			->where('parent_id = ?')
+			->orderBy('id', 'ASC');
 		$qb->setParameter(0, $parent_id);
 		$result = $qb->execute();
 
 		$galleries = array();
 		while ($arr = $result->fetch())
 		{
-			$galleries[$arr['id']] = $arr['name'];
+			$galleries[$arr['id']] =
+			[
+				'name' => $arr['name'],
+				'thumb_id' => $arr['thumb_id']
+			];
 		}
 
 		return $galleries;
@@ -215,5 +221,67 @@ class DataProvider
 		
 		$arr = $result->fetch();
 		return (int)$arr['count'];
+	}
+	
+	public function GetGalleryThumbId($gallery_id): int
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$qb->select('image_id')
+			->from('moa_gallerythumb')
+			->where("gallery_id = ?")
+			->setParameter(0, $gallery_id);
+		$result = $qb->execute();
+		
+		$arr = $result->fetch();
+		
+		if ($result->rowCount() === 0)
+			return -1;
+		
+		return (int)$arr['image_id'];
+	}
+	
+	public function SetGalleryThumbId(int $gallery_id, int $image_id)
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		if ($this->GetGalleryThumbId($gallery_id) === -1)
+		{
+			$qb->insert('moa_gallerythumb')
+				->values(
+					[
+						'gallery_id' => '?',
+						'image_id' => '?',
+						'auto' => '1'
+					])
+				->setParameter(0, $gallery_id)
+				->setParameter(1, $image_id);
+		} else
+		{
+			$qb->update('moa_gallerythumb')
+				->set('image_id', $image_id)
+				->where("gallery_id = ?")
+				->setParameter(0, $gallery_id);
+		}
+		
+		$result = $qb->execute();
+	}
+	
+	public function IsGalleryThumbAuto($gallery_id): int
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$qb->select('auto')
+			->from('moa_gallerythumb')
+			->where("gallery_id = ?")
+			->setParameter(0, $gallery_id);
+		$result = $qb->execute();
+		
+		$arr = $result->fetch();
+		
+		if ($result->rowCount() === 0)
+			return true;
+		
+		return (bool)$arr['auto'];
 	}
 }

@@ -15,4 +15,7 @@ export class GalleryTileComponent {
         return '/gallery/' + this.gallery.id;
     }
 
+	doesThumbExist(thumb_id: number) {
+    	return thumb_id !== null;
+	}
 }

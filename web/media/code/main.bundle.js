@@ -656,7 +656,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/gallery/gallery-tile/gallery-tile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"[getLink(gallery.id)]\">\n\t<img src=\"http://placehold.it/300x200\">\n\t<h4>{{gallery.name}}</h4>\n</a>"
+module.exports = "<a [routerLink]=\"[getLink(gallery.id)]\">\n\t<img *ngIf=\"!doesThumbExist(gallery.thumb_id)\" src=\"http://placehold.it/300x200\">\n\t<img *ngIf=\"doesThumbExist(gallery.thumb_id)\" src=\"/image/thumb/{{gallery.thumb_id}}.jpg\">\n\t<h4>{{gallery.name}}</h4>\n</a>"
 
 /***/ }),
 
@@ -683,6 +683,9 @@ var GalleryTileComponent = (function () {
     }
     GalleryTileComponent.prototype.getLink = function (id) {
         return '/gallery/' + this.gallery.id;
+    };
+    GalleryTileComponent.prototype.doesThumbExist = function (thumb_id) {
+        return thumb_id !== null;
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
