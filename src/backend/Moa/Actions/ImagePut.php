@@ -3,20 +3,31 @@
 namespace Moa\Actions;
 
 use Moa\Image;
+use Moa\Gallery;
 use Moa\Service\IncomingFileService;
 use Moa\Tag;
 
 class ImagePut
 {
 	protected $image_provider;
+	protected $gallery_provider;
 	protected $tag_provider;
 	protected $file_service;
 	
-	function __construct(Image\DataProvider $image_provider, Tag\DataProvider $tag_provider, IncomingFileService $file_service)
+	protected $gallery_find_thumb;
+	
+	function __construct(Image\DataProvider $image_provider,
+	                     Gallery\DataProvider $gallery_provider,
+	                     Tag\DataProvider $tag_provider,
+	                     IncomingFileService $file_service,
+	                     GalleryFindThumb $gallery_find_thumb)
 	{
 		$this->image_provider = $image_provider;
+		$this->gallery_provider = $gallery_provider;
 		$this->tag_provider = $tag_provider;
 		$this->file_service = $file_service;
+		
+		$this->gallery_find_thumb = $gallery_find_thumb;
 	}
 	
 	function SaveImage($image_id, $data)
@@ -24,7 +35,9 @@ class ImagePut
 		$image = new Image\Model($this->image_provider, $this->tag_provider);
 		$image->Load($image_id);
 		$image->SetProperty('description', $data->description);
-		
+		$update_galleries = [
+			$this->gallery_provider->LoadGalleriesByImage($image_id)
+		];
 		$this->image_provider->SaveImage($image);
 		
 		$tags = [];
@@ -34,6 +47,20 @@ class ImagePut
 		}
 		
 		$this->tag_provider->SaveTagsForImage($tags, $image_id);
+		$update_galleries[] = $this->gallery_provider->LoadGalleriesByImage($image_id);
+		
+		foreach ($update_galleries as $galleries)
+		{
+			foreach ($galleries as $gallery)
+			{
+				/** @var Gallery\Model $gallery */
+				if ($gallery->GetProperty('combined_view') === '1')
+				{
+					$thumb_id = $this->gallery_find_thumb->GalleryFindThumb($gallery);
+					$this->gallery_provider->SetGalleryThumbId((int)$gallery->GetProperty('id'), $thumb_id);
+				}
+			}
+		}
 		
 		return $image_id;
 	}

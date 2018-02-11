@@ -38,7 +38,7 @@ class DataProvider
 		return $info;
 	}
 	
-	public function LoadImagesByGalleryTags($gallery_id)
+	public function LoadImagesByGallery($gallery_id)
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		

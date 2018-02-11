@@ -57,7 +57,7 @@ class GalleryPage
 		$image_list = [];
 		if ($gallery->GetProperty('combined_view') == 1)
 		{
-			$images = $this->image_db_provider->LoadImagesByGalleryTags($gallery_id);
+			$images = $this->image_db_provider->LoadImagesByGallery($gallery_id);
 			$image_view = new Image\View($args, $this->thumbnail_provider);
 			$image_list = $image_view->GetImageListData($images);
 		}

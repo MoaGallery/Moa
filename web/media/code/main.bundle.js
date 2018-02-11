@@ -574,7 +574,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".thumbnail {\n    height: 250px;\n}", ""]);
 
 // exports
 

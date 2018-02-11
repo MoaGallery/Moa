@@ -284,4 +284,60 @@ class DataProvider
 		
 		return (bool)$arr['auto'];
 	}
+	
+	public function LoadGalleriesByImage($image_id)
+	{
+		$qb = new QueryBuilder($this->db->Connection());
+		
+		$where = $qb->expr()->andX();
+		$where->add('image_id = ?');
+		$where->add('itl.tag_id = gtl.tag_id');
+		
+		$qb->select('gallery_id')
+			->from('moa_imagetaglink', 'itl')
+			->from('moa_gallerytaglink', 'gtl')
+			->where($where)
+			->groupBy('gallery_id')
+			->having('COUNT(gtl.tag_id) = (SELECT COUNT(tag_id) FROM moa_gallerytaglink WHERE gallery_id = gtl.gallery_id)')
+			->setParameter(0, $image_id)
+			->orderBy('gtl.gallery_id', 'ASC');
+		$result = $qb->execute();
+		
+		/*
+		SELECT gallery_id
+		       FROM moa_gallerytaglink gtl, moa_imagetaglink itl
+		       WHERE image_id = 307
+		             AND itl.tag_id = gtl.tag_id
+		GROUP BY gallery_id
+		HAVING COUNT(gtl.tag_id) = (SELECT COUNT(tag_id)
+		       FROM moa_gallerytaglink
+		       WHERE gallery_id = gtl.gallery_id)
+		 */
+		
+		$gallery_ids = array();
+		while ($arr = $result->fetch())
+		{
+			$gallery_ids[] = (int)$arr['gallery_id'];
+		}
+		
+		$galleries = array();
+		
+		if (count($gallery_ids) > 0)
+		{
+			$qb = new QueryBuilder($this->db->Connection());
+			$qb->select('*')
+				->from('moa_gallery')
+				->where($qb->expr()->in('id', $gallery_ids));
+			$result = $qb->execute();
+			
+			while ($arr = $result->fetch())
+			{
+				$gallery = new Model($this, $this->tdp);
+				$gallery->SetInfo($arr);
+				$galleries[] = $gallery;
+			}
+		}
+		
+		return $galleries;
+	}
 }
