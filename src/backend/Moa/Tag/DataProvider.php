@@ -2,12 +2,15 @@
 
 namespace Moa\Tag;
 
-
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Service\Db;
+use Moa\Gallery;
+use Moa\Image;
 
 class DataProvider
 {
+	const DB_NAME = Db::DB_PREFIX . 'tag';
+	
 	/** @var  Db */
 	protected $db;
 
@@ -21,7 +24,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('id', 'name')
-			->from('moa_tag')
+			->from(self::DB_NAME)
 			->orderBy('name');
 		$result = $qb->execute();
 
@@ -39,7 +42,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('id', 'name')
-			->from('moa_tag')
+			->from(self::DB_NAME)
 			->orderBy('name')
 			->where("name LIKE ?")
 			->setParameter(0, '%' . addcslashes($term, '%_') . '%')
@@ -64,7 +67,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('COUNT(1) AS count')
-			->from('moa_tag')
+			->from(self::DB_NAME)
 			->orderBy('name')
 			->where("name LIKE ?")
 			->setParameter(0, '%' . addcslashes($term, '%_') . '%');
@@ -79,8 +82,8 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('t.id', 't.name', 'tl.gallery_id')
-			->from('moa_tag', 't')
-			->join('t', 'moa_gallerytaglink', 'tl', 't.id = tl.tag_id')
+			->from(self::DB_NAME, 't')
+			->join('t', Gallery\DataProvider::DB_TAG_LINK_NAME, 'tl', 't.id = tl.tag_id')
 			->where('tl.gallery_id = ?')
 			->setParameter(0, $gallery_id);
 		$result = $qb->execute();
@@ -99,8 +102,8 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('t.id', 't.name', 'tl.image_id')
-			->from('moa_tag', 't')
-			->join('t', 'moa_imagetaglink', 'tl', 't.id = tl.tag_id')
+			->from(self::DB_NAME, 't')
+			->join('t', Image\DataProvider::DB_TAG_LINK_NAME, 'tl', 't.id = tl.tag_id')
 			->where('tl.image_id = ?')
 			->setParameter(0, $image_id);
 		$result = $qb->execute();
@@ -118,7 +121,7 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->insert('moa_tag')
+		$qb->insert(self::DB_NAME)
 			->setValue('name', '?')
 			->setParameter(0, $tag_name);
 		$qb->execute();
@@ -130,14 +133,14 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->delete('moa_gallerytaglink')
+		$qb->delete(Gallery\DataProvider::DB_TAG_LINK_NAME)
 			->where('gallery_id = ?')
 			->setParameter(0, $gallery_id);
 		$qb->execute();
 
 		foreach ($tags as $tag)
 		{
-			$qb->insert('moa_gallerytaglink')
+			$qb->insert(Gallery\DataProvider::DB_TAG_LINK_NAME)
 				->setValue('gallery_id', '?')
 				->setValue('tag_id', '?')
 				->setParameter(0, $gallery_id)
@@ -150,14 +153,14 @@ class DataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		
-		$qb->delete('moa_imagetaglink')
+		$qb->delete(Image\DataProvider::DB_TAG_LINK_NAME)
 			->where('image_id = ?')
 			->setParameter(0, $image_id);
 		$qb->execute();
 		
 		foreach ($tags as $tag)
 		{
-			$qb->insert('moa_imagetaglink')
+			$qb->insert(Image\DataProvider::DB_TAG_LINK_NAME)
 				->setValue('image_id', '?')
 				->setValue('tag_id', '?')
 				->setParameter(0, $image_id)

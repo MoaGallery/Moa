@@ -7,6 +7,7 @@ use Doctrine\DBAL\DriverManager;
 
 class Db
 {
+	const DB_PREFIX = '';
 	/** @var \Doctrine\DBAL\Connection $conn */
 	protected $conn;
 

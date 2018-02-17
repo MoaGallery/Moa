@@ -7,6 +7,8 @@ use Moa\Actions\ImageResize;
 
 class ThumbnailProvider
 {
+	const DB_NAME = Db::DB_PREFIX . 'thumb_regen';
+	
 	protected $db;
 	protected $resize_action;
 	
@@ -25,7 +27,7 @@ class ThumbnailProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('count(1) count')
-			->from('moa_thumb_regen')
+			->from(self::DB_NAME)
 			->where('image_id = ?')
 			->setParameter(0, $image_id);
 		$result = $qb->execute();
@@ -33,7 +35,7 @@ class ThumbnailProvider
 		$arr = $result->fetch();
 		if ($arr['count'] === '0')
 		{
-			$qb->insert('moa_thumb_regen')
+			$qb->insert(self::DB_NAME)
 				->values(
 				[
 					'image_id' => '?'
@@ -47,7 +49,7 @@ class ThumbnailProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('count(1) count')
-			->from('moa_thumb_regen')
+			->from(self::DB_NAME)
 			->where('image_id = ?')
 			->setParameter(0, $image_id);
 		$result = $qb->execute();
@@ -62,7 +64,7 @@ class ThumbnailProvider
 		
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('image_id')
-			->from('moa_thumb_regen');
+			->from(self::DB_NAME);
 			//->orderBy('id', 'desc');
 		$result = $qb->execute();
 		
@@ -78,7 +80,7 @@ class ThumbnailProvider
 				($this->DoesThumbnailExist($image_id)))
 			{
 				$qb2 = new QueryBuilder($this->db->Connection());
-				$qb2->delete('moa_thumb_regen')
+				$qb2->delete(self::DB_NAME)
 					->where('image_id = ?')
 					->setParameter(0, $image_id);
 				$qb2->execute();

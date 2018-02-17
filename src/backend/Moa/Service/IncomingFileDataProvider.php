@@ -6,6 +6,8 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 class IncomingFileDataProvider
 {
+	const DB_NAME = Db::DB_PREFIX . 'incoming';
+	
 	protected $db;
 	
 	public function __construct(Db $db)
@@ -16,7 +18,7 @@ class IncomingFileDataProvider
 	public function AddFile(string $filename, int $timestamp, string $extension) : int
 	{
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->insert('moa_incoming')
+		$qb->insert(self::DB_NAME)
 			->values(
 			[
 				'filename' => '?',
@@ -34,7 +36,7 @@ class IncomingFileDataProvider
 	public function AddHash(int $file_id, string $hash)
 	{
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->update('moa_incoming')
+		$qb->update(self::DB_NAME)
 			->set('hash', '?')
 			->setParameter(0, $hash)
 			->where('id = ?')
@@ -46,7 +48,7 @@ class IncomingFileDataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('id')
-			->from('moa_incoming')
+			->from(self::DB_NAME)
 			->where('hash = ?')
 			->setParameter(0, $hash);
 		$result = $qb->execute();
@@ -63,7 +65,7 @@ class IncomingFileDataProvider
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('id, filename, extension')
-			->from('moa_incoming')
+			->from(self::DB_NAME)
 			->where('hash = ?')
 			->setParameter(0, $hash);
 		$result = $qb->execute();

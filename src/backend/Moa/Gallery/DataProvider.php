@@ -5,9 +5,14 @@ namespace Moa\Gallery;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Service\Db;
 use Moa\Tag;
+use Moa\Image;
 
 class DataProvider
 {
+	const DB_NAME = Db::DB_PREFIX . 'gallery';
+	const DB_THUMB_NAME = Db::DB_PREFIX . 'gallerythumb';
+	const DB_TAG_LINK_NAME = Db::DB_PREFIX . 'gallerytaglink';
+	
 	/** @var Db Db */
 	protected $db;
 
@@ -25,7 +30,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('*')
-			->from('moa_gallery')
+			->from(self::DB_NAME)
 			->where('id = ?')
 			->setParameter(0, $id);
 		$result = $qb->execute();
@@ -53,8 +58,8 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('id', 'name', 'gt.image_id AS thumb_id')
-			->from('moa_gallery')
-			->leftJoin('moa_gallery', 'moa_gallerythumb', 'gt', 'moa_gallery.id = gt.gallery_id')
+			->from(self::DB_NAME, 'g')
+			->leftJoin('g', self::DB_THUMB_NAME, 'gt', 'g.id = gt.gallery_id')
 			->where('parent_id = ?')
 			->orderBy('id', 'ASC');
 		$qb->setParameter(0, $parent_id);
@@ -78,7 +83,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('id', 'name')
-			->from('moa_gallery');
+			->from(self::DB_NAME);
 		$result = $qb->execute();
 
 		$galleries = array();
@@ -95,7 +100,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('*')
-			->from('moa_gallery')
+			->from(self::DB_NAME)
 			->where('id = ?');
 		$qb->setParameter(0, $id);
 		$result = $qb->execute();
@@ -119,7 +124,7 @@ class DataProvider
 		if ($info['id'] == 0)
 		{
 			$qb = new QueryBuilder($this->db->Connection());
-			$qb->insert('moa_gallery')
+			$qb->insert(self::DB_NAME)
 				->setValue('name', '?')
 				->setValue('description', '?')
 				->setValue('parent_id', '?')
@@ -137,7 +142,7 @@ class DataProvider
 		} else
 		{
 			$qb = new QueryBuilder($this->db->Connection());
-			$qb->update('moa_gallery')
+			$qb->update(self::DB_NAME)
 				->set('name', '?')
 				->set('description', '?')
 				->set('parent_id', '?')
@@ -162,13 +167,13 @@ class DataProvider
 	public function DeleteGallery($id)
 	{
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->delete('moa_gallerytaglink')
+		$qb->delete(self::DB_TAG_LINK_NAME)
 			->where('gallery_id = ?')
 			->setParameter(0, $id);
 		$qb->execute();
 		
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->delete('moa_gallery')
+		$qb->delete(self::DB_NAME)
 			->where('id = ?')
 			->setParameter(0, $id);
 		$qb->execute();
@@ -179,7 +184,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('id', 'name')
-			->from('moa_gallery')
+			->from(self::DB_NAME)
 			->orderBy('name')
 			->where("name LIKE ?")
 			->setParameter(0, '%' . addcslashes($term, '%_') . '%')
@@ -213,7 +218,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('COUNT(1) AS count')
-			->from('moa_gallery')
+			->from(self::DB_NAME)
 			->orderBy('name')
 			->where("name LIKE ?")
 			->setParameter(0, '%' . addcslashes($term, '%_') . '%');
@@ -228,7 +233,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('image_id')
-			->from('moa_gallerythumb')
+			->from(self::DB_THUMB_NAME)
 			->where("gallery_id = ?")
 			->setParameter(0, $gallery_id);
 		$result = $qb->execute();
@@ -247,7 +252,7 @@ class DataProvider
 		
 		if ($this->GetGalleryThumbId($gallery_id) === -1)
 		{
-			$qb->insert('moa_gallerythumb')
+			$qb->insert(self::DB_THUMB_NAME)
 				->values(
 					[
 						'gallery_id' => '?',
@@ -258,7 +263,7 @@ class DataProvider
 				->setParameter(1, $image_id);
 		} else
 		{
-			$qb->update('moa_gallerythumb')
+			$qb->update(self::DB_THUMB_NAME)
 				->set('image_id', $image_id)
 				->where("gallery_id = ?")
 				->setParameter(0, $gallery_id);
@@ -272,7 +277,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->select('auto')
-			->from('moa_gallerythumb')
+			->from(self::DB_THUMB_NAME)
 			->where("gallery_id = ?")
 			->setParameter(0, $gallery_id);
 		$result = $qb->execute();
@@ -294,11 +299,11 @@ class DataProvider
 		$where->add('itl.tag_id = gtl.tag_id');
 		
 		$qb->select('gallery_id')
-			->from('moa_imagetaglink', 'itl')
-			->from('moa_gallerytaglink', 'gtl')
+			->from(Image\DataProvider::DB_TAG_LINK_NAME, 'itl')
+			->from(self::DB_TAG_LINK_NAME, 'gtl')
 			->where($where)
 			->groupBy('gallery_id')
-			->having('COUNT(gtl.tag_id) = (SELECT COUNT(tag_id) FROM moa_gallerytaglink WHERE gallery_id = gtl.gallery_id)')
+			->having('COUNT(gtl.tag_id) = (SELECT COUNT(tag_id) FROM ' . self::DB_TAG_LINK_NAME . ' WHERE gallery_id = gtl.gallery_id)')
 			->setParameter(0, $image_id)
 			->orderBy('gtl.gallery_id', 'ASC');
 		$result = $qb->execute();
@@ -326,7 +331,7 @@ class DataProvider
 		{
 			$qb = new QueryBuilder($this->db->Connection());
 			$qb->select('*')
-				->from('moa_gallery')
+				->from(self::DB_NAME)
 				->where($qb->expr()->in('id', $gallery_ids));
 			$result = $qb->execute();
 			

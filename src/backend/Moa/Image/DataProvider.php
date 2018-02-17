@@ -5,9 +5,13 @@ namespace Moa\Image;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Moa\Service\Db;
 use Moa\Tag;
+use Moa\Gallery;
 
 class DataProvider
 {
+	const DB_NAME = Db::DB_PREFIX . 'image';
+	const DB_TAG_LINK_NAME = Db::DB_PREFIX . 'imagetaglink';
+	
 	/** @var Db Db */
 	protected $db;
 
@@ -25,7 +29,7 @@ class DataProvider
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->select('*')
-			->from('moa_image')
+			->from(self::DB_NAME)
 			->where('id = ?')
 			->setParameter(0, $id);
 		$result = $qb->execute();
@@ -47,11 +51,11 @@ class DataProvider
 		$where->add('itl.tag_id = gtl.tag_id');
 		
 		$qb->select('itl.image_id')
-			->from('moa_imagetaglink', 'itl')
-			->from('moa_gallerytaglink', 'gtl')
+			->from(self::DB_TAG_LINK_NAME, 'itl')
+			->from(Gallery\DataProvider::DB_TAG_LINK_NAME, 'gtl')
 			->where($where)
 			->groupBy('itl.image_id')
-			->having('COUNT(itl.tag_id) = (SELECT COUNT(tag_id) FROM moa_gallerytaglink WHERE gallery_id = ?)')
+			->having('COUNT(itl.tag_id) = (SELECT COUNT(tag_id) FROM ' . Gallery\DataProvider::DB_TAG_LINK_NAME . ' WHERE gallery_id = ?)')
 			->setParameter(0, $gallery_id)
 			->setParameter(1, $gallery_id)
 			->orderBy('itl.image_id', 'ASC');
@@ -80,7 +84,7 @@ class DataProvider
 		{
 			$qb = new QueryBuilder($this->db->Connection());
 			$qb->select('*')
-				->from('moa_image')
+				->from(self::DB_NAME)
 				->where($qb->expr()->in('id', $image_ids));
 			$result = $qb->execute();
 			
@@ -111,7 +115,7 @@ class DataProvider
 		if ($info['id'] == 0)
 		{
 			$qb = new QueryBuilder($this->db->Connection());
-			$qb->insert('moa_image')
+			$qb->insert(self::DB_NAME)
 				->setValue('filename', '?')
 				->setValue('description', '?')
 				->setValue('width', '?')
@@ -128,7 +132,7 @@ class DataProvider
 		} else
 		{
 			$qb = new QueryBuilder($this->db->Connection());
-			$qb->update('moa_image')
+			$qb->update(self::DB_NAME)
 				->set('description', '?')
 				->where('id = ?')
 				
@@ -143,14 +147,14 @@ class DataProvider
 	public function DeleteImage($id)
 	{
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->delete('moa_imagetaglink')
+		$qb->delete(self::DB_TAG_LINK_NAME)
 			->where('image_id = ?')
 			->setParameter(0, $id);
 		$qb->execute();
 		
 		$qb = new QueryBuilder($this->db->Connection());
 		$qb->select('format')
-			->from('moa_image')
+			->from(self::DB_NAME)
 			->where('id = ?')
 			->setParameter(0, $id);
 		$res = $qb->execute();
@@ -158,7 +162,7 @@ class DataProvider
 		$format = $arr['format'];
 		
 		$qb = new QueryBuilder($this->db->Connection());
-		$qb->delete('moa_image')
+		$qb->delete(self::DB_NAME)
 			->where('id = ?')
 			->setParameter(0, $id);
 		$qb->execute();
@@ -176,11 +180,11 @@ class DataProvider
 		$where->add('itl.tag_id = gtl.tag_id');
 		
 		$qb->select('itl.image_id')
-			->from('moa_imagetaglink', 'itl')
-			->from('moa_gallerytaglink', 'gtl')
+			->from(self::DB_TAG_LINK_NAME, 'itl')
+			->from(Gallery\DataProvider::DB_TAG_LINK_NAME, 'gtl')
 			->where($where)
 			->groupBy('itl.image_id')
-			->having('COUNT(itl.tag_id) = (SELECT COUNT(tag_id) FROM moa_gallerytaglink WHERE gallery_id = ?)')
+			->having('COUNT(itl.tag_id) = (SELECT COUNT(tag_id) FROM ' . Gallery\DataProvider::DB_TAG_LINK_NAME . ' WHERE gallery_id = ?)')
 			->setParameter(0, $gallery_id)
 			->setParameter(1, $gallery_id)
 			->setMaxResults(1)
