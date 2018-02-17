@@ -55,7 +55,8 @@ class GalleryPage
 		
 		$args = [];
 		$image_list = [];
-		if ($gallery->GetProperty('combined_view') == 1)
+		if (($gallery->GetProperty('combined_view') == 1) ||
+			(count($subgalleries) === 0))
 		{
 			$images = $this->image_db_provider->LoadImagesByGallery($gallery_id);
 			$image_view = new Image\View($args, $this->thumbnail_provider);
