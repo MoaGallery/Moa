@@ -131,6 +131,18 @@ class DataProvider
 
 	public function SaveTagsForGallery($tags, $gallery_id)
 	{
+		$tag_ids = [];
+		foreach ($tags as $tag)
+		{
+			if (is_numeric($tag))
+			{
+				$tag_ids[] = $tag;
+			} else
+			{
+				$tag_ids[] = $this->AddTag($tag);
+			}
+		}
+		
 		$qb = new QueryBuilder($this->db->Connection());
 
 		$qb->delete(Gallery\DataProvider::DB_TAG_LINK_NAME)
@@ -138,7 +150,7 @@ class DataProvider
 			->setParameter(0, $gallery_id);
 		$qb->execute();
 
-		foreach ($tags as $tag)
+		foreach ($tag_ids as $tag)
 		{
 			$qb->insert(Gallery\DataProvider::DB_TAG_LINK_NAME)
 				->setValue('gallery_id', '?')
@@ -151,6 +163,18 @@ class DataProvider
 	
 	public function SaveTagsForImage($tags, $image_id)
 	{
+		$tag_ids = [];
+		foreach ($tags as $tag)
+		{
+			if (is_numeric($tag))
+			{
+				$tag_ids[] = $tag;
+			} else
+			{
+				$tag_ids[] = $this->AddTag($tag);
+			}
+		}
+		
 		$qb = new QueryBuilder($this->db->Connection());
 		
 		$qb->delete(Image\DataProvider::DB_TAG_LINK_NAME)
@@ -158,7 +182,7 @@ class DataProvider
 			->setParameter(0, $image_id);
 		$qb->execute();
 		
-		foreach ($tags as $tag)
+		foreach ($tag_ids as $tag)
 		{
 			$qb->insert(Image\DataProvider::DB_TAG_LINK_NAME)
 				->setValue('image_id', '?')

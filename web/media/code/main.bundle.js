@@ -396,6 +396,7 @@ var GalleryEditComponent = (function () {
                     }
                 });
                 $('#inputGalleryTags').select2({
+                    tags: true,
                     ajax: {
                         url: '/api/tag_lookup',
                         dataType: 'json',
@@ -978,6 +979,7 @@ var ImageAddComponent = (function () {
             $('#add-modal').modal('show');
             setTimeout(function () {
                 $('#inputImageTags').select2({
+                    tags: true,
                     ajax: {
                         url: '/api/tag_lookup',
                         dataType: 'json',
@@ -1143,6 +1145,7 @@ var ImageEditComponent = (function () {
             $('#edit-modal').modal('show');
             setTimeout(function () {
                 $('#inputImageTags').select2({
+                    tags: true,
                     ajax: {
                         url: '/api/tag_lookup',
                         dataType: 'json',

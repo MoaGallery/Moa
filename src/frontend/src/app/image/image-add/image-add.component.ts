@@ -36,6 +36,7 @@ export class ImageAddComponent implements OnInit {
 				$('#add-modal').modal('show');
 				setTimeout(function() {
 					$('#inputImageTags').select2({
+						tags: true,
 						ajax: {
 							url: '/api/tag_lookup',
 							dataType: 'json',

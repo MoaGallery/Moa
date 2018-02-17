@@ -58,6 +58,7 @@ export class GalleryEditComponent implements OnDestroy {
 						}
 					});
 					$('#inputGalleryTags').select2({
+						tags: true,
 						ajax: {
 							url: '/api/tag_lookup',
 							dataType: 'json',
