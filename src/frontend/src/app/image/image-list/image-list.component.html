@@ -1,8 +1,6 @@
-<div class="row">
-	<ul class="list-unstyled">
-		<li *ngFor="let image of images" class="thumbnail col-md-3" style="min-height: 150px;">
-			<image-thumb [image]="image" [gallery_id]="gallery.id">
-			</image-thumb>
-		</li>
-	</ul>
-</div>
+<ul class="list-unstyled">
+	<li *ngFor="let image of images" class="thumbnail">
+		<image-thumb [image]="image" [gallery_id]="gallery.id">
+		</image-thumb>
+	</li>
+</ul>

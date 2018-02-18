@@ -32,7 +32,9 @@ class View
 			$data[] = array
 			(
 				'filename' => $image->GetProperty('filename'),
-				'id' => $image_id,
+				'id' => (int)$image_id,
+				'width' => (int)$image->GetProperty('width'),
+				'height' => (int)$image->GetProperty('height'),
 				'isGenerating' => $is_generating
 			);
 		};

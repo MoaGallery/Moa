@@ -40,6 +40,12 @@ image_thumb:
     requirements:
         filename: '\d+\.\w+'
 
+image_thumb_wide:
+    path: /image/thumb/{filename}
+    controller: 'Moa\Image\Controller::GetWideThumbFile'
+    requirements:
+        filename: '\d+-w\.\w+'
+
 image_standard:
     path: /image/standard/{filename}
     controller: 'Moa\Image\Controller::GetStandardFile'

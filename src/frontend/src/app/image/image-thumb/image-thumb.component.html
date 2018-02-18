@@ -1,7 +1,8 @@
-<a [routerLink]="[getLink()]">
-	<span class="thumbnail-image-container">
-		<img *ngIf="!image.isGenerating" src="/image/thumb/{{image.id}}.jpg">
+<div>
+	<a [routerLink]="[getLink()]">
+		<img *ngIf="!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300" src="/image/thumb/{{image.id}}.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}">
+		<img *ngIf="!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)" src="/image/thumb/{{image.id}}-w.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}">
 		<img *ngIf="image.isGenerating" src="/media/spinner.svg" class="thumbnail-generating">
-	</span>
-	<h4>{{image.filename}}</h4>
-</a>
+		<span>{{image.filename}}</span>
+	</a>
+</div>

@@ -52,6 +52,18 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		return BinaryFileResponse::create($file);
 	}
 	
+	function GetWideThumbFile(string $filename, Request $request)
+	{
+		preg_match('/(\d+)\-w.(\w+)/', $filename, $matches);
+		
+		$file = '../data/images/thumbs/' . $matches[1] . '-w.' . $matches[2];
+		
+		if (!file_exists($file))
+			return new RedirectResponse('/media/thumberror.png');
+		
+		return BinaryFileResponse::create($file);
+	}
+	
 	function GetStandardFile(string $filename, Request $request, ImageResize $action)
 	{
 		preg_match('/(\d+)\.(\w+)/', $filename, $matches);

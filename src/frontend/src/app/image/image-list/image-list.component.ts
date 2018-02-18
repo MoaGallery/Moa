@@ -12,6 +12,9 @@ import {Observable} from "rxjs/Observable";
 })
 export class ImageListComponent implements OnInit, OnDestroy {
 
+	static readonly TARGET_HEIGHT: Number = 300;
+	static readonly GALLERY_WIDTH: Number = 1140;
+
 	images: Array<any>;
 	gallery: Array<any>;
 	imagesObserver: Subscription;
@@ -39,6 +42,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
 	}
 
 	private checkThumbs() {
+		let imageWidths = [];
+		let totalWidth = 0;
+
 		if (this.thumbSub !== undefined)
 			this.thumbSub.unsubscribe();
 
@@ -48,10 +54,69 @@ export class ImageListComponent implements OnInit, OnDestroy {
 				if (image.isGenerating) {
 					toGenerate.push(parseInt(image.id));
 				}
+
+				let width = image.width * (Number(ImageListComponent.TARGET_HEIGHT) / image.height);
+				imageWidths.push(width);
+				totalWidth += width;
 			}
 
 			if (toGenerate.length > 0)
 				this.getThumbs(toGenerate);
+
+			let maxWidth = Number(ImageListComponent.GALLERY_WIDTH) * 1.2;
+
+			let rows = [];
+			let row = {
+				width: 0,
+				images: 0
+			};
+			let i = 0;
+			while (i < imageWidths.length) {
+				row.width += imageWidths[i];
+				row.images++;
+				if ((row.width > ImageListComponent.GALLERY_WIDTH) &&
+					(row.images > 1)) {
+					if (row.width > maxWidth) {
+						row.width -= imageWidths[i];
+						row.images--;
+						rows.push(row);
+						row = {
+							width: imageWidths[i],
+							images: 1
+						};
+					} else {
+						rows.push(row);
+						row = {
+							width: 0,
+							images: 0
+						};
+					}
+				}
+				i++;
+			}
+			if ((row.images === 1) &&
+				(rows.length > 0)){
+				rows[rows.length-1].images++;
+				rows[rows.length-1].width += row.width;
+				row = {
+					width: 0,
+					images: 0
+				}
+			}
+			if ((row.images > 1) ||
+				(rows.length === 0)) {
+				rows.push(row);
+			}
+
+			i = 0;
+			for (let row of rows) {
+				let scaleFactor = Number(ImageListComponent.GALLERY_WIDTH) / row.width;
+				for (let j = 0; j < row.images; j++) {
+					this.images[i].displayWidth = Math.floor(imageWidths[i] * scaleFactor);
+					this.images[i].displayHeight = Math.floor   (Number(ImageListComponent.TARGET_HEIGHT) * scaleFactor);
+					i++;
+				}
+			}
 		}
 	}
 

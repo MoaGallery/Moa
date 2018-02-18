@@ -1308,7 +1308,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".thumbnail {\n    float: left;\n    margin-bottom: 0;\n}", ""]);
 
 // exports
 
@@ -1321,7 +1321,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-list/image-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n\t<ul class=\"list-unstyled\">\n\t\t<li *ngFor=\"let image of images\" class=\"thumbnail col-md-3\" style=\"min-height: 150px;\">\n\t\t\t<image-thumb [image]=\"image\" [gallery_id]=\"gallery.id\">\n\t\t\t</image-thumb>\n\t\t</li>\n\t</ul>\n</div>"
+module.exports = "<ul class=\"list-unstyled\">\n\t<li *ngFor=\"let image of images\" class=\"thumbnail\">\n\t\t<image-thumb [image]=\"image\" [gallery_id]=\"gallery.id\">\n\t\t</image-thumb>\n\t</li>\n</ul>\n"
 
 /***/ }),
 
@@ -1358,10 +1358,13 @@ var ImageListComponent = (function () {
             _this.gallery = data;
         });
     }
+    ImageListComponent_1 = ImageListComponent;
     ImageListComponent.prototype.ngOnInit = function () {
         this.checkThumbs();
     };
     ImageListComponent.prototype.checkThumbs = function () {
+        var imageWidths = [];
+        var totalWidth = 0;
         if (this.thumbSub !== undefined)
             this.thumbSub.unsubscribe();
         var toGenerate = [];
@@ -1371,9 +1374,66 @@ var ImageListComponent = (function () {
                 if (image.isGenerating) {
                     toGenerate.push(parseInt(image.id));
                 }
+                var width = image.width * (Number(ImageListComponent_1.TARGET_HEIGHT) / image.height);
+                imageWidths.push(width);
+                totalWidth += width;
             }
             if (toGenerate.length > 0)
                 this.getThumbs(toGenerate);
+            var maxWidth = Number(ImageListComponent_1.GALLERY_WIDTH) * 1.2;
+            var rows = [];
+            var row = {
+                width: 0,
+                images: 0
+            };
+            var i = 0;
+            while (i < imageWidths.length) {
+                row.width += imageWidths[i];
+                row.images++;
+                if ((row.width > ImageListComponent_1.GALLERY_WIDTH) &&
+                    (row.images > 1)) {
+                    if (row.width > maxWidth) {
+                        row.width -= imageWidths[i];
+                        row.images--;
+                        rows.push(row);
+                        row = {
+                            width: imageWidths[i],
+                            images: 1
+                        };
+                    }
+                    else {
+                        rows.push(row);
+                        row = {
+                            width: 0,
+                            images: 0
+                        };
+                    }
+                }
+                i++;
+            }
+            if ((row.images === 1) &&
+                (rows.length > 0)) {
+                rows[rows.length - 1].images++;
+                rows[rows.length - 1].width += row.width;
+                row = {
+                    width: 0,
+                    images: 0
+                };
+            }
+            if ((row.images > 1) ||
+                (rows.length === 0)) {
+                rows.push(row);
+            }
+            i = 0;
+            for (var _b = 0, rows_1 = rows; _b < rows_1.length; _b++) {
+                var row_1 = rows_1[_b];
+                var scaleFactor = Number(ImageListComponent_1.GALLERY_WIDTH) / row_1.width;
+                for (var j = 0; j < row_1.images; j++) {
+                    this.images[i].displayWidth = Math.floor(imageWidths[i] * scaleFactor);
+                    this.images[i].displayHeight = Math.floor(Number(ImageListComponent_1.TARGET_HEIGHT) * scaleFactor);
+                    i++;
+                }
+            }
         }
     };
     ImageListComponent.prototype.getThumbs = function (toGenerate) {
@@ -1411,7 +1471,9 @@ var ImageListComponent = (function () {
         this.imagesObserver.unsubscribe();
         this.galleryObserver.unsubscribe();
     };
-    ImageListComponent = __decorate([
+    ImageListComponent.TARGET_HEIGHT = 300;
+    ImageListComponent.GALLERY_WIDTH = 1140;
+    ImageListComponent = ImageListComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'image-list',
             template: __webpack_require__("../../../../../src/app/image/image-list/image-list.component.html"),
@@ -1421,6 +1483,7 @@ var ImageListComponent = (function () {
             __WEBPACK_IMPORTED_MODULE_2__services_thumbnail_service__["a" /* ThumbnailService */]])
     ], ImageListComponent);
     return ImageListComponent;
+    var ImageListComponent_1;
 }());
 
 
@@ -1435,7 +1498,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".thumbnail-generating {\n    width: 64px;\n    height: 64px;\n    margin: 62px 109px;\n}\n\n.thumbnail-image-container {\n    height: 188px;\n    display: block;\n    overflow: hidden;\n    text-align: center;\n    background-color: rgba(0, 0, 0, 0.05);\n}", ""]);
+exports.push([module.i, ".thumbnail-generating {\n    width: 64px;\n    height: 64px;\n    margin: 62px 109px;\n}\n\n.thumbnail-image-container {\n    overflow: hidden;\n    text-align: center;\n    background-color: rgba(0, 0, 0, 0.05);\n}", ""]);
 
 // exports
 
@@ -1448,7 +1511,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/image/image-thumb/image-thumb.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"[getLink()]\">\n\t<span class=\"thumbnail-image-container\">\n\t\t<img *ngIf=\"!image.isGenerating\" src=\"/image/thumb/{{image.id}}.jpg\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t</span>\n\t<h4>{{image.filename}}</h4>\n</a>"
+module.exports = "<div>\n\t<a [routerLink]=\"[getLink()]\">\n\t\t<img *ngIf=\"!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300\" src=\"/image/thumb/{{image.id}}.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\">\n\t\t<img *ngIf=\"!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)\" src=\"/image/thumb/{{image.id}}-w.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t\t<span>{{image.filename}}</span>\n\t</a>\n</div>"
 
 /***/ }),
 

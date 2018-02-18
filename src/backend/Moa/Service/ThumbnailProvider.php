@@ -102,7 +102,9 @@ class ThumbnailProvider
 			return false;
 		
 		$output = '../data/images/thumbs/' . $image_id . '.jpg';
+		$output_wide = '../data/images/thumbs/' . $image_id . '-w.jpg';
 		
-		return $this->resize_action->Resize($input . $ext, $output, ImageResize::THUMB_WIDTH, ImageResize::THUMB_HEIGHT, ImageResize::RESIZE_FIT);
+		$this->resize_action->Resize($input . $ext, $output, ImageResize::THUMB_WIDTH, ImageResize::THUMB_HEIGHT, ImageResize::RESIZE_FIT);
+		return $this->resize_action->Resize($input . $ext, $output_wide, ImageResize::THUMB_WIDTH_WIDE, ImageResize::THUMB_HEIGHT_WIDE, ImageResize::RESIZE_FIT);
 	}
 }

@@ -7,8 +7,11 @@ class ImageResize
 	const RESIZE_ABSOLUTE = 1;
 	const RESIZE_FIT = 2;
 	
-	const THUMB_WIDTH = 282;
-	const THUMB_HEIGHT = 188;
+	const THUMB_WIDTH = 450;
+	const THUMB_HEIGHT = 300;
+	
+	const THUMB_WIDTH_WIDE = 1200;
+	const THUMB_HEIGHT_WIDE = 800;
 	
 	const STANDARD_WIDTH = 800;
 	const STANDARD_HEIGHT = 600;
