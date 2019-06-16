@@ -2,6 +2,7 @@
 
 namespace Moa\Event;
 
+use Moa\Service\ThumbnailProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -9,9 +10,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class TerminateSubscriber implements EventSubscriberInterface {
 	
 	protected $container;
+	protected $thumbnailProvider;
 	
-	public function __construct(ContainerInterface $container) {
+	public function __construct(ContainerInterface $container, ThumbnailProvider $thumbnailProvider) {
 		$this->container = $container;
+		$this->thumbnailProvider = $thumbnailProvider;
 	}
 	
 	public static function getSubscribedEvents()
@@ -23,9 +26,7 @@ class TerminateSubscriber implements EventSubscriberInterface {
 	
 	public function OnTerminate()
 	{
-		$thumb_provider = $this->container->get('Moa\Service\ThumbnailProvider');
-
 		// TODO: Properly daemonise this bit
-		$thumb_provider->DoRegen(200);
+		$this->thumbnailProvider->DoRegen(200);
 	}
 }

@@ -1,9 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from "rxjs/Subscription";
 import {DataService} from "../../services/data.service";
-import {forEach} from "@angular/router/src/utils/collection";
 import {ThumbnailService} from "../../services/thumbnail.service";
-import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'image-list',

@@ -184,8 +184,8 @@ export class NgBoxComponent implements DoCheck {
     interval: any;
     @Input() data: any;
     @Output() showMore = new EventEmitter();
-    @ViewChild('ngBoxContent') elementView: ElementRef;
-    @ViewChild('ngBoxButtons') elementButtons: ElementRef;
+    @ViewChild('ngBoxContent', null) elementView: ElementRef;
+    @ViewChild('ngBoxButtons', null) elementButtons: ElementRef;
 
     constructor(
         public ngBox: NgBoxService

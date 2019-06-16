@@ -2,7 +2,6 @@ import {Component, OnDestroy} from '@angular/core';
 import {Breadcrumb} from "../models/breadcrumb.model";
 import {DataService} from "../services/data.service";
 import {Subscription} from "rxjs/Subscription";
-import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'breadcrumb',
