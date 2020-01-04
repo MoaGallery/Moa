@@ -1,8 +1,9 @@
-<div>
+<div class="inner-thumbnail" (dragenter)="onDragEnter($event)" (dragleave)="onDragLeave($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)" [attr.data-image_id]="image.id">
+	<div class="left-dropper" *ngIf="showDropTargets" (drop)="onDrop($event)" data-direction="before"><span>&lt;&lt;</span></div>
+	<div class="right-dropper" *ngIf="showDropTargets" (drop)="onDrop($event)" data-direction="after"><span>&gt;&gt;</span></div>
 	<a [routerLink]="[getLink()]">
-		<img *ngIf="!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300" src="/image/thumb/{{image.id}}.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}">
+		<img *ngIf="!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300" src="/image/thumb/{{image.id}}.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}" (dragstart)="onDrag($event, image.id)">
 		<img *ngIf="!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)" src="/image/thumb/{{image.id}}-w.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}">
 		<img *ngIf="image.isGenerating" src="/media/spinner.svg" class="thumbnail-generating">
-		<span>{{image.filename}}</span>
 	</a>
 </div>

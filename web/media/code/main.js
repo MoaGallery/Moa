@@ -128,7 +128,7 @@ module.exports = "<div class=\"moa-page\">\n\t<p>\n\t\t{{image.description}}\n\t
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"list-unstyled\">\n\t<li *ngFor=\"let image of images\" class=\"thumbnail\">\n\t\t<image-thumb [image]=\"image\" [gallery_id]=\"gallery.id\">\n\t\t</image-thumb>\n\t</li>\n</ul>\n"
+module.exports = "<ul class=\"list-unstyled\" style=\"overflow: auto;\">\n\t<li *ngFor=\"let image of images\" class=\"thumbnail\">\n\t\t<image-thumb [image]=\"image\" [gallery_id]=\"gallery.id\">\n\t\t</image-thumb>\n\t</li>\n</ul>\n"
 
 /***/ }),
 
@@ -139,7 +139,7 @@ module.exports = "<ul class=\"list-unstyled\">\n\t<li *ngFor=\"let image of imag
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n\t<a [routerLink]=\"[getLink()]\">\n\t\t<img *ngIf=\"!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300\" src=\"/image/thumb/{{image.id}}.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\">\n\t\t<img *ngIf=\"!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)\" src=\"/image/thumb/{{image.id}}-w.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t\t<span>{{image.filename}}</span>\n\t</a>\n</div>\n"
+module.exports = "<div class=\"inner-thumbnail\" (dragenter)=\"onDragEnter($event)\" (dragleave)=\"onDragLeave($event)\" (dragover)=\"onDragOver($event)\" (drop)=\"onDrop($event)\" [attr.data-image_id]=\"image.id\">\n\t<div class=\"left-dropper\" *ngIf=\"showDropTargets\" (drop)=\"onDrop($event)\" data-direction=\"before\"><span>&lt;&lt;</span></div>\n\t<div class=\"right-dropper\" *ngIf=\"showDropTargets\" (drop)=\"onDrop($event)\" data-direction=\"after\"><span>&gt;&gt;</span></div>\n\t<a [routerLink]=\"[getLink()]\">\n\t\t<img *ngIf=\"!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300\" src=\"/image/thumb/{{image.id}}.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\" (dragstart)=\"onDrag($event, image.id)\">\n\t\t<img *ngIf=\"!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)\" src=\"/image/thumb/{{image.id}}-w.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t</a>\n</div>\n"
 
 /***/ }),
 
@@ -217,7 +217,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvYXBwLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -255,6 +255,12 @@ let AppComponent = class AppComponent {
         this.service.setPageData(this.preload);
     }
 };
+AppComponent.ctorParameters = () => [
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] },
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _services_page_title_service__WEBPACK_IMPORTED_MODULE_4__["PageTitleService"] },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"] }
+];
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-root',
@@ -316,6 +322,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngbox_ngbox_service__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./ngbox/ngbox.service */ "./src/app/ngbox/ngbox.service.ts");
 /* harmony import */ var _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./ngbox/ngbox.component */ "./src/app/ngbox/ngbox.component.ts");
 /* harmony import */ var _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./ngbox/ngbox.directive */ "./src/app/ngbox/ngbox.directive.ts");
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
+
 
 
 
@@ -386,7 +394,8 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_common_http__WEBPACK_IMPORTED_MODULE_10__["HttpClientModule"],
             _angular_router__WEBPACK_IMPORTED_MODULE_11__["RouterModule"].forRoot(routes),
             _angular_forms__WEBPACK_IMPORTED_MODULE_20__["FormsModule"],
-            primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_29__["FileUploadModule"]
+            primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_29__["FileUploadModule"],
+            _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_34__["BrowserAnimationsModule"]
         ],
         providers: [
             _services_data_service__WEBPACK_IMPORTED_MODULE_7__["DataService"],
@@ -415,7 +424,7 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvYnJlYWRjcnVtYi9icmVhZGNydW1iLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2JyZWFkY3J1bWIvYnJlYWRjcnVtYi5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -454,6 +463,9 @@ let BreadcrumbComponent = class BreadcrumbComponent {
         return '/';
     }
 };
+BreadcrumbComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] }
+];
 BreadcrumbComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'breadcrumb',
@@ -474,7 +486,7 @@ BreadcrumbComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvZ2FsbGVyeS9nYWxsZXJ5LWVkaXQvZ2FsbGVyeS1lZGl0LmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2dhbGxlcnkvZ2FsbGVyeS1lZGl0L2dhbGxlcnktZWRpdC5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -610,6 +622,11 @@ let GalleryEditComponent = class GalleryEditComponent {
         this.subscription.unsubscribe();
     }
 };
+GalleryEditComponent.ctorParameters = () => [
+    { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_2__["ButtonClickService"] },
+    { type: _services_gallery_service__WEBPACK_IMPORTED_MODULE_3__["GalleryService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -636,7 +653,7 @@ GalleryEditComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvZ2FsbGVyeS9nYWxsZXJ5LWluZm8vZ2FsbGVyeS1pbmZvLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2dhbGxlcnkvZ2FsbGVyeS1pbmZvL2dhbGxlcnktaW5mby5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -671,6 +688,9 @@ let GalleryInfoComponent = class GalleryInfoComponent {
         this.observer.unsubscribe();
     }
 };
+GalleryInfoComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] }
+];
 GalleryInfoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'gallery-info',
@@ -691,7 +711,7 @@ GalleryInfoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".thumbnail {\n    height: 250px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9nYWxsZXJ5L2dhbGxlcnktbGlzdC9nYWxsZXJ5LWxpc3QuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLGFBQWE7QUFDakIiLCJmaWxlIjoiYXBwL2dhbGxlcnkvZ2FsbGVyeS1saXN0L2dhbGxlcnktbGlzdC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRodW1ibmFpbCB7XG4gICAgaGVpZ2h0OiAyNTBweDtcbn0iXX0= */"
+module.exports = ".thumbnail {\n    height: 250px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZ2FsbGVyeS9nYWxsZXJ5LWxpc3QvZ2FsbGVyeS1saXN0LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxhQUFhO0FBQ2pCIiwiZmlsZSI6InNyYy9hcHAvZ2FsbGVyeS9nYWxsZXJ5LWxpc3QvZ2FsbGVyeS1saXN0LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIudGh1bWJuYWlsIHtcbiAgICBoZWlnaHQ6IDI1MHB4O1xufSJdfQ== */"
 
 /***/ }),
 
@@ -722,6 +742,9 @@ let GalleryListComponent = class GalleryListComponent {
         this.observer.unsubscribe();
     }
 };
+GalleryListComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] }
+];
 GalleryListComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'gallery-list',
@@ -742,7 +765,7 @@ GalleryListComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvZ2FsbGVyeS9nYWxsZXJ5LXRpbGUvZ2FsbGVyeS10aWxlLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2dhbGxlcnkvZ2FsbGVyeS10aWxlL2dhbGxlcnktdGlsZS5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -795,7 +818,7 @@ GalleryTileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvZ2FsbGVyeS9nYWxsZXJ5LXRvb2xiYXIvZ2FsbGVyeS10b29sYmFyLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2dhbGxlcnkvZ2FsbGVyeS10b29sYmFyL2dhbGxlcnktdG9vbGJhci5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -866,6 +889,12 @@ let GalleryToolbarComponent = class GalleryToolbarComponent {
         this.observer.unsubscribe();
     }
 };
+GalleryToolbarComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__["ButtonClickService"] },
+    { type: _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__["GalleryService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }
+];
 GalleryToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'gallery-toolbar',
@@ -889,7 +918,7 @@ GalleryToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvaG9tZS9ob21lLXRvb2xiYXIvaG9tZS10b29sYmFyLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2hvbWUvaG9tZS10b29sYmFyL2hvbWUtdG9vbGJhci5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -943,6 +972,12 @@ let HomeToolbarComponent = class HomeToolbarComponent {
         this.observer.unsubscribe();
     }
 };
+HomeToolbarComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__["ButtonClickService"] },
+    { type: _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__["GalleryService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }
+];
 HomeToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'home-toolbar',
@@ -966,7 +1001,7 @@ HomeToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".uploaded-image-list li {\n    padding: 5px 10px;\n}\n\n.uploaded-image-list li img {\n    padding-right: 10px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9pbWFnZS9pbWFnZS1hZGQvaW1hZ2UtYWRkLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxpQkFBaUI7QUFDckI7O0FBRUE7SUFDSSxtQkFBbUI7QUFDdkIiLCJmaWxlIjoiYXBwL2ltYWdlL2ltYWdlLWFkZC9pbWFnZS1hZGQuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi51cGxvYWRlZC1pbWFnZS1saXN0IGxpIHtcbiAgICBwYWRkaW5nOiA1cHggMTBweDtcbn1cblxuLnVwbG9hZGVkLWltYWdlLWxpc3QgbGkgaW1nIHtcbiAgICBwYWRkaW5nLXJpZ2h0OiAxMHB4O1xufSJdfQ== */"
+module.exports = ".uploaded-image-list li {\n    padding: 5px 10px;\n}\n\n.uploaded-image-list li img {\n    padding-right: 10px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaW1hZ2UvaW1hZ2UtYWRkL2ltYWdlLWFkZC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksaUJBQWlCO0FBQ3JCOztBQUVBO0lBQ0ksbUJBQW1CO0FBQ3ZCIiwiZmlsZSI6InNyYy9hcHAvaW1hZ2UvaW1hZ2UtYWRkL2ltYWdlLWFkZC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnVwbG9hZGVkLWltYWdlLWxpc3QgbGkge1xuICAgIHBhZGRpbmc6IDVweCAxMHB4O1xufVxuXG4udXBsb2FkZWQtaW1hZ2UtbGlzdCBsaSBpbWcge1xuICAgIHBhZGRpbmctcmlnaHQ6IDEwcHg7XG59Il19 */"
 
 /***/ }),
 
@@ -1083,6 +1118,11 @@ let ImageAddComponent = class ImageAddComponent {
             this.uploadedFiles.splice(fileIndex, 1);
     }
 };
+ImageAddComponent.ctorParameters = () => [
+    { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_2__["ButtonClickService"] },
+    { type: _services_image_service__WEBPACK_IMPORTED_MODULE_4__["ImageService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
+];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -1109,7 +1149,7 @@ ImageAddComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvaW1hZ2UvaW1hZ2UtZWRpdC9pbWFnZS1lZGl0LmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2ltYWdlL2ltYWdlLWVkaXQvaW1hZ2UtZWRpdC5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -1200,6 +1240,11 @@ let ImageEditComponent = class ImageEditComponent {
     ngOnInit() {
     }
 };
+ImageEditComponent.ctorParameters = () => [
+    { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_2__["ButtonClickService"] },
+    { type: _services_image_service__WEBPACK_IMPORTED_MODULE_4__["ImageService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
+];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -1226,7 +1271,7 @@ ImageEditComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".moa-page {\n    width: 1140px;\n}\n\n.image-container {\n    text-align: center;\n}\n\n.image-lightbox-link {\n    text-align: center;\n    cursor: pointer;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9pbWFnZS9pbWFnZS1pbmZvL2ltYWdlLWluZm8uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLGFBQWE7QUFDakI7O0FBRUE7SUFDSSxrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSSxrQkFBa0I7SUFDbEIsZUFBZTtBQUNuQiIsImZpbGUiOiJhcHAvaW1hZ2UvaW1hZ2UtaW5mby9pbWFnZS1pbmZvLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubW9hLXBhZ2Uge1xuICAgIHdpZHRoOiAxMTQwcHg7XG59XG5cbi5pbWFnZS1jb250YWluZXIge1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbn1cblxuLmltYWdlLWxpZ2h0Ym94LWxpbmsge1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICBjdXJzb3I6IHBvaW50ZXI7XG59Il19 */"
+module.exports = ".moa-page {\n    width: 1140px;\n}\n\n.image-container {\n    text-align: center;\n}\n\n.image-lightbox-link {\n    text-align: center;\n    cursor: pointer;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaW1hZ2UvaW1hZ2UtaW5mby9pbWFnZS1pbmZvLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxhQUFhO0FBQ2pCOztBQUVBO0lBQ0ksa0JBQWtCO0FBQ3RCOztBQUVBO0lBQ0ksa0JBQWtCO0lBQ2xCLGVBQWU7QUFDbkIiLCJmaWxlIjoic3JjL2FwcC9pbWFnZS9pbWFnZS1pbmZvL2ltYWdlLWluZm8uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5tb2EtcGFnZSB7XG4gICAgd2lkdGg6IDExNDBweDtcbn1cblxuLmltYWdlLWNvbnRhaW5lciB7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuXG4uaW1hZ2UtbGlnaHRib3gtbGluayB7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xuICAgIGN1cnNvcjogcG9pbnRlcjtcbn0iXX0= */"
 
 /***/ }),
 
@@ -1269,6 +1314,9 @@ let ImageInfoComponent = class ImageInfoComponent {
         return '/image/' + this.image.id + '/' + this.image.filename;
     }
 };
+ImageInfoComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] }
+];
 ImageInfoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'image-info',
@@ -1289,7 +1337,7 @@ ImageInfoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".thumbnail {\n    float: left;\n    margin-bottom: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9pbWFnZS9pbWFnZS1saXN0L2ltYWdlLWxpc3QuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxnQkFBZ0I7QUFDcEIiLCJmaWxlIjoiYXBwL2ltYWdlL2ltYWdlLWxpc3QvaW1hZ2UtbGlzdC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRodW1ibmFpbCB7XG4gICAgZmxvYXQ6IGxlZnQ7XG4gICAgbWFyZ2luLWJvdHRvbTogMDtcbn0iXX0= */"
+module.exports = ".thumbnail {\n    /*float: left;*/\n    display: inline-block;\n    margin-bottom: 0;\n    position: relative;\n}\n\n.cdk-drag-placeholder {\n    /*width: 100%;\n    height: 100%;*/\n}\n\n.example-custom-placeholder {\n    width: 300px;\n    height: 300px;\n    border: 1px dashed black;\n    background-color: white;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaW1hZ2UvaW1hZ2UtbGlzdC9pbWFnZS1saXN0LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxlQUFlO0lBQ2YscUJBQXFCO0lBQ3JCLGdCQUFnQjtJQUNoQixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSTtrQkFDYztBQUNsQjs7QUFFQTtJQUNJLFlBQVk7SUFDWixhQUFhO0lBQ2Isd0JBQXdCO0lBQ3hCLHVCQUF1QjtBQUMzQiIsImZpbGUiOiJzcmMvYXBwL2ltYWdlL2ltYWdlLWxpc3QvaW1hZ2UtbGlzdC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRodW1ibmFpbCB7XG4gICAgLypmbG9hdDogbGVmdDsqL1xuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgICBtYXJnaW4tYm90dG9tOiAwO1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLmNkay1kcmFnLXBsYWNlaG9sZGVyIHtcbiAgICAvKndpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTsqL1xufVxuXG4uZXhhbXBsZS1jdXN0b20tcGxhY2Vob2xkZXIge1xuICAgIHdpZHRoOiAzMDBweDtcbiAgICBoZWlnaHQ6IDMwMHB4O1xuICAgIGJvcmRlcjogMXB4IGRhc2hlZCBibGFjaztcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB3aGl0ZTtcbn1cbiJdfQ== */"
 
 /***/ }),
 
@@ -1433,6 +1481,10 @@ let ImageListComponent = ImageListComponent_1 = class ImageListComponent {
 };
 ImageListComponent.TARGET_HEIGHT = 300;
 ImageListComponent.GALLERY_WIDTH = 1140;
+ImageListComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _services_thumbnail_service__WEBPACK_IMPORTED_MODULE_3__["ThumbnailService"] }
+];
 ImageListComponent = ImageListComponent_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'image-list',
@@ -1454,7 +1506,7 @@ ImageListComponent = ImageListComponent_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".thumbnail-generating {\n    width: 64px;\n    height: 64px;\n    margin: 62px 109px;\n}\n\n.thumbnail-image-container {\n    overflow: hidden;\n    text-align: center;\n    background-color: rgba(0, 0, 0, 0.05);\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9pbWFnZS9pbWFnZS10aHVtYi9pbWFnZS10aHVtYi5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksV0FBVztJQUNYLFlBQVk7SUFDWixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSSxnQkFBZ0I7SUFDaEIsa0JBQWtCO0lBQ2xCLHFDQUFxQztBQUN6QyIsImZpbGUiOiJhcHAvaW1hZ2UvaW1hZ2UtdGh1bWIvaW1hZ2UtdGh1bWIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi50aHVtYm5haWwtZ2VuZXJhdGluZyB7XG4gICAgd2lkdGg6IDY0cHg7XG4gICAgaGVpZ2h0OiA2NHB4O1xuICAgIG1hcmdpbjogNjJweCAxMDlweDtcbn1cblxuLnRodW1ibmFpbC1pbWFnZS1jb250YWluZXIge1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHJnYmEoMCwgMCwgMCwgMC4wNSk7XG59Il19 */"
+module.exports = ".thumbnail-generating {\n    width: 64px;\n    height: 64px;\n    margin: 62px 109px;\n}\n\n.thumbnail-image-container {\n    overflow: hidden;\n    text-align: center;\n    background-color: rgba(0, 0, 0, 0.05);\n}\n\n.inner-thumbnail .left-dropper {\n    position: absolute;\n    left: 0;\n    top: 0;\n    height: 100%;\n    width: 50px;\n    background-color: #ccc;\n    opacity: 0.8;\n}\n\n.inner-thumbnail .left-dropper span {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    margin-top: -50%;\n    margin-left: -50%;\n}\n\n.inner-thumbnail .right-dropper {\n\tposition: absolute;\n\tright: 0;\n\ttop: 0;\n\theight: 100%;\n\twidth: 50px;\n\tbackground-color: #ccc;\n\topacity: 0.8;\n}\n\n.inner-thumbnail .right-dropper span {\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n\tmargin-top: -50%;\n\tmargin-left: -50%;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaW1hZ2UvaW1hZ2UtdGh1bWIvaW1hZ2UtdGh1bWIuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0lBQ1osa0JBQWtCO0FBQ3RCOztBQUVBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGtCQUFrQjtJQUNsQixxQ0FBcUM7QUFDekM7O0FBRUE7SUFDSSxrQkFBa0I7SUFDbEIsT0FBTztJQUNQLE1BQU07SUFDTixZQUFZO0lBQ1osV0FBVztJQUNYLHNCQUFzQjtJQUN0QixZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksa0JBQWtCO0lBQ2xCLFFBQVE7SUFDUixTQUFTO0lBQ1QsZ0JBQWdCO0lBQ2hCLGlCQUFpQjtBQUNyQjs7QUFFQTtDQUNDLGtCQUFrQjtDQUNsQixRQUFRO0NBQ1IsTUFBTTtDQUNOLFlBQVk7Q0FDWixXQUFXO0NBQ1gsc0JBQXNCO0NBQ3RCLFlBQVk7QUFDYjs7QUFFQTtDQUNDLGtCQUFrQjtDQUNsQixRQUFRO0NBQ1IsU0FBUztDQUNULGdCQUFnQjtDQUNoQixpQkFBaUI7QUFDbEIiLCJmaWxlIjoic3JjL2FwcC9pbWFnZS9pbWFnZS10aHVtYi9pbWFnZS10aHVtYi5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRodW1ibmFpbC1nZW5lcmF0aW5nIHtcbiAgICB3aWR0aDogNjRweDtcbiAgICBoZWlnaHQ6IDY0cHg7XG4gICAgbWFyZ2luOiA2MnB4IDEwOXB4O1xufVxuXG4udGh1bWJuYWlsLWltYWdlLWNvbnRhaW5lciB7XG4gICAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSgwLCAwLCAwLCAwLjA1KTtcbn1cblxuLmlubmVyLXRodW1ibmFpbCAubGVmdC1kcm9wcGVyIHtcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gICAgbGVmdDogMDtcbiAgICB0b3A6IDA7XG4gICAgaGVpZ2h0OiAxMDAlO1xuICAgIHdpZHRoOiA1MHB4O1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNjY2M7XG4gICAgb3BhY2l0eTogMC44O1xufVxuXG4uaW5uZXItdGh1bWJuYWlsIC5sZWZ0LWRyb3BwZXIgc3BhbiB7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHRvcDogNTAlO1xuICAgIGxlZnQ6IDUwJTtcbiAgICBtYXJnaW4tdG9wOiAtNTAlO1xuICAgIG1hcmdpbi1sZWZ0OiAtNTAlO1xufVxuXG4uaW5uZXItdGh1bWJuYWlsIC5yaWdodC1kcm9wcGVyIHtcblx0cG9zaXRpb246IGFic29sdXRlO1xuXHRyaWdodDogMDtcblx0dG9wOiAwO1xuXHRoZWlnaHQ6IDEwMCU7XG5cdHdpZHRoOiA1MHB4O1xuXHRiYWNrZ3JvdW5kLWNvbG9yOiAjY2NjO1xuXHRvcGFjaXR5OiAwLjg7XG59XG5cbi5pbm5lci10aHVtYm5haWwgLnJpZ2h0LWRyb3BwZXIgc3BhbiB7XG5cdHBvc2l0aW9uOiBhYnNvbHV0ZTtcblx0dG9wOiA1MCU7XG5cdGxlZnQ6IDUwJTtcblx0bWFyZ2luLXRvcDogLTUwJTtcblx0bWFyZ2luLWxlZnQ6IC01MCU7XG59XG4iXX0= */"
 
 /***/ }),
 
@@ -1470,14 +1522,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImageThumbComponent", function() { return ImageThumbComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/image_service */ "./src/app/services/image_service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+
+
 
 
 let ImageThumbComponent = class ImageThumbComponent {
-    constructor() { }
+    constructor(imageService, router) {
+        this.imageService = imageService;
+        this.router = router;
+    }
     getLink() {
         return '/image/' + this.gallery_id + '/' + this.image.id;
     }
+    onDragEnter($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        if (localStorage.getItem('moaDragId') != this.image.id)
+            this.showDropTargets = true;
+    }
+    onDragLeave($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        let element = $event.relatedTarget.closest('.inner-thumbnail');
+        if (element !== null) {
+            let image_id = element.getAttribute('data-image_id');
+            if (image_id != this.image.id)
+                this.showDropTargets = false;
+        }
+        else {
+            this.showDropTargets = false;
+        }
+    }
+    onDrag($event, image_id) {
+        localStorage.setItem('moaDragType', 'image');
+        localStorage.setItem('moaDragId', image_id);
+    }
+    onDrop($event) {
+        let droppedId = localStorage.getItem('moaDragId');
+        localStorage.removeItem('moaDragType');
+        localStorage.removeItem('moaDragId');
+        this.showDropTargets = false;
+        let direction = $event.toElement.getAttribute('data-direction');
+        if (direction !== null) {
+            console.log(droppedId + ' dropped ' + direction + ' ' + this.image.id);
+            this.imageService.MoveImage(droppedId, direction, this.image.id).subscribe(data => {
+                this.router.navigate(['/gallery/' + this.gallery_id]);
+            });
+        }
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
+    onDragOver($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
 };
+ImageThumbComponent.ctorParameters = () => [
+    { type: _services_image_service__WEBPACK_IMPORTED_MODULE_2__["ImageService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
+];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -1492,7 +1597,8 @@ ImageThumbComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./image-thumb.component.html */ "./node_modules/raw-loader/index.js!./src/app/image/image-thumb/image-thumb.component.html"),
         styles: [__webpack_require__(/*! ./image-thumb.component.css */ "./src/app/image/image-thumb/image-thumb.component.css")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_image_service__WEBPACK_IMPORTED_MODULE_2__["ImageService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
 ], ImageThumbComponent);
 
 
@@ -1506,7 +1612,7 @@ ImageThumbComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvaW1hZ2UvaW1hZ2UtdG9vbGJhci9pbWFnZS10b29sYmFyLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2ltYWdlL2ltYWdlLXRvb2xiYXIvaW1hZ2UtdG9vbGJhci5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -1568,6 +1674,12 @@ let ImageToolbarComponent = class ImageToolbarComponent {
         this.observer.unsubscribe();
     }
 };
+ImageToolbarComponent.ctorParameters = () => [
+    { type: _services_data_service__WEBPACK_IMPORTED_MODULE_3__["DataService"] },
+    { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_2__["ButtonClickService"] },
+    { type: _services_image_service__WEBPACK_IMPORTED_MODULE_5__["ImageService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+];
 ImageToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'image-toolbar',
@@ -1601,6 +1713,11 @@ class Gallery {
         this.thumb_id = thumb_id;
     }
 }
+Gallery.ctorParameters = () => [
+    { type: Number },
+    { type: String },
+    { type: Number }
+];
 
 
 /***/ }),
@@ -1747,6 +1864,9 @@ let NgBoxComponent = class NgBoxComponent {
         this.checkInterval();
     }
 };
+NgBoxComponent.ctorParameters = () => [
+    { type: _ngbox_service__WEBPACK_IMPORTED_MODULE_2__["NgBoxService"] }
+];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -1996,6 +2116,10 @@ let NgBoxDirective = class NgBoxDirective {
         }
     }
 };
+NgBoxDirective.ctorParameters = () => [
+    { type: _ngbox_service__WEBPACK_IMPORTED_MODULE_3__["NgBoxService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DomSanitizer"] }
+];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -2084,7 +2208,7 @@ NgBoxService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvcGFnZXMvZ2FsbGVyeS1wYWdlL2dhbGxlcnktcGFnZS5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL2dhbGxlcnktcGFnZS9nYWxsZXJ5LXBhZ2UuY29tcG9uZW50LmNzcyJ9 */"
 
 /***/ }),
 
@@ -2117,6 +2241,10 @@ let GalleryPageComponent = class GalleryPageComponent {
         });
     }
 };
+GalleryPageComponent.ctorParameters = () => [
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
+    { type: _services_page_data_service__WEBPACK_IMPORTED_MODULE_3__["PageDataService"] }
+];
 GalleryPageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'gallery-page',
@@ -2138,7 +2266,7 @@ GalleryPageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvcGFnZXMvaG9tZS1wYWdlL2hvbWUtcGFnZS5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL2hvbWUtcGFnZS9ob21lLXBhZ2UuY29tcG9uZW50LmNzcyJ9 */"
 
 /***/ }),
 
@@ -2166,6 +2294,9 @@ let HomePageComponent = class HomePageComponent {
         this.page_data_service.GetHomePageData();
     }
 };
+HomePageComponent.ctorParameters = () => [
+    { type: _services_page_data_service__WEBPACK_IMPORTED_MODULE_2__["PageDataService"] }
+];
 HomePageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'moa',
@@ -2186,7 +2317,7 @@ HomePageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvcGFnZXMvaW1hZ2UtcGFnZS9pbWFnZS1wYWdlLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL2ltYWdlLXBhZ2UvaW1hZ2UtcGFnZS5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -2219,6 +2350,10 @@ let ImagePageComponent = class ImagePageComponent {
         });
     }
 };
+ImagePageComponent.ctorParameters = () => [
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
+    { type: _services_page_data_service__WEBPACK_IMPORTED_MODULE_3__["PageDataService"] }
+];
 ImagePageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'image-page',
@@ -2347,6 +2482,9 @@ let DataService = class DataService {
             .filter(data => data !== undefined);
     }
 };
+DataService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+];
 DataService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
@@ -2417,6 +2555,10 @@ let GalleryService = class GalleryService {
         return subject.asObservable();
     }
 };
+GalleryService.ctorParameters = () => [
+    { type: _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }
+];
 GalleryService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"],
@@ -2486,7 +2628,20 @@ let ImageService = class ImageService {
         });
         return subject.asObservable();
     }
+    MoveImage(id, position, targetImageId) {
+        let url = this.api_url + id + '/move/' + position + '/' + targetImageId;
+        let subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
+        this.http.post(url, null)
+            .subscribe(data => {
+            subject.next({ success: data['success'], message: data['message'] });
+        });
+        return subject.asObservable();
+    }
 };
+ImageService.ctorParameters = () => [
+    { type: _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }
+];
 ImageService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"],
@@ -2539,6 +2694,10 @@ let PageDataService = class PageDataService {
         this.GetPageData(url);
     }
 };
+PageDataService.ctorParameters = () => [
+    { type: _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }
+];
 PageDataService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"], _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])
@@ -2575,6 +2734,9 @@ let PageTitleService = class PageTitleService {
         this.observer.unsubscribe();
     }
 };
+PageTitleService.ctorParameters = () => [
+    { type: _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] }
+];
 PageTitleService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"]])
@@ -2617,6 +2779,9 @@ let ThumbnailService = class ThumbnailService {
         return subject.asObservable();
     }
 };
+ThumbnailService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }
+];
 ThumbnailService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])

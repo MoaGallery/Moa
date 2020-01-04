@@ -34,6 +34,7 @@ import {CommonModule} from "@angular/common";
 import {NgBoxService} from "./ngbox/ngbox.service";
 import {NgBoxComponent} from "./ngbox/ngbox.component";
 import {NgBoxDirective} from "./ngbox/ngbox.directive";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
 	{ path: '', component: HomePageComponent },
@@ -74,7 +75,8 @@ const routes: Routes = [
 		HttpClientModule,
 		RouterModule.forRoot(routes),
 		FormsModule,
-		FileUploadModule
+		FileUploadModule,
+		BrowserAnimationsModule
 	],
 	providers: [
 		DataService,

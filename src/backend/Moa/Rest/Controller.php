@@ -160,4 +160,12 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		
 		return new JsonResponse($results);
 	}
+	
+	public function ImageMove(int $id, string $position, int $targetId)
+	{
+		return new JsonResponse([
+			'success' => true,
+			'message' => 'Yay!'
+		]);
+	}
 }

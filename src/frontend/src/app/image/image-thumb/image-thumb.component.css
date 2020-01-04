@@ -9,3 +9,39 @@
     text-align: center;
     background-color: rgba(0, 0, 0, 0.05);
 }
+
+.inner-thumbnail .left-dropper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 50px;
+    background-color: #ccc;
+    opacity: 0.8;
+}
+
+.inner-thumbnail .left-dropper span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50%;
+    margin-left: -50%;
+}
+
+.inner-thumbnail .right-dropper {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	width: 50px;
+	background-color: #ccc;
+	opacity: 0.8;
+}
+
+.inner-thumbnail .right-dropper span {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -50%;
+	margin-left: -50%;
+}

@@ -51,4 +51,16 @@ export class ImageService {
 
 		return subject.asObservable();
 	}
+
+	MoveImage(id, position, targetImageId): Observable<any> {
+		let url = this.api_url + id + '/move/' + position + '/' + targetImageId;
+		let subject = new Subject();
+
+		this.http.post(url, null)
+			.subscribe(data => {
+				subject.next({success: data['success'], message: data['message']});
+			});
+
+		return subject.asObservable();
+	}
 }
