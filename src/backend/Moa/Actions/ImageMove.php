@@ -7,7 +7,7 @@ use Moa\Gallery;
 use Moa\Service\IncomingFileService;
 use Moa\Tag;
 
-class ImagePut
+class ImageMove
 {
 	protected $image_provider;
 	protected $gallery_provider;
@@ -30,7 +30,7 @@ class ImagePut
 		$this->gallery_find_thumb = $gallery_find_thumb;
 	}
 	
-	function SaveImage($image_id, $data)
+	function ImageMove($image_id, $data)
 	{
 		$image = new Image\Model($this->image_provider, $this->tag_provider);
 		$image->Load($image_id);
