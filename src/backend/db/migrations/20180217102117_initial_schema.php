@@ -185,6 +185,11 @@ class InitialSchema extends AbstractMigration
 		{
 			unlink($file);
 		}
+		
+		foreach (glob($source_path . '*') as $file)
+		{
+			unlink($file);
+		}
 		rmdir($source_path . 'thumbs');
 		rmdir($source_path);
 	}
