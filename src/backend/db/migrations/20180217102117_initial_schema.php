@@ -109,7 +109,7 @@ class InitialSchema extends AbstractMigration
 	    $table->renameColumn('Description', 'description');
 	    $table->renameColumn('IDParent', 'parent_id');
 	    $table->renameColumn('UseTags', 'use_tags');
-	    $table->addColumn('combined_view', 'integer', ['default' => 1, 'null' => false]);
+	    $table->addColumn('combined_view', 'integer', ['default' => 0, 'null' => false]);
     	$table->update();
 	
 	    $table = $this->table('image');
@@ -174,6 +174,10 @@ class InitialSchema extends AbstractMigration
 	{
 		$source_path = '../../images/';
 		$dest_path = '../../data/images/';
+		
+		if (!file_exists($source_path))
+			return;
+		
 		foreach (glob($source_path . '/*.jpg') as $file)
 		{
 			$filename = substr($file, strlen($source_path) + 1);
@@ -181,9 +185,12 @@ class InitialSchema extends AbstractMigration
 			rename($file, $dest_path . $id . '.jpg');
 		}
 		
-		foreach (glob($source_path . '/thumbs/*') as $file)
+		if (file_exists($source_path . 'thumbs'))
 		{
-			unlink($file);
+			foreach (glob($source_path . 'thumbs/*') as $file)
+			{
+				unlink($file);
+			}
 		}
 		
 		foreach (glob($source_path . '*') as $file)

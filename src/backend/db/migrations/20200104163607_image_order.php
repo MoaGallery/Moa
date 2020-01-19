@@ -37,5 +37,11 @@ class ImageOrder extends AbstractMigration
 		    	'name' => 'idx_image_order'
 		    ])
 		    ->create();
+	    
+	    // If no old data to upgrade, can stop here
+	    if (!$this->hasTable('galleryindex'))
+		    return;
+	    
+	    $this->query('INSERT INTO image_order (gallery_id, image_id, `order`) (SELECT IDGallery, IDImage, Seq FROM galleryindex)');
     }
 }
