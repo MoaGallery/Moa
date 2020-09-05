@@ -139,7 +139,7 @@ module.exports = "<ul class=\"list-unstyled\" style=\"overflow: auto;\">\n\t<li 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"inner-thumbnail\" (dragenter)=\"onDragEnter($event)\" (dragleave)=\"onDragLeave($event)\" (dragover)=\"onDragOver($event)\" (drop)=\"onDrop($event)\" [attr.data-image_id]=\"image.id\">\n\t<div class=\"left-dropper\" *ngIf=\"showDropTargets\" (drop)=\"onDrop($event)\" data-direction=\"before\"><span>&lt;&lt;</span></div>\n\t<div class=\"right-dropper\" *ngIf=\"showDropTargets\" (drop)=\"onDrop($event)\" data-direction=\"after\"><span>&gt;&gt;</span></div>\n\t<a [routerLink]=\"[getLink()]\">\n\t\t<img *ngIf=\"!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300\" src=\"/image/thumb/{{image.id}}.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\" (dragstart)=\"onDrag($event, image.id)\">\n\t\t<img *ngIf=\"!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)\" src=\"/image/thumb/{{image.id}}-w.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\">\n\t</a>\n</div>\n"
+module.exports = "<div class=\"inner-thumbnail\" (dragenter)=\"onDragEnter($event)\" (dragleave)=\"onDragLeave($event)\" (dragover)=\"onDragOver($event)\" (drop)=\"onDrop($event)\" [attr.data-image_id]=\"image.id\">\n\t<div class=\"left-dropper\" *ngIf=\"showDropTargets\" (drop)=\"onDrop($event)\" data-direction=\"before\"><span>&lt;&lt;</span></div>\n\t<div class=\"right-dropper\" *ngIf=\"showDropTargets\" (drop)=\"onDrop($event)\" data-direction=\"after\"><span>&gt;&gt;</span></div>\n\t<a [routerLink]=\"[getLink()]\">\n\t\t<img *ngIf=\"!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300\" src=\"/image/thumb/{{image.id}}.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\" (dragstart)=\"onDrag($event, image.id)\">\n\t\t<img *ngIf=\"!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)\" src=\"/image/thumb/{{image.id}}-w.jpg\" [ngStyle]=\"{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}\" (dragstart)=\"onDrag($event, image.id)\">\n\t\t<img *ngIf=\"image.isGenerating\" src=\"/media/spinner.svg\" class=\"thumbnail-generating\" (dragstart)=\"onDrag($event, image.id)\">\n\t</a>\n</div>\n"
 
 /***/ }),
 
@@ -1522,15 +1522,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImageThumbComponent", function() { return ImageThumbComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/image_service */ "./src/app/services/image_service.ts");
+/* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/gallery_service */ "./src/app/services/gallery_service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 
 
 
 
 let ImageThumbComponent = class ImageThumbComponent {
-    constructor(imageService, router) {
-        this.imageService = imageService;
+    constructor(galleryService, router) {
+        this.galleryService = galleryService;
         this.router = router;
     }
     getLink() {
@@ -1556,6 +1556,7 @@ let ImageThumbComponent = class ImageThumbComponent {
         }
     }
     onDrag($event, image_id) {
+        console.log('Dragging ' + image_id);
         localStorage.setItem('moaDragType', 'image');
         localStorage.setItem('moaDragId', image_id);
     }
@@ -1567,7 +1568,7 @@ let ImageThumbComponent = class ImageThumbComponent {
         let direction = $event.toElement.getAttribute('data-direction');
         if (direction !== null) {
             console.log(droppedId + ' dropped ' + direction + ' ' + this.image.id);
-            this.imageService.MoveImage(droppedId, direction, this.image.id).subscribe(data => {
+            this.galleryService.MoveImage(this.gallery_id, droppedId, direction, this.image.id).subscribe(data => {
                 this.router.navigate(['/gallery/' + this.gallery_id]);
             });
         }
@@ -1580,7 +1581,7 @@ let ImageThumbComponent = class ImageThumbComponent {
     }
 };
 ImageThumbComponent.ctorParameters = () => [
-    { type: _services_image_service__WEBPACK_IMPORTED_MODULE_2__["ImageService"] },
+    { type: _services_gallery_service__WEBPACK_IMPORTED_MODULE_2__["GalleryService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1597,7 +1598,7 @@ ImageThumbComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./image-thumb.component.html */ "./node_modules/raw-loader/index.js!./src/app/image/image-thumb/image-thumb.component.html"),
         styles: [__webpack_require__(/*! ./image-thumb.component.css */ "./src/app/image/image-thumb/image-thumb.component.css")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_image_service__WEBPACK_IMPORTED_MODULE_2__["ImageService"],
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_gallery_service__WEBPACK_IMPORTED_MODULE_2__["GalleryService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
 ], ImageThumbComponent);
 
@@ -2554,6 +2555,15 @@ let GalleryService = class GalleryService {
         });
         return subject.asObservable();
     }
+    MoveImage(gallery_id, image_id, position, targetImageId) {
+        let url = this.api_url + gallery_id + '/' + image_id + '/move/' + position + '/' + targetImageId;
+        let subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
+        this.http.post(url, null)
+            .subscribe(data => {
+            subject.next({ success: data['success'], message: data['message'] });
+        });
+        return subject.asObservable();
+    }
 };
 GalleryService.ctorParameters = () => [
     { type: _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
@@ -2623,15 +2633,6 @@ let ImageService = class ImageService {
         let url = this.api_url + id;
         let subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
         this.http.delete(url)
-            .subscribe(data => {
-            subject.next({ success: data['success'], message: data['message'] });
-        });
-        return subject.asObservable();
-    }
-    MoveImage(id, position, targetImageId) {
-        let url = this.api_url + id + '/move/' + position + '/' + targetImageId;
-        let subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
-        this.http.post(url, null)
             .subscribe(data => {
             subject.next({ success: data['success'], message: data['message'] });
         });
@@ -2845,7 +2846,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/servers/moa/src/frontend/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/dan/code/docker/www/servers/moa/src/frontend/src/main.ts */"./src/main.ts");
 
 
 /***/ })

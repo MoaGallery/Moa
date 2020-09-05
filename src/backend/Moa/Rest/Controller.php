@@ -4,6 +4,7 @@ namespace Moa\Rest;
 
 use Moa\Actions\GalleryLookup;
 use Moa\Actions\GalleryPut;
+use Moa\Actions\ImageMove;
 use Moa\Actions\ImagePut;
 use Moa\Actions\PageData;
 use Moa\Actions\TagLookup;
@@ -161,8 +162,10 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		return new JsonResponse($results);
 	}
 	
-	public function ImageMove(int $id, string $position, int $targetId)
+	public function ImageMove(int $gallery_id, int $image_id, string $position, int $target_id, ImageMove $image_move)
 	{
+		$image_move->ImageMove($gallery_id, $image_id, $position, $target_id);
+		
 		return new JsonResponse([
 			'success' => true,
 			'message' => 'Yay!'

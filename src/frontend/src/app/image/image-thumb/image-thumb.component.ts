@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ImageService} from '../../services/image_service';
+import {GalleryService} from '../../services/gallery_service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ export class ImageThumbComponent {
 
 	showDropTargets: boolean;
 
-	constructor(private imageService: ImageService,
+	constructor(private galleryService: GalleryService,
 	            private router: Router) { }
 
 	getLink() {
@@ -43,6 +43,7 @@ export class ImageThumbComponent {
 	}
 
 	onDrag($event, image_id) {
+		console.log('Dragging ' + image_id);
 		localStorage.setItem('moaDragType', 'image');
 		localStorage.setItem('moaDragId', image_id);
 	}
@@ -58,7 +59,7 @@ export class ImageThumbComponent {
 
 		if (direction !== null) {
 			console.log(droppedId + ' dropped ' + direction + ' ' + this.image.id);
-			this.imageService.MoveImage(droppedId, direction, this.image.id
+			this.galleryService.MoveImage(this.gallery_id, droppedId, direction, this.image.id
 			).subscribe(data => {
 				this.router.navigate(['/gallery/' + this.gallery_id])
 			});

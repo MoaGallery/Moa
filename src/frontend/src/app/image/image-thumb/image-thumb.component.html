@@ -3,7 +3,7 @@
 	<div class="right-dropper" *ngIf="showDropTargets" (drop)="onDrop($event)" data-direction="after"><span>&gt;&gt;</span></div>
 	<a [routerLink]="[getLink()]">
 		<img *ngIf="!image.isGenerating && image.displayWidth <= 450 && image.displayHeight <= 300" src="/image/thumb/{{image.id}}.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}" (dragstart)="onDrag($event, image.id)">
-		<img *ngIf="!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)" src="/image/thumb/{{image.id}}-w.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}">
-		<img *ngIf="image.isGenerating" src="/media/spinner.svg" class="thumbnail-generating">
+		<img *ngIf="!image.isGenerating && (image.displayWidth > 450 || image.displayHeight > 300)" src="/image/thumb/{{image.id}}-w.jpg" [ngStyle]="{width: (image.displayWidth - 10) + 'px', height: image.displayHeight + 'px'}" (dragstart)="onDrag($event, image.id)">
+		<img *ngIf="image.isGenerating" src="/media/spinner.svg" class="thumbnail-generating" (dragstart)="onDrag($event, image.id)">
 	</a>
 </div>

@@ -12,6 +12,7 @@ class DataProvider
 	const DB_NAME = Db::DB_PREFIX . 'gallery';
 	const DB_THUMB_NAME = Db::DB_PREFIX . 'gallerythumb';
 	const DB_TAG_LINK_NAME = Db::DB_PREFIX . 'gallerytaglink';
+	const DB_IMAGE_ORDER_NAME = Db::DB_PREFIX . 'image_order';
 	
 	/** @var Db Db */
 	protected $db;

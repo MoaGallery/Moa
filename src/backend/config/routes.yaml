@@ -113,10 +113,11 @@ api_api_delete_image:
     methods: DELETE
 
 api_image_move:
-  path: /api/image/{id}/move/{position}/{targetId}
+  path: /api/gallery/{gallery_id}/{image_id}/move/{position}/{target_id}
   controller: 'Moa\Rest\Controller::ImageMove'
   requirements:
-    id: '\d+'
+    gallery_id: '\d+'
+    image_id: '\d+'
     position: '\S+'
     targetId: '\d+'
   methods: [POST, PUT]
