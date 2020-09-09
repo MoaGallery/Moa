@@ -557,7 +557,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/dan/code/docker/www/servers/moa/src/frontend/src/styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! /var/www/servers/moa/src/frontend/src/styles.css */"./src/styles.css");
 
 
 /***/ })

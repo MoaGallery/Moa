@@ -291,5 +291,44 @@ class DataProvider
 			->setParameter(1, $image_id);
 		$qb->execute();
 	}
+	
+	public function MoveToAfter(int $image_id, int $gallery_id, int $target_id)
+	{
+		$source_position = (int)$this->GetPosition($gallery_id, $image_id);
+		$target_position = (int)$this->GetPosition($gallery_id, $target_id);
+		
+		if ($source_position === $target_position)
+			return;
+		
+		$extra_shift = 0;
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->update(Gallery\DataProvider::DB_IMAGE_ORDER_NAME);
+		
+		// Shift the subset between them
+		if ($source_position < $target_position)
+		{
+			$qb->set('sequence', 'sequence - 1')
+				->where('sequence > ?', 'sequence <= ?')
+				->setParameter(0, $source_position)
+				->setParameter(1, $target_position);
+		} else
+		{
+			$qb->set('sequence', 'sequence + 1')
+				->where('sequence > ?', 'sequence < ?')
+				->setParameter(0, $target_position)
+				->setParameter(1, $source_position);
+			$extra_shift = 1;
+		}
+		$qb->execute();
+		
+		// Update the image
+		$qb = new QueryBuilder($this->db->Connection());
+		$qb->update(Gallery\DataProvider::DB_IMAGE_ORDER_NAME)
+			->set('sequence', $target_position + $extra_shift)
+			->where('gallery_id = ?', 'image_id = ?')
+			->setParameter(0, $gallery_id)
+			->setParameter(1, $image_id);
+		$qb->execute();
+	}
 }
 

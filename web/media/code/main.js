@@ -1556,7 +1556,6 @@ let ImageThumbComponent = class ImageThumbComponent {
         }
     }
     onDrag($event, image_id) {
-        console.log('Dragging ' + image_id);
         localStorage.setItem('moaDragType', 'image');
         localStorage.setItem('moaDragId', image_id);
     }
@@ -1567,7 +1566,6 @@ let ImageThumbComponent = class ImageThumbComponent {
         this.showDropTargets = false;
         let direction = $event.toElement.getAttribute('data-direction');
         if (direction !== null) {
-            console.log(droppedId + ' dropped ' + direction + ' ' + this.image.id);
             this.galleryService.MoveImage(this.gallery_id, droppedId, direction, this.image.id).subscribe(data => {
                 this.router.navigate(['/gallery/' + this.gallery_id]);
             });
@@ -2560,7 +2558,8 @@ let GalleryService = class GalleryService {
         let subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
         this.http.post(url, null)
             .subscribe(data => {
-            subject.next({ success: data['success'], message: data['message'] });
+            subject.next({ success: data['success'], message: data['images'] });
+            this.dataService.setPageData({ images: data['images'] });
         });
         return subject.asObservable();
     }
@@ -2846,7 +2845,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/dan/code/docker/www/servers/moa/src/frontend/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /var/www/servers/moa/src/frontend/src/main.ts */"./src/main.ts");
 
 
 /***/ })

@@ -43,7 +43,6 @@ export class ImageThumbComponent {
 	}
 
 	onDrag($event, image_id) {
-		console.log('Dragging ' + image_id);
 		localStorage.setItem('moaDragType', 'image');
 		localStorage.setItem('moaDragId', image_id);
 	}
@@ -58,7 +57,6 @@ export class ImageThumbComponent {
 		let direction = $event.toElement.getAttribute('data-direction');
 
 		if (direction !== null) {
-			console.log(droppedId + ' dropped ' + direction + ' ' + this.image.id);
 			this.galleryService.MoveImage(this.gallery_id, droppedId, direction, this.image.id
 			).subscribe(data => {
 				this.router.navigate(['/gallery/' + this.gallery_id])

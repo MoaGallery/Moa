@@ -162,13 +162,15 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		return new JsonResponse($results);
 	}
 	
-	public function ImageMove(int $gallery_id, int $image_id, string $position, int $target_id, ImageMove $image_move)
+	public function ImageMove(int $gallery_id, int $image_id, string $position, int $target_id, ImageMove $image_move, PageData\GalleryPage $gallery_page)
 	{
 		$image_move->ImageMove($gallery_id, $image_id, $position, $target_id);
 		
+		$data = $gallery_page->GetGalleryPageData($gallery_id);
+		
 		return new JsonResponse([
 			'success' => true,
-			'message' => 'Yay!'
+			'images' => $data['images']
 		]);
 	}
 }

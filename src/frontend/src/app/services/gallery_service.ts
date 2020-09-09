@@ -59,7 +59,8 @@ export class GalleryService {
 
 		this.http.post(url, null)
 			.subscribe(data => {
-				subject.next({success: data['success'], message: data['message']});
+				subject.next({success: data['success'], message: data['images']});
+				this.dataService.setPageData({images:data['images']});
 			});
 
 		return subject.asObservable();
