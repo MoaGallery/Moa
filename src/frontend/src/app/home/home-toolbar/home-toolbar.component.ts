@@ -4,6 +4,7 @@ import {Subscription} from "rxjs/Subscription";
 import {ButtonClickService} from "../../services/button-click.service";
 import {GalleryService} from "../../services/gallery_service";
 import {Router} from "@angular/router";
+import {IdentityService} from '../../services/identity.service';
 
 declare var $: any;
 
@@ -25,17 +26,22 @@ export class HomeToolbarComponent implements OnDestroy {
 			name: 'Homepage'
 		}
 	};
+	rights = {
+		isAdmin: false
+	};
 	observer: Subscription;
 
 	constructor(private dataService: DataService,
 	            private buttonClickService: ButtonClickService,
 	            private galleryService: GalleryService,
+	            private identityService: IdentityService,
 	            private router: Router) {
 		this.observer = dataService.getGalleryObserver().subscribe(
 			data => {
 				this.gallery = data;
 			}
 		);
+		this.rights.isAdmin = identityService.isAdmin();
 	}
 
 	onAddGalleryClick() {

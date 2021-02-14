@@ -30,7 +30,10 @@ class HomePage
 		return [
 			'galleries' => $galleries,
 			'breadcrumbs' => [],
-			'page_title' => 'Gallery'
+			'page_title' => 'Gallery',
+			'rights' => [
+				'isAdmin' => false
+			]
 		];
 	}
 }

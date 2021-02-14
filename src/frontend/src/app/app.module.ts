@@ -20,6 +20,7 @@ import { GalleryToolbarComponent } from './gallery/gallery-toolbar/gallery-toolb
 import { GalleryEditComponent } from './gallery/gallery-edit/gallery-edit.component';
 import {ButtonClickService} from "./services/button-click.service";
 import {FormsModule} from "@angular/forms";
+import {IdentityService} from "./services/identity.service";
 import {GalleryService} from "./services/gallery_service";
 import {ImageService} from "./services/image_service";
 import { ImagePageComponent } from './pages/image-page/image-page.component';
@@ -86,7 +87,8 @@ const routes: Routes = [
 		GalleryService,
 		ImageService,
 		ThumbnailService,
-		NgBoxService
+		NgBoxService,
+		IdentityService
 	],
 	bootstrap: [
 		AppComponent

@@ -73,7 +73,7 @@ module.exports = "<a [routerLink]=\"[getLink(gallery.id)]\">\n\t<img *ngIf=\"!do
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n<image-add [gallery]=\"gallery\"></image-add>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onAddImageClick()\" class=\"btn btn-default\" id=\"imageAdd\" title=\"Add image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-picture\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onEditClick()\" class=\"btn btn-default\" id=\"galleryEdit\" title=\"Edit gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onDeleteClick()\" class=\"btn btn-default\" id=\"galleryDelete\" title=\"Delete gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n\t\t</div>\n\t</div>\n</div>"
+module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n<image-add [gallery]=\"gallery\"></image-add>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div *ngIf=\"rights.isAdmin\" class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onAddImageClick()\" class=\"btn btn-default\" id=\"imageAdd\" title=\"Add image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-picture\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onEditClick()\" class=\"btn btn-default\" id=\"galleryEdit\" title=\"Edit gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onDeleteClick()\" class=\"btn btn-default\" id=\"galleryDelete\" title=\"Delete gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n\t\t</div>\n\t</div>\n</div>\n"
 
 /***/ }),
 
@@ -84,7 +84,7 @@ module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n<image-ad
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t</div>\n\t</div>\n</div>"
+module.exports = "<gallery-edit [gallery]=\"gallery\"></gallery-edit>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div *ngIf=\"rights.isAdmin\" class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onAddGalleryClick()\" class=\"btn btn-default\" id=\"galleryAdd\" title=\"Add gallery\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-th\"></span></button>\n\t\t</div>\n\t</div>\n</div>\n"
 
 /***/ }),
 
@@ -150,7 +150,7 @@ module.exports = "<div class=\"inner-thumbnail\" (dragenter)=\"onDragEnter($even
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<image-edit [image]=\"image\"></image-edit>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onEditClick()\" class=\"btn btn-default\" id=\"imageEdit\" title=\"Edit image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onDeleteClick()\" class=\"btn btn-default\" id=\"imageDelete\" title=\"Delete image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n\t\t</div>\n\t</div>\n</div>"
+module.exports = "<image-edit [image]=\"image\"></image-edit>\n\n<div class=\"row\">\n\t<div class=\"pull-right\">\n\t\t<div *ngIf=\"rights.isAdmin\" class=\"btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<button type=\"button\" (click)=\"onEditClick()\" class=\"btn btn-default\" id=\"imageEdit\" title=\"Edit image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button>\n\t\t\t<button type=\"button\" (click)=\"onDeleteClick()\" class=\"btn btn-default\" id=\"imageDelete\" title=\"Delete image\" data-toggle=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n\t\t</div>\n\t</div>\n</div>\n"
 
 /***/ }),
 
@@ -236,29 +236,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/data.service */ "./src/app/services/data.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _services_page_title_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/page_title.service */ "./src/app/services/page_title.service.ts");
+/* harmony import */ var _services_identity_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/identity.service */ "./src/app/services/identity.service.ts");
+
 
 
 
 
 
 let AppComponent = class AppComponent {
-    constructor(router, service, pageTitleService, elementRef) {
+    constructor(router, service, pageTitleService, identityService, elementRef) {
         this.router = router;
         this.service = service;
         this.pageTitleService = pageTitleService;
+        this.identityService = identityService;
         this.elementRef = elementRef;
-        this.preload = {};
+        this.preload = {
+            rights: {
+                isAdmin: false
+            }
+        };
         this.data = [];
         this.preload = JSON.parse(this.elementRef.nativeElement.getAttribute('[preload]'));
     }
     ngOnInit() {
         this.service.setPageData(this.preload);
+        this.identityService.SetRights({
+            isAdmin: this.preload.rights.isAdmin
+        });
     }
 };
 AppComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] },
     { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
     { type: _services_page_title_service__WEBPACK_IMPORTED_MODULE_4__["PageTitleService"] },
+    { type: _services_identity_service__WEBPACK_IMPORTED_MODULE_5__["IdentityService"] },
     { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"] }
 ];
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -270,6 +281,7 @@ AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"],
         _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"],
         _services_page_title_service__WEBPACK_IMPORTED_MODULE_4__["PageTitleService"],
+        _services_identity_service__WEBPACK_IMPORTED_MODULE_5__["IdentityService"],
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]])
 ], AppComponent);
 
@@ -308,21 +320,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./gallery/gallery-edit/gallery-edit.component */ "./src/app/gallery/gallery-edit/gallery-edit.component.ts");
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./services/button-click.service */ "./src/app/services/button-click.service.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-/* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./services/gallery_service */ "./src/app/services/gallery_service.ts");
-/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./services/image_service */ "./src/app/services/image_service.ts");
-/* harmony import */ var _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./pages/image-page/image-page.component */ "./src/app/pages/image-page/image-page.component.ts");
-/* harmony import */ var _image_image_info_image_info_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./image/image-info/image-info.component */ "./src/app/image/image-info/image-info.component.ts");
-/* harmony import */ var _image_image_toolbar_image_toolbar_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./image/image-toolbar/image-toolbar.component */ "./src/app/image/image-toolbar/image-toolbar.component.ts");
-/* harmony import */ var _image_image_edit_image_edit_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./image/image-edit/image-edit.component */ "./src/app/image/image-edit/image-edit.component.ts");
-/* harmony import */ var _services_thumbnail_service__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./services/thumbnail.service */ "./src/app/services/thumbnail.service.ts");
-/* harmony import */ var _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./image/image-add/image-add.component */ "./src/app/image/image-add/image-add.component.ts");
-/* harmony import */ var primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! primeng/components/fileupload/fileupload */ "./node_modules/primeng/components/fileupload/fileupload.js");
-/* harmony import */ var primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_29___default = /*#__PURE__*/__webpack_require__.n(primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_29__);
-/* harmony import */ var _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./home/home-toolbar/home-toolbar.component */ "./src/app/home/home-toolbar/home-toolbar.component.ts");
-/* harmony import */ var _ngbox_ngbox_service__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./ngbox/ngbox.service */ "./src/app/ngbox/ngbox.service.ts");
-/* harmony import */ var _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./ngbox/ngbox.component */ "./src/app/ngbox/ngbox.component.ts");
-/* harmony import */ var _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./ngbox/ngbox.directive */ "./src/app/ngbox/ngbox.directive.ts");
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
+/* harmony import */ var _services_identity_service__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./services/identity.service */ "./src/app/services/identity.service.ts");
+/* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./services/gallery_service */ "./src/app/services/gallery_service.ts");
+/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./services/image_service */ "./src/app/services/image_service.ts");
+/* harmony import */ var _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./pages/image-page/image-page.component */ "./src/app/pages/image-page/image-page.component.ts");
+/* harmony import */ var _image_image_info_image_info_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./image/image-info/image-info.component */ "./src/app/image/image-info/image-info.component.ts");
+/* harmony import */ var _image_image_toolbar_image_toolbar_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./image/image-toolbar/image-toolbar.component */ "./src/app/image/image-toolbar/image-toolbar.component.ts");
+/* harmony import */ var _image_image_edit_image_edit_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./image/image-edit/image-edit.component */ "./src/app/image/image-edit/image-edit.component.ts");
+/* harmony import */ var _services_thumbnail_service__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./services/thumbnail.service */ "./src/app/services/thumbnail.service.ts");
+/* harmony import */ var _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./image/image-add/image-add.component */ "./src/app/image/image-add/image-add.component.ts");
+/* harmony import */ var primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! primeng/components/fileupload/fileupload */ "./node_modules/primeng/components/fileupload/fileupload.js");
+/* harmony import */ var primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_30___default = /*#__PURE__*/__webpack_require__.n(primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_30__);
+/* harmony import */ var _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./home/home-toolbar/home-toolbar.component */ "./src/app/home/home-toolbar/home-toolbar.component.ts");
+/* harmony import */ var _ngbox_ngbox_service__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./ngbox/ngbox.service */ "./src/app/ngbox/ngbox.service.ts");
+/* harmony import */ var _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./ngbox/ngbox.component */ "./src/app/ngbox/ngbox.component.ts");
+/* harmony import */ var _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./ngbox/ngbox.directive */ "./src/app/ngbox/ngbox.directive.ts");
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
+
 
 
 
@@ -361,7 +375,7 @@ __webpack_require__.r(__webpack_exports__);
 const routes = [
     { path: '', component: _pages_home_page_home_page_component__WEBPACK_IMPORTED_MODULE_13__["HomePageComponent"] },
     { path: 'gallery/:id', component: _pages_gallery_page_gallery_page_component__WEBPACK_IMPORTED_MODULE_12__["GalleryPageComponent"] },
-    { path: 'image/:gallery_id/:image_id', component: _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_23__["ImagePageComponent"] }
+    { path: 'image/:gallery_id/:image_id', component: _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_24__["ImagePageComponent"] }
 ];
 let AppModule = class AppModule {
 };
@@ -377,35 +391,36 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_18__["GalleryEditComponent"],
             _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_15__["ImageListComponent"],
             _image_image_thumb_image_thumb_component__WEBPACK_IMPORTED_MODULE_16__["ImageThumbComponent"],
-            _image_image_info_image_info_component__WEBPACK_IMPORTED_MODULE_24__["ImageInfoComponent"],
-            _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_30__["HomeToolbarComponent"],
+            _image_image_info_image_info_component__WEBPACK_IMPORTED_MODULE_25__["ImageInfoComponent"],
+            _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_31__["HomeToolbarComponent"],
             // Route pages
             _pages_home_page_home_page_component__WEBPACK_IMPORTED_MODULE_13__["HomePageComponent"],
             _pages_gallery_page_gallery_page_component__WEBPACK_IMPORTED_MODULE_12__["GalleryPageComponent"],
-            _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_23__["ImagePageComponent"],
-            _image_image_toolbar_image_toolbar_component__WEBPACK_IMPORTED_MODULE_25__["ImageToolbarComponent"],
-            _image_image_edit_image_edit_component__WEBPACK_IMPORTED_MODULE_26__["ImageEditComponent"],
-            _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_28__["ImageAddComponent"],
-            _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_32__["NgBoxComponent"],
-            _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_33__["NgBoxDirective"]
+            _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_24__["ImagePageComponent"],
+            _image_image_toolbar_image_toolbar_component__WEBPACK_IMPORTED_MODULE_26__["ImageToolbarComponent"],
+            _image_image_edit_image_edit_component__WEBPACK_IMPORTED_MODULE_27__["ImageEditComponent"],
+            _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_29__["ImageAddComponent"],
+            _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_33__["NgBoxComponent"],
+            _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_34__["NgBoxDirective"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_10__["HttpClientModule"],
             _angular_router__WEBPACK_IMPORTED_MODULE_11__["RouterModule"].forRoot(routes),
             _angular_forms__WEBPACK_IMPORTED_MODULE_20__["FormsModule"],
-            primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_29__["FileUploadModule"],
-            _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_34__["BrowserAnimationsModule"]
+            primeng_components_fileupload_fileupload__WEBPACK_IMPORTED_MODULE_30__["FileUploadModule"],
+            _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_35__["BrowserAnimationsModule"]
         ],
         providers: [
             _services_data_service__WEBPACK_IMPORTED_MODULE_7__["DataService"],
             _services_page_title_service__WEBPACK_IMPORTED_MODULE_8__["PageTitleService"],
             _services_page_data_service__WEBPACK_IMPORTED_MODULE_9__["PageDataService"],
             _services_button_click_service__WEBPACK_IMPORTED_MODULE_19__["ButtonClickService"],
-            _services_gallery_service__WEBPACK_IMPORTED_MODULE_21__["GalleryService"],
-            _services_image_service__WEBPACK_IMPORTED_MODULE_22__["ImageService"],
-            _services_thumbnail_service__WEBPACK_IMPORTED_MODULE_27__["ThumbnailService"],
-            _ngbox_ngbox_service__WEBPACK_IMPORTED_MODULE_31__["NgBoxService"]
+            _services_gallery_service__WEBPACK_IMPORTED_MODULE_22__["GalleryService"],
+            _services_image_service__WEBPACK_IMPORTED_MODULE_23__["ImageService"],
+            _services_thumbnail_service__WEBPACK_IMPORTED_MODULE_28__["ThumbnailService"],
+            _ngbox_ngbox_service__WEBPACK_IMPORTED_MODULE_32__["NgBoxService"],
+            _services_identity_service__WEBPACK_IMPORTED_MODULE_21__["IdentityService"]
         ],
         bootstrap: [
             _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]
@@ -838,6 +853,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/button-click.service */ "./src/app/services/button-click.service.ts");
 /* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/gallery_service */ "./src/app/services/gallery_service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _services_identity_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/identity.service */ "./src/app/services/identity.service.ts");
+
 
 
 
@@ -845,10 +862,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let GalleryToolbarComponent = class GalleryToolbarComponent {
-    constructor(dataService, buttonClickService, galleryService, router) {
+    constructor(dataService, buttonClickService, galleryService, identityService, router) {
         this.dataService = dataService;
         this.buttonClickService = buttonClickService;
         this.galleryService = galleryService;
+        this.identityService = identityService;
         this.router = router;
         this.gallery = {
             id: 0,
@@ -856,9 +874,13 @@ let GalleryToolbarComponent = class GalleryToolbarComponent {
             name: '',
             description: ''
         };
+        this.rights = {
+            isAdmin: false
+        };
         this.observer = dataService.getGalleryObserver().subscribe(data => {
             this.gallery = data;
         });
+        this.rights.isAdmin = identityService.isAdmin();
     }
     onEditClick() {
         this.buttonClickService.trigger('galleryEditClick');
@@ -893,6 +915,7 @@ GalleryToolbarComponent.ctorParameters = () => [
     { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
     { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__["ButtonClickService"] },
     { type: _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__["GalleryService"] },
+    { type: _services_identity_service__WEBPACK_IMPORTED_MODULE_6__["IdentityService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }
 ];
 GalleryToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -904,6 +927,7 @@ GalleryToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"],
         _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__["ButtonClickService"],
         _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__["GalleryService"],
+        _services_identity_service__WEBPACK_IMPORTED_MODULE_6__["IdentityService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"]])
 ], GalleryToolbarComponent);
 
@@ -938,6 +962,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/button-click.service */ "./src/app/services/button-click.service.ts");
 /* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/gallery_service */ "./src/app/services/gallery_service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _services_identity_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/identity.service */ "./src/app/services/identity.service.ts");
+
 
 
 
@@ -945,10 +971,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let HomeToolbarComponent = class HomeToolbarComponent {
-    constructor(dataService, buttonClickService, galleryService, router) {
+    constructor(dataService, buttonClickService, galleryService, identityService, router) {
         this.dataService = dataService;
         this.buttonClickService = buttonClickService;
         this.galleryService = galleryService;
+        this.identityService = identityService;
         this.router = router;
         this.gallery = {
             id: 0,
@@ -961,9 +988,13 @@ let HomeToolbarComponent = class HomeToolbarComponent {
                 name: 'Homepage'
             }
         };
+        this.rights = {
+            isAdmin: false
+        };
         this.observer = dataService.getGalleryObserver().subscribe(data => {
             this.gallery = data;
         });
+        this.rights.isAdmin = identityService.isAdmin();
     }
     onAddGalleryClick() {
         this.buttonClickService.trigger('galleryAddClick');
@@ -976,6 +1007,7 @@ HomeToolbarComponent.ctorParameters = () => [
     { type: _services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"] },
     { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__["ButtonClickService"] },
     { type: _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__["GalleryService"] },
+    { type: _services_identity_service__WEBPACK_IMPORTED_MODULE_6__["IdentityService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }
 ];
 HomeToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -987,6 +1019,7 @@ HomeToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"],
         _services_button_click_service__WEBPACK_IMPORTED_MODULE_3__["ButtonClickService"],
         _services_gallery_service__WEBPACK_IMPORTED_MODULE_4__["GalleryService"],
+        _services_identity_service__WEBPACK_IMPORTED_MODULE_6__["IdentityService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"]])
 ], HomeToolbarComponent);
 
@@ -1631,6 +1664,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/data.service */ "./src/app/services/data.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/image_service */ "./src/app/services/image_service.ts");
+/* harmony import */ var _services_identity_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/identity.service */ "./src/app/services/identity.service.ts");
+
 
 
 
@@ -1638,10 +1673,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ImageToolbarComponent = class ImageToolbarComponent {
-    constructor(dataService, buttonClickService, imageService, router) {
+    constructor(dataService, buttonClickService, imageService, identityService, router) {
         this.dataService = dataService;
         this.buttonClickService = buttonClickService;
         this.imageService = imageService;
+        this.identityService = identityService;
         this.router = router;
         this.image = {
             id: 0,
@@ -1649,9 +1685,13 @@ let ImageToolbarComponent = class ImageToolbarComponent {
             description: '',
             gallery_id: 0
         };
+        this.rights = {
+            isAdmin: false
+        };
         this.observer = dataService.getImageObserver().subscribe(data => {
             this.image = data;
         });
+        this.rights.isAdmin = identityService.isAdmin();
     }
     onEditClick() {
         this.buttonClickService.trigger('imageEditClick');
@@ -1677,6 +1717,7 @@ ImageToolbarComponent.ctorParameters = () => [
     { type: _services_data_service__WEBPACK_IMPORTED_MODULE_3__["DataService"] },
     { type: _services_button_click_service__WEBPACK_IMPORTED_MODULE_2__["ButtonClickService"] },
     { type: _services_image_service__WEBPACK_IMPORTED_MODULE_5__["ImageService"] },
+    { type: _services_identity_service__WEBPACK_IMPORTED_MODULE_6__["IdentityService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
 ];
 ImageToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1688,6 +1729,7 @@ ImageToolbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_data_service__WEBPACK_IMPORTED_MODULE_3__["DataService"],
         _services_button_click_service__WEBPACK_IMPORTED_MODULE_2__["ButtonClickService"],
         _services_image_service__WEBPACK_IMPORTED_MODULE_5__["ImageService"],
+        _services_identity_service__WEBPACK_IMPORTED_MODULE_6__["IdentityService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]])
 ], ImageToolbarComponent);
 
@@ -2573,6 +2615,43 @@ GalleryService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"],
         _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])
 ], GalleryService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/identity.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/services/identity.service.ts ***!
+  \**********************************************/
+/*! exports provided: IdentityService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IdentityService", function() { return IdentityService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let IdentityService = class IdentityService {
+    constructor() {
+        this.rights = {
+            isAdmin: false
+        };
+    }
+    SetRights(rights) {
+        this.rights.isAdmin = rights.isAdmin;
+    }
+    isAdmin() {
+        return this.rights.isAdmin;
+    }
+};
+IdentityService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], IdentityService);
 
 
 

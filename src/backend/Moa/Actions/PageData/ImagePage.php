@@ -51,7 +51,10 @@ class ImagePage
 		return [
 			'image' => $image_data,
 			'breadcrumbs' => $view->getBreadcrumb($image, $parents),
-			'page_title' => 'Image "' . $image->GetProperty('filename') . '"'
+			'page_title' => 'Image "' . $image->GetProperty('filename') . '"',
+			'rights' => [
+				'isAdmin' => false
+			]
 		];
 	}
 	

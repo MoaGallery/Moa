@@ -68,7 +68,10 @@ class GalleryPage
 			'galleries' => $subgalleries,
 			'breadcrumbs' => $view->getBreadcrumb($gallery, $parents),
 			'page_title' => 'Gallery "' . $gallery->GetProperty('name') . '"',
-			'images' => $image_list
+			'images' => $image_list,
+			'rights' => [
+				'isAdmin' => false
+			]
 		];
 	}
 	

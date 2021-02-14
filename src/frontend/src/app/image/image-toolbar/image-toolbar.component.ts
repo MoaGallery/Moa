@@ -4,6 +4,7 @@ import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs/Subscription";
 import {Router} from "@angular/router";
 import {ImageService} from "../../services/image_service";
+import {IdentityService} from '../../services/identity.service';
 
 declare var $: any;
 
@@ -20,17 +21,22 @@ export class ImageToolbarComponent implements OnDestroy {
 		description: '',
 		gallery_id: 0
 	};
+	rights = {
+		isAdmin: false
+	};
 	observer: Subscription;
 
 	constructor(private dataService: DataService,
 				private buttonClickService: ButtonClickService,
 				private imageService: ImageService,
+				private identityService: IdentityService,
 	            private router: Router) {
 		this.observer = dataService.getImageObserver().subscribe(
 			data => {
 				this.image = data;
 			}
 		);
+		this.rights.isAdmin = identityService.isAdmin();
 	}
 
 	onEditClick() {
