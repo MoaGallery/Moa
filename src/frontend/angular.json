@@ -24,7 +24,11 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+		    "allowedCommonJsDependencies": [
+			  "rxjs/add/operator/map",
+			  "rxjs/add/operator/filter"
+		    ]
           },
           "configurations": {
             "production": {
@@ -37,7 +41,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
