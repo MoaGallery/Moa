@@ -29,7 +29,7 @@ import { ImageToolbarComponent } from './image/image-toolbar/image-toolbar.compo
 import { ImageEditComponent } from './image/image-edit/image-edit.component';
 import {ThumbnailService} from "./services/thumbnail.service";
 import {ImageAddComponent} from "./image/image-add/image-add.component";
-import {FileUploadModule} from 'primeng/components/fileupload/fileupload';
+import {FileUploadModule} from 'primeng/fileupload';
 import {HomeToolbarComponent} from "./home/home-toolbar/home-toolbar.component";
 import {CommonModule} from "@angular/common";
 import {NgBoxService} from "./ngbox/ngbox.service";

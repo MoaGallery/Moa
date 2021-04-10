@@ -43,13 +43,13 @@ dmlld0JveD0iMCAwIDcwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNzAgMTAwIiB4bWw6
 NGRkZGRkYiIHN0cm9rZT0iIzZCNkI2QiIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBwb2ludHM9IjE3Ljc0Niw5OC41MjQgNDguODAxLDUwIDE3Ljc0NiwxLjQ3NiAx
 NC41NDUsMy41MjQgDQoJNDQuMjg5LDUwIDE0LjU0NSw5Ni40NzYgIi8+DQo8L3N2Zz4NCg==">
                 <img *ngIf="ngBox.current.type == 1"
-                     (load)="isLoaded()" 
-                     #ngBoxContent 
+                     (load)="isLoaded()"
+                     #ngBoxContent
                      [src]="ngBox.current.url"
-                     [hidden]="ngBox.loading" 
+                     [hidden]="ngBox.loading"
                      (click)="nextNgBox()"
                      alt="">
-                <iframe *ngIf="ngBox.current.type == 2" 
+                <iframe *ngIf="ngBox.current.type == 2"
                         #ngBoxContent
                         [src]="ngBox.current.url"
                         width="{{ngBox.current.width}}"
@@ -57,17 +57,17 @@ NC41NDUsMy41MjQgDQoJNDQuMjg5LDUwIDE0LjU0NSw5Ni40NzYgIi8+DQo8L3N2Zz4NCg==">
                         frameborder="0"
                         allowfullscreen>
                 </iframe>
-                <iframe *ngIf="ngBox.current.type == 3" 
+                <iframe *ngIf="ngBox.current.type == 3"
                         [src]="ngBox.current.url"
                         #ngBoxContent
                         width="{{ngBox.current.width}}"
                         height="{{ngBox.current.height}}"
-                        frameborder="0" 
-                        webkitallowfullscreen 
-                        mozallowfullscreen 
+                        frameborder="0"
+                        webkitallowfullscreen
+                        mozallowfullscreen
                         allowfullscreen>
                 </iframe>
-                <iframe *ngIf="ngBox.current.type == 4" 
+                <iframe *ngIf="ngBox.current.type == 4"
                         #ngBoxContent
                         [src]="ngBox.current.url"
                         frameborder="0"
@@ -92,9 +92,9 @@ oJMTIuODExLDE1IDEuNSwyNy4xNiA0LjUzOSwyOC41IDE1LDE3LjI1MSAyNS40NjMsMjguNSAyOC41LD
             </div>
 
 
-            
-            
-            
+
+
+
 
         </div>
     `,
@@ -184,8 +184,8 @@ export class NgBoxComponent implements DoCheck {
     interval: any;
     @Input() data: any;
     @Output() showMore = new EventEmitter();
-    @ViewChild('ngBoxContent', null) elementView: ElementRef;
-    @ViewChild('ngBoxButtons', null) elementButtons: ElementRef;
+    @ViewChild('ngBoxContent', {}) elementView: ElementRef;
+    @ViewChild('ngBoxButtons', {}) elementButtons: ElementRef;
 
     constructor(
         public ngBox: NgBoxService
