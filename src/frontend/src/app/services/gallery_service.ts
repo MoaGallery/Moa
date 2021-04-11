@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {DataService} from "./data.service";
 import {HttpClient} from "@angular/common/http";
-import {Subject} from "rxjs/Subject";
-import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class GalleryService {

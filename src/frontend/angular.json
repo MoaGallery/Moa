@@ -24,7 +24,11 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+		    "allowedCommonJsDependencies": [
+			    "rxjs/add/operator/map",
+			    "rxjs/add/operator/filter"
+		    ]
           },
           "configurations": {
             "production": {
