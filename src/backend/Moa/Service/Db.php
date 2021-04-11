@@ -16,9 +16,9 @@ class Db
 		$config = new Configuration();
 
 		$connectionParams = array(
-			'dbname' => 'moa',
-			'user' => 'moa',
-			'password' => 'moa',
+			'dbname' => 'moa2',
+			'user' => 'moa2',
+			'password' => 'moa2',
 			'host' => 'db',
 			'driver' => 'pdo_mysql',
 		);
