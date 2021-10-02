@@ -1,9 +1,10 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs/Subscription";
 import {ButtonClickService} from "../../services/button-click.service";
 import {GalleryService} from "../../services/gallery_service";
 import {Router} from "@angular/router";
+import {Gallery} from '../../models/gallery.model';
 
 declare var $: any;
 
@@ -12,25 +13,14 @@ declare var $: any;
   templateUrl: './gallery-toolbar.component.html',
   styleUrls: ['./gallery-toolbar.component.css']
 })
-export class GalleryToolbarComponent implements OnDestroy {
+export class GalleryToolbarComponent {
 
-	gallery = {
-		id: 0,
-		parent_id: 0,
-		name: '',
-		description: ''
-	};
-	observer: Subscription;
+	@Input() gallery: Gallery;
 
 	constructor(private dataService: DataService,
 	            private buttonClickService: ButtonClickService,
 	            private galleryService: GalleryService,
 	            private router: Router) {
-		this.observer = dataService.getGalleryObserver().subscribe(
-			data => {
-				this.gallery = data;
-			}
-		);
 	}
 
 	onEditClick() {
@@ -47,7 +37,7 @@ export class GalleryToolbarComponent implements OnDestroy {
 
 	onDeleteClick() {
 		if (confirm('Delete this gallery?')) {
-			this.galleryService.DeleteGallery(this.gallery.id, this.gallery.parent_id).subscribe(next => {
+			this.galleryService.DeleteGallery(this.gallery.id, this.gallery.parentId).subscribe(next => {
 				let options =
 					{
 						message: 'Gallery deleted',
@@ -56,16 +46,12 @@ export class GalleryToolbarComponent implements OnDestroy {
 					};
 				$.meow(options);
 
-				if (this.gallery.parent_id > 0)
-					this.router.navigate(['/gallery/' + this.gallery.parent_id]);
+				if (this.gallery.parentId > 0)
+					this.router.navigate(['/gallery/' + this.gallery.parentId]);
 				else
 					this.router.navigate(['/']);
 
 			});
 		}
-	}
-
-	ngOnDestroy() {
-		this.observer.unsubscribe();
 	}
 }

@@ -3,6 +3,7 @@ import {ButtonClickService} from "../../services/button-click.service";
 import {Subscription} from "rxjs/Subscription";
 import {GalleryService} from "../../services/gallery_service";
 import {Router} from "@angular/router";
+import {Gallery} from '../../models/gallery.model';
 
 declare var $: any;
 
@@ -15,15 +16,10 @@ export class GalleryEditComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
-	@Input() gallery;
+	@Input() gallery: Gallery;
 	addMode: boolean = false;
 
 	tagList = [];
-	parent_gallery = {
-		id: 0,
-		name: ''
-	};
-
 	name: String = '';
 	description: String = '';
 	useTags: boolean = false;
@@ -79,22 +75,18 @@ export class GalleryEditComponent implements OnDestroy {
 		if (!this.addMode) {
 			this.name = this.gallery.name;
 			this.description = this.gallery.description;
-			this.useTags = this.gallery.use_tags == 1;
-			this.showImages = this.gallery.combined_view == 1;
-			this.parent_gallery.id = this.gallery.parent_gallery.id;
-			this.parent_gallery.name = this.gallery.parent_gallery.name;
+			this.useTags = this.gallery.useTags;
+			this.showImages = this.gallery.combinedView;
 		} else
 		{
 			this.name = '';
 			this.description = '';
 			this.useTags = true;
 			this.showImages = false;
-			this.parent_gallery.id = this.gallery.id;
-			this.parent_gallery.name = this.gallery.name;
 		}
 		this.tagList = [];
 
-		for (let tag of this.gallery.tag_list) {
+		for (let tag of this.gallery.tagList) {
 			this.tagList.push({name: tag.name, id: ''+tag.id});
 		}
 	}
@@ -109,7 +101,7 @@ export class GalleryEditComponent implements OnDestroy {
 		}
 
 		let galleryData = $('#inputGalleryParent').select2('data');
-		this.parent_gallery.id = galleryData[0].id;
+		this.gallery.parentGallery.id = galleryData[0].id;
 
 		let id = 0;
 		if (!this.addMode)
@@ -119,7 +111,7 @@ export class GalleryEditComponent implements OnDestroy {
 			id: id,
 			name: this.name,
 			description: this.description,
-			parent: this.parent_gallery.id,
+			parent: this.gallery.parentGallery.id,
 			tags: tags,
 			useTags: this.useTags,
 			showImages: this.showImages

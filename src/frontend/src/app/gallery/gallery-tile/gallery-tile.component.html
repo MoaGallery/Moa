@@ -1,5 +1,5 @@
 <a [routerLink]="[getLink(gallery.id)]">
-	<img *ngIf="!doesThumbExist(gallery.thumb_id)" src="http://placehold.it/300x200">
-	<img *ngIf="doesThumbExist(gallery.thumb_id)" src="/image/thumb/{{gallery.thumb_id}}.jpg">
+	<img *ngIf="!doesThumbExist(gallery.thumbId)" src="http://placehold.it/300x200">
+	<img *ngIf="doesThumbExist(gallery.thumbId)" src="/image/thumb/{{gallery.thumbId}}.jpg">
 	<h4>{{gallery.name}}</h4>
 </a>

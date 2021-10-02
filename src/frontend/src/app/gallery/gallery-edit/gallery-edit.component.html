@@ -25,8 +25,8 @@
 					<div class="form-group">
 						<label for="inputGalleryParent" class="col-sm-2 control-label">Parent</label>
 						<div class="col-sm-10">
-							<select class="form-control" name="inputGalleryParent" id="inputGalleryParent" style="width: 100%">
-								<option value="{{parent_gallery.id}}" selected="selected">{{parent_gallery.name}}</option>
+							<select class="form-control" name="inputGalleryParent" id="inputGalleryParent" style="width: 100%" *ngIf="gallery.parentGallery !== undefined">
+								<option value="{{gallery.parentGallery.id}}" selected="selected">{{gallery.parentGallery.name}}</option>
 							</select>
 						</div>
 					</div>

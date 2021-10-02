@@ -13,7 +13,7 @@ class View
 			(
 				'name' => $data['name'],
 				'id' => (int)$id,
-				'thumb_id' => $data['thumb_id']
+				'thumbId' => $data['thumb_id']
 			);
 		};
 		return $output;
@@ -25,9 +25,9 @@ class View
 		$gallery_args['id'] = $gallery->GetProperty('id');
 		$gallery_args['name'] = $gallery->GetProperty('name', true);
 		$gallery_args['description'] = $gallery->GetProperty('description', true);
-		$gallery_args['combined_view'] = $gallery->GetProperty('combined_view');
-		$gallery_args['use_tags'] = $gallery->GetProperty('use_tags');
-		$gallery_args['parent_id'] = $gallery->GetProperty('parent_id');
+		$gallery_args['combinedView'] = $gallery->GetProperty('combined_view') == 1;
+		$gallery_args['useTags'] = $gallery->GetProperty('use_tags') == 1;
+		$gallery_args['parentId'] = $gallery->GetProperty('parent_id');
 
 		// Parent gallery list
 		$parents = [
@@ -42,7 +42,7 @@ class View
 			];
 		}
 		
-		$gallery_args['parent_gallery'] = $parents;
+		$gallery_args['parentGallery'] = $parents;
 
 		$tags = [];
 		foreach ($gallery_tags as $tag_id => $tag_name)
@@ -54,7 +54,7 @@ class View
 		}
 		
 		// Tags
-		$gallery_args['tag_list'] = $tags;
+		$gallery_args['tagList'] = $tags;
 
 		return $gallery_args;
 	}

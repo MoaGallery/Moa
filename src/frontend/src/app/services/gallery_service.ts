@@ -3,14 +3,31 @@ import {DataService} from "./data.service";
 import {HttpClient} from "@angular/common/http";
 import {Subject} from "rxjs";
 import {Observable} from "rxjs";
+import {Gallery} from '../models/gallery.model';
+import {Subscription} from 'rxjs/Subscription';
+import {ParentGallery} from '../models/parent-gallery.model';
 
 @Injectable()
 export class GalleryService {
+	get gallery(): Gallery {
+		return this._gallery;
+	}
 
 	protected api_url: string = '/api/gallery/';
+	private _gallery: Gallery;
+
+	private galleryObserver: Subscription;
 
 	constructor(private dataService: DataService,
 	            private http: HttpClient) {
+		this._gallery = new Gallery();
+		this._gallery.tagList = [];
+		this._gallery.parentGallery = new ParentGallery();
+		this.galleryObserver = dataService.getGalleryObserver().subscribe(
+			data => {
+				this._gallery.fromData(data);
+			}
+		);
 	}
 
 	SubmitGallery(data): Observable<any> {
@@ -41,7 +58,7 @@ export class GalleryService {
 		return subject.asObservable();
 	}
 
-	DeleteGallery(id, parent_id): Observable<any> {
+	DeleteGallery(id): Observable<any> {
 		let url = this.api_url + id;
 		let subject = new Subject();
 
