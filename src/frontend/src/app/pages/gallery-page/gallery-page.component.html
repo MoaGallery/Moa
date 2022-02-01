@@ -1,4 +1,14 @@
-<gallery-toolbar [gallery]="gallery"></gallery-toolbar>
+<div *ngIf="(gallery$ | async) as gallery">
+	<gallery-toolbar [gallery]="gallery"></gallery-toolbar>
+	<div class="course">
+		[{{gallery | json}}]
+	</div>
+</div>
+[
+<div class="course" *ngFor="let simpleGallery of (simpleGalleries$ | async)">
+	{{simpleGallery | json}}
+</div>
+]
 <gallery-info></gallery-info>
 <gallery-list></gallery-list>
 <image-list></image-list>

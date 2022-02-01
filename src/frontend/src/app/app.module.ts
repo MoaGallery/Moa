@@ -33,12 +33,45 @@ import { HomeToolbarComponent } from "./home/home-toolbar/home-toolbar.component
 import { NgBoxService } from "./ngbox/ngbox.service";
 import { NgBoxComponent } from "./ngbox/ngbox.component";
 import { NgBoxDirective } from "./ngbox/ngbox.directive";
+import {EntityDataModule, EntityDataService, EntityDefinitionService, EntityDispatcherDefaultOptions, EntityMetadataMap} from '@ngrx/data';
+import {GalleryDataService} from './services/gallery.data.service';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {environment} from '../environments/environment';
+import {metaReducers, reducers} from './reducers';
+import {GalleryEntityService} from './services/gallery-entity.service';
+import {GalleryResolver} from './gallery.resolver';
+import {RouterState, StoreRouterConnectingModule} from '@ngrx/router-store';
+import {SimpleGalleryDataService} from './services/simple_gallery.data.service';
+import {SimpleGalleryEntityService} from './services/simple_gallery-entity.service';
 
 const routes: Routes = [
-	{ path: '', component: HomePageComponent },
-	{ path: 'gallery/:id', component: GalleryPageComponent },
-	{ path: 'image/:gallery_id/:image_id', component: ImagePageComponent }
+	{
+		path: '',
+		component: HomePageComponent
+	},
+	{
+		path: 'gallery/:id',
+		component: GalleryPageComponent,
+		resolve: {
+			//gallery: GalleryResolver
+		}
+	},
+	{
+		path: 'image/:gallery_id/:image_id',
+		component: ImagePageComponent
+	}
 ];
+
+const entityMetadata: EntityMetadataMap = {
+	Gallery: {
+		entityDispatcherOptions: {
+			optimisticUpdate: true
+		}
+	},
+	SimpleGallery: {}
+};
 
 @NgModule({
 	declarations: [
@@ -73,7 +106,23 @@ const routes: Routes = [
 		HttpClientModule,
 		RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
 		FormsModule,
-		FileUploadModule
+		FileUploadModule,
+		StoreModule.forRoot(reducers, {
+			metaReducers,
+			runtimeChecks : {
+				strictStateImmutability: true,
+				strictActionImmutability: true,
+				strictActionSerializability: true,
+				strictStateSerializability:true
+			}
+		}),
+		StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+		EffectsModule.forRoot(),
+		EntityDataModule.forRoot({}),
+		StoreRouterConnectingModule.forRoot({
+			stateKey: 'router',
+			routerState: RouterState.Minimal
+		})
 	],
 	providers: [
 		DataService,
@@ -83,10 +132,26 @@ const routes: Routes = [
 		GalleryService,
 		ImageService,
 		ThumbnailService,
-		NgBoxService
+		NgBoxService,
+		GalleryDataService,
+		GalleryEntityService,
+		GalleryResolver,
+		SimpleGalleryDataService,
+		SimpleGalleryEntityService
 	],
 	bootstrap: [
 		AppComponent
 	]
 })
-export class AppModule { }
+export class AppModule {
+	constructor(
+		private eds: EntityDefinitionService,
+		private entityDataService: EntityDataService,
+		private galleryDataService: GalleryDataService,
+		private simpleGalleryDataService: SimpleGalleryDataService
+	) {
+		eds.registerMetadataMap(entityMetadata);
+		entityDataService.registerService('Gallery', this.galleryDataService);
+		entityDataService.registerService('SimpleGallery', this.simpleGalleryDataService);
+	}
+}

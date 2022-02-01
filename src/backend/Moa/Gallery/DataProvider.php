@@ -78,18 +78,24 @@ class DataProvider
 		return $galleries;
 	}
 
-	public function GetAllGalleries()
+	public function GetAllGalleries(): array
 	{
 		$qb = new QueryBuilder($this->db->Connection());
 
-		$qb->select('id', 'name')
-			->from(self::DB_NAME);
+		$qb->select('id', 'name', 'parent_id', 'gt.image_id AS thumb_id')
+			->from(self::DB_NAME, 'g')
+			->leftJoin('g', self::DB_THUMB_NAME, 'gt', 'g.id = gt.gallery_id');
 		$result = $qb->execute();
 
 		$galleries = array();
 		while ($arr = $result->fetch())
 		{
-			$galleries[$arr['id']] = $arr['name'];
+			$galleries[] = [
+				'id' => (int)$arr['id'],
+				'parentId' => (int)$arr['parent_id'],
+				'name' => $arr['name'],
+				'thumbId' => (int)$arr['thumb_id']
+			];
 		}
 
 		return $galleries;

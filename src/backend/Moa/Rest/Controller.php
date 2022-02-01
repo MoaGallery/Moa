@@ -160,4 +160,17 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		
 		return new JsonResponse($results);
 	}
+	
+	function GalleryGet($id, PageData\GalleryPage $page_data)
+	{
+		$data = $page_data->GetGalleryPageData($id);
+		return new JsonResponse($data['gallery']);
+	}
+	
+	function SimpleGalleryGet(Gallery\DataProvider $gallery_provider)
+	{
+		$galleries = $gallery_provider->GetAllGalleries();
+		
+		return new JsonResponse($galleries);
+	}
 }
