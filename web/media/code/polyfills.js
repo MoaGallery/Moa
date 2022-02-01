@@ -1,11 +1,40 @@
 "use strict";
 (self["webpackChunkmoa_frontend"] = self["webpackChunkmoa_frontend"] || []).push([["polyfills"],{
 
-/***/ 7761:
+/***/ 7435:
+/*!**************************!*\
+  !*** ./src/polyfills.ts ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var zone_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zone.js */ 4924);
+/* harmony import */ var zone_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(zone_js__WEBPACK_IMPORTED_MODULE_0__);
+/***************************************************************************************************
+ * Zone JS is required by Angular itself.
+ */
+ // Included with Angular CLI.
+/***************************************************************************************************
+ * APPLICATION IMPORTS
+ */
+/**
+ * Date, currency, decimal and percent pipes.
+ * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
+ */
+// import 'intl';  // Run `npm install --save intl`.
+/**
+ * Need to import at least one locale-data with intl.
+ */
+// import 'intl/locale-data/jsonp/en';
+
+
+/***/ }),
+
+/***/ 4924:
 /*!***********************************************!*\
   !*** ./node_modules/zone.js/fesm2015/zone.js ***!
   \***********************************************/
-/***/ (function() {
+/***/ (() => {
 
 
 /**
@@ -2965,46 +2994,12 @@ Zone.__load_patch('PromiseRejectionEvent', (global, Zone) => {
 });
 
 
-/***/ }),
-
-/***/ 7435:
-/*!**************************!*\
-  !*** ./src/polyfills.ts ***!
-  \**************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var zone_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zone.js */ 7761);
-/* harmony import */ var zone_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(zone_js__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * Required to support Web Animations `@angular/platform-browser/animations`.
- * Needed for: All but Chrome, Firefox and Opera. http://caniuse.com/#feat=web-animation
- **/
-// import 'web-animations-js';  // Run `npm install --save web-animations-js`.
-/***************************************************************************************************
- * Zone JS is required by Angular itself.
- */
- // Included with Angular CLI.
-/***************************************************************************************************
- * APPLICATION IMPORTS
- */
-/**
- * Date, currency, decimal and percent pipes.
- * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
- */
-// import 'intl';  // Run `npm install --save intl`.
-/**
- * Need to import at least one locale-data with intl.
- */
-// import 'intl/locale-data/jsonp/en';
-
-
 /***/ })
 
 },
-/******/ function(__webpack_require__) { // webpackRuntimeModules
-/******/ var __webpack_exec__ = function(moduleId) { return __webpack_require__(__webpack_require__.s = moduleId); }
+/******/ __webpack_require__ => { // webpackRuntimeModules
+/******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
 /******/ var __webpack_exports__ = (__webpack_exec__(7435));
 /******/ }
 ]);
-//# sourceMappingURL=polyfills-es2015.js.map
+//# sourceMappingURL=polyfills.js.map
