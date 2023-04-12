@@ -16,10 +16,10 @@ class Db
 		$config = new Configuration();
 
 		$connectionParams = array(
-			'dbname' => 'moa2',
-			'user' => 'moa2',
-			'password' => 'moa2',
-			'host' => 'db',
+			'dbname' => 'moa',
+			'user' => 'moa',
+			'password' => 'moa',
+			'host' => 'maria',
 			'driver' => 'pdo_mysql',
 		);
 		$this->conn = DriverManager::getConnection($connectionParams, $config);
