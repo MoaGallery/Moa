@@ -111,7 +111,6 @@
       }
     }
   },
-  "defaultProject": "moa-frontend",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "",
