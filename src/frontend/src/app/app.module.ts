@@ -104,7 +104,7 @@ const entityMetadata: EntityMetadataMap = {
 	imports: [
 		BrowserModule,
 		HttpClientModule,
-		RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+		RouterModule.forRoot(routes, {}),
 		FormsModule,
 		FileUploadModule,
 		StoreModule.forRoot(reducers, {
