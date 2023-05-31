@@ -16,10 +16,10 @@ environments:
 
     development:
         adapter: mysql
-        host: localhost
-        name: db
-        user: root
-        pass: ''
+        host: mysql
+        name: moa
+        user: moa
+        pass: moa
         port: 3306
         charset: utf8
 
