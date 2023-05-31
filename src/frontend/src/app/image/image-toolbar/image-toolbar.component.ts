@@ -3,7 +3,7 @@ import {ButtonClickService} from "../../services/button-click.service";
 import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs/Subscription";
 import {Router} from "@angular/router";
-import {ImageService} from "../../services/image_service";
+import {ImageService} from "../image.service";
 
 declare var $: any;
 
@@ -39,7 +39,7 @@ export class ImageToolbarComponent implements OnDestroy {
 
 	onDeleteClick() {
 		if (confirm('Delete this image?')) {
-			this.imageService.DeleteImage(this.image.id).subscribe(next => {
+			/*this.imageService.DeleteImage(this.image.id).subscribe(next => {
 				let options =
 					{
 						message: 'Image deleted',
@@ -49,7 +49,7 @@ export class ImageToolbarComponent implements OnDestroy {
 				$.meow(options);
 
 				this.router.navigate(['/gallery/' + this.image.gallery_id]);
-			});
+			});*/
 		}
 	}
 

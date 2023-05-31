@@ -31,7 +31,7 @@ class DataProvider
 		$tags = array();
 		while ($arr = $result->fetch())
 		{
-			$tags[$arr['id']] = $arr['name'];
+			$tags[(int)$arr['id']] = $arr['name'];
 		}
 
 		return $tags;

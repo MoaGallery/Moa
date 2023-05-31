@@ -1,7 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs/Subscription";
-import {NgBoxService} from "../../ngbox/ngbox.service";
 
 @Component({
   selector: 'image-info',

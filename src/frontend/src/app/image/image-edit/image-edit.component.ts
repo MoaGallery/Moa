@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ButtonClickService} from "../../services/button-click.service";
 import {Subscription} from "rxjs/Subscription";
 import {Router} from "@angular/router";
-import {ImageService} from "../../services/image_service";
+import {ImageService} from "../image.service";
 
 declare var $: any;
 
@@ -72,7 +72,7 @@ export class ImageEditComponent implements OnInit {
 			tags.push(tag.id);
 		}
 
-		this.imageService.SubmitImages({
+		/*this.imageService.SubmitImages({
 			id: this.image.id,
 			gallery_id: this.image.gallery_id,
 			description: this.description,
@@ -87,7 +87,7 @@ export class ImageEditComponent implements OnInit {
 			$.meow(options);
 			$('#inputImageTags').children().remove();
 			$('#edit-modal').modal('hide');
-		});
+		});*/
 	}
 
 	ngOnInit() {

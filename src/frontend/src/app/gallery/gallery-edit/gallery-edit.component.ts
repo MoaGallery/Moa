@@ -1,9 +1,9 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import {ButtonClickService} from "../../services/button-click.service";
 import {Subscription} from "rxjs/Subscription";
-import {GalleryService} from "../../services/gallery_service";
+import {GalleryService} from "../gallery.service";
 import {Router} from "@angular/router";
-import {Gallery} from '../../models/gallery.model';
+import {GalleryModel} from '../gallery.model';
 
 declare var $: any;
 
@@ -16,7 +16,7 @@ export class GalleryEditComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
-	@Input() gallery: Gallery;
+	@Input() gallery: GalleryModel;
 	addMode: boolean = false;
 
 	tagList = [];
@@ -107,7 +107,7 @@ export class GalleryEditComponent implements OnDestroy {
 		if (!this.addMode)
 			id = this.gallery.id;
 
-		this.galleryService.SubmitGallery({
+		/*this.galleryService.SubmitGallery({
 			id: id,
 			name: this.name,
 			description: this.description,
@@ -129,7 +129,7 @@ export class GalleryEditComponent implements OnDestroy {
 			if (this.addMode) {
 				this.router.navigate(['/gallery/' + data.message])
 			}
-		});
+		});*/
 	}
 
 	ngOnDestroy(): void {

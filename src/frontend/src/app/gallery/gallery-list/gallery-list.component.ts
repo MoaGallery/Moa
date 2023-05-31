@@ -1,7 +1,10 @@
 import {Component} from '@angular/core';
-import {Gallery} from "../../models/gallery.model";
-import {DataService} from "../../services/data.service";
-import {Subscription} from "rxjs/Subscription";
+import {Store} from '@ngrx/store';
+import {GalleryState} from '../state/gallery.reducer';
+import {getGalleryId} from '../state/gallery.selector';
+import {AppState} from '../../state/app.reducer';
+import {SimpleGallery} from '../../models/simple_gallery';
+import {getSubGalleries} from '../../state/app.selector';
 
 @Component({
   selector: 'gallery-list',
@@ -10,18 +13,24 @@ import {Subscription} from "rxjs/Subscription";
 })
 export class GalleryListComponent {
 
-    galleries: Gallery[];
-    observer: Subscription;
+	public galleryId: number = 0;
+	public galleries: SimpleGallery[] = [];
 
-    constructor(private service: DataService) {
-        this.observer = service.getGalleriesObserver().subscribe(
-            data => {
-                this.galleries = data;
-            }
-        );
+    constructor(private galleryStore: Store<GalleryState>,
+                private appStore: Store<AppState>) {
     }
 
-    ngOnDestroy(): void {
-        this.observer.unsubscribe();
-    }
+	ngOnInit(): void {
+		this.galleryStore.select(getGalleryId).subscribe(
+			(id: number) => {
+				this.galleryId = id;
+
+				this.appStore.select(getSubGalleries({id: this.galleryId})).subscribe(
+					(galleries: SimpleGallery[]) => {
+						this.galleries = galleries;
+					}
+				);
+			}
+		);
+	}
 }

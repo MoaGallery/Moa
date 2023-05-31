@@ -9,6 +9,7 @@ use Moa\Actions\PageData;
 use Moa\Actions\TagLookup;
 use Moa\Gallery;
 use Moa\Image;
+use Moa\Tag;
 use Moa\Service\IncomingFileService;
 use Moa\Service\ThumbnailProvider;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -172,5 +173,16 @@ class Controller extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 		$galleries = $gallery_provider->GetAllGalleries();
 		
 		return new JsonResponse($galleries);
+	}
+	
+	function OtherDataGet(Gallery\DataProvider $gallery_provider,
+	                      Tag\DataProvider $tag_provider)
+	{
+		$data = [
+			'galleries' => $gallery_provider->GetAllGalleries(),
+			'tags' => $tag_provider->GetAllTags()
+		];
+		
+		return new JsonResponse($data);
 	}
 }

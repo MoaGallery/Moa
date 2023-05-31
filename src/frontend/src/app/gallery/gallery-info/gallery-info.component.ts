@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {GalleryEntityService} from '../../services/gallery-entity.service';
-import {Observable} from 'rxjs';
-import {Gallery} from '../../models/gallery';
-import {map} from 'rxjs/operators';
+import {Store} from '@ngrx/store';
+import {GalleryInfoData, getGalleryInfo} from '../state/gallery.selector';
+import {GalleryState} from '../state/gallery.reducer';
 
 @Component({
   selector: 'gallery-info',
@@ -11,14 +10,16 @@ import {map} from 'rxjs/operators';
 })
 export class GalleryInfoComponent {
 
-	public gallery$: Observable<Gallery>
-	constructor(private galleryService: GalleryEntityService) {
+	public galleryData;
+
+	constructor(private store: Store<GalleryState>) {
 	}
 
 	private ngOnInit() {
-		this.gallery$ = this.galleryService.entities$
-			.pipe(
-				map(gallery => gallery.find(gallery => gallery.id == 32))
-			);
+		this.store.select(getGalleryInfo).subscribe(
+			(data: GalleryInfoData) => {
+				this.galleryData = data;
+			}
+		);
 	}
 }

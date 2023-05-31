@@ -1,10 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {DataService} from "../../services/data.service";
-import {ButtonClickService} from "../../services/button-click.service";
-import {GalleryService} from "../../services/gallery_service";
+import {GalleryService} from "../gallery.service";
 import {Router} from "@angular/router";
 import {Gallery} from '../../models/gallery';
-import {GalleryEntityService} from '../../services/gallery-entity.service';
 import {map, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 
@@ -18,17 +15,11 @@ declare var $: any;
 export class GalleryToolbarComponent {
 
 	@Input() gallery: Gallery;
-	public gallery$: Observable<Gallery>;
 
-	constructor(private galleryService: GalleryEntityService,
-	            private router: Router) {
+	constructor(private router: Router) {
 	}
 
 	private ngOnInit() {
-		this.gallery$ = this.galleryService.entities$
-			.pipe(
-				map(gallery => gallery.find(gallery => gallery.id == 32))
-			);
 	}
 
 	onEditClick() {
@@ -45,7 +36,7 @@ export class GalleryToolbarComponent {
 
 	onDeleteClick() {
 		if (confirm('Delete this gallery?')) {
-			this.galleryService.delete(this.gallery)
+			/*this.galleryService.delete(this.gallery)
 				.pipe(
 					tap(gallery => {
 						let options =
@@ -61,7 +52,7 @@ export class GalleryToolbarComponent {
 						else
 							this.router.navigate(['/']);
 					})
-				);
+				);*/
 		}
 	}
 }

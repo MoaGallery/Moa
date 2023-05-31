@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {PageDataService} from "../../services/page_data.service";
+import {ActivatedRoute} from '@angular/router';
 import {Gallery} from '../../models/gallery';
-import {GalleryService} from '../../services/gallery_service';
-import {GalleryEntityService} from '../../services/gallery-entity.service';
 import {Observable} from 'rxjs';
-import { map } from 'rxjs/operators';
-import { tap } from 'rxjs/operators';
 import {SimpleGallery} from '../../models/simple_gallery';
-import {SimpleGalleryEntityService} from '../../services/simple_gallery-entity.service';
+import {loadGalleryAction} from '../../gallery/state/gallery.action';
+import {Store} from '@ngrx/store';
+import {GalleryState} from '../../gallery/state/gallery.reducer';
+import {State} from '../../state/app.state';
+import {loadOtherDataAction} from '../../state/app.action';
 
 @Component({
 	selector: 'gallery-page',
@@ -18,30 +17,18 @@ import {SimpleGalleryEntityService} from '../../services/simple_gallery-entity.s
 export class GalleryPageComponent implements OnInit {
 
 	public gallery$: Observable<Gallery>;
-	public simpleGalleries$: Observable<SimpleGallery[]>;
-	public id: number = 32;
+	public id: number = 0;
 
 	constructor(private route: ActivatedRoute,
-	            private galleryEntityService: GalleryEntityService,
-	            private simpleGalleryEntityService: SimpleGalleryEntityService) {
-		console.log(this.route);
+	            private galleryStore: Store<GalleryState>,
+	            private rootStore: Store<State>) {
 	}
 
 	ngOnInit(): void {
-		this.gallery$ = this.galleryEntityService.entities$
-			.pipe(
-				tap(galleries => {console.log(galleries)}),
-				map(galleries => galleries.find(gallery => gallery.id == this.id))
-			);
-		this.simpleGalleries$ = this.simpleGalleryEntityService.entities$
-			.pipe(
-				tap(simpleGalleries => {console.log(simpleGalleries)}),
-				map(galleries => galleries.filter(gallery => gallery.parentId == this.id))
-			);
-		this.simpleGalleryEntityService.getAll();
-
 		this.route.params.subscribe(params => {
-			this.galleryEntityService.getByKey(this.id);
+			this.id = params.gallery_id;
+			this.galleryStore.dispatch(loadGalleryAction({id: this.id}));
+			this.rootStore.dispatch(loadOtherDataAction());
 		});
 	}
 }

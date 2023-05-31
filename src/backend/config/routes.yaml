@@ -112,6 +112,10 @@ api_api_delete_image:
         id: '\d+'
     methods: DELETE
 
+api_other_get:
+  path: /api/other/
+  controller: 'Moa\Rest\Controller::OtherDataGet'
+
 api_galleries_get:
   path: /api/simplegalleries/
   controller: 'Moa\Rest\Controller::SimpleGalleryGet'

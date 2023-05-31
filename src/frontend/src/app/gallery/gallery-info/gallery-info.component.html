@@ -1,6 +1,6 @@
-<div *ngIf="(gallery$ | async) as gallery">
-	<h1>{{gallery.name}}</h1>
+<div *ngIf="galleryData">
+	<h1>{{galleryData.name}}</h1>
 	<p>
-		{{gallery.description}}
+		{{galleryData.description}}
 	</p>
 </div>

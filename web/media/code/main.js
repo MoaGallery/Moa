@@ -73,8 +73,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./gallery/gallery-edit/gallery-edit.component */ 9188);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./services/button-click.service */ 4872);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! @angular/forms */ 587);
-/* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./services/gallery_service */ 586);
-/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./services/image_service */ 8121);
+/* harmony import */ var _gallery_gallery_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./gallery/gallery.service */ 8422);
+/* harmony import */ var _image_image_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./image/image.service */ 964);
 /* harmony import */ var _pages_image_page_image_page_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pages/image-page/image-page.component */ 2141);
 /* harmony import */ var _image_image_info_image_info_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./image/image-info/image-info.component */ 386);
 /* harmony import */ var _image_image_toolbar_image_toolbar_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./image/image-toolbar/image-toolbar.component */ 9458);
@@ -87,19 +87,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./ngbox/ngbox.component */ 3995);
 /* harmony import */ var _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./ngbox/ngbox.directive */ 4126);
 /* harmony import */ var _ngrx_data__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @ngrx/data */ 4824);
-/* harmony import */ var _services_gallery_data_service__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./services/gallery.data.service */ 9626);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! @ngrx/store */ 5585);
 /* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! @ngrx/effects */ 369);
 /* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! @ngrx/store-devtools */ 5811);
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ../environments/environment */ 2340);
-/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./reducers */ 1697);
-/* harmony import */ var _services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./services/gallery-entity.service */ 6671);
-/* harmony import */ var _gallery_resolver__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./gallery.resolver */ 7615);
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ../environments/environment */ 2340);
+/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./reducers */ 1697);
 /* harmony import */ var _ngrx_router_store__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! @ngrx/router-store */ 25);
-/* harmony import */ var _services_simple_gallery_data_service__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./services/simple_gallery.data.service */ 5599);
-/* harmony import */ var _services_simple_gallery_entity_service__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./services/simple_gallery-entity.service */ 2889);
+/* harmony import */ var _services_simple_gallery_data_service__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./services/simple_gallery.data.service */ 5599);
+/* harmony import */ var _services_simple_gallery_entity_service__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./services/simple_gallery-entity.service */ 2889);
+/* harmony import */ var _gallery_gallery_module__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./gallery/gallery.module */ 8632);
+/* harmony import */ var _state_app_effect__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./state/app.effect */ 2297);
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./app.service */ 900);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/core */ 3184);
-
 
 
 
@@ -158,7 +157,7 @@ const routes = [
         component: _pages_home_page_home_page_component__WEBPACK_IMPORTED_MODULE_8__.HomePageComponent
     },
     {
-        path: 'gallery/:id',
+        path: 'gallery/:gallery_id',
         component: _pages_gallery_page_gallery_page_component__WEBPACK_IMPORTED_MODULE_7__.GalleryPageComponent,
         resolve: {
         //gallery: GalleryResolver
@@ -178,40 +177,36 @@ const entityMetadata = {
     SimpleGallery: {}
 };
 class AppModule {
-    constructor(eds, entityDataService, galleryDataService, simpleGalleryDataService) {
+    constructor(eds, entityDataService, simpleGalleryDataService) {
         this.eds = eds;
         this.entityDataService = entityDataService;
-        this.galleryDataService = galleryDataService;
         this.simpleGalleryDataService = simpleGalleryDataService;
         eds.registerMetadataMap(entityMetadata);
-        entityDataService.registerService('Gallery', this.galleryDataService);
         entityDataService.registerService('SimpleGallery', this.simpleGalleryDataService);
     }
 }
-AppModule.ɵfac = function AppModule_Factory(t) { return new (t || AppModule)(_angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDefinitionService), _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDataService), _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_services_gallery_data_service__WEBPACK_IMPORTED_MODULE_27__.GalleryDataService), _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_services_simple_gallery_data_service__WEBPACK_IMPORTED_MODULE_32__.SimpleGalleryDataService)); };
+AppModule.ɵfac = function AppModule_Factory(t) { return new (t || AppModule)(_angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDefinitionService), _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDataService), _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵinject"](_services_simple_gallery_data_service__WEBPACK_IMPORTED_MODULE_29__.SimpleGalleryDataService)); };
 AppModule.ɵmod = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵdefineNgModule"]({ type: AppModule, bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_0__.AppComponent] });
 AppModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵɵdefineInjector"]({ providers: [
         _services_data_service__WEBPACK_IMPORTED_MODULE_4__.DataService,
         _services_page_title_service__WEBPACK_IMPORTED_MODULE_5__.PageTitleService,
         _services_page_data_service__WEBPACK_IMPORTED_MODULE_6__.PageDataService,
         _services_button_click_service__WEBPACK_IMPORTED_MODULE_14__.ButtonClickService,
-        _services_gallery_service__WEBPACK_IMPORTED_MODULE_15__.GalleryService,
-        _services_image_service__WEBPACK_IMPORTED_MODULE_16__.ImageService,
+        _gallery_gallery_service__WEBPACK_IMPORTED_MODULE_15__.GalleryService,
+        _image_image_service__WEBPACK_IMPORTED_MODULE_16__.ImageService,
+        _app_service__WEBPACK_IMPORTED_MODULE_33__.AppService,
         _services_thumbnail_service__WEBPACK_IMPORTED_MODULE_21__.ThumbnailService,
         _ngbox_ngbox_service__WEBPACK_IMPORTED_MODULE_24__.NgBoxService,
-        _services_gallery_data_service__WEBPACK_IMPORTED_MODULE_27__.GalleryDataService,
-        _services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_30__.GalleryEntityService,
-        _gallery_resolver__WEBPACK_IMPORTED_MODULE_31__.GalleryResolver,
-        _services_simple_gallery_data_service__WEBPACK_IMPORTED_MODULE_32__.SimpleGalleryDataService,
-        _services_simple_gallery_entity_service__WEBPACK_IMPORTED_MODULE_33__.SimpleGalleryEntityService
+        _services_simple_gallery_data_service__WEBPACK_IMPORTED_MODULE_29__.SimpleGalleryDataService,
+        _services_simple_gallery_entity_service__WEBPACK_IMPORTED_MODULE_30__.SimpleGalleryEntityService
     ], imports: [[
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_36__.BrowserModule,
             _angular_common_http__WEBPACK_IMPORTED_MODULE_37__.HttpClientModule,
             _angular_router__WEBPACK_IMPORTED_MODULE_38__.RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
             _angular_forms__WEBPACK_IMPORTED_MODULE_39__.FormsModule,
             primeng_fileupload__WEBPACK_IMPORTED_MODULE_40__.FileUploadModule,
-            _ngrx_store__WEBPACK_IMPORTED_MODULE_41__.StoreModule.forRoot(_reducers__WEBPACK_IMPORTED_MODULE_29__.reducers, {
-                metaReducers: _reducers__WEBPACK_IMPORTED_MODULE_29__.metaReducers,
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_41__.StoreModule.forRoot(_reducers__WEBPACK_IMPORTED_MODULE_28__.reducers, {
+                metaReducers: _reducers__WEBPACK_IMPORTED_MODULE_28__.metaReducers,
                 runtimeChecks: {
                     strictStateImmutability: true,
                     strictActionImmutability: true,
@@ -219,8 +214,9 @@ AppModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵ�
                     strictStateSerializability: true
                 }
             }),
-            _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_42__.StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: _environments_environment__WEBPACK_IMPORTED_MODULE_28__.environment.production }),
-            _ngrx_effects__WEBPACK_IMPORTED_MODULE_43__.EffectsModule.forRoot(),
+            _gallery_gallery_module__WEBPACK_IMPORTED_MODULE_31__.GalleryModule,
+            _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_42__.StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: _environments_environment__WEBPACK_IMPORTED_MODULE_27__.environment.production }),
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_43__.EffectsModule.forRoot([_state_app_effect__WEBPACK_IMPORTED_MODULE_32__.AppEffect]),
             _ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDataModule.forRoot({}),
             _ngrx_router_store__WEBPACK_IMPORTED_MODULE_44__.StoreRouterConnectingModule.forRoot({
                 stateKey: 'router',
@@ -248,7 +244,59 @@ AppModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_34__["ɵ�
         _ngbox_ngbox_component__WEBPACK_IMPORTED_MODULE_25__.NgBoxComponent,
         _ngbox_ngbox_directive__WEBPACK_IMPORTED_MODULE_26__.NgBoxDirective], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_36__.BrowserModule,
         _angular_common_http__WEBPACK_IMPORTED_MODULE_37__.HttpClientModule, _angular_router__WEBPACK_IMPORTED_MODULE_38__.RouterModule, _angular_forms__WEBPACK_IMPORTED_MODULE_39__.FormsModule,
-        primeng_fileupload__WEBPACK_IMPORTED_MODULE_40__.FileUploadModule, _ngrx_store__WEBPACK_IMPORTED_MODULE_41__.StoreRootModule, _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_42__.StoreDevtoolsModule, _ngrx_effects__WEBPACK_IMPORTED_MODULE_43__.EffectsRootModule, _ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDataModule, _ngrx_router_store__WEBPACK_IMPORTED_MODULE_44__.StoreRouterConnectingModule] }); })();
+        primeng_fileupload__WEBPACK_IMPORTED_MODULE_40__.FileUploadModule, _ngrx_store__WEBPACK_IMPORTED_MODULE_41__.StoreRootModule, _gallery_gallery_module__WEBPACK_IMPORTED_MODULE_31__.GalleryModule, _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_42__.StoreDevtoolsModule, _ngrx_effects__WEBPACK_IMPORTED_MODULE_43__.EffectsRootModule, _ngrx_data__WEBPACK_IMPORTED_MODULE_35__.EntityDataModule, _ngrx_router_store__WEBPACK_IMPORTED_MODULE_44__.StoreRouterConnectingModule] }); })();
+
+
+/***/ }),
+
+/***/ 900:
+/*!********************************!*\
+  !*** ./src/app/app.service.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AppService": () => (/* binding */ AppService)
+/* harmony export */ });
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ 6587);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ 7418);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ 8784);
+
+
+
+
+class AppService {
+    constructor(http) {
+        this.http = http;
+        this.api_url = '/api/other/';
+    }
+    handleError(err) {
+        // in a real world app, we may send the server to some remote logging infrastructure
+        // instead of just logging it to the console
+        let errorMessage;
+        if (err.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            errorMessage = `An error occurred: ${err.error.message}`;
+        }
+        else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
+        }
+        console.error(err);
+        return (0,rxjs__WEBPACK_IMPORTED_MODULE_0__.throwError)(errorMessage);
+    }
+    getOtherData() {
+        return this.http.get(this.api_url)
+            .pipe(
+        /*tap(data => console.log(JSON.stringify(data))),*/
+        (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_1__.catchError)(this.handleError));
+    }
+}
+AppService.ɵfac = function AppService_Factory(t) { return new (t || AppService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpClient)); };
+AppService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: AppService, factory: AppService.ɵfac });
 
 
 /***/ }),
@@ -344,44 +392,6 @@ BreadcrumbComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE
 
 /***/ }),
 
-/***/ 7615:
-/*!*************************************!*\
-  !*** ./src/app/gallery.resolver.ts ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GalleryResolver": () => (/* binding */ GalleryResolver)
-/* harmony export */ });
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ 8759);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ 9151);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ 5670);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./services/gallery-entity.service */ 6671);
-
-
-
-class GalleryResolver {
-    constructor(galleryService) {
-        this.galleryService = galleryService;
-    }
-    resolve(route, state) {
-        return this.galleryService.loaded$
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_1__.tap)(loaded => {
-            if (!loaded) {
-                //console.log(route, state)
-                //this.galleryService.getAll()//ByKey(route.params.id);
-            }
-        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_2__.filter)(loaded => !!loaded), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.first)());
-    }
-}
-GalleryResolver.ɵfac = function GalleryResolver_Factory(t) { return new (t || GalleryResolver)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__.GalleryEntityService)); };
-GalleryResolver.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjectable"]({ token: GalleryResolver, factory: GalleryResolver.ɵfac });
-
-
-/***/ }),
-
 /***/ 9188:
 /*!****************************************************************!*\
   !*** ./src/app/gallery/gallery-edit/gallery-edit.component.ts ***!
@@ -394,7 +404,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/button-click.service */ 4872);
-/* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/gallery_service */ 586);
+/* harmony import */ var _gallery_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../gallery.service */ 8422);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 2816);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ 587);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ 6362);
@@ -505,7 +515,7 @@ class GalleryEditComponent {
         let id = 0;
         if (!this.addMode)
             id = this.gallery.id;
-        this.galleryService.SubmitGallery({
+        /*this.galleryService.SubmitGallery({
             id: id,
             name: this.name,
             description: this.description,
@@ -514,7 +524,8 @@ class GalleryEditComponent {
             useTags: this.useTags,
             showImages: this.showImages
         }).subscribe(data => {
-            let options = {
+            let options =
+            {
                 message: 'Gallery saved',
                 container: '#editSuccessContainer',
                 duration: 5000
@@ -522,16 +533,17 @@ class GalleryEditComponent {
             $.meow(options);
             $('#inputGalleryTags').children().remove();
             $('#edit-modal').modal('hide');
+
             if (this.addMode) {
-                this.router.navigate(['/gallery/' + data.message]);
+                this.router.navigate(['/gallery/' + data.message])
             }
-        });
+        });*/
     }
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
 }
-GalleryEditComponent.ɵfac = function GalleryEditComponent_Factory(t) { return new (t || GalleryEditComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_0__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_gallery_service__WEBPACK_IMPORTED_MODULE_1__.GalleryService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
+GalleryEditComponent.ɵfac = function GalleryEditComponent_Factory(t) { return new (t || GalleryEditComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_0__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_gallery_service__WEBPACK_IMPORTED_MODULE_1__.GalleryService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
 GalleryEditComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: GalleryEditComponent, selectors: [["gallery-edit"]], inputs: { gallery: "gallery" }, decls: 50, vars: 7, consts: [["id", "edit-modal", 1, "modal", "fade"], [1, "modal-dialog"], [1, "modal-content"], [1, "modal-header"], ["type", "button", "data-dismiss", "modal", "aria-label", "Close", 1, "close"], ["aria-hidden", "true"], [1, "modal-title"], ["method", "post", 1, "form-horizontal", 3, "action"], [1, "modal-body"], [1, "form-group"], ["for", "inputGalleryName", 1, "col-sm-2", "control-label"], [1, "col-sm-10"], ["type", "text", "name", "inputGalleryName", "id", "inputGalleryName", "placeholder", "Edit...", 1, "form-control", 3, "ngModel", "ngModelChange"], ["for", "inputGalleryDescription", 1, "col-sm-2", "control-label"], ["name", "inputGalleryDescription", "id", "inputGalleryDescription", "placeholder", "Edit...", 1, "form-control", 3, "ngModel", "ngModelChange"], ["for", "inputGalleryParent", 1, "col-sm-2", "control-label"], ["class", "form-control", "name", "inputGalleryParent", "id", "inputGalleryParent", "style", "width: 100%", 4, "ngIf"], ["for", "inputGalleryTags", 1, "col-sm-2", "control-label"], ["name", "inputGalleryTags[]", "id", "inputGalleryTags", "multiple", "", 1, "form-control", 2, "width", "100%"], ["selected", "selected", 3, "value", 4, "ngFor", "ngForOf"], [1, "checkbox"], [1, "col-sm-2"], ["type", "checkbox", "name", "inputGalleryCombinedView", "id", "inputGalleryCombinedView", 3, "ngModel", "ngModelChange"], ["for", "inputGalleryCombinedView", 1, "control-label"], ["type", "checkbox", "name", "inputGalleryUseTags", "id", "inputGalleryUseTags", 3, "ngModel", "ngModelChange"], ["for", "inputGalleryUseTags", 1, "control-label"], [1, "modal-footer"], ["type", "button", "data-dismiss", "modal", 1, "btn", "btn-default"], ["type", "submit", "value", "Save changes", 1, "btn", "btn-primary", 3, "click"], ["name", "inputGalleryParent", "id", "inputGalleryParent", 1, "form-control", 2, "width", "100%"], ["selected", "selected", 3, "value"]], template: function GalleryEditComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 1);
@@ -655,9 +667,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "GalleryInfoComponent": () => (/* binding */ GalleryInfoComponent)
 /* harmony export */ });
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ 6942);
+/* harmony import */ var _state_gallery_selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state/gallery.selector */ 4806);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/gallery-entity.service */ 6671);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ 5585);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ 6362);
 
 
@@ -673,28 +685,28 @@ function GalleryInfoComponent_div_0_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } if (rf & 2) {
-    const gallery_r1 = ctx.ngIf;
+    const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](gallery_r1.name);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx_r0.galleryData.name);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", gallery_r1.description, " ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", ctx_r0.galleryData.description, " ");
 } }
 class GalleryInfoComponent {
-    constructor(galleryService) {
-        this.galleryService = galleryService;
+    constructor(store) {
+        this.store = store;
     }
     ngOnInit() {
-        this.gallery$ = this.galleryService.entities$
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_2__.map)(gallery => gallery.find(gallery => gallery.id == 32)));
+        this.store.select(_state_gallery_selector__WEBPACK_IMPORTED_MODULE_0__.getGalleryInfo).subscribe((data) => {
+            this.galleryData = data;
+        });
     }
 }
-GalleryInfoComponent.ɵfac = function GalleryInfoComponent_Factory(t) { return new (t || GalleryInfoComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__.GalleryEntityService)); };
-GalleryInfoComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: GalleryInfoComponent, selectors: [["gallery-info"]], decls: 2, vars: 3, consts: [[4, "ngIf"]], template: function GalleryInfoComponent_Template(rf, ctx) { if (rf & 1) {
+GalleryInfoComponent.ɵfac = function GalleryInfoComponent_Factory(t) { return new (t || GalleryInfoComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_2__.Store)); };
+GalleryInfoComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: GalleryInfoComponent, selectors: [["gallery-info"]], decls: 1, vars: 1, consts: [[4, "ngIf"]], template: function GalleryInfoComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](0, GalleryInfoComponent_div_0_Template, 5, 2, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](1, "async");
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind1"](1, 1, ctx.gallery$));
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_3__.NgIf], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_3__.AsyncPipe], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnYWxsZXJ5LWluZm8uY29tcG9uZW50LmNzcyJ9 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.galleryData);
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_3__.NgIf], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnYWxsZXJ5LWluZm8uY29tcG9uZW50LmNzcyJ9 */"] });
 
 
 /***/ }),
@@ -709,45 +721,54 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "GalleryListComponent": () => (/* binding */ GalleryListComponent)
 /* harmony export */ });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/data.service */ 2468);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ 6362);
-/* harmony import */ var _gallery_tile_gallery_tile_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../gallery-tile/gallery-tile.component */ 4511);
+/* harmony import */ var _state_gallery_selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state/gallery.selector */ 4806);
+/* harmony import */ var _state_app_selector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../state/app.selector */ 614);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ 5585);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ 6362);
+/* harmony import */ var _gallery_tile_gallery_tile_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../gallery-tile/gallery-tile.component */ 4511);
+
+
 
 
 
 
 function GalleryListComponent_li_2_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "li", 3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](1, "gallery-tile", 4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "li", 3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](1, "gallery-tile", 4);
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const gallery_r1 = ctx.$implicit;
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("gallery", gallery_r1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("gallery", gallery_r1);
 } }
 class GalleryListComponent {
-    constructor(service) {
-        this.service = service;
-        this.observer = service.getGalleriesObserver().subscribe(data => {
-            this.galleries = data;
+    constructor(galleryStore, appStore) {
+        this.galleryStore = galleryStore;
+        this.appStore = appStore;
+        this.galleryId = 0;
+        this.galleries = [];
+    }
+    ngOnInit() {
+        this.galleryStore.select(_state_gallery_selector__WEBPACK_IMPORTED_MODULE_0__.getGalleryId).subscribe((id) => {
+            this.galleryId = id;
+            this.appStore.select((0,_state_app_selector__WEBPACK_IMPORTED_MODULE_1__.getSubGalleries)({ id: this.galleryId })).subscribe((galleries) => {
+                this.galleries = galleries;
+            });
         });
     }
-    ngOnDestroy() {
-        this.observer.unsubscribe();
-    }
 }
-GalleryListComponent.ɵfac = function GalleryListComponent_Factory(t) { return new (t || GalleryListComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_data_service__WEBPACK_IMPORTED_MODULE_0__.DataService)); };
-GalleryListComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: GalleryListComponent, selectors: [["gallery-list"]], decls: 3, vars: 1, consts: [[1, "row"], [1, "list-unstyled"], ["class", "thumbnail col-md-3", "style", "min-height: 150px;", 4, "ngFor", "ngForOf"], [1, "thumbnail", "col-md-3", 2, "min-height", "150px"], [3, "gallery"]], template: function GalleryListComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "ul", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](2, GalleryListComponent_li_2_Template, 2, 1, "li", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+GalleryListComponent.ɵfac = function GalleryListComponent_Factory(t) { return new (t || GalleryListComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_4__.Store), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_4__.Store)); };
+GalleryListComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({ type: GalleryListComponent, selectors: [["gallery-list"]], decls: 3, vars: 1, consts: [[1, "row"], [1, "list-unstyled"], ["class", "thumbnail col-md-3", "style", "min-height: 150px;", 4, "ngFor", "ngForOf"], [1, "thumbnail", "col-md-3", 2, "min-height", "150px"], [3, "gallery"]], template: function GalleryListComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](1, "ul", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](2, GalleryListComponent_li_2_Template, 2, 1, "li", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngForOf", ctx.galleries);
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_3__.NgForOf, _gallery_tile_gallery_tile_component__WEBPACK_IMPORTED_MODULE_1__.GalleryTileComponent], styles: [".thumbnail[_ngcontent-%COMP%] {\n    height: 250px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImdhbGxlcnktbGlzdC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksYUFBYTtBQUNqQiIsImZpbGUiOiJnYWxsZXJ5LWxpc3QuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi50aHVtYm5haWwge1xuICAgIGhlaWdodDogMjUwcHg7XG59Il19 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("ngForOf", ctx.galleries);
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_5__.NgForOf, _gallery_tile_gallery_tile_component__WEBPACK_IMPORTED_MODULE_2__.GalleryTileComponent], styles: [".thumbnail[_ngcontent-%COMP%] {\n    height: 250px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImdhbGxlcnktbGlzdC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksYUFBYTtBQUNqQiIsImZpbGUiOiJnYWxsZXJ5LWxpc3QuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi50aHVtYm5haWwge1xuICAgIGhlaWdodDogMjUwcHg7XG59Il19 */"] });
 
 
 /***/ }),
@@ -819,27 +840,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "GalleryToolbarComponent": () => (/* binding */ GalleryToolbarComponent)
 /* harmony export */ });
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ 6942);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ 8759);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/gallery-entity.service */ 6671);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ 2816);
-/* harmony import */ var _gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../gallery-edit/gallery-edit.component */ 9188);
-/* harmony import */ var _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../image/image-add/image-add.component */ 1963);
-
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 2816);
+/* harmony import */ var _gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../gallery-edit/gallery-edit.component */ 9188);
+/* harmony import */ var _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../image/image-add/image-add.component */ 1963);
 
 
 
 
 class GalleryToolbarComponent {
-    constructor(galleryService, router) {
-        this.galleryService = galleryService;
+    constructor(router) {
         this.router = router;
     }
     ngOnInit() {
-        this.gallery$ = this.galleryService.entities$
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.map)(gallery => gallery.find(gallery => gallery.id == 32)));
     }
     onEditClick() {
         //this.buttonClickService.trigger('galleryEditClick');
@@ -852,53 +865,279 @@ class GalleryToolbarComponent {
     }
     onDeleteClick() {
         if (confirm('Delete this gallery?')) {
-            this.galleryService.delete(this.gallery)
-                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.tap)(gallery => {
-                let options = {
-                    message: 'Gallery deleted',
-                    container: '#editSuccessContainer',
-                    duration: 5000
-                };
-                $.meow(options);
-                if (this.gallery.parentId > 0)
-                    this.router.navigate(['/gallery/' + this.gallery.parentId]);
-                else
-                    this.router.navigate(['/']);
-            }));
+            /*this.galleryService.delete(this.gallery)
+                .pipe(
+                    tap(gallery => {
+                        let options =
+                            {
+                                message: 'Gallery deleted',
+                                container: '#editSuccessContainer',
+                                duration: 5000
+                            };
+                        $.meow(options);
+
+                        if (this.gallery.parentId > 0)
+                            this.router.navigate(['/gallery/' + this.gallery.parentId]);
+                        else
+                            this.router.navigate(['/']);
+                    })
+                );*/
         }
     }
 }
-GalleryToolbarComponent.ɵfac = function GalleryToolbarComponent_Factory(t) { return new (t || GalleryToolbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__.GalleryEntityService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__.Router)); };
-GalleryToolbarComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: GalleryToolbarComponent, selectors: [["gallery-toolbar"]], inputs: { gallery: "gallery" }, decls: 13, vars: 2, consts: [[3, "gallery"], [1, "row"], [1, "pull-right"], ["role", "group", "aria-label", "...", 1, "btn-group"], ["type", "button", "id", "galleryAdd", "title", "Add gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-th"], ["type", "button", "id", "imageAdd", "title", "Add image", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-picture"], ["type", "button", "id", "galleryEdit", "title", "Edit gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-pencil"], ["type", "button", "id", "galleryDelete", "title", "Delete gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-trash"]], template: function GalleryToolbarComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](0, "gallery-edit", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](1, "image-add", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](2, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](3, "div", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](4, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](5, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_5_listener() { return ctx.onAddGalleryClick(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](6, "span", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](7, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_7_listener() { return ctx.onAddImageClick(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](8, "span", 7);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](9, "button", 8);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_9_listener() { return ctx.onEditClick(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](10, "span", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](11, "button", 10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_11_listener() { return ctx.onDeleteClick(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](12, "span", 11);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+GalleryToolbarComponent.ɵfac = function GalleryToolbarComponent_Factory(t) { return new (t || GalleryToolbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
+GalleryToolbarComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: GalleryToolbarComponent, selectors: [["gallery-toolbar"]], inputs: { gallery: "gallery" }, decls: 13, vars: 2, consts: [[3, "gallery"], [1, "row"], [1, "pull-right"], ["role", "group", "aria-label", "...", 1, "btn-group"], ["type", "button", "id", "galleryAdd", "title", "Add gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-th"], ["type", "button", "id", "imageAdd", "title", "Add image", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-picture"], ["type", "button", "id", "galleryEdit", "title", "Edit gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-pencil"], ["type", "button", "id", "galleryDelete", "title", "Delete gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-trash"]], template: function GalleryToolbarComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](0, "gallery-edit", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](1, "image-add", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](2, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](3, "div", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](4, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](5, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_5_listener() { return ctx.onAddGalleryClick(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](6, "span", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](7, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_7_listener() { return ctx.onAddImageClick(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](8, "span", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](9, "button", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_9_listener() { return ctx.onEditClick(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](10, "span", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](11, "button", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function GalleryToolbarComponent_Template_button_click_11_listener() { return ctx.onDeleteClick(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](12, "span", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("gallery", ctx.gallery);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("gallery", ctx.gallery);
-    } }, directives: [_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_1__.GalleryEditComponent, _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_2__.ImageAddComponent], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnYWxsZXJ5LXRvb2xiYXIuY29tcG9uZW50LmNzcyJ9 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("gallery", ctx.gallery);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("gallery", ctx.gallery);
+    } }, directives: [_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_0__.GalleryEditComponent, _image_image_add_image_add_component__WEBPACK_IMPORTED_MODULE_1__.ImageAddComponent], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnYWxsZXJ5LXRvb2xiYXIuY29tcG9uZW50LmNzcyJ9 */"] });
+
+
+/***/ }),
+
+/***/ 8632:
+/*!*******************************************!*\
+  !*** ./src/app/gallery/gallery.module.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GalleryModule": () => (/* binding */ GalleryModule)
+/* harmony export */ });
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ 6362);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ 5585);
+/* harmony import */ var _state_gallery_reducer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state/gallery.reducer */ 8630);
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/effects */ 369);
+/* harmony import */ var _state_gallery_effect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./state/gallery.effect */ 59);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
+
+
+
+
+
+
+
+
+class GalleryModule {
+}
+GalleryModule.ɵfac = function GalleryModule_Factory(t) { return new (t || GalleryModule)(); };
+GalleryModule.ɵmod = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineNgModule"]({ type: GalleryModule });
+GalleryModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector"]({ imports: [[
+            _angular_common__WEBPACK_IMPORTED_MODULE_3__.CommonModule,
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_4__.StoreModule.forFeature('gallery', _state_gallery_reducer__WEBPACK_IMPORTED_MODULE_0__.galleryReducer),
+            _ngrx_effects__WEBPACK_IMPORTED_MODULE_5__.EffectsModule.forFeature([_state_gallery_effect__WEBPACK_IMPORTED_MODULE_1__.GalleryEffect])
+        ]] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵsetNgModuleScope"](GalleryModule, { imports: [_angular_common__WEBPACK_IMPORTED_MODULE_3__.CommonModule, _ngrx_store__WEBPACK_IMPORTED_MODULE_4__.StoreFeatureModule, _ngrx_effects__WEBPACK_IMPORTED_MODULE_5__.EffectsFeatureModule] }); })();
+
+
+/***/ }),
+
+/***/ 8422:
+/*!********************************************!*\
+  !*** ./src/app/gallery/gallery.service.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GalleryService": () => (/* binding */ GalleryService)
+/* harmony export */ });
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ 6587);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ 7418);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ 8784);
+
+
+
+
+class GalleryService {
+    constructor(http) {
+        this.http = http;
+        this.api_url = '/api/gallery/';
+    }
+    get gallery() {
+        return this._gallery;
+    }
+    handleError(err) {
+        // in a real world app, we may send the server to some remote logging infrastructure
+        // instead of just logging it to the console
+        let errorMessage;
+        if (err.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            errorMessage = `An error occurred: ${err.error.message}`;
+        }
+        else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
+        }
+        console.error(err);
+        return (0,rxjs__WEBPACK_IMPORTED_MODULE_0__.throwError)(errorMessage);
+    }
+    getGallery(id) {
+        return this.http.get(this.api_url + id)
+            .pipe(
+        /*tap(data => console.log(JSON.stringify(data))),*/
+        (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_1__.catchError)(this.handleError));
+    }
+}
+GalleryService.ɵfac = function GalleryService_Factory(t) { return new (t || GalleryService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpClient)); };
+GalleryService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: GalleryService, factory: GalleryService.ɵfac });
+
+
+/***/ }),
+
+/***/ 2868:
+/*!*************************************************!*\
+  !*** ./src/app/gallery/state/gallery.action.ts ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "loadGalleryAction": () => (/* binding */ loadGalleryAction),
+/* harmony export */   "galleryLoadedAction": () => (/* binding */ galleryLoadedAction)
+/* harmony export */ });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ 5585);
+
+const loadGalleryAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Gallery] Load gallery', (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.props)());
+const galleryLoadedAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Gallery] Gallery loaded', (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.props)());
+
+
+/***/ }),
+
+/***/ 59:
+/*!*************************************************!*\
+  !*** ./src/app/gallery/state/gallery.effect.ts ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GalleryEffect": () => (/* binding */ GalleryEffect)
+/* harmony export */ });
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/effects */ 369);
+/* harmony import */ var _gallery_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gallery.action */ 2868);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ 522);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ 6942);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _gallery_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../gallery.service */ 8422);
+
+
+
+
+
+
+class GalleryEffect {
+    constructor(actions$, galleryService) {
+        this.actions$ = actions$;
+        this.galleryService = galleryService;
+        this.loadGalleryInfo$ = (0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_2__.createEffect)(() => {
+            return this.actions$.pipe((0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_2__.ofType)(_gallery_action__WEBPACK_IMPORTED_MODULE_0__.loadGalleryAction), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.mergeMap)((data) => {
+                return this.galleryService.getGallery(data.id).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.map)(gallery => {
+                    return _gallery_action__WEBPACK_IMPORTED_MODULE_0__.galleryLoadedAction({ gallery: gallery });
+                }));
+            }));
+        });
+    }
+}
+GalleryEffect.ɵfac = function GalleryEffect_Factory(t) { return new (t || GalleryEffect)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵinject"](_ngrx_effects__WEBPACK_IMPORTED_MODULE_2__.Actions), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵinject"](_gallery_service__WEBPACK_IMPORTED_MODULE_1__.GalleryService)); };
+GalleryEffect.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineInjectable"]({ token: GalleryEffect, factory: GalleryEffect.ɵfac });
+
+
+/***/ }),
+
+/***/ 8630:
+/*!**************************************************!*\
+  !*** ./src/app/gallery/state/gallery.reducer.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "galleryReducer": () => (/* binding */ galleryReducer)
+/* harmony export */ });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ 5585);
+/* harmony import */ var _gallery_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gallery.action */ 2868);
+
+
+const initialState = {
+    gallery: {
+        id: 0,
+        name: '',
+        thumbId: 0,
+        parentId: 0,
+        parentGalleryId: 0,
+        tagIdList: [],
+        description: '',
+        useTags: true,
+        combinedView: false,
+    }
+};
+const galleryReducer = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_1__.createReducer)(initialState, (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_1__.on)(_gallery_action__WEBPACK_IMPORTED_MODULE_0__.galleryLoadedAction, (state, data) => {
+    var val = {
+        gallery: Object.assign({}, state.gallery)
+    };
+    val.gallery = Object.assign({}, data.gallery);
+    return val;
+}));
+
+
+/***/ }),
+
+/***/ 4806:
+/*!***************************************************!*\
+  !*** ./src/app/gallery/state/gallery.selector.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getGalleryInfo": () => (/* binding */ getGalleryInfo),
+/* harmony export */   "getGalleryId": () => (/* binding */ getGalleryId)
+/* harmony export */ });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ 5585);
+
+const getGalleryFeatureSelector = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createFeatureSelector)('gallery');
+const EmptyGalleryInfo = {
+    name: '',
+    description: ''
+};
+const getGalleryInfo = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createSelector)(getGalleryFeatureSelector, (state) => {
+    let data = EmptyGalleryInfo;
+    data.name = state.gallery.name;
+    data.description = state.gallery.description;
+    return data;
+});
+const getGalleryId = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createSelector)(getGalleryFeatureSelector, (state) => {
+    return state.gallery.id;
+});
 
 
 /***/ }),
@@ -913,23 +1152,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "HomeToolbarComponent": () => (/* binding */ HomeToolbarComponent)
 /* harmony export */ });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 3184);
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/data.service */ 2468);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/button-click.service */ 4872);
-/* harmony import */ var _services_gallery_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/gallery_service */ 586);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ 2816);
-/* harmony import */ var _gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../gallery/gallery-edit/gallery-edit.component */ 9188);
-
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ 2816);
+/* harmony import */ var _gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../gallery/gallery-edit/gallery-edit.component */ 9188);
 
 
 
 
 
 class HomeToolbarComponent {
-    constructor(dataService, buttonClickService, galleryService, router) {
+    constructor(dataService, buttonClickService, router) {
         this.dataService = dataService;
         this.buttonClickService = buttonClickService;
-        this.galleryService = galleryService;
         this.router = router;
         this.gallery = {
             id: 0,
@@ -953,22 +1189,22 @@ class HomeToolbarComponent {
         this.observer.unsubscribe();
     }
 }
-HomeToolbarComponent.ɵfac = function HomeToolbarComponent_Factory(t) { return new (t || HomeToolbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_data_service__WEBPACK_IMPORTED_MODULE_0__.DataService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_1__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_gallery_service__WEBPACK_IMPORTED_MODULE_2__.GalleryService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.Router)); };
-HomeToolbarComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({ type: HomeToolbarComponent, selectors: [["home-toolbar"]], decls: 6, vars: 1, consts: [[3, "gallery"], [1, "row"], [1, "pull-right"], ["role", "group", "aria-label", "...", 1, "btn-group"], ["type", "button", "id", "galleryAdd", "title", "Add gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-th"]], template: function HomeToolbarComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](0, "gallery-edit", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](2, "div", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](3, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function HomeToolbarComponent_Template_button_click_4_listener() { return ctx.onAddGalleryClick(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](5, "span", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+HomeToolbarComponent.ɵfac = function HomeToolbarComponent_Factory(t) { return new (t || HomeToolbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_services_data_service__WEBPACK_IMPORTED_MODULE_0__.DataService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_1__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__.Router)); };
+HomeToolbarComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({ type: HomeToolbarComponent, selectors: [["home-toolbar"]], decls: 6, vars: 1, consts: [[3, "gallery"], [1, "row"], [1, "pull-right"], ["role", "group", "aria-label", "...", 1, "btn-group"], ["type", "button", "id", "galleryAdd", "title", "Add gallery", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-th"]], template: function HomeToolbarComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](0, "gallery-edit", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](1, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](2, "div", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](3, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](4, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵlistener"]("click", function HomeToolbarComponent_Template_button_click_4_listener() { return ctx.onAddGalleryClick(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](5, "span", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("gallery", ctx.gallery);
-    } }, directives: [_gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_3__.GalleryEditComponent], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJob21lLXRvb2xiYXIuY29tcG9uZW50LmNzcyJ9 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("gallery", ctx.gallery);
+    } }, directives: [_gallery_gallery_edit_gallery_edit_component__WEBPACK_IMPORTED_MODULE_2__.GalleryEditComponent], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJob21lLXRvb2xiYXIuY29tcG9uZW50LmNzcyJ9 */"] });
 
 
 /***/ }),
@@ -985,7 +1221,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/button-click.service */ 4872);
-/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/image_service */ 8121);
+/* harmony import */ var _image_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../image.service */ 964);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 2816);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ 587);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ 6362);
@@ -1089,24 +1325,26 @@ class ImageAddComponent {
         let files = this.uploadedFiles.map((file) => {
             return file.hash;
         });
-        this.imageService.SubmitImages({
+        /*this.imageService.SubmitImages({
             id: 0,
             gallery_id: this.gallery.id,
             description: this.description,
             tags: tags,
             fileHashes: files
         }).subscribe(data => {
-            let options = {
-                message: 'Image saved',
-                container: '#editSuccessContainer',
-                duration: 5000
-            };
+            let options =
+                {
+                    message: 'Image saved',
+                    container: '#editSuccessContainer',
+                    duration: 5000
+                };
             $.meow(options);
             $('#inputImageTags').children().remove();
             $('#add-modal').modal('hide');
+
             if (files.length === 1)
                 this.router.navigate(['/image/' + this.gallery.id + '/' + data.message]);
-        });
+        });*/
     }
     ngOnInit() {
     }
@@ -1134,7 +1372,7 @@ class ImageAddComponent {
             this.uploadedFiles.splice(fileIndex, 1);
     }
 }
-ImageAddComponent.ɵfac = function ImageAddComponent_Factory(t) { return new (t || ImageAddComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_0__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_image_service__WEBPACK_IMPORTED_MODULE_1__.ImageService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
+ImageAddComponent.ɵfac = function ImageAddComponent_Factory(t) { return new (t || ImageAddComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_0__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_image_service__WEBPACK_IMPORTED_MODULE_1__.ImageService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
 ImageAddComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: ImageAddComponent, selectors: [["image-add"]], inputs: { gallery: "gallery" }, decls: 32, vars: 2, consts: [["id", "add-modal", 1, "modal", "fade"], [1, "modal-dialog"], [1, "modal-content"], [1, "modal-header"], ["type", "button", "data-dismiss", "modal", "aria-label", "Close", 1, "close"], ["aria-hidden", "true"], [1, "modal-title"], ["action", "", "method", "post", 1, "form-horizontal"], [1, "modal-body"], [1, "form-group"], ["for", "inputImageDescription", 1, "col-sm-2", "control-label"], [1, "col-sm-10"], ["name", "inputImageDescription", "id", "inputImageDescription", "placeholder", "Edit...", 1, "form-control", 3, "ngModel", "ngModelChange"], ["for", "inputImageTags", 1, "col-sm-2", "control-label"], ["name", "inputImageTags[]", "id", "inputImageTags", "multiple", "", 1, "form-control", 2, "width", "100%"], ["selected", "selected", 3, "value", 4, "ngFor", "ngForOf"], ["url", "/api/upload", "name", "myfile[]", "accept", "image/*", "auto", "auto", "multiple", "multiple", 3, "onUpload"], ["pTemplate", "content"], [1, "modal-footer"], ["type", "button", "data-dismiss", "modal", 1, "btn", "btn-default"], ["type", "submit", "value", "Save changes", 1, "btn", "btn-primary", 3, "click"], ["selected", "selected", 3, "value"], ["class", "list-unstyled uploaded-image-list", 4, "ngIf"], [1, "list-unstyled", "uploaded-image-list"], [4, "ngFor", "ngForOf"], ["width", "50", 3, "src"], ["href", "#", 3, "click"], [1, "glyphicon", "glyphicon-trash"]], template: function ImageAddComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 1);
@@ -1217,7 +1455,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/button-click.service */ 4872);
-/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/image_service */ 8121);
+/* harmony import */ var _image_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../image.service */ 964);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 2816);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ 587);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ 6362);
@@ -1285,26 +1523,27 @@ class ImageEditComponent {
         for (let tag of tagData) {
             tags.push(tag.id);
         }
-        this.imageService.SubmitImages({
+        /*this.imageService.SubmitImages({
             id: this.image.id,
             gallery_id: this.image.gallery_id,
             description: this.description,
             tags: tags,
         }).subscribe(data => {
-            let options = {
-                message: 'Image saved',
-                container: '#editSuccessContainer',
-                duration: 5000
-            };
+            let options =
+                {
+                    message: 'Image saved',
+                    container: '#editSuccessContainer',
+                    duration: 5000
+                };
             $.meow(options);
             $('#inputImageTags').children().remove();
             $('#edit-modal').modal('hide');
-        });
+        });*/
     }
     ngOnInit() {
     }
 }
-ImageEditComponent.ɵfac = function ImageEditComponent_Factory(t) { return new (t || ImageEditComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_0__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_image_service__WEBPACK_IMPORTED_MODULE_1__.ImageService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
+ImageEditComponent.ɵfac = function ImageEditComponent_Factory(t) { return new (t || ImageEditComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_0__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_image_service__WEBPACK_IMPORTED_MODULE_1__.ImageService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__.Router)); };
 ImageEditComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({ type: ImageEditComponent, selectors: [["image-edit"]], inputs: { image: "image" }, decls: 26, vars: 2, consts: [["id", "edit-modal", 1, "modal", "fade"], [1, "modal-dialog"], [1, "modal-content"], [1, "modal-header"], ["type", "button", "data-dismiss", "modal", "aria-label", "Close", 1, "close"], ["aria-hidden", "true"], [1, "modal-title"], ["action", "", "method", "post", 1, "form-horizontal"], [1, "modal-body"], [1, "form-group"], ["for", "inputImageDescription", 1, "col-sm-2", "control-label"], [1, "col-sm-10"], ["name", "inputImageDescription", "id", "inputImageDescription", "placeholder", "Edit...", 1, "form-control", 3, "ngModel", "ngModelChange"], ["for", "inputImageTags", 1, "col-sm-2", "control-label"], ["name", "inputImageTags[]", "id", "inputImageTags", "multiple", "", 1, "form-control", 2, "width", "100%"], ["selected", "selected", 3, "value", 4, "ngFor", "ngForOf"], [1, "modal-footer"], ["type", "button", "data-dismiss", "modal", 1, "btn", "btn-default"], ["type", "submit", "value", "Save changes", 1, "btn", "btn-primary", 3, "click"], ["selected", "selected", 3, "value"]], template: function ImageEditComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 1);
@@ -1685,7 +1924,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3184);
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/data.service */ 2468);
 /* harmony import */ var _services_button_click_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/button-click.service */ 4872);
-/* harmony import */ var _services_image_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/image_service */ 8121);
+/* harmony import */ var _image_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../image.service */ 964);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ 2816);
 /* harmony import */ var _image_edit_image_edit_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../image-edit/image-edit.component */ 6424);
 
@@ -1715,22 +1954,24 @@ class ImageToolbarComponent {
     }
     onDeleteClick() {
         if (confirm('Delete this image?')) {
-            this.imageService.DeleteImage(this.image.id).subscribe(next => {
-                let options = {
-                    message: 'Image deleted',
-                    container: '#editSuccessContainer',
-                    duration: 5000
-                };
+            /*this.imageService.DeleteImage(this.image.id).subscribe(next => {
+                let options =
+                    {
+                        message: 'Image deleted',
+                        container: '#editSuccessContainer',
+                        duration: 5000
+                    };
                 $.meow(options);
+
                 this.router.navigate(['/gallery/' + this.image.gallery_id]);
-            });
+            });*/
         }
     }
     ngOnDestroy() {
         this.observer.unsubscribe();
     }
 }
-ImageToolbarComponent.ɵfac = function ImageToolbarComponent_Factory(t) { return new (t || ImageToolbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_data_service__WEBPACK_IMPORTED_MODULE_0__.DataService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_1__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_image_service__WEBPACK_IMPORTED_MODULE_2__.ImageService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.Router)); };
+ImageToolbarComponent.ɵfac = function ImageToolbarComponent_Factory(t) { return new (t || ImageToolbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_data_service__WEBPACK_IMPORTED_MODULE_0__.DataService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_services_button_click_service__WEBPACK_IMPORTED_MODULE_1__.ButtonClickService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_image_service__WEBPACK_IMPORTED_MODULE_2__.ImageService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.Router)); };
 ImageToolbarComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({ type: ImageToolbarComponent, selectors: [["image-toolbar"]], decls: 8, vars: 1, consts: [[3, "image"], [1, "row"], [1, "pull-right"], ["role", "group", "aria-label", "...", 1, "btn-group"], ["type", "button", "id", "imageEdit", "title", "Edit image", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-pencil"], ["type", "button", "id", "imageDelete", "title", "Delete image", "data-toggle", "tooltip", 1, "btn", "btn-default", 3, "click"], [1, "glyphicon", "glyphicon-trash"]], template: function ImageToolbarComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](0, "image-edit", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "div", 1);
@@ -1754,74 +1995,28 @@ ImageToolbarComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 4183:
-/*!*****************************************!*\
-  !*** ./src/app/models/gallery.model.ts ***!
-  \*****************************************/
+/***/ 964:
+/*!****************************************!*\
+  !*** ./src/app/image/image.service.ts ***!
+  \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Gallery": () => (/* binding */ Gallery)
+/* harmony export */   "ImageService": () => (/* binding */ ImageService)
 /* harmony export */ });
-/* harmony import */ var rxjs_internal_compatibility__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/internal-compatibility */ 7269);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ 8784);
 
-class Gallery {
-    constructor() {
-        this.fromData({
-            id: 0,
-            name: '',
-            thumbId: 0,
-            parentId: 0,
-            tagList: [],
-            description: 'description',
-            useTags: true,
-            combinedView: false
-        });
-    }
-    fromData(data) {
-        if ((0,rxjs_internal_compatibility__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(data.id))
-            this.id = data.id;
-        if (typeof data.name === 'string')
-            this.name = data.name;
-        if ((0,rxjs_internal_compatibility__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(data.thumbId))
-            this.thumbId = data.thumbId;
-        if ((0,rxjs_internal_compatibility__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(data.parentId))
-            this.parentId = data.parentId;
-        if (typeof data.parentGallery === 'object') {
-            this.parentGallery.id = data.parentGallery.id;
-            this.parentGallery.name = data.parentGallery.name;
-        }
-        if (Array.isArray(data.tagList))
-            this.tagList = data.tagList;
-        if (typeof data.description === 'string')
-            this.description = data.description;
-        if (typeof data.useTags === 'boolean')
-            this.useTags = data.useTags;
-        if (typeof data.combinedView === 'boolean')
-            this.combinedView = data.combinedView;
+
+class ImageService {
+    constructor(http) {
+        this.http = http;
+        this.api_url = '/api/image/';
     }
 }
-
-
-/***/ }),
-
-/***/ 3805:
-/*!************************************************!*\
-  !*** ./src/app/models/parent-gallery.model.ts ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ParentGallery": () => (/* binding */ ParentGallery)
-/* harmony export */ });
-class ParentGallery {
-    fromData(data) {
-        this.id = data.id;
-        this.name = data.name;
-    }
-}
+ImageService.ɵfac = function ImageService_Factory(t) { return new (t || ImageService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpClient)); };
+ImageService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: ImageService, factory: ImageService.ɵfac });
 
 
 /***/ }),
@@ -2264,13 +2459,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "GalleryPageComponent": () => (/* binding */ GalleryPageComponent)
 /* harmony export */ });
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/operators */ 6942);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 8759);
+/* harmony import */ var _gallery_state_gallery_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../gallery/state/gallery.action */ 2868);
+/* harmony import */ var _state_app_action__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../state/app.action */ 6641);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/router */ 2816);
-/* harmony import */ var _services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/gallery-entity.service */ 6671);
-/* harmony import */ var _services_simple_gallery_entity_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/simple_gallery-entity.service */ 2889);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/common */ 6362);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/router */ 2816);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ngrx/store */ 5585);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common */ 6362);
 /* harmony import */ var _gallery_gallery_toolbar_gallery_toolbar_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../gallery/gallery-toolbar/gallery-toolbar.component */ 5923);
 /* harmony import */ var _gallery_gallery_info_gallery_info_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../gallery/gallery-info/gallery-info.component */ 7022);
 /* harmony import */ var _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../gallery/gallery-list/gallery-list.component */ 8072);
@@ -2285,67 +2479,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 function GalleryPageComponent_div_0_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](0, "div");
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](1, "gallery-toolbar", 2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](2, "div", 3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](1, "gallery-toolbar", 1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](2, "div", 2);
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtext"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipe"](4, "json");
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
 } if (rf & 2) {
-    const gallery_r2 = ctx.ngIf;
+    const gallery_r1 = ctx.ngIf;
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("gallery", gallery_r2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("gallery", gallery_r1);
     _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtextInterpolate1"](" [", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](4, 2, gallery_r2), "] ");
-} }
-function GalleryPageComponent_div_3_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](0, "div", 3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtext"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipe"](2, "json");
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
-} if (rf & 2) {
-    const simpleGallery_r3 = ctx.$implicit;
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](2, 1, simpleGallery_r3), "\n");
+    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtextInterpolate1"](" [", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](4, 2, gallery_r1), "] ");
 } }
 class GalleryPageComponent {
-    constructor(route, galleryEntityService, simpleGalleryEntityService) {
+    constructor(route, galleryStore, rootStore) {
         this.route = route;
-        this.galleryEntityService = galleryEntityService;
-        this.simpleGalleryEntityService = simpleGalleryEntityService;
-        this.id = 32;
-        console.log(this.route);
+        this.galleryStore = galleryStore;
+        this.rootStore = rootStore;
+        this.id = 0;
     }
     ngOnInit() {
-        this.gallery$ = this.galleryEntityService.entities$
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.tap)(galleries => { console.log(galleries); }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_8__.map)(galleries => galleries.find(gallery => gallery.id == this.id)));
-        this.simpleGalleries$ = this.simpleGalleryEntityService.entities$
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.tap)(simpleGalleries => { console.log(simpleGalleries); }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_8__.map)(galleries => galleries.filter(gallery => gallery.parentId == this.id)));
-        this.simpleGalleryEntityService.getAll();
         this.route.params.subscribe(params => {
-            this.galleryEntityService.getByKey(this.id);
+            this.id = params.gallery_id;
+            this.galleryStore.dispatch((0,_gallery_state_gallery_action__WEBPACK_IMPORTED_MODULE_0__.loadGalleryAction)({ id: this.id }));
+            this.rootStore.dispatch((0,_state_app_action__WEBPACK_IMPORTED_MODULE_1__.loadOtherDataAction)());
         });
     }
 }
-GalleryPageComponent.ɵfac = function GalleryPageComponent_Factory(t) { return new (t || GalleryPageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_9__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_services_gallery_entity_service__WEBPACK_IMPORTED_MODULE_0__.GalleryEntityService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_services_simple_gallery_entity_service__WEBPACK_IMPORTED_MODULE_1__.SimpleGalleryEntityService)); };
-GalleryPageComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineComponent"]({ type: GalleryPageComponent, selectors: [["gallery-page"]], decls: 9, vars: 6, consts: [[4, "ngIf"], ["class", "course", 4, "ngFor", "ngForOf"], [3, "gallery"], [1, "course"]], template: function GalleryPageComponent_Template(rf, ctx) { if (rf & 1) {
+GalleryPageComponent.ɵfac = function GalleryPageComponent_Factory(t) { return new (t || GalleryPageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_7__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_8__.Store), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_8__.Store)); };
+GalleryPageComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineComponent"]({ type: GalleryPageComponent, selectors: [["gallery-page"]], decls: 5, vars: 3, consts: [[4, "ngIf"], [3, "gallery"], [1, "course"]], template: function GalleryPageComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtemplate"](0, GalleryPageComponent_div_0_Template, 5, 4, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipe"](1, "async");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtext"](2, "\n[\n");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtemplate"](3, GalleryPageComponent_div_3_Template, 3, 3, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipe"](4, "async");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtext"](5, "\n]\n");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](6, "gallery-info");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](7, "gallery-list");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](8, "image-list");
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](2, "gallery-info");
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](3, "gallery-list");
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](4, "image-list");
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngIf", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](1, 2, ctx.gallery$));
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngForOf", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](4, 4, ctx.simpleGalleries$));
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_10__.NgIf, _gallery_gallery_toolbar_gallery_toolbar_component__WEBPACK_IMPORTED_MODULE_2__.GalleryToolbarComponent, _angular_common__WEBPACK_IMPORTED_MODULE_10__.NgForOf, _gallery_gallery_info_gallery_info_component__WEBPACK_IMPORTED_MODULE_3__.GalleryInfoComponent, _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_4__.GalleryListComponent, _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_5__.ImageListComponent], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_10__.AsyncPipe, _angular_common__WEBPACK_IMPORTED_MODULE_10__.JsonPipe], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnYWxsZXJ5LXBhZ2UuY29tcG9uZW50LmNzcyJ9 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngIf", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](1, 1, ctx.gallery$));
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_9__.NgIf, _gallery_gallery_toolbar_gallery_toolbar_component__WEBPACK_IMPORTED_MODULE_2__.GalleryToolbarComponent, _gallery_gallery_info_gallery_info_component__WEBPACK_IMPORTED_MODULE_3__.GalleryInfoComponent, _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_4__.GalleryListComponent, _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_5__.ImageListComponent], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_9__.AsyncPipe, _angular_common__WEBPACK_IMPORTED_MODULE_9__.JsonPipe], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnYWxsZXJ5LXBhZ2UuY29tcG9uZW50LmNzcyJ9 */"] });
 
 
 /***/ }),
@@ -2438,16 +2611,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "metaReducers": () => (/* binding */ metaReducers)
 /* harmony export */ });
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../environments/environment */ 2340);
-/* harmony import */ var _ngrx_router_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/router-store */ 25);
+/* harmony import */ var _ngrx_router_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/router-store */ 25);
+/* harmony import */ var _state_app_reducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../state/app.reducer */ 5103);
+
 
 
 const reducers = {
-    router: _ngrx_router_store__WEBPACK_IMPORTED_MODULE_1__.routerReducer
+    router: _ngrx_router_store__WEBPACK_IMPORTED_MODULE_2__.routerReducer,
+    app: _state_app_reducer__WEBPACK_IMPORTED_MODULE_1__.AppReducer
 };
 function logger(reducer) {
     return (state, action) => {
-        console.log("state before: ", state);
-        console.log("action", action);
+        //console.log("state before: ", state);
+        //console.log("action", action);
         return reducer(state, action);
     };
 }
@@ -2569,202 +2745,6 @@ DataService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["�
 
 /***/ }),
 
-/***/ 6671:
-/*!****************************************************!*\
-  !*** ./src/app/services/gallery-entity.service.ts ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GalleryEntityService": () => (/* binding */ GalleryEntityService)
-/* harmony export */ });
-/* harmony import */ var _ngrx_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/data */ 4824);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
-
-
-
-class GalleryEntityService extends _ngrx_data__WEBPACK_IMPORTED_MODULE_0__.EntityCollectionServiceBase {
-    constructor(serviceElementsFactory) {
-        super('Gallery', serviceElementsFactory);
-    }
-}
-GalleryEntityService.ɵfac = function GalleryEntityService_Factory(t) { return new (t || GalleryEntityService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_0__.EntityCollectionServiceElementsFactory)); };
-GalleryEntityService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: GalleryEntityService, factory: GalleryEntityService.ɵfac });
-
-
-/***/ }),
-
-/***/ 9626:
-/*!**************************************************!*\
-  !*** ./src/app/services/gallery.data.service.ts ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GalleryDataService": () => (/* binding */ GalleryDataService)
-/* harmony export */ });
-/* harmony import */ var _ngrx_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/data */ 4824);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ 8784);
-
-
-
-
-class GalleryDataService extends _ngrx_data__WEBPACK_IMPORTED_MODULE_0__.DefaultDataService {
-    constructor(http, httpUrlGenerator) {
-        super('Gallery', http, httpUrlGenerator);
-    }
-}
-GalleryDataService.ɵfac = function GalleryDataService_Factory(t) { return new (t || GalleryDataService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_0__.HttpUrlGenerator)); };
-GalleryDataService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: GalleryDataService, factory: GalleryDataService.ɵfac });
-
-
-/***/ }),
-
-/***/ 586:
-/*!*********************************************!*\
-  !*** ./src/app/services/gallery_service.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GalleryService": () => (/* binding */ GalleryService)
-/* harmony export */ });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ 2218);
-/* harmony import */ var _models_gallery_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../models/gallery.model */ 4183);
-/* harmony import */ var _models_parent_gallery_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/parent-gallery.model */ 3805);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./data.service */ 2468);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ 8784);
-
-
-
-
-
-
-class GalleryService {
-    constructor(dataService, http) {
-        this.dataService = dataService;
-        this.http = http;
-        this.api_url = '/api/gallery/';
-        this._gallery = new _models_gallery_model__WEBPACK_IMPORTED_MODULE_0__.Gallery();
-        this._gallery.tagList = [];
-        this._gallery.parentGallery = new _models_parent_gallery_model__WEBPACK_IMPORTED_MODULE_1__.ParentGallery();
-        this.galleryObserver = dataService.getGalleryObserver().subscribe(data => {
-            this._gallery.fromData(data);
-        });
-    }
-    get gallery() {
-        return this._gallery;
-    }
-    SubmitGallery(data) {
-        let url = this.api_url + data.id;
-        let subject = new rxjs__WEBPACK_IMPORTED_MODULE_3__.Subject();
-        let body = {
-            name: data.name,
-            description: data.description,
-            parent: data.parent,
-            tags: data.tags,
-            useTags: data.useTags,
-            showImages: data.showImages
-        };
-        if (data.id > 0) {
-            this.http.put(url, body).subscribe(data => {
-                subject.next({ success: data['success'], message: data['message'] });
-                this.dataService.setPageData(data);
-            });
-        }
-        else {
-            this.http.post(url, body).subscribe(data => {
-                subject.next({ success: data['success'], message: data['message'] });
-                this.dataService.setPageData(data);
-            });
-        }
-        return subject.asObservable();
-    }
-    DeleteGallery(id) {
-        let url = this.api_url + id;
-        let subject = new rxjs__WEBPACK_IMPORTED_MODULE_3__.Subject();
-        this.http.delete(url)
-            .subscribe(data => {
-            subject.next({ success: data['success'], message: data['message'] });
-        });
-        return subject.asObservable();
-    }
-}
-GalleryService.ɵfac = function GalleryService_Factory(t) { return new (t || GalleryService)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_data_service__WEBPACK_IMPORTED_MODULE_2__.DataService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_5__.HttpClient)); };
-GalleryService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjectable"]({ token: GalleryService, factory: GalleryService.ɵfac });
-
-
-/***/ }),
-
-/***/ 8121:
-/*!*******************************************!*\
-  !*** ./src/app/services/image_service.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ImageService": () => (/* binding */ ImageService)
-/* harmony export */ });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ 2218);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3184);
-/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ 2468);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ 8784);
-
-
-
-
-class ImageService {
-    constructor(dataService, http) {
-        this.dataService = dataService;
-        this.http = http;
-        this.api_url = '/api/image/';
-    }
-    SubmitImages(data) {
-        let url = this.api_url + data.id;
-        let subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__.Subject();
-        let body = {
-            id: data.id,
-            gallery_id: data.gallery_id,
-            description: data.description,
-            tags: data.tags,
-            fileHashes: data.fileHashes
-        };
-        if (data.id > 0) {
-            this.http.put(url, body).subscribe(data => {
-                subject.next({ success: data['success'], message: data['message'] });
-                this.dataService.setPageData(data);
-            });
-        }
-        else {
-            this.http.post(url, body).subscribe(data => {
-                subject.next({ success: data['success'], message: data['message'] });
-                this.dataService.setPageData(data);
-            });
-        }
-        return subject.asObservable();
-    }
-    DeleteImage(id) {
-        let url = this.api_url + id;
-        let subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__.Subject();
-        this.http.delete(url)
-            .subscribe(data => {
-            subject.next({ success: data['success'], message: data['message'] });
-        });
-        return subject.asObservable();
-    }
-}
-ImageService.ɵfac = function ImageService_Factory(t) { return new (t || ImageService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_data_service__WEBPACK_IMPORTED_MODULE_0__.DataService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpClient)); };
-ImageService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: ImageService, factory: ImageService.ɵfac });
-
-
-/***/ }),
-
 /***/ 5914:
 /*!***********************************************!*\
   !*** ./src/app/services/page_data.service.ts ***!
@@ -2794,10 +2774,6 @@ class PageDataService {
     }
     GetHomePageData() {
         let url = this.api_url + 'home_page';
-        this.GetPageData(url);
-    }
-    GetGalleryPageData(id) {
-        let url = this.api_url + 'gallery_page/' + id;
         this.GetPageData(url);
     }
     GetImagePageData(image_id, gallery_id) {
@@ -2929,6 +2905,127 @@ class ThumbnailService {
 }
 ThumbnailService.ɵfac = function ThumbnailService_Factory(t) { return new (t || ThumbnailService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__.HttpClient)); };
 ThumbnailService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: ThumbnailService, factory: ThumbnailService.ɵfac });
+
+
+/***/ }),
+
+/***/ 6641:
+/*!*************************************!*\
+  !*** ./src/app/state/app.action.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "loadOtherDataAction": () => (/* binding */ loadOtherDataAction),
+/* harmony export */   "otherDataLoadedAction": () => (/* binding */ otherDataLoadedAction)
+/* harmony export */ });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ 5585);
+
+const loadOtherDataAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Root] Load other data');
+const otherDataLoadedAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Root] Other data loaded', (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.props)());
+
+
+/***/ }),
+
+/***/ 2297:
+/*!*************************************!*\
+  !*** ./src/app/state/app.effect.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AppEffect": () => (/* binding */ AppEffect)
+/* harmony export */ });
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/effects */ 369);
+/* harmony import */ var _app_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app.action */ 6641);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ 522);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ 6942);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../app.service */ 900);
+
+
+
+
+
+
+class AppEffect {
+    constructor(actions$, appService) {
+        this.actions$ = actions$;
+        this.appService = appService;
+        this.loadOtherData$ = (0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_2__.createEffect)(() => {
+            return this.actions$.pipe((0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_2__.ofType)(_app_action__WEBPACK_IMPORTED_MODULE_0__.loadOtherDataAction), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.mergeMap)(() => {
+                return this.appService.getOtherData().pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.map)((data) => {
+                    return _app_action__WEBPACK_IMPORTED_MODULE_0__.otherDataLoadedAction({ galleries: data.galleries, tags: data.tags });
+                }));
+            }));
+        });
+    }
+}
+AppEffect.ɵfac = function AppEffect_Factory(t) { return new (t || AppEffect)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵinject"](_ngrx_effects__WEBPACK_IMPORTED_MODULE_2__.Actions), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵinject"](_app_service__WEBPACK_IMPORTED_MODULE_1__.AppService)); };
+AppEffect.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineInjectable"]({ token: AppEffect, factory: AppEffect.ɵfac });
+
+
+/***/ }),
+
+/***/ 5103:
+/*!**************************************!*\
+  !*** ./src/app/state/app.reducer.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AppReducer": () => (/* binding */ AppReducer)
+/* harmony export */ });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ 5585);
+/* harmony import */ var _app_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app.action */ 6641);
+
+
+const initialState = {
+    galleries: [],
+    tags: []
+};
+const AppReducer = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_1__.createReducer)(initialState, (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_1__.on)(_app_action__WEBPACK_IMPORTED_MODULE_0__.otherDataLoadedAction, (state, data) => {
+    var val = {
+        galleries: Object.assign({}, state.galleries),
+        tags: Object.assign({}, state.tags)
+    };
+    val.galleries = Object.assign({}, data.galleries);
+    val.tags = Object.assign({}, data.tags);
+    return val;
+}));
+
+
+/***/ }),
+
+/***/ 614:
+/*!***************************************!*\
+  !*** ./src/app/state/app.selector.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "galleriesFeature": () => (/* binding */ galleriesFeature),
+/* harmony export */   "getSubGalleries": () => (/* binding */ getSubGalleries)
+/* harmony export */ });
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ 5585);
+
+const galleriesFeature = (state) => state.app.galleries;
+const getSubGalleries = (props) => (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createSelector)(galleriesFeature, (galleries) => {
+    if (galleries === undefined)
+        return [];
+    let subGalleries = [];
+    let k;
+    for (k in galleries) {
+        let gallery = galleries[k];
+        if (gallery.parentId == props.id)
+            subGalleries.push(gallery);
+    }
+    return subGalleries;
+});
 
 
 /***/ }),

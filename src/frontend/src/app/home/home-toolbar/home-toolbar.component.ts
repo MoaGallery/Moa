@@ -2,7 +2,6 @@ import {Component, OnDestroy} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {Subscription} from "rxjs/Subscription";
 import {ButtonClickService} from "../../services/button-click.service";
-import {GalleryService} from "../../services/gallery_service";
 import {Router} from "@angular/router";
 
 declare var $: any;
@@ -29,7 +28,6 @@ export class HomeToolbarComponent implements OnDestroy {
 
 	constructor(private dataService: DataService,
 	            private buttonClickService: ButtonClickService,
-	            private galleryService: GalleryService,
 	            private router: Router) {
 		this.observer = dataService.getGalleryObserver().subscribe(
 			data => {

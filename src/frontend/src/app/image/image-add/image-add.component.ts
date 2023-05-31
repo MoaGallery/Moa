@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ButtonClickService} from "../../services/button-click.service";
 import {Subscription} from "rxjs/Subscription";
 import {Router} from "@angular/router";
-import {ImageService} from "../../services/image_service";
+import {ImageService} from "../image.service";
 
 declare var $: any;
 
@@ -75,7 +75,7 @@ export class ImageAddComponent implements OnInit {
 			return file.hash
 		});
 
-		this.imageService.SubmitImages({
+		/*this.imageService.SubmitImages({
 			id: 0,
 			gallery_id: this.gallery.id,
 			description: this.description,
@@ -94,7 +94,7 @@ export class ImageAddComponent implements OnInit {
 
 			if (files.length === 1)
 				this.router.navigate(['/image/' + this.gallery.id + '/' + data.message]);
-		});
+		});*/
 	}
 
 	ngOnInit() {

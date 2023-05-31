@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {Gallery} from "../../models/gallery.model";
+import {Gallery} from "../gallery.model";
 
 @Component({
   selector: 'gallery-tile',

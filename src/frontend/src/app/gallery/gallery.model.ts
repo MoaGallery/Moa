@@ -1,8 +1,20 @@
-import {Tag} from './tag.model';
-import {ParentGallery} from './parent-gallery.model';
+import {Tag} from '../models/tag.model';
+import {ParentGallery} from '../models/parent-gallery.model';
 import {isArrayLike, isNumeric} from 'rxjs/internal-compatibility';
 
 export class Gallery {
+	id: number;
+	name: string;
+	thumbId: number;
+	parentId: number;
+	parentGalleryId: number;
+	tagIdList: Array<number>;
+	description: string;
+	useTags: boolean;
+	public combinedView: boolean;
+};
+
+export class GalleryModel {
     id: number;
     name: string;
     thumbId: number;
