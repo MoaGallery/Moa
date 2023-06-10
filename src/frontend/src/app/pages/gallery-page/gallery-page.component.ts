@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Gallery} from '../../models/gallery';
-import {Observable} from 'rxjs';
-import {SimpleGallery} from '../../models/simple_gallery';
 import {loadGalleryAction} from '../../gallery/state/gallery.action';
 import {Store} from '@ngrx/store';
 import {GalleryState} from '../../gallery/state/gallery.reducer';
@@ -16,7 +13,6 @@ import {loadOtherDataAction} from '../../state/app.action';
 })
 export class GalleryPageComponent implements OnInit {
 
-	public gallery$: Observable<Gallery>;
 	public id: number = 0;
 
 	constructor(private route: ActivatedRoute,

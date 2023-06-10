@@ -1,7 +1,5 @@
 import {createReducer, on} from '@ngrx/store';
 import {otherDataLoadedAction} from './app.action';
-import {State} from './app.state';
-import {Gallery} from '../gallery/gallery.model';
 
 export interface AppState {
 	galleries: [],

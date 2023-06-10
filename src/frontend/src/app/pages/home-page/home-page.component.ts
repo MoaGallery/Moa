@@ -1,5 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {PageDataService} from "../../services/page_data.service";
+import {ActivatedRoute} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {GalleryState} from '../../gallery/state/gallery.reducer';
+import {State} from '../../state/app.state';
+import {loadOtherDataAction} from '../../state/app.action';
+import {setHomePageAction} from '../../gallery/state/gallery.action';
 
 @Component({
     selector: 'moa',
@@ -7,10 +12,15 @@ import {PageDataService} from "../../services/page_data.service";
     styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-    constructor(private page_data_service: PageDataService) {
-    }
+	constructor(private route: ActivatedRoute,
+	            private galleryStore: Store<GalleryState>,
+	            private rootStore: Store<State>) {
+	}
 
-    ngOnInit(): void {
-    	this.page_data_service.GetHomePageData();
-    }
+	ngOnInit(): void {
+		this.route.params.subscribe(params => {
+			this.galleryStore.dispatch(setHomePageAction());
+			this.rootStore.dispatch(loadOtherDataAction());
+		});
+	}
 }

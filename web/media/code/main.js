@@ -1088,12 +1088,14 @@ class GalleryService {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "galleryLoadedAction": () => (/* binding */ galleryLoadedAction),
-/* harmony export */   "loadGalleryAction": () => (/* binding */ loadGalleryAction)
+/* harmony export */   "loadGalleryAction": () => (/* binding */ loadGalleryAction),
+/* harmony export */   "setHomePageAction": () => (/* binding */ setHomePageAction)
 /* harmony export */ });
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ 3488);
 
 const loadGalleryAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Gallery] Load gallery', (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.props)());
 const galleryLoadedAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Gallery] Gallery loaded', (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.props)());
+const setHomePageAction = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)('[Gallery] Set home page');
 
 /***/ }),
 
@@ -1180,6 +1182,14 @@ const galleryReducer = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_1__.createReducer
   val.gallery = {
     ...data.gallery
   };
+  return val;
+}), (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_1__.on)(_gallery_action__WEBPACK_IMPORTED_MODULE_0__.setHomePageAction, state => {
+  var val = {
+    gallery: {
+      ...state.gallery
+    }
+  };
+  val.gallery.id = 0;
   return val;
 }));
 
@@ -2716,14 +2726,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _gallery_state_gallery_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../gallery/state/gallery.action */ 2868);
 /* harmony import */ var _state_app_action__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../state/app.action */ 6641);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 2560);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/router */ 124);
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ngrx/store */ 3488);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common */ 4666);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ 124);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ngrx/store */ 3488);
 /* harmony import */ var _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../gallery/gallery-list/gallery-list.component */ 8072);
 /* harmony import */ var _gallery_gallery_info_gallery_info_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../gallery/gallery-info/gallery-info.component */ 7022);
-/* harmony import */ var _gallery_gallery_toolbar_gallery_toolbar_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../gallery/gallery-toolbar/gallery-toolbar.component */ 5923);
-/* harmony import */ var _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../image/image-list/image-list.component */ 3128);
+/* harmony import */ var _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../image/image-list/image-list.component */ 3128);
 
 
 
@@ -2732,25 +2740,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-function GalleryPageComponent_div_0_Template(rf, ctx) {
-  if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](0, "div");
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](1, "gallery-toolbar", 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](2, "div", 2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtext"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipe"](4, "json");
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]()();
-  }
-  if (rf & 2) {
-    const gallery_r1 = ctx.ngIf;
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("gallery", gallery_r1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtextInterpolate1"](" [", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](4, 2, gallery_r1), "] ");
-  }
-}
 class GalleryPageComponent {
   constructor(route, galleryStore, rootStore) {
     this.route = route;
@@ -2768,25 +2757,19 @@ class GalleryPageComponent {
     });
   }
   static #_ = this.ɵfac = function GalleryPageComponent_Factory(t) {
-    return new (t || GalleryPageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_7__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_8__.Store), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_8__.Store));
+    return new (t || GalleryPageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_7__.Store), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_7__.Store));
   };
-  static #_2 = this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineComponent"]({
+  static #_2 = this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({
     type: GalleryPageComponent,
     selectors: [["gallery-page"]],
-    decls: 5,
-    vars: 3,
-    consts: [[4, "ngIf"], [3, "gallery"], [1, "course"]],
+    decls: 3,
+    vars: 0,
     template: function GalleryPageComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵtemplate"](0, GalleryPageComponent_div_0_Template, 5, 4, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipe"](1, "async");
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](2, "gallery-info")(3, "gallery-list")(4, "image-list");
-      }
-      if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngIf", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpipeBind1"](1, 1, ctx.gallery$));
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](0, "gallery-info")(1, "gallery-list")(2, "image-list");
       }
     },
-    dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_9__.NgIf, _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_2__.GalleryListComponent, _gallery_gallery_info_gallery_info_component__WEBPACK_IMPORTED_MODULE_3__.GalleryInfoComponent, _gallery_gallery_toolbar_gallery_toolbar_component__WEBPACK_IMPORTED_MODULE_4__.GalleryToolbarComponent, _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_5__.ImageListComponent, _angular_common__WEBPACK_IMPORTED_MODULE_9__.AsyncPipe, _angular_common__WEBPACK_IMPORTED_MODULE_9__.JsonPipe],
+    dependencies: [_gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_2__.GalleryListComponent, _gallery_gallery_info_gallery_info_component__WEBPACK_IMPORTED_MODULE_3__.GalleryInfoComponent, _image_image_list_image_list_component__WEBPACK_IMPORTED_MODULE_4__.ImageListComponent],
     styles: ["\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsInNvdXJjZVJvb3QiOiIifQ== */"]
   });
 }
@@ -2803,35 +2786,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "HomePageComponent": () => (/* binding */ HomePageComponent)
 /* harmony export */ });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 2560);
-/* harmony import */ var _services_page_data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/page_data.service */ 5914);
-/* harmony import */ var _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../gallery/gallery-list/gallery-list.component */ 8072);
-/* harmony import */ var _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../home/home-toolbar/home-toolbar.component */ 5434);
+/* harmony import */ var _state_app_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state/app.action */ 6641);
+/* harmony import */ var _gallery_state_gallery_action__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../gallery/state/gallery.action */ 2868);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ 124);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ngrx/store */ 3488);
+/* harmony import */ var _gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../gallery/gallery-list/gallery-list.component */ 8072);
+/* harmony import */ var _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../home/home-toolbar/home-toolbar.component */ 5434);
+
+
+
 
 
 
 
 class HomePageComponent {
-  constructor(page_data_service) {
-    this.page_data_service = page_data_service;
+  constructor(route, galleryStore, rootStore) {
+    this.route = route;
+    this.galleryStore = galleryStore;
+    this.rootStore = rootStore;
   }
   ngOnInit() {
-    this.page_data_service.GetHomePageData();
+    this.route.params.subscribe(params => {
+      this.galleryStore.dispatch((0,_gallery_state_gallery_action__WEBPACK_IMPORTED_MODULE_1__.setHomePageAction)());
+      this.rootStore.dispatch((0,_state_app_action__WEBPACK_IMPORTED_MODULE_0__.loadOtherDataAction)());
+    });
   }
   static #_ = this.ɵfac = function HomePageComponent_Factory(t) {
-    return new (t || HomePageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_services_page_data_service__WEBPACK_IMPORTED_MODULE_0__.PageDataService));
+    return new (t || HomePageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_6__.Store), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_6__.Store));
   };
-  static #_2 = this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({
+  static #_2 = this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({
     type: HomePageComponent,
     selectors: [["moa"]],
     decls: 2,
     vars: 0,
     template: function HomePageComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelement"](0, "home-toolbar")(1, "gallery-list");
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](0, "home-toolbar")(1, "gallery-list");
       }
     },
-    dependencies: [_gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_1__.GalleryListComponent, _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_2__.HomeToolbarComponent],
+    dependencies: [_gallery_gallery_list_gallery_list_component__WEBPACK_IMPORTED_MODULE_2__.GalleryListComponent, _home_home_toolbar_home_toolbar_component__WEBPACK_IMPORTED_MODULE_3__.HomeToolbarComponent],
     styles: ["\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsInNvdXJjZVJvb3QiOiIifQ== */"]
   });
 }

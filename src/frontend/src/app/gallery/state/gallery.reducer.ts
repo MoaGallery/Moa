@@ -1,5 +1,5 @@
 import {createReducer, on} from '@ngrx/store';
-import {galleryLoadedAction} from './gallery.action';
+import * as actions from './gallery.action';
 import {Gallery} from '../gallery.model';
 
 export interface GalleryState {
@@ -22,11 +22,19 @@ const initialState = {
 
 export const galleryReducer = createReducer<GalleryState>(
 	initialState,
-	on(galleryLoadedAction, (state: GalleryState, data) => {
+	on(actions.galleryLoadedAction, (state: GalleryState, data) => {
 		var val = {
 			gallery: {...state.gallery}
 		};
 		val.gallery = {...data.gallery};
+		return val;
+	}),
+	on(actions.setHomePageAction, (state: GalleryState) => {
+		var val = {
+			gallery: {...state.gallery}
+		};
+		val.gallery.id = 0;
+
 		return val;
 	})
 );

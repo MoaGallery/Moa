@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {Gallery} from "../gallery.model";
+import {SimpleGallery} from '../../models/simple_gallery';
 
 @Component({
   selector: 'gallery-tile',
@@ -8,7 +8,7 @@ import {Gallery} from "../gallery.model";
 })
 export class GalleryTileComponent {
 
-    @Input() gallery: Gallery;
+    @Input() gallery: SimpleGallery;
 
     constructor() { }
     getLink(id) {
